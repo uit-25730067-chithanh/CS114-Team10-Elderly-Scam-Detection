@@ -32,13 +32,13 @@ jobs:
         run: |
           python3 - << 'EOF'
           import subprocess
-          import fnmatch
           import os
           import sys
           import json
           import time
           import urllib.request
           import urllib.error
+          from pathlib import Path
           from datetime import datetime, timezone
 
           gemini_api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -60,32 +60,57 @@ jobs:
           except Exception as e:
               print(f"Warning during git fetch: {e}")
 
-          EXCLUDE_PATTERNS = [
-              # Lockfiles
-              "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Cargo.lock", "poetry.lock", "Pipfile.lock",
-              # Build & dist artifacts
-              "dist/*", "dist/**", "build/*", "build/**", "target/*", "target/**", "out/*", "out/**", ".next/*", ".next/**",
-              # Cache and compiler files
-              "__pycache__/*", "__pycache__/**", "*.pyc", "*.pyo", "*.pyd",
+          EXCLUDE_FILENAMES = {
+              "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Cargo.lock",
+              "poetry.lock", "Pipfile.lock"
+          }
+
+          EXCLUDE_DIRS = {
+              "dist", "build", "target", "out", ".next", "__pycache__",
+              "node_modules", ".venv", "venv", "env"
+          }
+
+          EXCLUDE_EXTENSIONS = {
               # Minified & maps
-              "*.min.js", "*.min.css", "*.map",
-              # Assets and images
-              "assets/images/*", "assets/images/**", "docs/assets/*", "docs/assets/**",
-              "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.ico", "*.webp", "*.pdf",
-              # Binaries & large models
-              "*.pt", "*.pth", "*.bin", "*.onnx", "*.pkl", "*.joblib", "*.zip", "*.tar.gz", "*.parquet"
-          ]
+              ".min.js", ".min.css", ".map",
+              # Media & binary docs
+              ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp", ".pdf",
+              # Model checkpoints & large binary formats
+              ".pt", ".pth", ".bin", ".onnx", ".pkl", ".joblib", ".zip", ".tar.gz", ".parquet", ".h5"
+          }
+
+          # Sensitive files patterns (Secrets defense-in-depth)
+          SENSITIVE_PREFIXES = (".env",)
+          SENSITIVE_EXTENSIONS = (".pem", ".key", ".crt", ".secret")
 
           def should_exclude(filepath):
               normalized = filepath.replace("\\", "/")
-              filename = os.path.basename(normalized)
-              for pat in EXCLUDE_PATTERNS:
-                  if fnmatch.fnmatch(normalized, pat) or fnmatch.fnmatch(filename, pat):
+              path_obj = Path(normalized)
+              filename = path_obj.name
+
+              # Check filename
+              if filename in EXCLUDE_FILENAMES:
+                  return True
+
+              # Check directory components anywhere in path hierarchy
+              if any(part in EXCLUDE_DIRS for part in path_obj.parts):
+                  return True
+
+              # Check specific paths like assets/images/ or docs/assets/
+              if "assets/images" in normalized or "docs/assets" in normalized:
+                  return True
+
+              # Check sensitive files (.env, .env.local, .key, etc.) except template examples
+              if any(filename.startswith(p) for p in SENSITIVE_PREFIXES) and not filename.endswith(".example"):
+                  return True
+              if any(filename.endswith(ext) for ext in SENSITIVE_EXTENSIONS):
+                  return True
+
+              # Check extensions
+              for ext in EXCLUDE_EXTENSIONS:
+                  if filename.endswith(ext):
                       return True
-                  if pat.endswith("/**") and (normalized + "/").startswith(pat[:-2]):
-                      return True
-                  if pat.endswith("/*") and normalized.startswith(pat[:-1]):
-                      return True
+
               return False
 
           # Get changed files between target base and current PR head
@@ -213,15 +238,6 @@ jobs:
 
           for model in models_to_try:
               api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-              req = urllib.request.Request(
-                  api_url,
-                  data=json.dumps(payload).encode("utf-8"),
-                  headers={
-                      "Content-Type": "application/json",
-                      "x-goog-api-key": gemini_api_key
-                  },
-                  method="POST"
-              )
               
               # Up to 3 attempts with progressive backoff for temporary spikes
               backoffs = [0, 4, 8]
@@ -229,6 +245,17 @@ jobs:
                   if delay > 0:
                       print(f"Temporary demand spike on '{model}'. Waiting {delay}s before attempt {attempt}...")
                       time.sleep(delay)
+
+                  # Fresh Request object per attempt to prevent state retention
+                  req = urllib.request.Request(
+                      api_url,
+                      data=json.dumps(payload).encode("utf-8"),
+                      headers={
+                          "Content-Type": "application/json",
+                          "x-goog-api-key": gemini_api_key
+                      },
+                      method="POST"
+                  )
 
                   print(f"Calling Gemini API with model '{model}' (attempt {attempt}/3) for PR #{pr_number}...")
                   try:
