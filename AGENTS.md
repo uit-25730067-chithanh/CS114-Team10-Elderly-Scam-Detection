@@ -169,7 +169,43 @@ dataset.csv (1,500+ mẫu tin nhắn tiếng Việt)
 [8] Commit
     → feat(phaseXX): <mô tả ngắn>  ← code + notebook
     → docs(phaseXX): <mô tả ngắn> ← docs/README riêng nếu nhiều thay đổi
+
+[9] Tạo Pull Request (PR) theo chuẩn quy định
+    → Title: Tiếng Anh, Title Case, KHÔNG dùng tiền tố commit (không feat/fix/chore)
+    → Body: Tóm tắt công việc đã làm trên PR đó, tiếng Việt, các gạch đầu dòng chi tiết
+    → Assignee: Tự gán chính mình (--assignee "@me")
 ```
+
+### Quy chuẩn tạo Pull Request (PR Standards) — BẮT BUỘC
+
+> 📌 **Mọi Agent AI khi tạo PR bắt buộc phải tuân theo khuôn mẫu chuẩn của [PR #1](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection/pull/1) & [PR #2](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection/pull/2):**
+
+1. **PR Title (Tiêu đề PR):**
+   - Sử dụng **Tiếng Anh** hoàn toàn, viết hoa dạng Title Case.
+   - **TUYỆT ĐỐI KHÔNG dùng tiền tố commit message** (KHÔNG dùng `feat:`, `feat(ci):`, `fix:`, `chore:`, `docs:`...).
+   - *Ví dụ chuẩn:*
+     - ✅ `Setup Development Environment, Utility Helpers, and Dataset Ingestion Template` (PR #1)
+     - ✅ `Integrate Automated PR Code Review with Google Gemini Flash` (PR #2)
+     - ❌ `feat(ci): integrate automated PR code review via Google Gemini Flash` (Sai convention)
+
+2. **PR Body (Nội dung mô tả PR):**
+   - Tóm tắt công việc đã làm trên PR bằng **Tiếng Việt**.
+   - Trình bày dạng **các gạch đầu dòng phân cấp rõ ràng**:
+     - Cấp 1 (`-`): Nhóm đầu việc lớn kèm đường dẫn/file liên quan trong dấu backticks.
+     - Cấp 2 (`  -`): Chi tiết kỹ thuật, cấu hình, logic triển khai hoặc tiêu chí nghiệm thu đạt được.
+   - Thuật ngữ kỹ thuật, tên thư viện, hàm, biến số, đường dẫn tệp bắt buộc đặt trong dấu code backticks (ví dụ: `requirements.txt`, `RANDOM_STATE = 42`).
+
+3. **Assignee (Người phụ trách):**
+   - **Tự assign chính mình** vào PR ngay khi tạo thông qua cờ `--assignee "@me"`.
+   - *Mẫu lệnh chuẩn qua GitHub CLI:*
+     ```bash
+     gh pr create \
+       --base main \
+       --head <branch-name> \
+       --title "<Title In English Without Commit Prefix>" \
+       --body-file <path/to/pr_body.md> \
+       --assignee "@me"
+     ```
 
 ### File nào phải update sau mỗi phase
 
