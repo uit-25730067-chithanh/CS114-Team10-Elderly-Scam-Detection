@@ -70,16 +70,25 @@ def get_project_root() -> Path:
     return Path(__file__).resolve().parent.parent.parent
 
 
-def get_data_dir() -> Path:
-    """Return the path to data directory."""
-    return get_project_root() / "data"
+def get_data_dir(ensure_exists: bool = True) -> Path:
+    """Return the path to data directory, creating it if needed."""
+    path = get_project_root() / "data"
+    if ensure_exists:
+        path.mkdir(parents=True, exist_ok=True)
+    return path
 
 
-def get_models_dir() -> Path:
-    """Return the path to models directory."""
-    return get_project_root() / "models"
+def get_models_dir(ensure_exists: bool = True) -> Path:
+    """Return the path to models directory, creating it if needed."""
+    path = get_project_root() / "models"
+    if ensure_exists:
+        path.mkdir(parents=True, exist_ok=True)
+    return path
 
 
-def get_reports_dir() -> Path:
-    """Return the path to reports directory."""
-    return get_project_root() / "reports"
+def get_reports_dir(ensure_exists: bool = True) -> Path:
+    """Return the path to reports directory, creating it if needed."""
+    path = get_project_root() / "reports"
+    if ensure_exists:
+        path.mkdir(parents=True, exist_ok=True)
+    return path

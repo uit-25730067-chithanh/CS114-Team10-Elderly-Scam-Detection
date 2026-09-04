@@ -48,6 +48,7 @@ def main() -> int:
         draft_dir / "data" / "raw",
         draft_dir / "data" / "processed",
         draft_dir / "notebooks",
+        draft_dir / "models",
         draft_dir / "reports" / "figures",
         draft_dir / "demo",
         plans_dir,
@@ -140,8 +141,9 @@ def main() -> int:
 
     # 6. Verify Markdown Integrity (Broken file:// links)
     log_info("Checking Markdown files for broken local file:// links...")
+    ignored_md_dirs = {".git", ".venv", "venv", "__pycache__", "node_modules", "dist", "build"}
     for md_file in final_dir.rglob("*.md"):
-        if ".git" in md_file.parts:
+        if any(part in ignored_md_dirs for part in md_file.parts):
             continue
         try:
             content = md_file.read_text(encoding="utf-8")
