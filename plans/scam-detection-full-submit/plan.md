@@ -1,7 +1,7 @@
 ---
 title: "CS114 Final — Scam Detection Full Implementation to Submit"
 description: "End-to-end implementation plan: từ code rỗng đến bản nộp hoàn chỉnh, chia theo phase độc lập có validation gate"
-status: not-started
+status: in-progress
 priority: P1
 effort: ~40h (nhóm 10 — 3 người)
 branch: main
@@ -22,7 +22,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 
 | Sprint | Thời gian | Mục tiêu chính |
 |--------|----------|---------------|
-| **Sprint 1** | 06/9 – 15/9 | Setup repo + Scaffold, Thu thập & Gán nhãn Dataset |
+| **Sprint 1** | 06/9 – 15/9 | Setup repo + Scaffold (Phase 00 Passed ✅), Thu thập & Gán nhãn Dataset (Phase 01) |
 | **Sprint 2** | 15/9 – 25/9 | Tiền xử lý tiếng Việt, EDA, Feature Engineering, Huấn luyện Naive Bayes baseline |
 | **Sprint 3** | 25/9 – 05/10 | Huấn luyện RF/XGBoost + SVM, Evaluation & So sánh, Demo UI shell |
 | **Sprint 4** | 05/10 – 13/10 | XAI/SHAP, Demo tích hợp model, Báo cáo & PPT hoàn thiện, Đóng gói nộp bài |
@@ -40,7 +40,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 
 | # | Phase | Owner | Sprint | Status | Gate |
 |---|-------|-------|--------|--------|------|
-| 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `not-started` | Venv OK, imports work, dataset template ready |
+| 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `passed` ✅ | Venv OK, utils helpers, template CSV ready, verify_final.py passed |
 | 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `not-started` | ≥1500 mẫu, 4 scam categories labeled |
 | 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 | `not-started` | Unicode normalized, tokenized, cleaned text |
 | 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 | `not-started` | TF-IDF matrix saved, EDA notebook complete |

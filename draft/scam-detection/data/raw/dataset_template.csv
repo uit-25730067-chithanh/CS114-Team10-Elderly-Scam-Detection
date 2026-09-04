@@ -1,0 +1,7 @@
+id,text,label,scam_category,source
+1,"[CẢNH BÁO] Toà án nhân dân tối cao thông báo: Ông/Bà có lệnh triệu tập điều tra đường dây rửa tiền xuyên quốc gia. Yêu cầu chuyển toàn bộ tiền vào tài khoản tạm giữ 0987654321 để cơ quan chức năng giám định trong 2 giờ, nếu không sẽ ra lệnh bắt tạm giam.",1,fear_authority,bocongan_canhsat
+2,"Bố ơi con là Tuấn đây, con đi xe máy va chạm giao thông đang cấp cứu ở Bệnh viện Chợ Rẫy, bác sĩ bảo phải nộp viện phí mổ gấp 35 triệu trong 30 phút nữa. Bố chuyển tiền ngay vào số tài khoản bác sĩ 1029384756 này giúp con với!",1,family_emergency,dantri_phapluat
+3,"Tri ân người cao tuổi: Chúc mừng bác đã được Trung tâm Y học Cổ truyền chọn tặng 01 liệu trình cao xương khớp trị giá 3.500.000đ hoàn toàn miễn phí. Bác chỉ cần đóng 200.000đ phí bảo hiểm vận chuyển tại bưu điện.",1,health_gift,vnexpress_canhbao
+4,"Cục Cảnh sát QLHC về TTXH thông báo: Hồ sơ định danh VNeID của công dân bị lỗi mức độ 2 dẫn đến khoá tài khoản ngân hàng. Đề nghị bấm vào liên kết https://dichvucong-vneid-capnhat.com/xac-thuc để cập nhật lại thông tin cá nhân ngay.",1,public_service,chongthurac_gov
+5,"[Vietcombank] Thong bao: So du tai khoan 0123456789 thay doi -500,000 VND luc 14:30 04/09/2026. So du cuoi: 12,450,000 VND. Noi dung: Chuyen tien hoc phi.",0,none,bank_sms
+6,"Cháu chào bác Thanh, thứ 7 tuần này con cháu về quê giỗ ông, bác có ở nhà không cháu ghé biếu bác ít quà quê mẹ cháu gửi ạ.",0,none,family_chat
