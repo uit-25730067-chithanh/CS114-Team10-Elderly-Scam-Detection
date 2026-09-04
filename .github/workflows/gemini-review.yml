@@ -185,7 +185,26 @@ jobs:
               }
           }
 
-          candidate_models = [preferred_model, "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+          # Discover active models from API
+          discovered_models = []
+          try:
+              list_req = urllib.request.Request(
+                  "https://generativelanguage.googleapis.com/v1beta/models",
+                  headers={"x-goog-api-key": gemini_api_key}
+              )
+              with urllib.request.urlopen(list_req, timeout=20) as resp:
+                  list_data = json.loads(resp.read().decode("utf-8"))
+                  for m in list_data.get("models", []):
+                      name = m.get("name", "").replace("models/", "")
+                      methods = m.get("supportedGenerationMethods", [])
+                      if "generateContent" in methods and "flash" in name.lower():
+                          discovered_models.append(name)
+              print(f"Discovered flash models supporting generateContent: {discovered_models}")
+          except Exception as e:
+              print(f"Model discovery query note: {e}")
+
+          # Build priority model list
+          candidate_models = [preferred_model] + discovered_models + ["gemini-3.6-flash"]
           models_to_try = list(dict.fromkeys([m for m in candidate_models if m]))
 
           success = False
@@ -204,9 +223,14 @@ jobs:
                   method="POST"
               )
               
-              # Try up to 2 attempts per model with backoff
-              for attempt in range(1, 3):
-                  print(f"Calling Gemini API with model '{model}' (attempt {attempt}) for PR #{pr_number}...")
+              # Up to 3 attempts with progressive backoff for temporary spikes
+              backoffs = [0, 4, 8]
+              for attempt, delay in enumerate(backoffs, start=1):
+                  if delay > 0:
+                      print(f"Temporary demand spike on '{model}'. Waiting {delay}s before attempt {attempt}...")
+                      time.sleep(delay)
+
+                  print(f"Calling Gemini API with model '{model}' (attempt {attempt}/3) for PR #{pr_number}...")
                   try:
                       with urllib.request.urlopen(req, timeout=120) as resp:
                           res_data = json.loads(resp.read().decode("utf-8"))
@@ -224,11 +248,8 @@ jobs:
                   except urllib.error.HTTPError as e:
                       err_body = e.read().decode("utf-8", errors="replace")
                       print(f"Model '{model}' failed with HTTP {e.code}: {err_body}")
-                      if e.code in (429, 500, 502, 503, 504) and attempt == 1:
-                          print(f"Temporary error ({e.code}). Retrying in 3 seconds...")
-                          time.sleep(3)
+                      if e.code in (429, 500, 502, 503, 504) and attempt < len(backoffs):
                           continue
-                      # Move to next model
                       break
                   except Exception as e:
                       print(f"Unexpected error with model '{model}': {e}")
