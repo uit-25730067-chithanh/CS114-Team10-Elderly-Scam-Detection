@@ -1,0 +1,44 @@
+# CS114 Final — Global .gitignore
+
+# Dataset (too large to commit)
+**/data/raw/*.csv
+**/data/raw/*.json
+**/data/raw/*.xlsx
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model artifacts (large trained models > 50MB)
+# PKL nhỏ (scaler, vectorizer ~1-5MB) → được commit để team sử dụng
+**/models/*.pkl
+!**/models/vectorizer.pkl
+!**/models/tfidf_vectorizer.pkl
+models/*.h5
+models/*.joblib
+models/*.pt
+models/*.bin
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.env
+
+# Office temp lock files
+~$*

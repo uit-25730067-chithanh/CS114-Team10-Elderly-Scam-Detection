@@ -1,0 +1,53 @@
+# Project Overview — CS114 Scam Detection
+
+## Tổng quan dự án
+
+**Tên dự án:** Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam  
+**Môn học:** CS114 — Máy học (Machine Learning) — UIT, ĐHQG-HCM  
+**Nhóm:** 10 (3 thành viên: Đặng Chí Thanh - 25730067 [PM/Lead], Bùi Thị Mỷ Cẩm - 25730013, Hoàng Cao Sơn - 25730061)  
+**Repository:** [`uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection`](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection)  
+**Deadline:** 13/10/2026
+
+---
+
+## Vấn đề cần giải quyết
+
+Người cao tuổi (NCT) tại Việt Nam là đối tượng bị nhắm mục tiêu nhiều nhất bởi các chiêu trò lừa đảo qua tin nhắn SMS, Zalo, Telegram. Bài toán có 2 thách thức:
+
+1. **Ngữ cảnh tiếng Việt đặc thù**: Teencode, từ viết tắt, không có word boundary rõ ràng, cần tokenizer riêng
+2. **Dataset tự thu thập**: Không có benchmark dataset sẵn cho Vietnamese scam SMS → phải xây dựng từ đầu
+
+## Mục tiêu
+
+- Xây dựng pipeline NLP tiếng Việt: thu thập → tiền xử lý → feature extraction → modeling
+- Thử nghiệm ≥3 models: Naive Bayes, Random Forest/XGBoost, SVM
+- Phân loại 4 nhóm bẫy tâm lý: `fear_authority`, `family_emergency`, `health_gift`, `public_service`
+- Đánh giá: F1-Score ≥ 88%, Recall Scam ≥ 92%
+- Demo Streamlit với UX dành cho người cao tuổi
+
+## Dataset
+
+| Thuộc tính | Giá trị |
+|-----------|---------|
+| Nguồn | Tự thu thập: báo Dân Trí, VnExpress, FB groups cảnh báo, tin nhắn bình thường |
+| Số mẫu | ≥1500 (lý tưởng 2000-3000) |
+| Schema | `id, text, label, scam_category, source` |
+| Tỷ lệ | ~40-50% Lừa đảo / 50-60% Bình thường |
+| Augmentation | Hoán đổi tên riêng, số tiền, số điện thoại |
+
+## Phạm vi đề tài
+
+- ✅ Thu thập và gán nhãn dataset tiếng Việt
+- ✅ Vietnamese text preprocessing (Unicode, tokenize, stopwords, TF-IDF)
+- ✅ EDA và Feature Engineering
+- ✅ ≥3 models (NB + RF/XGB + SVM)
+- ✅ Evaluation: Confusion Matrix, Learning Curves, ROC, Precision-Recall
+- ✅ XAI: Top-20 scam keywords, SHAP (optional)
+- ✅ Báo cáo Word + PPT + Code + Demo Streamlit
+
+## Ngoài phạm vi
+
+- ❌ Deploy lên production server
+- ❌ Real-time monitoring
+- ❌ Mobile app
+- ❌ PhoBERT fine-tuning (optional bonus nếu có thời gian)
