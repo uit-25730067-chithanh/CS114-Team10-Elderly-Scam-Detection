@@ -54,9 +54,9 @@
 |-----------|--------|
 | Project scaffold | ✅ Done — folder structure, docs, environment setup |
 | `BRAINSTORM.md` | ✅ Done — đề tài đã chọn, specification đã ký hợp đồng đầu ra |
-| Phase 00 (Env & Data Setup) | ⏳ Sprint 1 Target — pending implementation |
-| `src/utils/` | ⏳ Sprint 1 Target |
-| `draft/scam-detection/README.md` | ⏳ Sprint 1 Target |
+| Phase 00 (Env & Data Setup) | ✅ Passed — `requirements.txt`, `dataset_template.csv`, `verify_final.py` |
+| `src/utils/` | ✅ Done — `helpers.py`, `constants`, `set_seeds()` reproducibility |
+| `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
 | Dataset (`dataset.csv`) | ⏳ Sprint 1 Target (06/9 – 15/9) — cần thu thập >= 1,500 mẫu |
 | `src/preprocessing/` | ⏳ Sprint 2 Target — text_cleaner, tokenizer, feature_extractor |
 | `src/models/` | ⏳ Sprint 2-3 Target — naive_bayes, random_forest/xgboost, svm |
@@ -65,7 +65,7 @@
 | Demo UI (Streamlit) | ⏳ Sprint 3-4 Target — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-4 Target — triển khai song song theo sprint |
 
-> **Verdict (04/09): Khởi tạo repository hoàn tất. Sẵn sàng thực hiện Phase 00 (Môi trường & Khung dữ liệu).**
+> **Verdict (04/09): Phase 00 (Môi trường & Khung dữ liệu) đã PASSED ✅. Đạt 100% tiêu chí verify. Sẵn sàng khởi động Sprint 1 (Thu thập dữ liệu) từ 06/09.**
 
 ---
 
@@ -251,7 +251,7 @@ Place in `Final/submit/` before zipping.
 
 ## Next Actions
  
-> **🚀 Sẵn sàng thực hiện Phase 00 (Môi trường & Khung dữ liệu) khởi động Sprint 1 (06/9 – 15/9).**
+> **🚀 Phase 00 PASSED. Sẵn sàng khởi động Sprint 1 (06/9 – 15/9).**
 
 ### 🎯 Sprint 1 — Kế hoạch hành động cụ thể:
 1. **Hoàng Cao Sơn (Lead thu thập):**

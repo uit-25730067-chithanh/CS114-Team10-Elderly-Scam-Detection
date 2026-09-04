@@ -77,7 +77,7 @@
 
 | Sprint | Người | Task | Trạng thái |
 |--------|-------|------|-----------|
-| **Sprint 1** (06/9 – 15/9) | **Thanh** | Setup repo, utils, template, requirements.txt, verify_final.py | 🔲 |
+| **Sprint 1** (06/9 – 15/9) | **Thanh** | Setup repo, utils, template, requirements.txt, verify_final.py | ✅ Done (Phase 00 passed) |
 | | **Sơn** | Lập bảng thu thập, phân loại 4 nhóm bẫy tâm lý | 🔲 |
 | | **Cả nhóm** | Thu thập ≥500 mẫu / người | 🔲 |
 | **Sprint 2** (15/9 – 25/9) | **Thanh** | Text preprocessing pipeline (Unicode, tokenize, TF-IDF) | 🔲 |

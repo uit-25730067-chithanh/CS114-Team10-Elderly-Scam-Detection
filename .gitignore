@@ -2,6 +2,7 @@
 
 # Dataset (too large to commit)
 **/data/raw/*.csv
+!**/data/raw/dataset_template.csv
 **/data/raw/*.json
 **/data/raw/*.xlsx
 
