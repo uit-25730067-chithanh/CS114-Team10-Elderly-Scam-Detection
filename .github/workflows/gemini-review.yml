@@ -56,9 +56,16 @@ jobs:
 
           # Ensure base branch is fetched for accurate git diff
           try:
-              subprocess.run(["git", "fetch", "origin", base_ref], check=False)
+              res = subprocess.run(
+                  ["git", "fetch", "origin", base_ref],
+                  capture_output=True,
+                  text=True,
+                  check=False
+              )
+              if res.returncode != 0 and res.stderr:
+                  print(f"::warning::git fetch origin {base_ref} exited with code {res.returncode}: {res.stderr.strip()}")
           except Exception as e:
-              print(f"Warning during git fetch: {e}")
+              print(f"::warning::Exception during git fetch: {e}")
 
           EXCLUDE_FILENAMES = {
               "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "Cargo.lock",
@@ -205,7 +212,9 @@ jobs:
                   }
               ],
               "generationConfig": {
-                  "temperature": 0.2,
+                  "temperature": 0.1,
+                  "topP": 0.95,
+                  "topK": 40,
                   "maxOutputTokens": 4096
               }
           }
@@ -229,7 +238,7 @@ jobs:
               print(f"Model discovery query note: {e}")
 
           # Build priority model list
-          candidate_models = [preferred_model] + discovered_models + ["gemini-2.5-flash", "gemini-3.6-flash"]
+          candidate_models = [preferred_model] + discovered_models + ["gemini-2.5-flash", "gemini-1.5-flash"]
           models_to_try = list(dict.fromkeys([m for m in candidate_models if m]))
 
           success = False
