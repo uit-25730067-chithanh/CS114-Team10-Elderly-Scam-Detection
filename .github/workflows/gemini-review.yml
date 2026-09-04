@@ -22,7 +22,7 @@ jobs:
         id: review
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: "gemini-3.6-flash"
+          GEMINI_MODEL: "gemini-2.5-flash"
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
@@ -42,7 +42,7 @@ jobs:
           from datetime import datetime, timezone
 
           gemini_api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-          preferred_model = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-3.6-flash"
+          preferred_model = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-2.5-flash"
           pr_number = os.environ.get("PR_NUMBER", "").strip()
           base_ref = os.environ.get("BASE_REF", "").strip()
           head_ref = os.environ.get("HEAD_REF", "").strip()
@@ -54,9 +54,9 @@ jobs:
               print("::warning::GEMINI_API_KEY secret is not configured. Skipping Gemini code review.")
               sys.exit(0)
 
-          # Ensure base branch history is fetched for accurate git diff
+          # Ensure base branch is fetched for accurate git diff
           try:
-              subprocess.run(["git", "fetch", "origin", base_ref, "--depth=50"], check=False)
+              subprocess.run(["git", "fetch", "origin", base_ref], check=False)
           except Exception as e:
               print(f"Warning during git fetch: {e}")
 
@@ -185,7 +185,7 @@ jobs:
               }
           }
 
-          # Discover active models from API
+          # Discover active flash models from API
           discovered_models = []
           try:
               list_req = urllib.request.Request(
@@ -204,7 +204,7 @@ jobs:
               print(f"Model discovery query note: {e}")
 
           # Build priority model list
-          candidate_models = [preferred_model] + discovered_models + ["gemini-3.6-flash"]
+          candidate_models = [preferred_model] + discovered_models + ["gemini-2.5-flash", "gemini-3.6-flash"]
           models_to_try = list(dict.fromkeys([m for m in candidate_models if m]))
 
           success = False
@@ -288,11 +288,11 @@ jobs:
 
           HEADER_MARKER="<!-- gemini-pr-review -->"
 
-          # Search for existing comment with the header marker
-          COMMENT_ID=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" --jq ".[] | select(.body | contains(\"${HEADER_MARKER}\")) | .id" | head -n 1)
+          # Search for existing comment with pagination
+          COMMENT_ID=$(gh api --paginate "repos/${REPO}/issues/${PR_NUMBER}/comments" --jq ".[] | select(.body | contains(\"${HEADER_MARKER}\")) | .id" | head -n 1)
 
           if [ -n "$COMMENT_ID" ]; then
-            echo "Updating existing review comment (ID: ${COMMENT_ID})..."
+            echo "Updating existing review comment in-place (ID: ${COMMENT_ID})..."
             gh api "repos/${REPO}/issues/comments/${COMMENT_ID}" -X PATCH -F body=@review_comment.md
           else
             echo "Creating new review comment on PR #${PR_NUMBER}..."
