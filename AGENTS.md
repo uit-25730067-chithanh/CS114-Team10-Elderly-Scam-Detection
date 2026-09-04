@@ -185,7 +185,7 @@ dataset.csv (1,500+ mẫu tin nhắn tiếng Việt)
    - **TUYỆT ĐỐI KHÔNG dùng tiền tố commit message** (KHÔNG dùng `feat:`, `feat(ci):`, `fix:`, `chore:`, `docs:`...).
    - *Ví dụ chuẩn:*
      - ✅ `Setup Development Environment, Utility Helpers, and Dataset Ingestion Template` (PR #1)
-     - ✅ `Integrate Automated PR Code Review with Google Gemini Flash` (PR #2)
+     - ✅ `Setup Automated PR Code Review with Google Gemini Flash` (PR #2)
      - ❌ `feat(ci): integrate automated PR code review via Google Gemini Flash` (Sai convention)
 
 2. **PR Body (Nội dung mô tả PR):**
