@@ -36,6 +36,7 @@ jobs:
           import os
           import sys
           import json
+          import time
           import urllib.request
           import urllib.error
           from datetime import datetime, timezone
@@ -184,7 +185,7 @@ jobs:
               }
           }
 
-          candidate_models = [preferred_model, "gemini-3.6-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+          candidate_models = [preferred_model, "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
           models_to_try = list(dict.fromkeys([m for m in candidate_models if m]))
 
           success = False
@@ -202,33 +203,39 @@ jobs:
                   },
                   method="POST"
               )
-              print(f"Calling Gemini API with model '{model}' for PR #{pr_number}...")
-              try:
-                  with urllib.request.urlopen(req, timeout=120) as resp:
-                      res_data = json.loads(resp.read().decode("utf-8"))
-                  candidates = res_data.get("candidates", [])
-                  if not candidates:
-                      print(f"Warning: No candidates returned from model '{model}'. Response: {res_data}")
-                      continue
-                  parts = candidates[0].get("content", {}).get("parts", [])
-                  review_content = "".join(p.get("text", "") for p in parts).strip()
-                  if review_content:
-                      active_model_name = model
-                      success = True
-                      print(f"Successfully generated review with model '{model}'.")
+              
+              # Try up to 2 attempts per model with backoff
+              for attempt in range(1, 3):
+                  print(f"Calling Gemini API with model '{model}' (attempt {attempt}) for PR #{pr_number}...")
+                  try:
+                      with urllib.request.urlopen(req, timeout=120) as resp:
+                          res_data = json.loads(resp.read().decode("utf-8"))
+                      candidates = res_data.get("candidates", [])
+                      if not candidates:
+                          print(f"Warning: No candidates returned from model '{model}'. Response: {res_data}")
+                          break
+                      parts = candidates[0].get("content", {}).get("parts", [])
+                      review_content = "".join(p.get("text", "") for p in parts).strip()
+                      if review_content:
+                          active_model_name = model
+                          success = True
+                          print(f"Successfully generated review with model '{model}'.")
+                          break
+                  except urllib.error.HTTPError as e:
+                      err_body = e.read().decode("utf-8", errors="replace")
+                      print(f"Model '{model}' failed with HTTP {e.code}: {err_body}")
+                      if e.code in (429, 500, 502, 503, 504) and attempt == 1:
+                          print(f"Temporary error ({e.code}). Retrying in 3 seconds...")
+                          time.sleep(3)
+                          continue
+                      # Move to next model
                       break
-              except urllib.error.HTTPError as e:
-                  err_body = e.read().decode("utf-8", errors="replace")
-                  print(f"Model '{model}' failed with HTTP {e.code}: {err_body}")
-                  if e.code == 404:
-                      # Model not found or deprecated, try next model
-                      continue
-                  else:
-                      print(f"::error::Gemini API HTTP Error {e.code}: {err_body}")
+                  except Exception as e:
+                      print(f"Unexpected error with model '{model}': {e}")
                       break
-              except Exception as e:
-                  print(f"Unexpected error with model '{model}': {e}")
-                  continue
+
+              if success:
+                  break
 
           if not success or not review_content:
               print("::error::Could not generate review using any candidate model.")
