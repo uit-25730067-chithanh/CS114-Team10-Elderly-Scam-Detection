@@ -41,7 +41,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | # | Phase | Owner | Sprint | Status | Gate |
 |---|-------|-------|--------|--------|------|
 | 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `passed` ✅ | Venv OK, utils helpers, template CSV ready, verify_final.py passed |
-| 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `in-progress` (Thanh ✅) | Đặng Chí Thanh đạt 520/500 mẫu; Chờ Sơn & Cẩm nộp 1.000 mẫu |
+| 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `in-progress` (Thanh ✅) | Đặng Chí Thanh đạt 1.773/500 mẫu; Chờ Sơn & Cẩm nộp 1.000 mẫu |
 | 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 | `not-started` | Unicode normalized, tokenized, cleaned text |
 | 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 | `not-started` | TF-IDF matrix saved, EDA notebook complete |
 | 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 | `not-started` | NB trained, baseline metrics recorded |

@@ -21,10 +21,10 @@ scam-detection/
 ├── data/
 │   ├── raw/
 │   │   ├── dataset_template.csv     ← Template định dạng chuẩn UTF-8-sig
-│   │   ├── staging_thanh_normal.csv ← 520 mẫu SMS đời thực của Đặng Chí Thanh (100% PII masked)
-│   │   └── dataset.csv              ← Bộ dữ liệu tích hợp (520 mẫu hiện tại, mục tiêu >= 1500 mẫu)
-│   ├── processed/                   ← train.csv (80%), test.csv (20%), ma trận đặc trưng
-│   ├── evidence/                    ← Ảnh chụp màn hình SMS minh chứng đời thực
+│   │   ├── staging_thanh_normal.csv ← 1.773 mẫu SMS đời thực của Đặng Chí Thanh (100% PII masked)
+│   │   └── dataset.csv              ← Bộ dữ liệu tích hợp (1.773 mẫu hiện tại, mục tiêu >= 1500 mẫu)
+│   ├── processed/                   ← real_world_test_thanh.csv (42 mẫu kiểm định thực tế), ma trận đặc trưng
+│   ├── evidence/                    ← Ảnh chụp màn hình SMS minh chứng đời thực (Drive Vault) & JSON metadata
 │   └── scripts/                     ← Bộ công cụ tự động hóa dữ liệu
 │       ├── anonymize_sms.py         ← Ẩn danh hóa PII (che SĐT, STK, OTP, CCCD)
 │       ├── drive_uploader.py        ← Đồng bộ ảnh minh chứng lên Google Drive Vault

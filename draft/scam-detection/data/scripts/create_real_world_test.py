@@ -5,7 +5,7 @@ TRÍCH XUẤT VÀ KHỞI TẠO TẬP DỮ LIỆU KIỂM ĐỊNH ĐỜI THỰC (R
 TỪ 20 ẢNH CHỤP MÀN HÌNH ĐIỆN THOẠI CÁ NHÂN CỦA ĐẶNG CHÍ THANH
 ================================================================================
 Mục đích:
-  - Trích xuất toàn bộ 38 tin nhắn SMS đời thực từ 20 ảnh chụp màn hình điện thoại
+  - Trích xuất toàn bộ 42 tin nhắn SMS đời thực từ 20 ảnh chụp màn hình điện thoại
     cá nhân của Đặng Chí Thanh.
   - Tự động ẩn danh hóa toàn diện thông tin cá nhân (PII): tên riêng, mã OTP, số điện thoại,
     mã voucher cá nhân.
@@ -134,8 +134,8 @@ def main() -> None:
         ("thanh_sms_08.jpg", "Cục Cảnh Sát PCCC - Bộ Công An", "[TB] Khi phát hiện cháy cần bình tĩnh báo cho mọi người xung quanh biết và tìm cách thoát ra các vị trí thông thoáng, an toàn nhanh nhất; tuyệt đối không trú ẩn ở các khu vực khuất kín (nhà vệ sinh, tủ quần áo...), không dùng thang máy để thoát hiểm. Khi di chuyển thoát nạn cần dùng khăn, vải ướt che miệng, mũi và hạ thấp cơ thể để tránh hít phải khói, khí độc. Khi phải băng qua lửa cần lấy chăn, mền ướt trùm kín cơ thể. Mỗi cơ sở, hộ gia đình cần có nhiều phương án, lối thoát nạn an toàn phòng khi có cháy xảy ra."),
         
         # thanh_sms_09.jpg
-        ("thanh_sms_09.jpg", "FPT Play", "4651 la ma xac thuc tai khoan FPT Play cua Quy khach."),
-        ("thanh_sms_09.jpg", "FPT ID", "FPT ID Ma OTP cua QK la 892490, hieu luc 2 phut. FPT ID dung dang nhap cac App FPT, KHONG chia se ma nay voi bat ky ai, ke ca NV FPT. @accounts.fpt.vn #892490"),
+        ("thanh_sms_09.jpg", "FPT Play", "[MÃ_OTP] la ma xac thuc tai khoan FPT Play cua Quy khach."),
+        ("thanh_sms_09.jpg", "FPT ID", "FPT ID Ma OTP cua QK la [MÃ_OTP], hieu luc 2 phut. FPT ID dung dang nhap cac App FPT, KHONG chia se ma nay voi bat ky ai, ke ca NV FPT. @accounts.fpt.vn #[MÃ_OTP]"),
         
         # thanh_sms_10.jpg
         ("thanh_sms_10.jpg", "Dịch Vụ Công Quốc Gia", "[TB] Toàn dân tích cực tham gia phòng, chống mua bán người. Khi phát hiện dấu hiệu liên quan đến mua bán người, hãy thông báo ngay cho cơ quan Công an gần nhất hoặc Tổng đài quốc gia 111 để được tư vấn, hỗ trợ, hướng dẫn kịp thời."),
@@ -148,15 +148,15 @@ def main() -> None:
         ("thanh_sms_12.jpg", "Mắt Kính Tâm Đức", "(QC) Mung sinh nhat KH thang 11. Tam Duc gui tang KH Voucher -49% 01 Gong kinh, Kinh mat & Ma -100K HD1000K, -200K HD2000K. CT: https://mktd.vn/sinhnhat .HSD 30/11. De tu choi QC, Soan TC MKTAMDUC gui 1313"),
         ("thanh_sms_12.jpg", "Mắt Kính Tâm Đức", "Chuc mung sinh nhat quy khach. Doi ngu Mat Kinh Tam Duc kinh chuc Quy khach Suc khoe, Hanh phuc va Thanh cong. Cam on quy khach da tin dung san pham cua TamDuc"),
         ("thanh_sms_12.jpg", "Mắt Kính Tâm Đức", "(QC) Su kien khai xuan 2026 tai Mat Kinh Tam Duc. Li xi voucher len den 500K tang khach hang cu. Ap dung tu 22/02 - 22/03. CT: https://mktd.vn/tet2026 . De tu choi QC, Soan TC MKTAMDUC gui 1313"),
-        ("thanh_sms_12.jpg", "Mắt Kính Tâm Đức", "Mat Kinh Tam Duc gui rieng KH than thiet ma Y387AW -100K HD1000K va ma WBEZE7 -200K HD2000K khi mua sam. HSD 21/06. Chi tiet: https://matkinhtamduc.com/gift"),
+        ("thanh_sms_12.jpg", "Mắt Kính Tâm Đức", "Mat Kinh Tam Duc gui rieng KH than thiet ma [MÃ_ƯU_ĐÃI] -100K HD1000K va ma [MÃ_ƯU_ĐÃI] -200K HD2000K khi mua sam. HSD 21/06. Chi tiet: https://matkinhtamduc.com/gift"),
         
         # thanh_sms_13.jpg
-        ("thanh_sms_13.jpg", "TikTok", "[TikTok] 638516 là mã xác minh của bạn"),
-        ("thanh_sms_13.jpg", "TikTok", "[#][TikTok] 586203 là mã xác minh của bạn DaewVIZQ+ns"),
-        ("thanh_sms_13.jpg", "TikTok", "[#][TikTok] 897216 is your verification code, valid for 5 minutes. To keep your account safe, never forward this code."),
+        ("thanh_sms_13.jpg", "TikTok", "[TikTok] [MÃ_OTP] là mã xác minh của bạn"),
+        ("thanh_sms_13.jpg", "TikTok", "[#][TikTok] [MÃ_OTP] là mã xác minh của bạn DaewVIZQ+ns"),
+        ("thanh_sms_13.jpg", "TikTok", "[#][TikTok] [VERIFICATION_CODE] is your verification code, valid for 5 minutes. To keep your account safe, never forward this code."),
         
         # thanh_sms_14.jpg
-        ("thanh_sms_14.jpg", "Karofi", "KAROFI: Ma OTP cua Quy khach la 390843. Vui long su dung ma OTP nay trong vong 2 phut. Luu y: khong cung cap ma OTP cho bat ky ai. Tran trong!"),
+        ("thanh_sms_14.jpg", "Karofi", "KAROFI: Ma OTP cua Quy khach la [MÃ_OTP]. Vui long su dung ma OTP nay trong vong 2 phut. Luu y: khong cung cap ma OTP cho bat ky ai. Tran trong!"),
         
         # thanh_sms_15.jpg
         ("thanh_sms_15.jpg", "Mặt Trận Tổ Quốc Việt Nam", "[TB] MTTQ Việt Nam kêu gọi chung tay ủng hộ đồng bào bị thiệt hại do bão lũ gây ra. Các tài khoản tiếp nhận: 55102025 tại Vietinbank; 8639699999 tại BIDV; 1400666102025 tại Agribank; 8888881010 tại Vietcombank; 0606 tại MBbank."),
@@ -165,13 +165,13 @@ def main() -> None:
         ("thanh_sms_16.jpg", "Viettel Money / ePass", "Theo Nghi dinh 119/2024/ND-CP cua Chinh phu, de nghi chu phuong tien o to thuc hien thu tuc chuyen doi tai khoan thu phi sang tai khoan giao thong ket noi voi phuong tien thanh toan khong dung tien mat truoc ngay 01/10/2025. Chu phuong tien lien he voi ePass hoac Nha cung cap dich vu thu phi khac de duoc huong dan thuc hien, tranh gay gian doan dich vu. Neu da lien ket vui long bo qua. Truy cap https://giaothongso.viettelmoney.vn/nd119/ de biet them thong tin."),
         
         # thanh_sms_17.jpg
-        ("thanh_sms_17.jpg", "Pharmacity", "Ma giam 70K - CP7NF609J18DI84 cua ban sap het han! HSD: 09/06/25. Ghe Pharmacity gan nhat de su dung ngay! CT: https://bit.ly/4070vc - Hotline: 18006821"),
-        ("thanh_sms_17.jpg", "Pharmacity", "Ma xac nhan cua ban tai Pharmacity la: 9671, ma xac nhan chi co hieu luc trong vong 5 phut"),
+        ("thanh_sms_17.jpg", "Pharmacity", "Ma giam 70K - [MÃ_ƯU_ĐÃI] cua ban sap het han! HSD: 09/06/25. Ghe Pharmacity gan nhat de su dung ngay! CT: https://bit.ly/4070vc - Hotline: 18006821"),
+        ("thanh_sms_17.jpg", "Pharmacity", "Ma xac nhan cua ban tai Pharmacity la: [MÃ_OTP], ma xac nhan chi co hieu luc trong vong 5 phut"),
         ("thanh_sms_17.jpg", "Pharmacity", "(QC) Tu 01-30/08, tran ngap san pham moi, KDR Marvis chi 194k tang them qua, Drceutics chi tu 133k, Torriden giam den 40%. CT https://tinyurl.com/55zdybxy . De tu choi QC, Soan TC PHARMACITY gui 1313"),
         ("thanh_sms_17.jpg", "Pharmacity", "(QC) Giam ngay 14K khi mua Hiruscar Gel 5g tai Pharmacity. Ho tro mo seo tham, seo bong, seo moi hieu qua. Ap dung 15-30/09 & 16-31/10. Mua ngay https://tinyurl.com/Hiugel . De tu choi QC, Soan TC PHARMACITY gui 1313"),
         
         # thanh_sms_18.jpg
-        ("thanh_sms_18.jpg", "Đại Học Công Nghệ Thông Tin - UIT", "Chuc mung thi sinh Dang Chi Thanh da trung tuyen (DTTX-VB1) vao truong DH CNTT - DHQG-HCM nganh TRI TUE NHAN TAO . Chi tiet xem trong giay bao trung tuyen va nhap hoc, tra cuu tai dia chi https://tuyensinh.uit.edu.vn/giaybao-nhaphoc?dien_tt=TXQM, hotline 0865584879"),
+        ("thanh_sms_18.jpg", "Đại Học Công Nghệ Thông Tin - UIT", "Chuc mung thi sinh [HỌ_VÀ_TÊN] da trung tuyen (DTTX-VB1) vao truong DH CNTT - DHQG-HCM nganh TRI TUE NHAN TAO . Chi tiet xem trong giay bao trung tuyen va nhap hoc, tra cuu tai dia chi https://tuyensinh.uit.edu.vn/giaybao-nhaphoc?dien_tt=TXQM, hotline [SỐ_ĐIỆN_THOẠI]"),
         
         # thanh_sms_19.jpg
         ("thanh_sms_19.jpg", "Bộ Văn Hóa Thể Thao và Du Lịch", "[TB] Nhân dịp Ngày Sách và Văn hoá đọc Việt Nam lần IV (21/4/2025), Bộ VHTTDL kêu gọi các tổ chức, doanh nghiệp và bạn đọc cả nước cùng nhau lan toả tình yêu sách, để mỗi người dân là một đại sứ văn hoá đọc, mỗi gia đình, cộng đồng là một không gian văn hoá đọc, để cùng sách bước vào kỷ nguyên mới, kỷ nguyên vươn mình của dân tộc."),

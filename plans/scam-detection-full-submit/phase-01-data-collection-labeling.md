@@ -27,8 +27,8 @@
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
 | **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
-| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.776 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **1.776 / 1.500** | **100% có URL / Ảnh Drive** | ⏳ `in-progress` (Chờ Sơn & Cẩm) |
+| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **1.773 / 1.500** | **100% có URL / Ảnh Drive (0% rò rỉ)** | ⏳ `in-progress` (Chờ Sơn & Cẩm) |
 
 ---
 
@@ -192,12 +192,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 - [ ] Cẩm: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
 
 ### 3. Nhiệm vụ của Đặng Chí Thanh (Trưởng nhóm / PM)
-- [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 1.776 mẫu độc bản)
+- [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 1.773 mẫu độc bản, 0% rò rỉ với tập Holdout)
 - [x] Thanh: Tải ảnh chụp màn hình tin nhắn thực tế vào thư mục Google Drive [`CS114_Evidence_Vault`](https://drive.google.com/drive/folders/1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL)
 - [ ] Thanh: Kiểm tra chéo (Cross-review) dữ liệu của Sơn và Cẩm, rà soát nhãn nhất quán (Tạm dừng - Chờ Sơn & Cẩm nộp dữ liệu Google Sheet)
 - [x] Thanh: Export dữ liệu thành file `data/raw/dataset.csv` (bảng mã `utf-8-sig`)
 - [x] Thanh: Chạy script `python3 draft/scam-detection/data/scripts/data_validation.py --file draft/scam-detection/data/raw/dataset.csv` pass 100%
-- [x] Thanh: Thực hiện Stratified 80/20 Train/Test split và lưu trữ artifacts (`train.csv`, `test.csv`)
+- [ ] Thanh: Thực hiện Stratified 80/20 Train/Test split và lưu trữ artifacts (Tạm hoãn — Chờ Sơn & Cẩm nộp 1.000 mẫu lừa đảo để chia tập cân bằng 2 lớp)
 - [x] Thanh: Đánh dấu hoàn thành phần việc cá nhân trên Bảng trạng thái thành viên
 
 ---
@@ -229,15 +229,16 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 3. Minh chứng Đặng Chí Thanh:
-- Số mẫu bình thường đã nạp: `1.776 / 500` mẫu (Đạt 355% chỉ tiêu tối thiểu)
+- Số mẫu bình thường đã nạp: `1.773 / 500` mẫu (Đạt 354.6% chỉ tiêu tối thiểu)
 - Nguồn gốc dữ liệu: **100% đời thực từ Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026)**. Tuyệt đối không dùng AI tự sinh hay template vòng lặp nhân tạo (Zero Synthetic Text / Zero Template Duplication).
-- Phân bổ dữ liệu bình thường đời thực (1.776 mẫu độc bản):
+- Phân bổ dữ liệu bình thường đời thực (1.773 mẫu độc bản):
   + SMS Ngân hàng & Ví điện tử (Vietcombank, BIDV, Agribank, VietinBank, Techcombank, Sacombank, MB, VPBank, ACB, MoMo, ZaloPay, Viettel Money...)
   + SMS Viễn thông & Gói cước chính thống (Viettel, VinaPhone, MobiFone, Vietnamobile: đầu số 191, 198, 888, 900...)
   + SMS Khuyến cáo cơ quan nhà nước & Dịch vụ công (Bộ Công an PCCC, Cục CSGT CATP.HCM, Cục ATTT 156, Bộ TTTT...)
   + SMS Thương mại, Xác thực tài khoản & Giao nhận đơn hàng thực tế
 - Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin cá nhân nhạy cảm (SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
-- Truy xuất nguồn gốc (`source_url`): **1.776 / 1.776 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
+- Chống rò rỉ dữ liệu (Anti-Data Leakage): Đã chủ động loại trừ 3 mẫu trùng lặp hoàn toàn giữa IEEE Access và 20 ảnh chụp màn hình điện thoại cá nhân (Bộ VHTTDL, Phòng chống mua bán người 111, Cục An ninh mạng phòng chống cờ bạc). Giữ 3 mẫu này độc quyền trong tập Holdout Test để đảm bảo tập test phản ánh 100% dữ liệu chưa từng thấy (unseen data).
+- Truy xuất nguồn gốc (`source_url`): **1.773 / 1.773 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
 - Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng [**`Dang_Chi_Thanh_Normal_SMS`**](https://drive.google.com/drive/folders/1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg) bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`).
 - Đã tải thành công **20 ảnh chụp màn hình điện thoại thực tế** của Đặng Chí Thanh lên thư mục Google Drive riêng (`thanh_sms_01.jpg` đến `thanh_sms_20.jpg`) cùng tệp chứng nhận xuất xứ `Dang_Chi_Thanh_Normal_SMS_Provenance.txt`.
 - Đã bóc tách thành công **42 tin nhắn SMS đời thực** (100% ẩn danh hóa PII: tên cá nhân, mã OTP, số điện thoại, mã ưu đãi cá nhân) và xuất ra tệp kiểm định độc lập: `draft/scam-detection/data/processed/real_world_test_thanh.csv` với 100% `source_url` trỏ trực tiếp 1-1 tới link từng ảnh Drive.
@@ -248,51 +249,39 @@ X_train, X_test, y_train, y_test = train_test_split(
 ============================================================
   DATASET VALIDATION REPORT: dataset.csv
 ============================================================
-Total Rows:       1776
+Total Rows:       1773
 Columns:          ['id', 'text', 'label', 'scam_category', 'source', 'source_url', 'collector_name', 'notes']
-Class Balance:    Normal (0): 1776 | Scam (1): 0
+Class Balance:    Normal (0): 1773 | Scam (1): 0
 
 Scam Category Distribution:
-  - none                : 1776
+  - none                : 1773
 
 Collector Contributions:
-  - Đặng Chí Thanh      : 1776 samples
+  - Đặng Chí Thanh      : 1773 samples
 
-Provenance URLs:  1776 / 1776 samples (100.0%)
+Provenance URLs:  1773 / 1773 samples (100.0%)
 ------------------------------------------------------------
 ✅ STATUS: PASSED — Dataset conforms to all validation rules.
 ============================================================
 ```
 
 ### 5. Kết quả phân chia Train/Test (`split_data.py`):
-```text
-=================================================================
-  KẾT QUẢ PHÂN CHIA DỮ LIỆU HUẤN LUYỆN / KIỂM THỬ (STRATIFIED SPLIT)
-=================================================================
-Tệp gốc:            dataset.csv (1776 mẫu)
-Tập Train (80%):    draft/scam-detection/data/processed/train.csv (1420 mẫu)
-Tập Test (20%):     draft/scam-detection/data/processed/test.csv (356 mẫu)
-Tập Holdout Test:   draft/scam-detection/data/processed/real_world_test_thanh.csv (42 mẫu)
------------------------------------------------------------------
-Phân phối nhãn nhị phân (Class Balance):
-  • Train: Bình thường (0) = 100.0% | Lừa đảo (1) = 0.0%
-  • Test:  Bình thường (0) = 100.0% | Lừa đảo (1) = 0.0%
-=================================================================
-✅ ĐÃ HOÀN TẤT: Dữ liệu sạch sẵn sàng cho Phase 02.
-```
+> ⏳ **Tạm hoãn bước phân chia Train/Test (Deferred Split Gate):**  
+> Việc phân tách `train.csv` (80%) và `test.csv` (20%) bằng `split_data.py` chỉ được thực hiện sau khi Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu tin nhắn lừa đảo. Điều này nhằm đảm bảo thuật toán phân tầng (Stratified Split) hoạt động chính xác trên cả 2 nhãn `0` và `1` cùng 5 nhóm bẫy tâm lý, tránh tạo ra tập huấn luyện đơn lớp gây lỗi mô hình. Hiện tại thư mục `draft/scam-detection/data/processed/` chỉ lưu trữ tệp kiểm định đời thực độc lập `real_world_test_thanh.csv` (42 mẫu, 0% rò rỉ).
 
 ## Risk Assessment
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Không đủ mẫu | Low | High | Đã đạt 1.776 mẫu đời thực (vượt xa chỉ tiêu 500 mẫu) |
+| Không đủ mẫu | Low | High | Đã đạt 1.773 mẫu đời thực (vượt xa chỉ tiêu 500 mẫu) |
 | Class imbalance nặng | Medium | Medium | Chờ phần việc lừa đảo của Sơn & Cẩm; áp dụng kỹ thuật cân bằng lớp ở phase sau |
 | Chất lượng gán nhãn kém | Low | High | Đã kiểm định tự động qua data_validation.py (0 null, 0 dup, 100% provenance) |
+| Rò rỉ dữ liệu (Data Leakage) | Low | High | Đã loại trừ 3 mẫu trùng với Holdout Test set, kiểm tra overlap = 0 |
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.776/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive).**  
-> ⏳ **Tiến độ toàn nhóm:** Đạt 1.776/1.500 mẫu bình thường. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện và chốt sổ Phase 01.
+> ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.773/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive, 0% rò rỉ dữ liệu).**  
+> ⏳ **Tiến độ toàn nhóm:** Đạt 1.773/1.500 mẫu bình thường. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện, phân chia Train/Test và chốt sổ Phase 01.
 
 ## Commit
 
