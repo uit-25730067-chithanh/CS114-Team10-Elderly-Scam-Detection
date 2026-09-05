@@ -1,9 +1,29 @@
 """
-CS114 Final Project — Scam Detection
-Dataset Validation Script.
+================================================================================
+DỰ ÁN CUỐI KỲ CS114 - MÁY HỌC (NHÓM 10 - UIT)
+SCRIPT KIỂM ĐỊNH CHẤT LƯỢNG TẬP DỮ LIỆU TỰ ĐỘNG (DATASET VALIDATION)
+================================================================================
+Mục đích:
+  - Kiểm tra và thẩm định tự động toàn diện tệp dữ liệu CSV (`dataset.csv`) trước khi
+    đưa vào đường ống tiền xử lý Machine Learning (Phase 02).
+  - Đảm bảo tuân thủ nghiêm ngặt các tiêu chí chất lượng và quy tắc chống gian lận:
+    1. Đủ 5 cột bắt buộc: id, text, label, scam_category, source.
+    2. Không có văn bản rỗng, không chứa khoảng trắng vô nghĩa.
+    3. Nhãn `label` bắt buộc thuộc tập nhị phân {0, 1}.
+    4. Nhóm bẫy tâm lý `scam_category` phải hợp lệ:
+       - Nếu label = 0 thì scam_category bắt buộc là 'none'.
+       - Nếu label = 1 thì scam_category phải là 1 trong 4 nhóm:
+         ('fear_authority', 'family_emergency', 'health_gift', 'public_service').
+    5. Không trùng lặp nội dung tin nhắn (0 duplicate).
+    6. Kiểm toán tỷ lệ có nguồn gốc kiểm chứng (source_url / bằng chứng Drive).
+    7. Thống kê đóng góp của từng thành viên (collector_name) để đảm bảo cả 3 người đều làm.
 
-Validates raw or processed dataset CSV files against the schema,
-data types, category integrity, class balance, and provenance requirements.
+Hướng dẫn sử dụng cho thành viên trong nhóm:
+  1. Kiểm định file dataset chính:
+     python3 data_validation.py --file data/raw/dataset.csv
+  2. Chạy nhanh không hiển thị chi tiết (dùng cho CI/CD hoặc script tự động):
+     python3 data_validation.py --file data/raw/dataset.csv --quiet
+================================================================================
 """
 
 from __future__ import annotations

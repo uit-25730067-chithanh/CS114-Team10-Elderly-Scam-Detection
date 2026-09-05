@@ -1,11 +1,24 @@
 """
-CS114 Final Project — Scam Detection
-Semi-Automated Data Scraper & Provenance Extractor.
+================================================================================
+DỰ ÁN CUỐI KỲ CS114 - MÁY HỌC (NHÓM 10 - UIT)
+CÔNG CỤ CÀO DỮ LIỆU BÁN TỰ ĐỘNG & BÓC TÁCH NGUỒN GỐC (DATA SCRAPER & PROVENANCE)
+================================================================================
+Mục đích:
+  - Hỗ trợ các thành viên trong nhóm (đặc biệt là Sơn & Cẩm) cào nhanh các bài viết cảnh báo
+    lừa đảo từ các cổng thông tin chính thống và báo chí uy tín của Việt Nam:
+    (Dân Trí, VnExpress, Tuổi Trẻ, chongthurac.vn, canhsat.vn, Cục ATTT).
+  - Tự động trích xuất các câu trích dẫn tin nhắn SMS / hội thoại lừa đảo đặt trong ngoặc kép
+    hoặc gắn mác [CẢNH BÁO], [THÔNG BÁO].
+  - Gợi ý phân loại sơ bộ 4 nhóm bẫy tâm lý (scam_category) dựa trên từ khóa nhận diện.
+  - Tự động ghi nhận đầy đủ 8 cột kiểm toán nguồn gốc (source_url, source_title, SHA256 hash).
+  - Xuất ra file CSV tạm thời (staging) để thành viên kiểm duyệt trước khi đưa lên Google Sheet.
 
-Crawls scam alert articles from legitimate Vietnamese news sites and official portals
-(Dan Tri, VnExpress, Tuoi Tre, Chong Thu Rac, Canh Sat), extracts candidate scam
-messages/dialogues quoted in the text, and generates a staging CSV with full provenance
-(source_url, source_title, evidence_type, timestamp, content hash).
+Hướng dẫn sử dụng cho thành viên trong nhóm:
+  1. Cào từ 1 đường link bài báo đơn lẻ:
+     python3 data_scraper.py --url "https://dantri.com.vn/phap-luat/canh-bao-chieu-tro-lua-dao..."
+  2. Cào hàng loạt từ 1 file chứa danh sách link (mỗi dòng 1 link):
+     python3 data_scraper.py --file danh_sach_link.txt --collector "Hoàng Cao Sơn"
+================================================================================
 """
 
 from __future__ import annotations
