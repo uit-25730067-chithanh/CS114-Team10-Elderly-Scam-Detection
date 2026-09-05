@@ -18,6 +18,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Final
+from urllib.parse import urlparse
 
 import pandas as pd
 import requests
@@ -81,6 +82,7 @@ def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str]:
     headers = {"User-Agent": USER_AGENT}
     resp = requests.get(url, headers=headers, timeout=timeout)
     resp.raise_for_status()
+    resp.encoding = resp.apparent_encoding or "utf-8"
 
     raw_hash = hashlib.sha256(resp.content).hexdigest()
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -147,12 +149,15 @@ def process_url(url: str, collector_name: str = "Crawler") -> list[dict]:
     records = []
     evidence_type = "gov_portal" if any(g in url for g in [".gov.vn", "canhsat.vn", "chongthurac.vn"]) else "news_press"
 
+    parsed_url = urlparse(url)
+    source_domain = parsed_url.netloc if parsed_url.netloc else (parsed_url.path.split("/")[0] if parsed_url.path else "unknown")
+
     for quote in quotes:
         records.append({
             "text": quote,
             "label": LABEL_SCAM,
             "scam_category": infer_scam_category(quote),
-            "source": Path(url).netloc if hasattr(Path(url), "netloc") else url.split("/")[2],
+            "source": source_domain,
             "source_url": url,
             "source_title": title,
             "evidence_type": evidence_type,
@@ -178,7 +183,11 @@ def main() -> None:
     elif args.file:
         file_path = Path(args.file)
         if file_path.exists():
-            urls_to_scrape = [line.strip() for line in file_path.read_text().splitlines() if line.strip() and not line.startswith("#")]
+            urls_to_scrape = [
+                line.strip()
+                for line in file_path.read_text(encoding="utf-8").splitlines()
+                if line.strip() and not line.startswith("#")
+            ]
         else:
             print(f"[!] File not found: {args.file}")
             sys.exit(1)

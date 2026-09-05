@@ -135,11 +135,12 @@ def validate_dataset(file_path: Path | str, verbose: bool = True) -> tuple[bool,
             f"Found {len(scam_wrong_cat)} scam samples (label=1) with scam_category='none'."
         )
 
-    # Check duplicate texts
-    duplicate_mask = df.duplicated(subset=["text"], keep=False)
+    # Check duplicate texts (whitespace-normalized)
+    cleaned_text = df["text"].astype(str).str.strip()
+    duplicate_mask = cleaned_text.duplicated(keep=False)
     if duplicate_mask.any():
         dup_count = int(duplicate_mask.sum())
-        errors.append(f"Found {dup_count} rows with duplicate message text.")
+        errors.append(f"Found {dup_count} rows with duplicate message text (whitespace-normalized).")
 
     # Check provenance fields if present
     if "evidence_type" in df.columns:
