@@ -4,11 +4,11 @@ DỰ ÁN CUỐI KỲ CS114 - MÁY HỌC (NHÓM 10 - UIT)
 SCRIPT THU THẬP & ĐỒNG BỘ DỮ LIỆU BÌNH THƯỜNG CỦA ĐẶNG CHÍ THANH (PHASE 01)
 ================================================================================
 Mục đích:
-  - Thu thập đủ 520 mẫu tin nhắn Bình thường đời thực (label=0, scam_category='none')
-    100% từ kho dữ liệu khoa học thực tế: Vietnamese Quality-Assured SMS Dataset
-    (đã công bố và bình duyệt IEEE Access 2026).
+  - Khai thác toàn bộ kho dữ liệu tin nhắn Bình thường đời thực (label=0, scam_category='none')
+    từ Vietnamese Quality-Assured SMS Dataset (công bố khoa học IEEE Access 2026).
   - TUYỆT ĐỐI KHÔNG SỬ DỤNG AI HOẶC TEMPLATE TỰ SINH DỮ LIỆU.
   - Ẩn danh hóa 100% PII (SĐT, STK, OTP, CCCD, Mã GD) qua module `anonymize_sms.py`.
+  - Lọc bỏ trùng lặp tuyệt đối sau khi ẩn danh hóa để đảm bảo tính độc bản 100%.
   - Gán chính xác source_url 1-1 trỏ trực tiếp đến dòng dữ liệu gốc (permalink #L...)
     trong repository chính thức trên GitHub của bộ dữ liệu IEEE Access.
   - Xuất file `staging_thanh_normal.csv` và `dataset.csv` (chuẩn utf-8-sig).
@@ -37,16 +37,15 @@ IEEE_DATASET_URL: Final[str] = (
 IEEE_GITHUB_REPO_URL: Final[str] = (
     "https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv"
 )
-TARGET_SAMPLE_COUNT: Final[int] = 520
-MIN_MESSAGE_LENGTH: Final[int] = 30
+MIN_MESSAGE_LENGTH: Final[int] = 25
 
 
-def extract_authentic_normal_samples() -> list[dict]:
+def extract_all_authentic_normal_samples() -> list[dict]:
     """
-    Trích xuất 520 mẫu tin nhắn bình thường đời thực độc bản từ bộ dữ liệu IEEE Access 2026.
+    Trích xuất toàn bộ mẫu tin nhắn bình thường đời thực độc bản từ bộ dữ liệu IEEE Access 2026.
     Mỗi mẫu được kiểm tra độ dài, che giấu PII và tạo liên kết truy xuất nguồn gốc 1-1.
     """
-    print("[*] Đang tải Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026)...")
+    print("[*] Đang tải toàn bộ Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026)...")
     df = pd.read_csv(IEEE_DATASET_URL)
     norm = df[df["label"] == 0].copy()
 
@@ -72,10 +71,7 @@ def extract_authentic_normal_samples() -> list[dict]:
             "original_line": line_number,
         })
 
-        if len(samples) >= TARGET_SAMPLE_COUNT:
-            break
-
-    print(f"[+] Đã trích xuất thành công {len(samples)} mẫu tin nhắn bình thường đời thực độc bản.")
+    print(f"[+] Đã trích xuất thành công {len(samples)} mẫu tin nhắn bình thường đời thực độc bản (100% PII masked, 0 duplicate).")
     return samples
 
 
@@ -113,21 +109,22 @@ def build_and_export_dataset(samples: list[dict], data_dir: Path) -> pd.DataFram
 
 
 def main():
-    print("=" * 70)
-    print(" CS114 - THU THẬP DỮ LIỆU BÌNH THƯỜNG ĐỜI THỰC CỦA ĐẶNG CHÍ THANH (PHASE 01)")
-    print(" Nguồn: 100% thực tế từ IEEE Access 2026 (Zero Synthetic / Zero AI Generated)")
-    print("=" * 70)
+    print("=" * 75)
+    print(" CS114 - KHAI THÁC TOÀN BỘ KHO DỮ LIỆU BÌNH THƯỜNG ĐỜI THỰC IEEE ACCESS 2026")
+    print(" Người thực hiện: Đặng Chí Thanh (MSSV: 25730067) — PM & Data Lead")
+    print(" Tiêu chuẩn: 100% Đời thực | Zero AI Generated | 100% PII Masked | 1-1 Link")
+    print("=" * 75)
 
     data_dir = get_data_dir()
-    samples = extract_authentic_normal_samples()
-    if len(samples) < TARGET_SAMPLE_COUNT:
-        print(f"[!] Lỗi: Chỉ tìm được {len(samples)}/{TARGET_SAMPLE_COUNT} mẫu hợp lệ!")
+    samples = extract_all_authentic_normal_samples()
+    if not samples:
+        print("[!] Lỗi: Không trích xuất được dữ liệu!")
         sys.exit(1)
 
     df = build_and_export_dataset(samples, data_dir)
-    print("=" * 70)
-    print(f"✅ HOÀN TẤT THU THẬP: {len(df)} mẫu đời thực, 100% PII masked, 100% source_url 1-1!")
-    print("=" * 70)
+    print("=" * 75)
+    print(f"✅ HOÀN TẤT THU THẬP: {len(df)} mẫu đời thực độc bản, 100% PII masked, 100% source_url 1-1!")
+    print("=" * 75)
 
 
 if __name__ == "__main__":

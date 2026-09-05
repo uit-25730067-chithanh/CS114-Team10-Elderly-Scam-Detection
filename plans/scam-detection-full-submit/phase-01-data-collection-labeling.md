@@ -192,10 +192,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 - [ ] Cẩm: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
 
 ### 3. Nhiệm vụ của Đặng Chí Thanh (Trưởng nhóm / PM)
-- [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 520/500 mẫu độc bản)
-- [x] Thanh: Tải ảnh chụp màn hình tin nhắn thực tế vào thư mục Google Drive [`CS114_Evidence_Vault`](https://drive.google.com/drive/folders/1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL) (6 batch screenshots PNG)
+- [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 1.776 mẫu độc bản)
+- [x] Thanh: Tải ảnh chụp màn hình tin nhắn thực tế vào thư mục Google Drive [`CS114_Evidence_Vault`](https://drive.google.com/drive/folders/1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL)
 - [ ] Thanh: Kiểm tra chéo (Cross-review) dữ liệu của Sơn và Cẩm, rà soát nhãn nhất quán (Tạm dừng - Chờ Sơn & Cẩm nộp dữ liệu Google Sheet)
-- [x] Thanh: Export dữ liệu thành file `data/raw/staging_thanh_normal.csv` và khởi tạo `data/raw/dataset.csv` (bảng mã `utf-8-sig`)
+- [x] Thanh: Export dữ liệu thành file `data/raw/dataset.csv` (bảng mã `utf-8-sig`)
 - [x] Thanh: Chạy script `python3 draft/scam-detection/data/scripts/data_validation.py --file draft/scam-detection/data/raw/dataset.csv` pass 100%
 - [x] Thanh: Thực hiện Stratified 80/20 Train/Test split và lưu trữ artifacts (`train.csv`, `test.csv`)
 - [x] Thanh: Đánh dấu hoàn thành phần việc cá nhân trên Bảng trạng thái thành viên
@@ -229,16 +229,16 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 3. Minh chứng Đặng Chí Thanh:
-- Số mẫu bình thường đã nạp: `520 / 500` mẫu (Đạt 104% chỉ tiêu)
+- Số mẫu bình thường đã nạp: `1.776 / 500` mẫu (Đạt 355% chỉ tiêu tối thiểu)
 - Nguồn gốc dữ liệu: **100% đời thực từ Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026)**. Tuyệt đối không dùng AI tự sinh hay template vòng lặp nhân tạo (Zero Synthetic Text / Zero Template Duplication).
-- Phân bổ dữ liệu bình thường đời thực (520 mẫu độc bản):
+- Phân bổ dữ liệu bình thường đời thực (1.776 mẫu độc bản):
   + SMS Ngân hàng & Ví điện tử (Vietcombank, BIDV, Agribank, VietinBank, Techcombank, Sacombank, MB, VPBank, ACB, MoMo, ZaloPay, Viettel Money...)
   + SMS Viễn thông & Gói cước chính thống (Viettel, VinaPhone, MobiFone, Vietnamobile: đầu số 191, 198, 888, 900...)
   + SMS Khuyến cáo cơ quan nhà nước & Dịch vụ công (Bộ Công an PCCC, Cục CSGT CATP.HCM, Cục ATTT 156, Bộ TTTT...)
   + SMS Thương mại, Xác thực tài khoản & Giao nhận đơn hàng thực tế
 - Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin cá nhân nhạy cảm (SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
-- Truy xuất nguồn gốc (`source_url`): **520 / 520 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
-- Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng `Dang_Chi_Thanh_Normal_SMS` bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`), dọn dẹp sạch hoàn toàn thư mục gốc chung của nhóm để sẵn sàng tiếp nhận minh chứng lừa đảo từ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm.
+- Truy xuất nguồn gốc (`source_url`): **1.776 / 1.776 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
+- Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng `Dang_Chi_Thanh_Normal_SMS` bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`) sẵn sàng tiếp nhận thêm 50 ảnh chụp màn hình thực tế từ điện thoại của anh Thanh để lập tập kiểm định độc lập (Real-world Holdout Test Set).
 - Ngày ký duyệt hoàn thành phần việc: `05/09/2026`
 
 ### 4. Kết quả chạy script kiểm định (`data_validation.py`):
