@@ -1,7 +1,7 @@
 """
 ================================================================================
 DỰ ÁN CUỐI KỲ CS114 - MÁY HỌC (NHÓM 10 - UIT)
-SCRIPT THU THẬP & ĐỒNG BỘ DỮ LIỆU BÌNH THƯỜNG CỦA ĐẶNG CHÍ THANH (PHASE 01)
+PIPELINE TRÍCH XUẤT DỮ LIỆU BÌNH THƯỜNG IEEE ACCESS 2026 (PHASE 01)
 ================================================================================
 Mục đích:
   - Khai thác toàn bộ kho dữ liệu tin nhắn Bình thường đời thực (label=0, scam_category='none')

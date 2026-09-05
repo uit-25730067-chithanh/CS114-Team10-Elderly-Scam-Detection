@@ -30,7 +30,7 @@ scam-detection/
 │       ├── drive_uploader.py        ← Đồng bộ ảnh minh chứng lên Google Drive Vault
 │       ├── data_validation.py       ← Thẩm định chất lượng dữ liệu tự động
 │       ├── split_data.py            ← Stratified 80/20 Train/Test split
-│       └── collect_thanh_normal_dataset.py ← Pipeline thu thập & đồng bộ dữ liệu của Thanh
+│       └── collect_ieee_normal_dataset.py  ← Pipeline trích xuất dữ liệu chuẩn IEEE Access 2026
 ├── demo/
 │   ├── app.py                       ← Web app Streamlit
 │   └── components/                  ← Các module UI (Risk meter, Highlighting)
