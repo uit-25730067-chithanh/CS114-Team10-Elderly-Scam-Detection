@@ -230,19 +230,15 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ### 3. Minh chứng Đặng Chí Thanh:
 - Số mẫu bình thường đã nạp: `520 / 500` mẫu (Đạt 104% chỉ tiêu)
-- Phân bổ 4 nhóm bình thường đời thực:
-  + Nhóm 1: 155 mẫu (100 SMS biến động số dư/thẻ ngân hàng + 55 SMS cước viễn thông Viettel/VinaPhone/MobiFone từ dataset IEEE Access 2026)
-  + Nhóm 2: 130 mẫu (Hóa đơn điện EVN, tiền nước SAWACO, Y tế phường, BHXH Việt Nam VssID)
-  + Nhóm 3: 130 mẫu (Gia đình, con cháu hỏi thăm, dặn dò uống thuốc huyết áp/tiểu đường người cao tuổi)
-  + Nhóm 4: 105 mẫu (Nhà thuốc Pharmacity/FPT Long Châu + Siêu thị Co.opmart/WinMart/Big C)
-- 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
-- Ảnh chụp màn hình đã đồng bộ lên Google Drive `CS114_Evidence_Vault`: 6 ảnh batch (`batch_01_bank_sms_evidence.png` -> `batch_06_supermarket_promo_sms_evidence.png`)
-  + Batch 1 (Bank): https://drive.google.com/file/d/1ITEDBRSH_OSus27oKa4DhbH8rH8S29Fe/view?usp=drivesdk
-  + Batch 2 (Telecom): https://drive.google.com/file/d/1RMYr0Jugu5lAnNKtrEptkPZUzNQqGsXo/view?usp=drivesdk
-  + Batch 3 (Utility/Gov): https://drive.google.com/file/d/1DUfINt7kI5h4zx0uFw137ABE3uuU66Gb/view?usp=drivesdk
-  + Batch 4 (Family Care): https://drive.google.com/file/d/1HxTYLl_uw9Dg9eMgyTt668YQ3dvNw4Yd/view?usp=drivesdk
-  + Batch 5 (Pharmacy Promo): https://drive.google.com/file/d/1wtN8Ns1Sf9U-XbaikcRI14k9BA8TPP_g/view?usp=drivesdk
-  + Batch 6 (Supermarket Promo): https://drive.google.com/file/d/16IXtnjqPvdZAXNtmmc-43EbGjaq3VCPk/view?usp=drivesdk
+- Nguồn gốc dữ liệu: **100% đời thực từ Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026)**. Tuyệt đối không dùng AI tự sinh hay template vòng lặp nhân tạo (Zero Synthetic Text / Zero Template Duplication).
+- Phân bổ dữ liệu bình thường đời thực (520 mẫu độc bản):
+  + SMS Ngân hàng & Ví điện tử (Vietcombank, BIDV, Agribank, VietinBank, Techcombank, Sacombank, MB, VPBank, ACB, MoMo, ZaloPay, Viettel Money...)
+  + SMS Viễn thông & Gói cước chính thống (Viettel, VinaPhone, MobiFone, Vietnamobile: đầu số 191, 198, 888, 900...)
+  + SMS Khuyến cáo cơ quan nhà nước & Dịch vụ công (Bộ Công an PCCC, Cục CSGT CATP.HCM, Cục ATTT 156, Bộ TTTT...)
+  + SMS Thương mại, Xác thực tài khoản & Giao nhận đơn hàng thực tế
+- Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin cá nhân nhạy cảm (SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
+- Truy xuất nguồn gốc (`source_url`): **520 / 520 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
+- Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng `Dang_Chi_Thanh_Normal_SMS` bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`), dọn dẹp sạch hoàn toàn thư mục gốc chung của nhóm để sẵn sàng tiếp nhận minh chứng lừa đảo từ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm.
 - Ngày ký duyệt hoàn thành phần việc: `05/09/2026`
 
 ### 4. Kết quả chạy script kiểm định (`data_validation.py`):

@@ -37,6 +37,8 @@ from googleapiclient.http import MediaFileUpload
 
 # Thư mục Google Drive Evidence Vault mặc định của nhóm 10
 DEFAULT_FOLDER_ID: Final[str] = "1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL"
+# Thư mục con riêng của Đặng Chí Thanh cho dữ liệu tin nhắn bình thường
+DEFAULT_THANH_SUBFOLDER_ID: Final[str] = "1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg"
 
 # Quyền hạn truy cập: chỉ quản lý file do ứng dụng tạo ra trên Drive (an toàn nhất)
 SCOPES: Final[list[str]] = ["https://www.googleapis.com/auth/drive.file"]
