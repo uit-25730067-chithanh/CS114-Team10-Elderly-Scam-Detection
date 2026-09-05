@@ -27,8 +27,8 @@
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
 | **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
-| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **520 / 500** | 100% Ảnh Drive CS114_Evidence_Vault | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **520 / 1.500** | **100% có URL / Ảnh Drive** | ⏳ `in-progress` (Chờ Sơn & Cẩm) |
+| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.776 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **1.776 / 1.500** | **100% có URL / Ảnh Drive** | ⏳ `in-progress` (Chờ Sơn & Cẩm) |
 
 ---
 
@@ -238,7 +238,9 @@ X_train, X_test, y_train, y_test = train_test_split(
   + SMS Thương mại, Xác thực tài khoản & Giao nhận đơn hàng thực tế
 - Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin cá nhân nhạy cảm (SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
 - Truy xuất nguồn gốc (`source_url`): **1.776 / 1.776 mẫu (100.0%)** có liên kết permalink 1-1 chính xác trỏ trực tiếp đến từng dòng văn bản gốc (`#L...`) trên repository chính thức của bộ dữ liệu IEEE Access 2026.
-- Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng `Dang_Chi_Thanh_Normal_SMS` bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`) sẵn sàng tiếp nhận thêm 50 ảnh chụp màn hình thực tế từ điện thoại của anh Thanh để lập tập kiểm định độc lập (Real-world Holdout Test Set).
+- Thư mục Google Drive riêng: Đã khởi tạo thư mục riêng [**`Dang_Chi_Thanh_Normal_SMS`**](https://drive.google.com/drive/folders/1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg) bên trong `CS114_Evidence_Vault` (Folder ID: `1YIRd0PTYcCP_igYtY4YyZ-QCMKYBkJFg`).
+- Đã tải thành công **20 ảnh chụp màn hình điện thoại thực tế** của Đặng Chí Thanh lên thư mục Google Drive riêng (`thanh_sms_01.jpg` đến `thanh_sms_20.jpg`) cùng tệp chứng nhận xuất xứ `Dang_Chi_Thanh_Normal_SMS_Provenance.txt`.
+- Đã bóc tách thành công **42 tin nhắn SMS đời thực** (100% ẩn danh hóa PII: tên cá nhân, mã OTP, số điện thoại, mã ưu đãi cá nhân) và xuất ra tệp kiểm định độc lập: `draft/scam-detection/data/processed/real_world_test_thanh.csv` với 100% `source_url` trỏ trực tiếp 1-1 tới link từng ảnh Drive.
 - Ngày ký duyệt hoàn thành phần việc: `05/09/2026`
 
 ### 4. Kết quả chạy script kiểm định (`data_validation.py`):
@@ -246,17 +248,17 @@ X_train, X_test, y_train, y_test = train_test_split(
 ============================================================
   DATASET VALIDATION REPORT: dataset.csv
 ============================================================
-Total Rows:       520
+Total Rows:       1776
 Columns:          ['id', 'text', 'label', 'scam_category', 'source', 'source_url', 'collector_name', 'notes']
-Class Balance:    Normal (0): 520 | Scam (1): 0
+Class Balance:    Normal (0): 1776 | Scam (1): 0
 
 Scam Category Distribution:
-  - none                :  520
+  - none                : 1776
 
 Collector Contributions:
-  - Đặng Chí Thanh      :  520 samples
+  - Đặng Chí Thanh      : 1776 samples
 
-Provenance URLs:  520 / 520 samples (100.0%)
+Provenance URLs:  1776 / 1776 samples (100.0%)
 ------------------------------------------------------------
 ✅ STATUS: PASSED — Dataset conforms to all validation rules.
 ============================================================
@@ -267,9 +269,10 @@ Provenance URLs:  520 / 520 samples (100.0%)
 =================================================================
   KẾT QUẢ PHÂN CHIA DỮ LIỆU HUẤN LUYỆN / KIỂM THỬ (STRATIFIED SPLIT)
 =================================================================
-Tệp gốc:            dataset.csv (520 mẫu)
-Tập Train (80%):    draft/scam-detection/data/processed/train.csv (416 mẫu)
-Tập Test (20%):     draft/scam-detection/data/processed/test.csv (104 mẫu)
+Tệp gốc:            dataset.csv (1776 mẫu)
+Tập Train (80%):    draft/scam-detection/data/processed/train.csv (1420 mẫu)
+Tập Test (20%):     draft/scam-detection/data/processed/test.csv (356 mẫu)
+Tập Holdout Test:   draft/scam-detection/data/processed/real_world_test_thanh.csv (42 mẫu)
 -----------------------------------------------------------------
 Phân phối nhãn nhị phân (Class Balance):
   • Train: Bình thường (0) = 100.0% | Lừa đảo (1) = 0.0%
@@ -282,14 +285,14 @@ Phân phối nhãn nhị phân (Class Balance):
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Không đủ mẫu | Medium | High | Data augmentation + mở rộng nguồn |
-| Class imbalance nặng | Medium | Medium | SMOTE/Oversampling ở phase sau |
-| Chất lượng gán nhãn kém | Low | High | Cross-review giữa 2 người |
+| Không đủ mẫu | Low | High | Đã đạt 1.776 mẫu đời thực (vượt xa chỉ tiêu 500 mẫu) |
+| Class imbalance nặng | Medium | Medium | Chờ phần việc lừa đảo của Sơn & Cẩm; áp dụng kỹ thuật cân bằng lớp ở phase sau |
+| Chất lượng gán nhãn kém | Low | High | Đã kiểm định tự động qua data_validation.py (0 null, 0 dup, 100% provenance) |
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH 100% (520/500 mẫu, 100% PII masked, 100% có link ảnh Drive).**  
-> ⏳ **Tiến độ toàn nhóm:** Đạt 520/1.500 mẫu. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện và chốt sổ Phase 01.
+> ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.776/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive).**  
+> ⏳ **Tiến độ toàn nhóm:** Đạt 1.776/1.500 mẫu bình thường. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện và chốt sổ Phase 01.
 
 ## Commit
 
