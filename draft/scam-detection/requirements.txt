@@ -27,3 +27,8 @@ streamlit>=1.37.0
 joblib>=1.4.0
 tqdm>=4.66.0
 scipy>=1.13.0
+
+# Cloud Evidence Storage (Google Drive API)
+google-api-python-client>=2.185.0
+google-auth-oauthlib>=1.4.0
+google-auth-httplib2>=0.2.0

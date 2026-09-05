@@ -44,3 +44,7 @@ models/*.bin
 
 # Office temp lock files
 ~$*
+
+# 
+credentials.json
+token.json
