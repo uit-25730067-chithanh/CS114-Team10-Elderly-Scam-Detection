@@ -48,7 +48,7 @@
 
 ---
 
-## Current State (2026-09-04)
+## Current State (2026-09-05)
 
 | Component | Status |
 |-----------|--------|
@@ -57,7 +57,7 @@
 | Phase 00 (Env & Data Setup) | ✅ Passed — `requirements.txt`, `dataset_template.csv`, `verify_final.py` |
 | `src/utils/` | ✅ Done — `helpers.py`, `constants`, `set_seeds()` reproducibility |
 | `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
-| Dataset (`dataset.csv`) | ⏳ Sprint 1 Target (06/9 – 15/9) — cần thu thập >= 1,500 mẫu |
+| Dataset (`dataset.csv`) | ⏳ Sprint 1 (1.773/1.500 mẫu) — Đặng Chí Thanh hoàn thành 1.773 mẫu bình thường (100% PII masked, 100% có source_url 1-1); Chờ Sơn & Cẩm nộp 1.000 mẫu lừa đảo |
 | `src/preprocessing/` | ⏳ Sprint 2 Target — text_cleaner, tokenizer, feature_extractor |
 | `src/models/` | ⏳ Sprint 2-3 Target — naive_bayes, random_forest/xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Target — metrics, plots, comparator, XAI |
@@ -65,7 +65,7 @@
 | Demo UI (Streamlit) | ⏳ Sprint 3-4 Target — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-4 Target — triển khai song song theo sprint |
 
-> **Verdict (04/09): Phase 00 (Môi trường & Khung dữ liệu) đã PASSED ✅. Đạt 100% tiêu chí verify. Sẵn sàng khởi động Sprint 1 (Thu thập dữ liệu) từ 06/09.**
+> **Verdict (05/09): Phần việc của Đặng Chí Thanh trong Phase 01 đã HOÀN TẤT 100% (1.773 mẫu độc bản, 42 mẫu Holdout Test độc lập không rò rỉ, data_validation.py PASSED ✅). Đang ở cổng chờ đồng bộ (Pause gate) cho Sơn và Cẩm.**
 
 ---
 
@@ -251,17 +251,16 @@ Place in `Final/submit/` before zipping.
 
 ## Next Actions
  
-> **🚀 Phase 00 PASSED. Sẵn sàng khởi động Sprint 1 (06/9 – 15/9).**
+> **🚀 Phần việc của Đặng Chí Thanh trong Phase 01 đã PASSED (1.773 mẫu độc bản + 42 mẫu Holdout Test).**
 
-### 🎯 Sprint 1 — Kế hoạch hành động cụ thể:
+### 🎯 Kế hoạch hành động tiếp theo:
 1. **Hoàng Cao Sơn (Lead thu thập):**
-   - Thiết lập Google Sheet chia sẻ nhóm theo schema: `id | text | label | scam_category | source | collector_name | notes`.
-   - Phụ trách thu thập >= 500 mẫu lừa đảo (nhóm `fear_authority` và `family_emergency`).
+   - Thiết lập Google Sheet chia sẻ nhóm theo schema 8 cột chuẩn kiểm toán.
+   - Thu thập đủ ≥ 500 mẫu lừa đảo (nhóm `fear_authority` và `family_emergency`) kèm link bài báo / ảnh Drive.
 2. **Bùi Thị Mỷ Cẩm:**
-   - Cài đặt môi trường theo `requirements.txt`.
-   - Phụ trách thu thập >= 500 mẫu lừa đảo (nhóm `health_gift` và `public_service`).
+   - Thu thập đủ ≥ 500 mẫu lừa đảo (nhóm `health_gift` và `public_service`) kèm link bài báo / ảnh Drive.
 3. **Đặng Chí Thanh (PM & Data Lead):**
-   - Thu thập >= 500 mẫu tin nhắn bình thường (`none`) từ SMS nhà mạng, ngân hàng, sinh hoạt đời thường.
-   - Chuẩn bị sẵn module `src/preprocessing/` cho Sprint 2.
-   - Giám sát tiến độ và kiểm tra chất lượng dữ liệu thu thập (tránh trùng lặp, nhãn nhất quán).
+   - ✅ Đã thu thập 1.773 mẫu tin nhắn bình thường (`none`), ẩn danh PII 100%, đồng bộ 20 ảnh Drive và tệp 42 mẫu Holdout Test độc lập (0% rò rỉ).
+   - Sẵn sàng tích hợp dữ liệu từ Google Sheet của Sơn và Cẩm ngay khi các bạn bàn giao để nghiệm thu toàn diện Phase 01 và phân chia Train/Test 80/20.
+   - Khởi động chuẩn bị kiến trúc đường ống cho Phase 02 (`src/preprocessing/`).
 

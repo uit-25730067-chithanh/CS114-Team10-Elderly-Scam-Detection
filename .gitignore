@@ -6,6 +6,11 @@
 !**/data/raw/dataset.csv
 **/data/raw/*.json
 **/data/raw/*.xlsx
+**/data/evidence/**/*.jpg
+**/data/evidence/**/*.jpeg
+**/data/evidence/**/*.png
+!**/data/evidence/**/*.json
+!**/data/evidence/**/*.md
 
 # Python
 __pycache__/
