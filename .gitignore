@@ -6,6 +6,7 @@
 !**/data/raw/dataset.csv
 **/data/raw/*.json
 **/data/raw/*.xlsx
+**/data/evidence/
 
 # Python
 __pycache__/
