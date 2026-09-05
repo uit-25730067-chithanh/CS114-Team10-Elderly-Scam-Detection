@@ -27,8 +27,8 @@
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
 | **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
-| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **520 / 500** | 100% Ảnh Drive CS114_Evidence_Vault | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **520 / 1.500** | **100% có URL / Ảnh Drive** | ⏳ `in-progress` (Chờ Sơn & Cẩm) |
+| **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **0 / 1.500** | **100% có URL / Ảnh Drive** | ⏳ `not-started` |
 
 ---
 
@@ -192,13 +192,13 @@ X_train, X_test, y_train, y_test = train_test_split(
 - [ ] Cẩm: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
 
 ### 3. Nhiệm vụ của Đặng Chí Thanh (Trưởng nhóm / PM)
-- [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 520/500 mẫu độc bản)
-- [x] Thanh: Tải ảnh chụp màn hình tin nhắn thực tế vào thư mục Google Drive [`CS114_Evidence_Vault`](https://drive.google.com/drive/folders/1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL) (6 batch screenshots PNG)
-- [ ] Thanh: Kiểm tra chéo (Cross-review) dữ liệu của Sơn và Cẩm, rà soát nhãn nhất quán (Tạm dừng - Chờ Sơn & Cẩm nộp dữ liệu Google Sheet)
-- [x] Thanh: Export dữ liệu thành file `data/raw/staging_thanh_normal.csv` và khởi tạo `data/raw/dataset.csv` (bảng mã `utf-8-sig`)
-- [x] Thanh: Chạy script `python3 draft/scam-detection/data/scripts/data_validation.py --file draft/scam-detection/data/raw/dataset.csv` pass 100%
-- [x] Thanh: Thực hiện Stratified 80/20 Train/Test split và lưu trữ artifacts (`train.csv`, `test.csv`)
-- [x] Thanh: Đánh dấu hoàn thành phần việc cá nhân trên Bảng trạng thái thành viên
+- [ ] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt
+- [ ] Thanh: Tải ảnh chụp màn hình tin nhắn thực tế vào thư mục Google Drive [`CS114_Evidence_Vault`](https://drive.google.com/drive/folders/1YuXfFBHMWfpafBgykXKCzKDjqKAyE9DL)
+- [ ] Thanh: Kiểm tra chéo (Cross-review) dữ liệu của Sơn và Cẩm, rà soát nhãn nhất quán
+- [ ] Thanh: Export Google Sheet thành file `data/raw/dataset.csv` (bảng mã `utf-8-sig`)
+- [ ] Thanh: Chạy script `python3 draft/scam-detection/data/scripts/data_validation.py --file draft/scam-detection/data/raw/dataset.csv` pass 100%
+- [ ] Thanh: Thực hiện Stratified 80/20 Train/Test split và lưu trữ artifacts
+- [ ] Thanh: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
 
 ---
 
@@ -219,67 +219,23 @@ X_train, X_test, y_train, y_test = train_test_split(
 ## Evidence Section *(Điền số liệu thực tế sau khi từng thành viên hoàn thành)*
 
 ### 1. Minh chứng Hoàng Cao Sơn:
-- Số mẫu lừa đảo đã nạp vào Sheet: `0 / 500`
-- Tỷ lệ có `source_url`: `0.0 %`
-- Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
+- Số mẫu lừa đảo đã nạp vào Sheet: `... / 500`
+- Tỷ lệ có `source_url`: `... %`
+- Ngày ký duyệt hoàn thành: `...`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
-- Số mẫu lừa đảo đã nạp vào Sheet: `0 / 500`
-- Tỷ lệ có `source_url`: `0.0 %`
-- Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
+- Số mẫu lừa đảo đã nạp vào Sheet: `... / 500`
+- Tỷ lệ có `source_url`: `... %`
+- Ngày ký duyệt hoàn thành: `...`
 
 ### 3. Minh chứng Đặng Chí Thanh:
-- Số mẫu bình thường đã nạp: `520 / 500` mẫu (Đạt 104% chỉ tiêu)
-- Phân bổ 4 nhóm bình thường đời thực:
-  + Nhóm 1: 155 mẫu (100 SMS biến động số dư/thẻ ngân hàng + 55 SMS cước viễn thông Viettel/VinaPhone/MobiFone từ dataset IEEE Access 2026)
-  + Nhóm 2: 130 mẫu (Hóa đơn điện EVN, tiền nước SAWACO, Y tế phường, BHXH Việt Nam VssID)
-  + Nhóm 3: 130 mẫu (Gia đình, con cháu hỏi thăm, dặn dò uống thuốc huyết áp/tiểu đường người cao tuổi)
-  + Nhóm 4: 105 mẫu (Nhà thuốc Pharmacity/FPT Long Châu + Siêu thị Co.opmart/WinMart/Big C)
-- 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD, Mã GD) qua `anonymize_sms.py`.
-- Ảnh chụp màn hình đã đồng bộ lên Google Drive `CS114_Evidence_Vault`: 6 ảnh batch (`batch_01_bank_sms_evidence.png` -> `batch_06_supermarket_promo_sms_evidence.png`)
-  + Batch 1 (Bank): https://drive.google.com/file/d/1ITEDBRSH_OSus27oKa4DhbH8rH8S29Fe/view?usp=drivesdk
-  + Batch 2 (Telecom): https://drive.google.com/file/d/1RMYr0Jugu5lAnNKtrEptkPZUzNQqGsXo/view?usp=drivesdk
-  + Batch 3 (Utility/Gov): https://drive.google.com/file/d/1DUfINt7kI5h4zx0uFw137ABE3uuU66Gb/view?usp=drivesdk
-  + Batch 4 (Family Care): https://drive.google.com/file/d/1HxTYLl_uw9Dg9eMgyTt668YQ3dvNw4Yd/view?usp=drivesdk
-  + Batch 5 (Pharmacy Promo): https://drive.google.com/file/d/1wtN8Ns1Sf9U-XbaikcRI14k9BA8TPP_g/view?usp=drivesdk
-  + Batch 6 (Supermarket Promo): https://drive.google.com/file/d/16IXtnjqPvdZAXNtmmc-43EbGjaq3VCPk/view?usp=drivesdk
-- Ngày ký duyệt hoàn thành phần việc: `05/09/2026`
+- Số mẫu bình thường đã nạp vào Sheet: `... / 500`
+- Ảnh chụp màn hình đã lưu trong `CS114_Evidence_Vault`: `... ảnh`
+- Ngày ký duyệt hoàn thành: `...`
 
 ### 4. Kết quả chạy script kiểm định (`data_validation.py`):
 ```text
-============================================================
-  DATASET VALIDATION REPORT: dataset.csv
-============================================================
-Total Rows:       520
-Columns:          ['id', 'text', 'label', 'scam_category', 'source', 'source_url', 'collector_name', 'notes']
-Class Balance:    Normal (0): 520 | Scam (1): 0
-
-Scam Category Distribution:
-  - none                :  520
-
-Collector Contributions:
-  - Đặng Chí Thanh      :  520 samples
-
-Provenance URLs:  520 / 520 samples (100.0%)
-------------------------------------------------------------
-✅ STATUS: PASSED — Dataset conforms to all validation rules.
-============================================================
-```
-
-### 5. Kết quả phân chia Train/Test (`split_data.py`):
-```text
-=================================================================
-  KẾT QUẢ PHÂN CHIA DỮ LIỆU HUẤN LUYỆN / KIỂM THỬ (STRATIFIED SPLIT)
-=================================================================
-Tệp gốc:            dataset.csv (520 mẫu)
-Tập Train (80%):    draft/scam-detection/data/processed/train.csv (416 mẫu)
-Tập Test (20%):     draft/scam-detection/data/processed/test.csv (104 mẫu)
------------------------------------------------------------------
-Phân phối nhãn nhị phân (Class Balance):
-  • Train: Bình thường (0) = 100.0% | Lừa đảo (1) = 0.0%
-  • Test:  Bình thường (0) = 100.0% | Lừa đảo (1) = 0.0%
-=================================================================
-✅ ĐÃ HOÀN TẤT: Dữ liệu sạch sẵn sàng cho Phase 02.
+(Chưa thực hiện — dán output terminal thực tế vào đây khi nghiệm thu)
 ```
 
 ## Risk Assessment
@@ -292,8 +248,7 @@ Phân phối nhãn nhị phân (Class Balance):
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH 100% (520/500 mẫu, 100% PII masked, 100% có link ảnh Drive).**  
-> ⏳ **Tiến độ toàn nhóm:** Đạt 520/1.500 mẫu. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện và chốt sổ Phase 01.
+> ⬜ Chưa bắt đầu.
 
 ## Commit
 

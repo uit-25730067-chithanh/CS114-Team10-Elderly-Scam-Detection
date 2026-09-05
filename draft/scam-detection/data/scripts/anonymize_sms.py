@@ -42,18 +42,18 @@ from src.utils.helpers import CATEGORY_NONE, LABEL_NORMAL, get_data_dir
 
 # ─── Các biểu thức chính quy (Regex) phát hiện PII tiếng Việt ───────────────────
 REGEX_OTP: Final[re.Pattern] = re.compile(
-    r"(?:(?:m[aã]\s+)?otp(?:\s+(?:x[aá]c\s+th[uự]c|x[aá]c\s+nh[aậ]n)(?:\s+gd)?)?|m[aã]\s+(?:x[aá]c\s+th[uự]c|x[aá]c\s+nh[aậ]n|b[aả]o\s+m[aậ]t|giao\s+d[iị]ch))(?:\s+(?:c[uủ]a\s+b[aạ]n\s+)?(?:l[aà]|:))?[:\s]+([0-9]{4,8})\b",
+    r"(?:m[aã]\s+(?:otp|x[aá]c\s+th[uự]c|x[aá]c\s+nh[aậ]n|b[aả]o\s+m[aậ]t|giao\s+d[iị]ch)|otp)(?:\s+(?:c[uủ]a\s+b[aạ]n\s+)?l[aà])?[:\s]+([0-9]{4,8})\b",
     re.IGNORECASE,
 )
 REGEX_PHONE: Final[re.Pattern] = re.compile(
     r"(?:\+84|84|0)(?:3[2-9]|5[25689]|7[06-9]|8[1-9]|9[0-9])[0-9]{7}\b"
 )
 REGEX_BANK_ACCOUNT: Final[re.Pattern] = re.compile(
-    r"(?:t[aà]i\s+kho[aả]n(?:\s+ngu[oồ]n|\s+[đd][ií]ch)?|s[oố]\s+tk|stk|\btk|account)[:\s#]*([0-9]{8,16})\b",
+    r"(?:tài\s+khoản|stk|số\s+tk|tk|account)[:\s#]*([0-9]{8,16})\b",
     re.IGNORECASE,
 )
 REGEX_CCCD: Final[re.Pattern] = re.compile(
-    r"(?:cccd|cmnd|[đd][iị]nh\s+danh|c[aă]n\s+c[uư][oớ]c)[:\s]*([0-9]{9,12})\b",
+    r"(?:cccd|cmnd|định\s+danh)[:\s]*([0-9]{9,12})\b",
     re.IGNORECASE,
 )
 REGEX_TRANSACTION_ID: Final[re.Pattern] = re.compile(
