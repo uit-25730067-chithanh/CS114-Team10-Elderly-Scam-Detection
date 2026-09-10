@@ -94,7 +94,7 @@
 | | **Cả nhóm** | Báo cáo Word: Chương 4 (Thực nghiệm) + Chương 5 (Kết luận) + Tài liệu tham khảo | 🔲 |
 | | **Cả nhóm** | Slide PPT 15 phút (14–16 slides) + Diễn tập bấm giờ (≤15 phút) | 🔲 |
 | | **Thanh** | Pre-flight verification + Đóng gói `25730067-25730013-25730061.zip` (22/09) | 🔲 |
-| **D-Day (23/09/2026)** | **Cả nhóm** | **Báo cáo & Thuyết trình bảo vệ đồ án trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
+| **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
 
 ---
 

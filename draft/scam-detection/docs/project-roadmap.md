@@ -41,8 +41,8 @@ gantt
     Diễn tập thuyết trình bấm giờ ≤15p (Cả nhóm)   :crit, s3_5, 2026-09-21, 2026-09-22
     Đóng gói ZIP 25730067-... (Thanh)              :s3_6, 2026-09-22, 2026-09-22
 
-    section D-Day: Thuyết trình (23/09)
-    BÁO CÁO & BẢO VỆ CHÍNH THỨC (Cả nhóm)          :milestone, s3_7, 2026-09-23, 0d
+    section D-Day: Thuyết trình MS Teams (18h30 23/09)
+    BÁO CÁO TRỰC TUYẾN MS TEAMS (18h30)            :milestone, s3_7, 2026-09-23, 0d
 ```
 
 ---
@@ -151,12 +151,15 @@ gantt
 
 ---
 
-## 🎯 D-Day — 23/09/2026: Thuyết trình Bảo vệ Đồ án
+## 🎯 D-Day — 18:30 Ngày 23/09/2026: Thuyết Trình Bảo Vệ Đồ Án (MS Teams)
 
-| Thời gian | Nội dung | Phụ trách |
-|-----------|----------|-----------|
-| 00:00 – 02:00 | Khai mạc, Đặt vấn đề, Bối cảnh lừa đảo NCT & Ý nghĩa thực tiễn | **Đặng Chí Thanh** |
-| 02:00 – 05:00 | Phương pháp đề xuất, Pipeline NLP tiếng Việt, Feature Engineering | **Đặng Chí Thanh** |
-| 05:00 – 09:00 | Thực nghiệm 3+ Mô hình (NB, RF/XGB, SVM), Đánh giá Overfitting, Confusion Matrix | **Bùi Thị Mỷ Cẩm** |
-| 09:00 – 12:00 | Demo Web App Streamlit trực quan, Giải thích bẫy tâm lý XAI, Kết luận | **Hoàng Cao Sơn** |
-| 12:00 – 15:00 | Trả lời câu hỏi phản biện của Giảng viên (Q&A) | **Cả nhóm** |
+> 📌 **Hình thức:** Trực tuyến qua Microsoft Teams (khe giờ môn SS007 cũ, thầy Thăng tạo điều kiện báo cáo sớm).  
+> 📌 **Quy cách:** Bắt buộc thuyết trình luân phiên cả 3 thành viên; Trưởng nhóm Đặng Chí Thanh điều phối Master Share Screen.
+
+| Thời gian | Nội dung | Phụ trách & Thao tác kỹ thuật |
+|-----------|----------|------------------------------|
+| 00:00 – 01:30 | Chào thầy, giới thiệu Nhóm 10, bối cảnh lừa đảo NCT tại VN & ý nghĩa thực tiễn | **Đặng Chí Thanh** (Bật mic/cam, Share Screen Slide 1–2) |
+| 01:30 – 04:30 | Quy trình thu thập dataset (≥1.500 mẫu, PII Masking), Pipeline NLP tiếng Việt & TF-IDF | **Đặng Chí Thanh** (Slide 3–5, chuyển quyền nói cho Cẩm) |
+| 04:30 – 08:30 | Thực nghiệm 3+ mô hình (NB, RF/XGB, SVM), Đánh giá Overfitting (Learning Curves), Confusion Matrix | **Bùi Thị Mỷ Cẩm** (Bật mic/cam, Slide 6–9, chuyển quyền nói cho Sơn) |
+| 08:30 – 11:30 | Giải thích bẫy tâm lý XAI SHAP, Demo trực tiếp Web App Streamlit, Kết luận & Hướng mở rộng | **Hoàng Cao Sơn** (Bật mic/cam, thuyết minh trên tab Demo do Thanh share, Slide 10–13) |
+| 11:30 – 15:00 | Trả lời câu hỏi phản biện của ThS. Cáp Phạm Đình Thăng (Q&A) | **Cả nhóm** (Thanh điều phối mở đầu và cùng Cẩm, Sơn phản biện) |

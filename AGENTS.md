@@ -11,7 +11,7 @@
 - **Assignment:** Final — Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi
 - **Repository:** [`uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection`](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection)
 - **SSH Remote:** `git@github.com-uit:uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection.git`
-- **Deadline:** 23/09/2026 (Báo cáo sớm theo nguyện vọng nhóm | Hạn LMS gốc: 13/10/2026) | Báo cáo: 15 phút/nhóm
+- **Deadline & Báo cáo:** 18:30 ngày 23/09/2026 (Báo cáo sớm qua MS Teams | Hạn LMS gốc: 13/10/2026) | Thuyết trình: 15 phút/nhóm (Luân phiên 3 thành viên)
 - **Group:** Nhóm 10 | 3 thành viên:
   - **Đặng Chí Thanh** — MSSV: `25730067` (Trưởng nhóm / PM) — `25730067@ms.uit.edu.vn`
   - **Bùi Thị Mỷ Cẩm** — MSSV: `25730013` (ML Modeling) — `25730013@ms.uit.edu.vn`
@@ -64,9 +64,9 @@
 | Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (14/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
 | Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (15/09 shell → 20/09 integrated) — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (14/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
-| Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **23/09/2026 Thuyết trình chính thức** |
+| Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
-> **Verdict (10/09): Chuyển sang mô hình 3-Sprint Fast-Track (13 ngày đến ngày báo cáo 23/09). Phần việc của Đặng Chí Thanh trong Phase 01 đã HOÀN TẤT 100% (1.773 mẫu độc bản, 42 mẫu Holdout Test độc lập không rò rỉ, data_validation.py PASSED ✅). Khóa toàn bộ dữ liệu trước 23:59 ngày 12/09 để kích hoạt 4 luồng song song Sprint 2.**
+> **Verdict (10/09): Chuyển sang mô hình 3-Sprint Fast-Track (13 ngày đến ngày báo cáo 23/09 lúc 18h30). Phần việc của Đặng Chí Thanh trong Phase 01 đã HOÀN TẤT 100% (1.773 mẫu độc bản, 42 mẫu Holdout Test độc lập không rò rỉ, data_validation.py PASSED ✅). Khóa toàn bộ dữ liệu trước 23:59 ngày 12/09 để kích hoạt 4 luồng song song Sprint 2.**
 
 ---
 

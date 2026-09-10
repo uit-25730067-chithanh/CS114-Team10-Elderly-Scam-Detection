@@ -25,7 +25,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | **Sprint 1** | 06/09 – 12/09 | Setup repo + Scaffold (Phase 00 Passed ✅), Thu thập & Khóa Dataset (Phase 01) |
 | **Sprint 2** | 13/09 – 18/09 | Tiền xử lý tiếng Việt, EDA, Feature Engineering, Huấn luyện song song 4 mô hình (NB, RF, XGBoost, SVM), Dựng Demo UI shell, Soạn Báo cáo Chương 1–3 |
 | **Sprint 3** | 19/09 – 22/09 | Đánh giá tổng hợp & XAI, Tích hợp model vào Demo UI, Hoàn thiện Báo cáo Chương 4–5 & PPT, Diễn tập thuyết trình (≤15 phút), Đóng gói ZIP |
-| **D-Day** | **23/09/2026** | **Thuyết trình / Báo cáo bảo vệ đồ án trước ThS. Cáp Phạm Đình Thăng** |
+| **D-Day** | **18:30 23/09/2026** | **Thuyết trình luân phiên qua MS Teams bảo vệ đồ án trước ThS. Cáp Phạm Đình Thăng** |
 
 ## Constraints
 
@@ -50,7 +50,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `not-started` | Confusion Matrix, Learning Curves, SHAP top-20 keywords |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (15–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |
 | 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (14–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
-| 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 23/09 |
+| 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 18:30 23/09 qua MS Teams |
 
 ## Git Convention
 

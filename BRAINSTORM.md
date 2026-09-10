@@ -2,7 +2,7 @@
 
 **Môn học:** CS114 - Machine Learning (Máy học)  
 **Giảng viên:** ThS. Cáp Phạm Đình Thăng  
-**Hạn nộp & Báo cáo:** 23/09/2026 (Báo cáo sớm theo đăng ký của nhóm | Hạn LMS gốc: 13/10/2026) | **Thời lượng báo cáo:** 15 phút / nhóm  
+**Hạn nộp & Báo cáo:** 18:30 ngày 23/09/2026 (Báo cáo sớm trực tuyến qua MS Teams | Hạn LMS gốc: 13/10/2026) | **Thời lượng báo cáo:** 15 phút / nhóm (Luân phiên 3 thành viên)  
 **Repository:** [`uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection`](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection)
 
 ---
