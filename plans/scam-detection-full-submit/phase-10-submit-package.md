@@ -14,11 +14,11 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 1–2h |
-| Sprint | Sprint 4 |
+| Sprint | Sprint 3 Fast-Track (22/09/2026) |
 
 ## Context
 
-Đóng gói tất cả deliverables vào thư mục nộp bài theo đúng cấu trúc yêu cầu CS114. Submit lên LMS trước deadline 13/10/2026 23:59.
+Đóng gói tất cả deliverables vào thư mục nộp bài theo đúng cấu trúc yêu cầu CS114. Đóng gói hoàn tất ngày 22/09/2026 để sẵn sàng nộp và thuyết trình ngày 23/09/2026 (Hạn LMS gốc: 13/10/2026 23:59).
 
 ## Required Structure (từ README.md)
 
@@ -134,7 +134,7 @@ Nộp file `25730067-25730013-25730061.zip` lên Moodle LMS trước deadline.
 - [ ] ZIP file tạo thành công
 - [ ] File size reasonable (< 100MB, không có .venv)
 - [ ] Test unzip → chạy được
-- [ ] Upload LMS trước 13/10/2026 23:59
+- [ ] Đóng gói hoàn tất trước 22/09/2026 và sẵn sàng báo cáo ngày 23/09/2026 (Hạn LMS gốc: 13/10/2026 23:59)
 
 ## Success Criteria
 

@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 4–6h |
-| Sprint | Sprint 3–4 |
+| Sprint | Sprint 2–3 Fast-Track (15/09 shell → 20/09 integrated) |
 
 ## Context
 
