@@ -6,7 +6,7 @@
 **Môn học:** CS114 — Máy học (Machine Learning) — UIT, ĐHQG-HCM  
 **Nhóm:** 10 (3 thành viên: Đặng Chí Thanh - 25730067 [PM/Lead], Bùi Thị Mỷ Cẩm - 25730013, Hoàng Cao Sơn - 25730061)  
 **Repository:** [`uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection`](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection)  
-**Deadline:** 13/10/2026
+**Deadline:** 23/09/2026 (Báo cáo sớm theo nguyện vọng nhóm | Hạn LMS gốc: 13/10/2026)
 
 ---
 
