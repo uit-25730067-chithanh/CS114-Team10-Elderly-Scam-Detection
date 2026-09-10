@@ -22,7 +22,7 @@ gantt
     Setup repo, venv & verify_final (Thanh)        :done, s1_1, 2026-09-06, 2026-09-09
     Thu thập 1.773 mẫu bình thường (Thanh)         :done, s1_2, 2026-09-06, 2026-09-10
     Thu thập 1.000 mẫu lừa đảo (Sơn & Cẩm)         :active, s1_3, 2026-09-09, 2026-09-12
-    Khóa dataset.csv & chia 80/20 (Thanh)          :crit, s1_4, 2026-09-12, 2026-09-12
+    Khóa dataset.csv & chia 80/20 (Thanh)          :crit, s1_4, 2026-09-12, 1d
 
     section Sprint 2: Song song NLP & ML (13/09 – 18/09)
     Tiền xử lý NLP tiếng Việt (Thanh)              :s2_1, 2026-09-13, 2026-09-14

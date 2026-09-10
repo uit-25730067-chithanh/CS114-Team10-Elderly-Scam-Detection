@@ -134,7 +134,8 @@ Nộp file `25730067-25730013-25730061.zip` lên Moodle LMS trước deadline.
 - [ ] ZIP file tạo thành công
 - [ ] File size reasonable (< 100MB, không có .venv)
 - [ ] Test unzip → chạy được
-- [ ] Đóng gói hoàn tất trước 22/09/2026 và sẵn sàng báo cáo ngày 23/09/2026 (Hạn LMS gốc: 13/10/2026 23:59)
+- [ ] Đóng gói ZIP hoàn tất trước **22/09/2026** — sẵn sàng nộp ngay khi báo cáo xong 23/09
+- [ ] Upload ZIP lên Moodle LMS: thực hiện sau khi báo cáo 23/09, **trước hạn gốc 13/10/2026 23:59**
 
 ## Success Criteria
 
