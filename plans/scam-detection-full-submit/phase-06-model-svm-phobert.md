@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 3–5h |
-| Sprint | Sprint 2 Fast-Track (16/09 – 17/09/2026) |
+| Sprint | Sprint 3 Fast-Track (19/09 – 20/09/2026) *(dời từ Sprint 2 để tránh overcapacity cho Cẩm)* |
 
 ## Context
 
@@ -90,6 +90,33 @@ grid_svm.fit(X_train, y_train)
 ```python
 import joblib
 joblib.dump(svm_model, "models/svm_linear.pkl")
+```
+
+
+## 🔌 Interface Contract — Model Output (Phase 06 → Phase 08)
+
+> [!IMPORTANT]
+> Phase 08 (Demo UI) **phụ thuộc** vào output format chính xác từ Phase 06. Đây là hợp đồng cứng giữa Cẩm (train model) và Sơn (build app). Phải thống nhất trước khi bắt đầu code Phase 08.
+
+| Field | Spec bắt buộc |
+|---|---|
+| **Format lưu model** | `joblib` — `joblib.dump(bundle, 'models/best_model_bundle.pkl')` |
+| **Bundle structure** | `{'model': calibrated_svc, 'vectorizer': tfidf_vectorizer, 'threshold': 0.5, 'label_names': ['Bình thường', 'Lừa đảo']}` |
+| **Path chuẩn** | `models/best_model_bundle.pkl` (relative to repo root) |
+| **sklearn version** | Phải khớp với `requirements.txt` — kiểm tra bằng `sklearn.__version__` trước khi lưu |
+| **Tên vectorizer** | TF-IDF vectorizer được `fit` trên X_train — **tích hợp trong bundle**, không lưu tách rời |
+| **Input format** | Raw text string → vectorizer.transform → model.predict_proba |
+| **Output format** | `{'label': int, 'proba': [p_normal, p_scam], 'scam_keywords': list}` |
+
+```python
+# Mẫu sử dụng chuẩn trong Streamlit (Phase 08)
+import joblib
+bundle = joblib.load('models/best_model_bundle.pkl')
+model = bundle['model']
+vectorizer = bundle['vectorizer']
+X = vectorizer.transform([user_input])
+proba = model.predict_proba(X)[0]
+label = 1 if proba[1] >= bundle['threshold'] else 0
 ```
 
 ## Checklist

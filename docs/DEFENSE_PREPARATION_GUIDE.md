@@ -21,6 +21,20 @@
 > - **Đặng Chí Thanh** đảm nhận vai trò **chia sẻ màn hình chính (Master Share Screen)** xuyên suốt buổi báo cáo (trình chiếu Slide PPT và chuyển sang tab Demo Streamlit khi đến phần của Sơn) nhằm tránh độ trễ chuyển giao màn hình giữa các thành viên.
 > - Cả 3 thành viên luôn sẵn sàng mic/cam, khi đến lượt nói thì bật mic lập tức để đảm bảo mạch thuyết trình liền mạch.
 
+### 🔴 Kịch bản Dự phòng Kỹ thuật (Hot-Standby Protocol)
+
+> [!IMPORTANT]
+> Chuẩn bị backup link Teams trong group chat ít nhất 30 phút trước khi báo cáo. Mỗi thành viên phải sẵn sàng slide PPT cục bộ (offline) và biết cách share màn hình.
+
+| Tình huống sự cố | Người phụ trách | Hành động ngay lập tức |
+|---|---|---|
+| Thanh mất kết nối ≤ 2 phút | **Cẩm** | Bật mic, thông báo với Thầy đang chờ Thanh kết nối lại, tiếp tục giữ chỗ |
+| Thanh mất kết nối > 2 phút | **Cẩm** | **Bật Share Screen ngay**, tiếp tục thuyết trình từ slide hiện tại; Sơn hỗ trợ Q&A nếu cần |
+| Cẩm mất kết nối giữa chừng | **Thanh** | Tóm tắt nhanh phần Cẩm chưa nói, mời Sơn trình bày phần tiếp theo |
+| Link Teams hỏng hoàn toàn | **Cả nhóm** | Dùng backup link trong group chat; nếu vẫn lỗi → nhắn Thầy qua MS Teams chat để reschedule |
+| Demo Streamlit không khởi động | **Sơn** | Chuyển sang demo slide screenshot có sẵn (chuẩn bị ảnh chụp màn hình 3 test case) |
+
+
 | Mốc thời gian | Thời lượng | Nội dung chính | Slide | Người trình bày & Câu chuyển tiếp |
 |:---:|:---:|---|:---:|---|
 | **00:00 – 01:30** | 1.5 phút | • Chào thầy & giới thiệu thành viên Nhóm 10.<br>• Tính cấp bách & Nỗi đau người cao tuổi tại VN 2026.<br>• Ý nghĩa xã hội & 4 nhóm bẫy thao túng tâm lý. | Slide 1 – 2 | **Đặng Chí Thanh**<br>*(Mở đầu bài báo cáo)* |
@@ -87,6 +101,11 @@
 ---
 
 ## III. BỘ CÂU HỎI PHẢN BIỆN DỰ KIẾN TỪ THẦY THĂNG & CÁCH TRẢ LỜI
+
+> [!WARNING]
+> **Các số liệu trong phần này (F1 ~90%, Recall ~93%, khoảng cách Train/Val ≤5%, ...) là kịch bản đặt mục tiêu dựa trên lý thuyết — chưa phải kết quả thực nghiệm.**
+> Sau khi Phase 07 (Evaluation & XAI) hoàn thành (dự kiến 19/09), toàn nhóm cập nhật lại phần này bằng số liệu thật trước buổi diễn tập 21–22/09.
+
 
 ### Câu 1: *"Tại sao nhóm lại ưu tiên tối ưu chỉ số Recall của lớp Lừa đảo hơn là Accuracy hay Precision?"*
 - **Người trả lời chính:** Bùi Thị Mỷ Cẩm (hoặc Đặng Chí Thanh).

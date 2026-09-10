@@ -46,7 +46,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (14/09) | `not-started` | TF-IDF matrix saved, EDA notebook complete |
 | 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (14/09) | `not-started` | NB trained, baseline metrics recorded |
 | 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `not-started` | RF+XGB trained, hypertuned, metrics > NB |
-| 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 2 (16–17/09) | `not-started` | SVM trained, all 3+ models compared |
+| 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 3 (19–20/09) | `not-started` | SVM trained, all 3+ models compared *(dời sang Sprint 3 để tránh quá tải cho Cẩm trong Sprint 2)* |
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `not-started` | Confusion Matrix, Learning Curves, SHAP top-20 keywords |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (15–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |
 | 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (14–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |

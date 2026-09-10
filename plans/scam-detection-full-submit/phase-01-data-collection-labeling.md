@@ -283,9 +283,53 @@ Provenance URLs:  1773 / 1773 samples (100.0%)
 > ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.773/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive, 0% rò rỉ dữ liệu).**  
 > ⏳ **Tiến độ toàn nhóm:** Đạt 1.773/1.500 mẫu bình thường. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện, phân chia Train/Test và chốt sổ Phase 01.
 
+---
+
+## 🚨 Contingency Plan — Nếu thiếu mẫu vào 23:59 ngày 12/09
+
+> [!CAUTION]
+> Deadline khóa dữ liệu là **23:59 ngày 12/09/2026**. Nếu Sơn hoặc Cẩm chưa hoàn thành đủ 500 mẫu, nhóm cần kích hoạt đúng nhánh dự phòng bên dưới và **ghi rõ phương pháp trong báo cáo Word (Chương 2 — Dữ liệu)**.
+
+### Nhánh A — Đủ mẫu (Tiêu chuẩn)
+
+Điều kiện kích hoạt: Cả Sơn và Cẩm đều nộp đủ ≥ 500 mẫu có nguồn trên Google Sheet trước 23:59 ngày 12/09.
+
+**Hành động:** Thanh chạy `data_validation.py`, chia Stratified Train/Test 80/20, đóng băng `dataset.csv` → kích hoạt Sprint 2.
+
+### Nhánh B — Thiếu mẫu (Dự phòng học thuật)
+
+Điều kiện kích hoạt: Đến 22:00 ngày 12/09, tổng mẫu lừa đảo < 800 mẫu.
+
+**Hành động từng bước:**
+
+1. **Bước 1 — Đánh giá thiếu hụt:** Thanh kiểm đếm số mẫu thực tế trên Google Sheet lúc 22:00 ngày 12/09.
+
+2. **Bước 2 — Kích hoạt tăng cường dữ liệu (Rule-based Augmentation):**
+   - Chỉ áp dụng trên mẫu lừa đảo có nguồn thực tế đã thu thập.
+   - Kỹ thuật được phép: **Back-translation** (Việt → Anh → Việt qua Google Translate API) + **synonym replacement** với từ điển tiếng Việt.
+   - **Tuyệt đối không** prompt AI (ChatGPT/Claude/Gemini) tự sinh văn bản lừa đảo từ đầu.
+   - Tỷ lệ augmentation tối đa: **1 gốc → 2 biến thể** (augmented samples ≤ 2× original collected).
+
+3. **Bước 3 — Ghi nhận bắt buộc trong báo cáo Word (Chương 2):**
+   - Phải ghi rõ: số mẫu thu thập thực tế + số mẫu tăng cường + phương pháp tăng cường sử dụng.
+   - Cột `source` trong `dataset.csv`: mẫu augmented ghi `augmented_from:<id_gốc>`.
+   - Phân tích riêng distribution của mẫu gốc và mẫu tăng cường trong EDA notebook.
+
+4. **Bước 4 — Tiếp tục pipeline:** Sau khi đủ ≥ 1.500 mẫu (gốc + augmented), chạy `data_validation.py` và chia 80/20 như bình thường.
+
+| Metric | Nhánh A | Nhánh B |
+|---|---|---|
+| Tỷ lệ mẫu gốc | 100% | ≥ 60% |
+| Tỷ lệ augmented | 0% | ≤ 40% |
+| Ghi chú báo cáo | Không cần | **Bắt buộc** |
+| Ảnh hưởng điểm GV | Chuẩn | Minh bạch → chấp nhận được |
+
+---
+
 ## Commit
 
 ```bash
 git add data/raw/dataset.csv data/scripts/data_validation.py data/scripts/data_scraper.py
 git commit -m "feat(phase01): dataset 1500+ samples collected and validated"
 ```
+
