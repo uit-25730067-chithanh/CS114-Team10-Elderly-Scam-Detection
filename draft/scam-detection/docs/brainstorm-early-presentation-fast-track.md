@@ -15,6 +15,8 @@ Nhóm 10 môn **CS114 - Machine Learning (ThS. Cáp Phạm Đình Thăng)** đã
 
 - **Thời điểm ra quyết định:** 10/09/2026.
 - **Quỹ thời gian thực thi còn lại:** Đúng **13 ngày** (10/09 → 23/09/2026).
+- **Khung giờ báo cáo chính thức:** **18:30 Tối Thứ Tư, ngày 23/09/2026** (khe giờ môn SS007 cũ đã kết thúc, thầy Thăng tạo điều kiện cho các nhóm đăng ký báo cáo sớm).
+- **Hình thức & Quy cách:** **Trực tuyến qua Microsoft Teams (MS Teams) — Hệ Đào tạo Từ xa UIT; bắt buộc thuyết trình luân phiên cả 3 thành viên (Thanh, Cẩm, Sơn).**
 - **Chiến lược cốt lõi:** Chuyển đổi từ mô hình 4-Sprint tuần tự sang mô hình **3-Sprint Fast-Track kết hợp 4 luồng thực thi song song (`--parallels`)**, đảm bảo 100% tiêu chuẩn học thuật nghiêm ngặt (`--hard`), không cắt giảm tiêu chí nghiệm thu.
 
 ---
@@ -141,7 +143,9 @@ flowchart TD
 
 ---
 
-## 7. Các Câu Hỏi Chưa Giải Quyết (Unresolved Questions)
+## 7. Các Câu Hỏi Đã Giải Quyết (Resolved Status)
 
-1. Giảng viên ThS. Cáp Phạm Đình Thăng sẽ sắp xếp khung giờ báo cáo vào buổi sáng hay buổi chiều ngày 23/09/2026? (Trưởng nhóm Đặng Chí Thanh sẽ liên hệ xác nhận giờ cụ thể qua email/Teams).
-2. Hình thức báo cáo là trực tiếp tại phòng máy UIT hay online qua Microsoft Teams / Zoom? (Nhóm đã chuẩn bị sẵn phương án cho cả 2 hình thức).
+1. ✅ **Khung giờ báo cáo:** Đã xác nhận chính thức từ **18:30 Tối Thứ Tư, ngày 23/09/2026** (khe giờ môn SS007 cũ đã kết thúc, thầy Thăng tạo điều kiện cho các nhóm đăng ký báo cáo sớm).
+2. ✅ **Hình thức báo cáo:** Đã xác nhận chính thức là **Trực tuyến qua Microsoft Teams (MS Teams)** thuộc hệ Đào tạo Từ xa UIT.
+3. ✅ **Quy cách bảo vệ:** Bắt buộc **thuyết trình luân phiên cả 3 thành viên (Thanh, Cẩm, Sơn)**; Trưởng nhóm Đặng Chí Thanh điều phối Master Share Screen xuyên suốt bài thuyết trình và tab demo Streamlit.
+4. ✅ **Kế hoạch dự phòng:** Cẩm và Sơn tải sẵn slide PPT và PDF dự phòng trên máy cá nhân để sẵn sàng thay thế nếu Thanh gặp sự cố kết nối.

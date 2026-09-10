@@ -1,26 +1,33 @@
 # 🎓 CẨM NANG BẢO VỆ ĐỒ ÁN CS114 (DEFENSE PREPARATION GUIDE)
-## Thuyết Trình Báo Cáo Sớm: Ngày 23/09/2026 — Nhóm 10
+## Thuyết Trình Báo Cáo Sớm: 18h30 Ngày 23/09/2026 — Nhóm 10 (Trực Tuyến MS Teams)
 
-**Môn học:** CS114 — Máy học (Machine Learning) — UIT, ĐHQG-HCM  
+**Môn học:** CS114 — Máy học (Machine Learning) — Hệ Đào tạo Từ xa, Trường ĐH Công nghệ Thông tin (UIT)  
 **Giảng viên chấm:** ThS. Cáp Phạm Đình Thăng  
+**Khung giờ báo cáo:** **18:30 Tối Thứ Tư, ngày 23/09/2026** (Khung giờ môn SS007 cũ, thầy tạo điều kiện cho các nhóm đăng ký báo cáo sớm)  
+**Hình thức báo cáo:** **Trực tuyến qua Microsoft Teams (MS Teams)**  
+**Quy cách bắt buộc:** **Thuyết trình luân phiên cả 3 thành viên (100% thành viên đều phải bật mic/cam và lần lượt trình bày phần mình phụ trách)**  
 **Thời lượng quy định:** **15 phút / nhóm** (Khuyến nghị: 11–12 phút thuyết trình + 3–4 phút Q&A phản biện)  
 **Đề tài:** *Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam*  
 **Thành viên bảo vệ:**
-1. **Đặng Chí Thanh** (MSSV: `25730067`) — Lead / Data & NLP Pipeline
+1. **Đặng Chí Thanh** (MSSV: `25730067`) — Lead / Data & NLP Pipeline (Điều phối chung & Share Screen)
 2. **Bùi Thị Mỷ Cẩm** (MSSV: `25730013`) — Machine Learning Modeling & Benchmarking
 3. **Hoàng Cao Sơn** (MSSV: `25730061`) — Data Collection & Web App Demo UI
 
 ---
 
-## I. MA TRẬN PHÂN CHIA THỜI LƯỢNG THUYẾT TRÌNH (12 PHÚT)
+## I. MA TRẬN PHÂN CHIA THỜI LƯỢNG & LUÂN CHUYỂN THUYẾT TRÌNH (12 PHÚT)
 
-| Mốc thời gian | Thời lượng | Nội dung chính | Slide | Người trình bày |
-|:---:|:---:|---|:---:|:---:|
-| **00:00 – 01:30** | 1.5 phút | Giới thiệu thành viên, Lý do chọn đề tài, Nỗi đau người cao tuổi tại VN 2026, Ý nghĩa xã hội | Slide 1 – 2 | **Đặng Chí Thanh** |
-| **01:30 – 04:30** | 3.0 phút | Quy trình thu thập dataset (1.500+ mẫu, chống rò rỉ, 4 nhóm bẫy tâm lý), Pipeline tiền xử lý tiếng Việt & TF-IDF | Slide 3 – 5 | **Đặng Chí Thanh** |
-| **04:30 – 08:30** | 4.0 phút | So sánh thực nghiệm 3+ mô hình (NB baseline, RF/XGBoost, SVM), Phân tích Overfitting (Train vs Val Learning Curves), Confusion Matrix & Recall | Slide 6 – 9 | **Bùi Thị Mỷ Cẩm** |
-| **08:30 – 11:30** | 3.0 phút | Explainable AI (Top 20 từ khóa kích hoạt tâm lý), Demo trực tiếp Web App Streamlit (live input), Kết luận & Hướng mở rộng | Slide 10 – 13 | **Hoàng Cao Sơn** |
-| **11:30 – 15:00** | 3.5 phút | **Hỏi đáp & Phản biện trực tiếp với ThS. Cáp Phạm Đình Thăng (Q&A)** | Slide 14 (Q&A) | **Cả nhóm** |
+> 📌 **Nguyên tắc thuyết trình từ xa (MS Teams):**
+> - **Đặng Chí Thanh** đảm nhận vai trò **chia sẻ màn hình chính (Master Share Screen)** xuyên suốt buổi báo cáo (trình chiếu Slide PPT và chuyển sang tab Demo Streamlit khi đến phần của Sơn) nhằm tránh độ trễ chuyển giao màn hình giữa các thành viên.
+> - Cả 3 thành viên luôn sẵn sàng mic/cam, khi đến lượt nói thì bật mic lập tức để đảm bảo mạch thuyết trình liền mạch.
+
+| Mốc thời gian | Thời lượng | Nội dung chính | Slide | Người trình bày & Câu chuyển tiếp |
+|:---:|:---:|---|:---:|---|
+| **00:00 – 01:30** | 1.5 phút | • Chào thầy & giới thiệu thành viên Nhóm 10.<br>• Tính cấp bách & Nỗi đau người cao tuổi tại VN 2026.<br>• Ý nghĩa xã hội & 4 nhóm bẫy thao túng tâm lý. | Slide 1 – 2 | **Đặng Chí Thanh**<br>*(Mở đầu bài báo cáo)* |
+| **01:30 – 04:30** | 3.0 phút | • Kiến trúc thu thập Dataset (≥1.500 mẫu, PII Masking, chống rò rỉ dữ liệu).<br>• Pipeline tiền xử lý tiếng Việt (Unicode NFC, pyvi, regex).<br>• Feature Engineering: TF-IDF N-grams (1-2) + đặc trưng phụ. | Slide 3 – 5 | **Đặng Chí Thanh**<br>*Chuyển tiếp (phút 04:30): "Tiếp theo, em xin mời bạn Bùi Thị Mỷ Cẩm trình bày phần thực nghiệm huấn luyện và đánh giá các mô hình học máy."* |
+| **04:30 – 08:30** | 4.0 phút | • Huấn luyện 3+ mô hình (NB baseline, RF/XGBoost, Linear SVM).<br>• Bảng tổng hợp số liệu thực nghiệm (Accuracy, F1, Recall).<br>• Phân tích Overfitting qua Learning Curves (Train vs Val).<br>• Ma trận nhầm lẫn (Confusion Matrix) & Phân tích chi phí False Negative. | Slide 6 – 9 | **Bùi Thị Mỷ Cẩm**<br>*Chuyển tiếp (phút 08:30): "Tiếp theo, em xin mời bạn Hoàng Cao Sơn trình bày phần giải thích mô hình XAI và demo trực tiếp ứng dụng Streamlit."* |
+| **08:30 – 11:30** | 3.0 phút | • Trí tuệ nhân tạo có thể giải thích (Top 20 từ khóa cảnh báo SHAP).<br>• Demo trực tiếp Web App Streamlit (3 kịch bản tin nhắn thực tế).<br>• Thiết kế UX thân thiện với người cao tuổi.<br>• Kết luận & Định hướng mở rộng (PhoBERT, Mobile). | Slide 10 – 13 | **Hoàng Cao Sơn**<br>*Chuyển tiếp (phút 11:30): "Phần trình bày của Nhóm 10 đến đây là kết thúc. Em xin nhường lời lại cho Trưởng nhóm Đặng Chí Thanh điều phối phần Q&A cùng Thầy ạ."* |
+| **11:30 – 15:00** | 3.5 phút | **Hỏi đáp & Phản biện trực tiếp với ThS. Cáp Phạm Đình Thăng (Q&A)** | Slide 14 (Q&A) | **Cả nhóm** (Thanh điều phối mở đầu: *"Nhóm 10 chúng em xin trân trọng cảm ơn Thầy. Kính mời Thầy đặt câu hỏi phản biện ạ."*) |
 
 ---
 
@@ -132,10 +139,15 @@
 
 ---
 
-## IV. CHECKLIST CHUẨN BỊ KỸ THUẬT TRƯỚC GIỜ G (23/09/2026)
+## IV. CHECKLIST KỸ THUẬT TRỰC TUYẾN MS TEAMS TRƯỚC GIỜ G (18h30 23/09/2026)
 
-- [ ] **Máy tính trình chiếu:** Đã cài sẵn Python 3.10+, kiểm tra cổng xuất HDMI/Type-C với máy chiếu UIT.
-- [ ] **Khởi động sẵn Web App Streamlit:** Mở sẵn `localhost:8501`, chuẩn bị sẵn 3 tab trình duyệt với 3 mẫu tin nhắn demo (1 tin dọa nạt, 1 tin dịch vụ công, 1 tin bình thường) để thao tác trong vòng 15 giây.
-- [ ] **File Slide dự phòng:** Lưu 1 bản PPTX trên máy, 1 bản xuất PDF (phòng trường hợp lỗi font), 1 bản trên USB và 1 bản trên Google Drive.
-- [ ] **Bút trình chiếu (Clicker):** Đã kiểm tra pin, kết nối ổn định.
-- [ ] **Đồng hồ bấm giờ:** Phân công 1 thành viên theo dõi thời gian và ra hiệu ở các mốc 5 phút, 10 phút, 12 phút.
+- [ ] **Tài khoản & MS Teams:** Cả 3 thành viên đăng nhập bằng tài khoản email sinh viên UIT (`@ms.uit.edu.vn`), kiểm tra quyền truy cập phòng họp lớp CS114 trước 15 phút (18h15).
+- [ ] **Thiết bị ngoại vi (Mic & Webcam):** Kiểm tra tai nghe có mic chống ồn, camera rõ nét, ánh sáng khuôn mặt đầy đủ, chọn phông nền lịch sự hoặc bật chế độ làm mờ nền (Blur background).
+- [ ] **Máy chủ trình chiếu (Thanh):**
+  - Mở sẵn file Slide PowerPoint ở chế độ Presenter / Window View.
+  - Chạy sẵn Web App Streamlit (`streamlit run demo/app.py`) trên trình duyệt `localhost:8501`, mở sẵn 3 tab chứa 3 kịch bản tin nhắn mẫu để Sơn thao tác trong 10 giây.
+  - Tắt toàn bộ thông báo Zalo, Telegram, Facebook trên máy để tránh gián đoạn khi share screen.
+- [ ] **Phương án dự phòng nóng (Hot Standby Backup):**
+  - Cẩm và Sơn đều tải sẵn file `Presentation_CS114.pptx` và bản PDF dự phòng về máy cá nhân.
+  - Nếu đường truyền của Thanh bị rớt mạng, Cẩm hoặc Sơn lập tức bấm nút Share Screen thay thế trong vòng 5 giây và tiếp tục điều phối.
+- [ ] **Kiểm soát thời gian (Timer):** Đặt đồng hồ bấm giờ riêng trước mặt, báo hiệu qua khung chat nội bộ Zalo nhóm ở các mốc 5 phút, 10 phút, 12 phút để không vượt quá 15 phút.
