@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 4–6h |
-| Sprint | Sprint 3–4 |
+| Sprint | Sprint 2–3 Fast-Track (15/09 shell → 20/09 integrated) |
 
 ## Context
 
@@ -27,6 +27,11 @@ Web app demo bằng Streamlit giả lập khung chat kiểm tra tin nhắn lừa
 - Giao diện 2 cột: input bên trái, kết quả bên phải
 - Tích hợp model đã train (best model)
 - Hiển thị: thanh nguy cơ, từ khóa bôi đỏ, loại bẫy tâm lý, lời khuyên
+
+> [!IMPORTANT]
+> **Phụ thuộc Phase 06:** Phase 08 yêu cầu Cẩm xuất đúng format bundle theo [Interface Contract trong phase-06](./phase-06-model-svm-phobert.md).  
+> Load model bằng: `bundle = joblib.load('models/best_model_bundle.pkl')` — **không dùng pickle, không load vectorizer tách rời**.  
+> Sơn cần xác nhận với Cẩm về path `models/best_model_bundle.pkl` trước khi bắt đầu Step 6 (Integration).
 
 ## Implementation Steps
 

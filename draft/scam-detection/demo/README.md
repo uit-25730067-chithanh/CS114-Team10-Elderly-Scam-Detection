@@ -1,0 +1,148 @@
+# Demo UI — Streamlit Application & Integration Contract
+
+> Hướng dẫn tích hợp mô hình phát hiện lừa đảo vào giao diện Web Demo Streamlit (`draft/scam-detection/demo/`).
+
+---
+
+## 1. Kiến trúc luồng Demo (Data Flow)
+
+```
+Người dùng nhập tin nhắn (raw text)
+  │
+  ▼
+[Tiền xử lý văn bản] (text_cleaner.py + tokenizer.py)
+  │
+  ▼
+[Transform vector] (vectorizer đã fit trong bundle)
+  │
+  ▼
+[Inference] (clf.predict_proba)
+  │
+  ├─► Xác suất lừa đảo (% Risk) ──► Risk Meter Component
+  ├─► Nhãn dự đoán (0: Bình thường / 1: Lừa đảo) ──► Cảnh báo
+  └─► Trích xuất từ khóa bẫy tâm lý ──► Keyword Highlighter + Lời khuyên an toàn
+```
+
+---
+
+## 2. Integration Contract (Hợp đồng giao tiếp giữa Model & UI)
+
+### 2.1 File Bundle quy ước
+- **Đường dẫn mặc định:** `models/best_model_bundle.pkl` (hoặc dropdown chọn model từ `models/*_bundle.pkl`).
+- **Cấu trúc Bundle Dictionary:**
+```python
+{
+    "model": classifier,            # sklearn / xgboost model instance
+    "vectorizer": tfidf_vectorizer, # TfidfVectorizer instance đã fit
+    "model_name": "XGBoost",        # str: Tên hiển thị trên giao diện
+    "threshold": 0.5                # float: Ngưỡng cảnh báo (mặc định 0.5)
+}
+```
+
+### 2.2 Hàm Inference chuẩn cho UI
+Trong `demo/app.py` hoặc module hỗ trợ:
+
+```python
+import os
+import joblib
+import numpy as np
+
+# Cho phép fallback xử lý chuỗi nếu module tiền xử lý chưa hoàn tất
+try:
+    from src.preprocessing.text_cleaner import clean_text
+    from src.preprocessing.tokenizer import tokenize_text
+except ImportError:
+    clean_text = lambda text: text.strip().lower()
+    tokenize_text = lambda text: text
+
+def load_bundle(model_path="models/best_model_bundle.pkl"):
+    if not os.path.exists(model_path):
+        return None
+    return joblib.load(model_path)
+
+def predict_message(raw_text: str, bundle: dict) -> dict:
+    """
+    Hàm chuẩn đầu ra cho giao diện Streamlit
+    """
+    if bundle is None:
+        # Fallback Mock Mode nếu chưa có file model thực tế
+        return {
+            "is_scam": False,
+            "risk_score": 0.0,
+            "label": 0,
+            "tokenized_text": "",
+            "highlight_keywords": [],
+            "message": "Model chưa sẵn sàng (Chế độ mô phỏng giao diện)"
+        }
+
+    # Tiền xử lý
+    cleaned = clean_text(raw_text)
+    tokenized = tokenize_text(cleaned)
+
+    # Vector hóa & Phân loại
+    vec = bundle["vectorizer"].transform([tokenized])
+    clf = bundle["model"]
+
+    if hasattr(clf, "predict_proba"):
+        proba = float(clf.predict_proba(vec)[0][1])
+    else:
+        # Với mô hình không có predict_proba (như LinearSVC thô)
+        decision = clf.decision_function(vec)[0]
+        proba = float(1.0 / (1.0 + np.exp(-decision)))
+
+    threshold = bundle.get("threshold", 0.5)
+    is_scam = bool(proba >= threshold)
+
+    # Trích xuất từ khóa bẫy tâm lý cơ bản (phục vụ hiển thị UI)
+    risk_keywords = [
+        "chuyển khoản", "mã otp", "công an", "viện kiểm sát", 
+        "trúng thưởng", "bắt giam", "phạt nguội", "khóa tài khoản"
+    ]
+    highlight_keywords = [kw for kw in risk_keywords if kw in raw_text.lower()]
+
+    return {
+        "is_scam": is_scam,
+        "risk_score": proba,
+        "label": 1 if is_scam else 0,
+        "tokenized_text": tokenized,
+        "highlight_keywords": highlight_keywords,
+        "message": "Cảnh báo: Phát hiện dấu hiệu lừa đảo!" if is_scam else "Tin nhắn có mức độ an toàn cao."
+    }
+```
+
+---
+
+## 3. Mock Model (Dành riêng cho Sơn khi dựng khung UI sớm)
+
+Trong Sprint 2 (15/09 – 17/09), khi Thanh và Cẩm chưa export xong `best_model_bundle.pkl`, Sơn có thể dựng giao diện và test tương tác bằng **Mock Bundle**:
+
+```python
+# Tạo mock bundle tạm để test UI
+class MockModel:
+    def predict_proba(self, X):
+        return [[0.15, 0.85]]
+
+class MockVectorizer:
+    def transform(self, texts):
+        return None
+
+mock_bundle = {
+    "model": MockModel(),
+    "vectorizer": MockVectorizer(),
+    "model_name": "Mock Detector (Test UI)",
+    "threshold": 0.5
+}
+```
+
+---
+
+## 4. Hướng dẫn chạy Demo
+
+```bash
+# Từ thư mục gốc draft/scam-detection/
+streamlit run demo/app.py
+```
+
+- Yêu cầu UI: Cỡ chữ to, rõ ràng, màu sắc tương phản cao (phục vụ đối tượng nghiên cứu là người cao tuổi).
+- Có thanh trượt Risk Meter (Xanh lá < 30%, Vàng 30-70%, Đỏ > 70%).
+- Hiển thị khuyến cáo hành động tức thời ("Không chuyển tiền", "Gọi ngay cho người thân xác minh").

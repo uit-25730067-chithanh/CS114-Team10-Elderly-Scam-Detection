@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 8–12h |
-| Sprint | Sprint 2–4 (Early Start) |
+| Sprint | Sprint 2–3 Fast-Track (14/09 – 22/09/2026) |
 
 ## Context
 
@@ -88,11 +88,12 @@ Theo yêu cầu trong [README.md](../../README.md):
 | 13 | Kết luận & Hướng phát triển | 1 phút |
 | 14 | Q&A | 1 phút |
 
-## Early Start Tasks (từ Sprint 2)
+## Fast-Track Tasks (Báo cáo sớm 23/09/2026)
 
-- [ ] **Sprint 2:** Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát)
-- [ ] **Sprint 3:** Chương 3 (Phương pháp) + Slide shell (layout, design)
-- [ ] **Sprint 4:** Chương 4 (Thực nghiệm — cần kết quả từ Phase 07) + Chương 5 + Hoàn thiện PPT
+- [ ] **Sprint 2 (14/09 – 18/09):** Viết sớm Báo cáo Word Chương 1 (Đặt vấn đề), Chương 2 (Khảo sát) + Chương 3 (Phương pháp) + Chuẩn bị khung Slide PPT 15 phút
+- [ ] **Sprint 3 (19/09 – 20/09):** Báo cáo Word Chương 4 (Thực nghiệm — tích hợp số liệu từ Phase 07) + Chương 5 (Kết luận) + Hoàn thiện Slide PPT (14–16 slides)
+- [ ] **Sprint 3 (21/09 – 22/09):** Diễn tập thuyết trình (≤15 phút) cả nhóm + Chuẩn bị câu hỏi Q&A phản biện của thầy Thăng
+- [ ] **D-Day (18:30 23/09/2026):** Thuyết trình trực tuyến MS Teams, luân phiên cả 3 thành viên trước ThS. Cáp Phạm Đình Thăng
 
 ## Checklist
 

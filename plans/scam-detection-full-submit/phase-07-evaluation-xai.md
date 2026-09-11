@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 4–5h |
-| Sprint | Sprint 3–4 |
+| Sprint | Sprint 3 Fast-Track (18/09 – 19/09/2026) |
 
 ## Context
 
