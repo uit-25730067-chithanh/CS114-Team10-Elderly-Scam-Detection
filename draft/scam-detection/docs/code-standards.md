@@ -59,6 +59,34 @@ Mỗi notebook tuân theo cấu trúc:
 - **Encoding**: luôn đọc/ghi CSV với `encoding='utf-8-sig'`
 - **Unicode**: luôn normalize NFC trước khi xử lý
 
+## Model Bundle Save/Load Convention (BẮT BUỘC)
+
+Để tránh lỗi không khớp feature space hoặc thiếu vectorizer khi tích hợp Demo UI (`demo/app.py`), **tuyệt đối không lưu model và vectorizer riêng lẻ**. Luôn đóng gói (bundle) cả hai vào một dictionary hoặc `Pipeline`:
+
+```python
+import joblib
+
+# 1. Lưu Bundle (Áp dụng khi train xong trong Notebooks 03-05)
+bundle = {
+    'model': model,                 # scikit-learn / xgboost classifier
+    'vectorizer': tfidf_vectorizer, # TfidfVectorizer đã fit trên train data
+    'model_name': 'Naive Bayes',     # Tên hiển thị
+    'threshold': 0.5,                # Ngưỡng phân loại (mặc định 0.5)
+}
+joblib.dump(bundle, 'models/naive_bayes_bundle.pkl')
+
+# 2. Load Bundle (Áp dụng trong Demo UI / Evaluation)
+bundle = joblib.load('models/naive_bayes_bundle.pkl')
+clf = bundle['model']
+tfidf = bundle['vectorizer']
+
+# Inference chuẩn:
+# (văn bản sau khi qua clean_text và tokenize_text / segment_vietnamese)
+X_vec = tfidf.transform([preprocessed_text])
+prediction = clf.predict(X_vec)[0]
+proba = clf.predict_proba(X_vec)[0][1] if hasattr(clf, 'predict_proba') else None
+```
+
 ## Evaluation Checklist
 
 Trước khi báo cáo, đảm bảo mỗi model có đủ:
