@@ -3,6 +3,7 @@ name: Gemini PR Code Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -83,7 +84,9 @@ jobs:
               # Media & binary docs
               ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp", ".pdf",
               # Model checkpoints & large binary formats
-              ".pt", ".pth", ".bin", ".onnx", ".pkl", ".joblib", ".zip", ".tar.gz", ".parquet", ".h5"
+              ".pt", ".pth", ".bin", ".onnx", ".pkl", ".joblib", ".zip", ".tar.gz", ".parquet", ".h5",
+              # Raw tabular datasets (exclude data files from code review diff)
+              ".csv", ".tsv", ".jsonl"
           }
 
           # Sensitive files patterns (Secrets defense-in-depth)
@@ -216,7 +219,13 @@ jobs:
                   "topP": 0.95,
                   "topK": 40,
                   "maxOutputTokens": 4096
-              }
+              },
+              "safetySettings": [
+                  {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                  {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                  {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                  {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
+              ]
           }
 
           # Discover active flash models from API
@@ -274,6 +283,8 @@ jobs:
                       if not candidates:
                           print(f"Warning: No candidates returned from model '{model}'. Response: {res_data}")
                           break
+                      finish_reason = candidates[0].get("finishReason", "")
+                      print(f"Candidate finishReason: {finish_reason}")
                       parts = candidates[0].get("content", {}).get("parts", [])
                       review_content = "".join(p.get("text", "") for p in parts).strip()
                       if review_content:
