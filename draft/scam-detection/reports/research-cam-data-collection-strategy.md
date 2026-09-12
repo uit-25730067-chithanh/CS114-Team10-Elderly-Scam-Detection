@@ -48,15 +48,15 @@ Theo phân công trong kế hoạch [phase-01-data-collection-labeling.md](../..
 
 | Nhóm bẫy tâm lý (`scam_category`) | Số lượng mẫu | Tỷ lệ (%) | Mô tả đặc trưng thực tế |
 |---|:---:|:---:|---|
-| **`public_service`** (Dịch vụ công, Định danh, Ngân hàng, Phạt nguội, SIM) | 471 | 88.9% | Tin nhắn mạo danh VNeID lỗi định danh mức 2, cập nhật CCCD, vi phạm giao thông phạt nguội `dichvucong-vn.com`, khóa SIM 2G/4G, nợ tiền điện EVN, mạo danh ngân hàng nâng cấp hệ thống hoặc thông báo khóa tài khoản. |
-| **`health_gift`** (Sức khỏe, Quà tặng, Tuyển dụng việc làm, Ưu đãi) | 59 | 11.1% | Tin nhắn mạo danh trường đại học tặng ưu đãi nhập học, quà tặng tri ân tri ân khách hàng, điểm thưởng Priority hết hạn đổi quà, việc làm thu nhập cao, thuốc chữa bệnh thần kỳ. |
-| **TỔNG CỘNG** | **530** | **100.0%** | **100% thuộc 2 nhóm bẫy được phân công** |
+| **`public_service`** (Dịch vụ công, Định danh, Ngân hàng, Phạt nguội, SIM) | 384 | 74.7% | Tin nhắn mạo danh VNeID lỗi định danh mức 2, cập nhật CCCD, vi phạm giao thông phạt nguội `dichvucong-vn.com`, khóa SIM 2G/4G, nợ tiền điện EVN, mạo danh ngân hàng nâng cấp hệ thống hoặc thông báo khóa tài khoản. |
+| **`health_gift`** (Sức khỏe, Quà tặng, Tuyển dụng việc làm, Ưu đãi) | 130 | 25.3% | Tin nhắn mạo danh trường đại học tặng ưu đãi nhập học, quà tặng tri ân tri ân khách hàng, điểm thưởng Priority hết hạn đổi quà, việc làm thu nhập cao, thuốc chữa bệnh thần kỳ. |
+| **TỔNG CỘNG** | **514** | **100.0%** | **100% thuộc 2 nhóm bẫy được phân công (0% cờ bạc / cá cược)** |
 
 ---
 
 ## 4. Bảo vệ Quyền Riêng tư & Ẩn danh hóa PII (100% Masked)
 
-Toàn bộ 530 mẫu tin nhắn đời thực đều được chạy qua bộ lọc biểu thức chính quy tiêu chuẩn trong `data/scripts/anonymize_sms.py` nhằm bảo vệ tuyệt đối thông tin riêng tư của người dân:
+Toàn bộ 514 mẫu tin nhắn đời thực đều được chạy qua bộ lọc biểu thức chính quy tiêu chuẩn trong `data/scripts/anonymize_sms.py` nhằm bảo vệ tuyệt đối thông tin riêng tư của người dân:
 * Số điện thoại liên hệ → `[SỐ_ĐIỆN_THOẠI]`
 * Mã xác thực bí mật → `[MÃ_OTP]`
 * Số tài khoản ngân hàng → `[SỐ_TÀI_KHOẢN]`
@@ -72,18 +72,18 @@ Toàn bộ 530 mẫu tin nhắn đời thực đều được chạy qua bộ l�
 ============================================================
   DATASET VALIDATION REPORT: staging_cam_scam.csv
 ============================================================
-Total Rows:       530
+Total Rows:       514
 Columns:          ['id', 'text', 'label', 'scam_category', 'source', 'source_url', 'collector_name', 'notes']
-Class Balance:    Normal (0): 0 | Scam (1): 530
+Class Balance:    Normal (0): 0 | Scam (1): 514
 
 Scam Category Distribution:
-  - public_service      :  471
-  - health_gift         :   59
+  - public_service      :  384
+  - health_gift         :  130
 
 Collector Contributions:
-  - Bùi Thị Mỷ Cẩm      :  530 samples
+  - Bùi Thị Mỷ Cẩm      :  514 samples
 
-Provenance URLs:  530 / 530 samples (100.0%)
+Provenance URLs:  514 / 514 samples (100.0%)
 ------------------------------------------------------------
 ✅ STATUS: PASSED — Dataset conforms to all validation rules.
 ============================================================
@@ -91,17 +91,17 @@ Provenance URLs:  530 / 530 samples (100.0%)
 
 ### 5.2. Báo cáo từ `verify_cam_provenance.py` (Thẩm định Đối chiếu Trực tiếp Nguồn gốc):
 ```text
-[*] Đang thẩm định tính chân thực của 530 mẫu trong staging_cam_scam.csv...
+[*] Đang thẩm định tính chân thực của 514 mẫu trong staging_cam_scam.csv...
 [*] Tải dữ liệu đối chứng từ GitHub UIT IE403...
 [*] Tải dữ liệu đối chứng từ GitHub IEEE Access 2026...
 
 ============================================================
 KẾT QUẢ THẨM ĐỊNH NGUỒN GỐC:
-  - Tổng số mẫu đã kiểm tra: 530
-  - Số mẫu xác thực 100% khớp nguồn: 530 / 530 (100.0%)
+  - Tổng số mẫu đã kiểm tra: 514
+  - Số mẫu xác thực 100% khớp nguồn: 514 / 514 (100.0%)
   - Số mẫu sai lệch: 0
 ============================================================
-✅ TẤT CẢ 530 MẪU ĐỀU CÓ MINH CHỨNG NGUỒN GỐC THỰC TẾ 100% CHÍNH XÁC!
+✅ TẤT CẢ 514 MẪU ĐỀU CÓ MINH CHỨNG NGUỒN GỐC THỰC TẾ 100% CHÍNH XÁC!
 ```
 
 ---
