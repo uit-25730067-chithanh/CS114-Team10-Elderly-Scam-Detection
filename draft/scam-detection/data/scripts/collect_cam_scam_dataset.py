@@ -55,7 +55,7 @@ COLLECTOR_NAME: Final[str] = "Bùi Thị Mỷ Cẩm"
 # Biểu thức chính quy phát hiện cờ bạc / cá cược / nổ hũ / khiêu dâm / game bài
 GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
     r"kubet", r"casino", r"danh\s*ba[`i]?", r"lo\s*de", r"so\s*xo", r"xo\s*so", r"x0s0",
-    r"no\s*hu", r"no\s*hu", r"n[/\s]*o[/\s]*h[/\s]*u", r"quay\s*hu",
+    r"no\s*hu", r"n[/\s]*o[/\s]*h[/\s]*u", r"quay\s*hu",
     r"ban\s*ca", r"ba?n'\s*ca", r"b[/\s]*a[/\s]*n[/\s]*c[/\s]*a",
     r"tai\s*xiu", r"da\s*ga", r"ca\s*cuoc", r"\bcuoc\b", r"game\s*bai", r"nohu",
     r"slot", r"nha\s*cai", r"baccarat", r"bcr", r"dat\s*cuoc", r"jili", r"8day",
@@ -150,7 +150,7 @@ def fetch_uit_ie403_samples() -> list[dict]:
     url = "https://raw.githubusercontent.com/duynguyenhoang22/SMS_Phishing_Detection/main/data/dataset_label_1.csv"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
 
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         raw_content = resp.read().decode("utf-8-sig", errors="replace")
 
     f = io.StringIO(raw_content)
@@ -217,7 +217,7 @@ def fetch_ieee_access_samples(limit: int = 450) -> list[dict]:
     url = "https://raw.githubusercontent.com/trannguyenthaituan251209/vietnamese_sms_dataset/main/full_dataset.csv"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
 
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         raw_content = resp.read().decode("utf-8-sig", errors="replace")
 
     f = io.StringIO(raw_content)

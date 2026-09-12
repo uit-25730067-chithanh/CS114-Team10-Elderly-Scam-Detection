@@ -29,14 +29,14 @@ print(f"[*] Đang thẩm định tính chân thực của {len(df)} mẫu trong 
 print("[*] Tải dữ liệu đối chứng từ GitHub UIT IE403...")
 url_uit = "https://raw.githubusercontent.com/duynguyenhoang22/SMS_Phishing_Detection/main/data/dataset_label_1.csv"
 req = urllib.request.Request(url_uit, headers={"User-Agent": "Mozilla/5.0"})
-with urllib.request.urlopen(req) as resp:
+with urllib.request.urlopen(req, timeout=20) as resp:
     uit_lines = resp.read().decode("utf-8-sig", errors="replace").splitlines()
 
 # 2. Tải toàn bộ dòng vật lý từ IEEE raw
 print("[*] Tải dữ liệu đối chứng từ GitHub IEEE Access 2026...")
 url_ieee = "https://raw.githubusercontent.com/trannguyenthaituan251209/vietnamese_sms_dataset/main/full_dataset.csv"
 req = urllib.request.Request(url_ieee, headers={"User-Agent": "Mozilla/5.0"})
-with urllib.request.urlopen(req) as resp:
+with urllib.request.urlopen(req, timeout=20) as resp:
     ieee_lines = resp.read().decode("utf-8-sig", errors="replace").splitlines()
 
 # 3. Kiểm tra từng mẫu 1-1
