@@ -26,9 +26,9 @@
 | Thành viên | Phụ trách dữ liệu | Mục tiêu mẫu | Đã thu thập | Minh chứng nguồn gốc | Trạng thái |
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
-| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
+| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **530 / 500** | 100% Real Đa nguồn: UIT IE403 Ground Truth (241) + IEEE Access (287) + Báo Tuổi Trẻ (2) | ✅ `completed` (Hỗ trợ kỹ thuật từ PM) |
 | **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **1.773 / 1.500** | **100% có URL / Ảnh Drive (0% rò rỉ)** | ⏳ `in-progress` (Khóa dữ liệu 12/09) |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.303 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Khóa dữ liệu 12/09) |
 
 ---
 
@@ -186,10 +186,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 - [ ] Sơn: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
 
 ### 2. Nhiệm vụ của Bùi Thị Mỷ Cẩm
-- [ ] Cẩm: Cài đặt môi trường Python cá nhân theo `requirements.txt`
-- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` (Sức khỏe/Quà tặng) & `public_service` (Dịch vụ công/VNeID)
-- [ ] Cẩm: 100% mẫu lừa đảo thu thập có đính kèm `source_url` (link bài báo chính thống hoặc link ảnh Drive)
-- [ ] Cẩm: Đánh dấu hoàn thành trên Bảng trạng thái thành viên
+- [x] Cẩm: Cài đặt môi trường Python cá nhân theo `requirements.txt`
+- [x] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` (59 mẫu) & `public_service` (471 mẫu) qua pipeline đa nguồn bán tự động `collect_cam_scam_dataset.py` (Đạt 530 mẫu - 106.0%, 100% dữ liệu đời thực, 0% AI tự sinh)
+- [x] Cẩm: 100% mẫu lừa đảo thu thập có đính kèm `source_url` (241 permalink GitHub UIT IE403 Ground Truth, 287 permalink GitHub IEEE Access 2026 chính xác từng dòng vật lý #L..., 2 URL bài báo Báo Tuổi Trẻ trích dẫn nguyên văn)
+- [x] Cẩm: 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD) qua `anonymize_sms.py`
+- [x] Cẩm: Xuất tệp staging kiểm định độc lập `draft/scam-detection/data/raw/staging_cam_scam.csv` pass `data_validation.py` và `verify_cam_provenance.py` 100%
+- [x] Cẩm: Đánh dấu hoàn thành phần việc trên Bảng trạng thái thành viên
 
 ### 3. Nhiệm vụ của Đặng Chí Thanh (Trưởng nhóm / PM)
 - [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 1.773 mẫu độc bản, 0% rò rỉ với tập Holdout)
@@ -224,9 +226,21 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
-- Số mẫu lừa đảo đã nạp vào Sheet: `0 / 500`
-- Tỷ lệ có `source_url`: `0.0 %`
-- Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
+- Số mẫu lừa đảo đã nạp vào Staging CSV: `530 / 500` mẫu (Đạt 106.0% chỉ tiêu tối thiểu)
+- Nguồn gốc dữ liệu: **100% đời thực từ Kiến trúc Đa nguồn Cân bằng Độc lập (Zero Synthetic Text - 0% AI bịa/sinh)**.
+- Phân bổ đa nguồn độc lập:
+  + Nguồn UIT IE403 Ground Truth Smishing Dataset (`duynguyenhoang22`): **241 mẫu (45.5%)** trích xuất từ các điện thoại thực tế của sinh viên UIT, định vị chính xác từng dòng vật lý `#L...` trên GitHub repository.
+  + Nguồn Vietnamese Quality-Assured SMS Dataset (`IEEE Access 2026`): **287 mẫu (54.1%)** trích xuất từ dữ liệu SMS lừa đảo đời thực, định vị chính xác dòng vật lý `#L...` trên GitHub repository.
+  + Nguồn Báo chí điều tra chính thống (Báo Tuổi Trẻ): **2 mẫu (0.4%)** trích dẫn nguyên văn tin nhắn phạt nguội và mạo danh trường đại học có URL trực tiếp.
+- Phân bổ 2 nhóm bẫy tâm lý theo phân công:
+  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **471 mẫu** (88.9%)
+  + Sức khỏe, quà tặng tri ân, việc làm, ưu đãi (`health_gift`): **59 mẫu** (11.1%)
+- Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin nhạy cảm qua `anonymize_sms.py`.
+- Tỷ lệ có `source_url`: **530 / 530 mẫu (100.0%)** có liên kết permalink 1-1 chính xác tuyệt đối.
+- Độ sạch: 0 dòng trùng lặp (`text.duplicated().sum() == 0`), 0 văn bản rỗng, độ dài hợp lệ 25-600 ký tự.
+- Kết quả kiểm định tự động `data_validation.py`: **PASSED 100%**
+- Kết quả audit độc lập `verify_cam_provenance.py`: **530 / 530 mẫu (100.0%) khớp nguyên văn nguồn gốc**
+- Ngày hoàn thành: `12/09/2026`
 
 ### 3. Minh chứng Đặng Chí Thanh:
 - Số mẫu bình thường đã nạp: `1.773 / 500` mẫu (Đạt 354.6% chỉ tiêu tối thiểu)
@@ -281,7 +295,8 @@ Provenance URLs:  1773 / 1773 samples (100.0%)
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
 > ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.773/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive, 0% rò rỉ dữ liệu).**  
-> ⏳ **Tiến độ toàn nhóm:** Đạt 1.773/1.500 mẫu bình thường. Hiện đang tạm dừng (Pause gate) để chờ Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu lừa đảo (nhóm quyền lực, cấp cứu, sức khỏe, dịch vụ công) trên Google Sheet nhóm trước khi thực hiện nghiệm thu toàn diện, phân chia Train/Test và chốt sổ Phase 01.
+> ✅ **Phần việc Bùi Thị Mỷ Cẩm: HOÀN THÀNH XUẤT SẮC (530/500 mẫu lừa đảo đời thực 100%: 241 mẫu UIT IE403 Ground Truth + 287 mẫu IEEE Access 2026 + 2 mẫu báo Tuổi Trẻ, 471 mẫu dịch vụ công/VNeID/SIM + 59 mẫu sức khỏe/quà tri ân, 100% PII masked, verify_cam_provenance.py và data_validation.py PASSED 100% ✅).**  
+> ⏳ **Tiến độ toàn nhóm:** Đạt **2.303 / 1.500 mẫu** (1.773 mẫu bình thường + 530 mẫu lừa đảo). Hiện đang chờ Hoàng Cao Sơn hoàn tất 500 mẫu lừa đảo nhóm quyền lực & cấp cứu để hoàn thành 100% chỉ tiêu Phase 01 trước 23:59 đêm nay 12/09/2026, nghiệm thu hợp nhất và tiến hành Train/Test Split cho Sprint 2.
 
 ---
 
