@@ -18,16 +18,16 @@ Tuân thủ nghiêm ngặt chỉ đạo kỷ luật của Trưởng nhóm:
 > *"TUYỆT ĐỐI KHÔNG ĐƯỢC TỰ SINH DATA. ĐÓ LÀ HÀNH VI LỪA DỐI VÀ KHÔNG ĐƯỢC CHẤP NHẬN. Dùng tất cả kỹ năng để cào data đi! 100% mẫu tin nhắn phải là dữ liệu thực tế: trích xuất từ bài báo chính thống hoặc kho bằng chứng đời thực."*
 
 Nhóm đã xóa bỏ hoàn toàn các mô hình tự sinh template giả lập trước đó và tái thiết lập một **Pipeline Thu thập & Thẩm định Dữ liệu Đời thực Độc lập** với các thành tựu cốt lõi:
-1. **100% Dữ liệu Thực tế (0% AI Tự sinh / 0% Synthetic):** Toàn bộ 530 mẫu tin nhắn đều được trích xuất trực tiếp từ các điện thoại thực tế của người dùng tại Việt Nam và các bài báo điều tra trích dẫn nguyên văn.
+1. **100% Dữ liệu Thực tế (0% AI Tự sinh / 0% Synthetic):** Toàn bộ 514 mẫu tin nhắn đều được trích xuất trực tiếp từ các điện thoại thực tế của người dùng tại Việt Nam và các bài báo điều tra trích dẫn nguyên văn.
 2. **Minh chứng 1-1 Chính xác Tuyệt đối (Physical Line Permalink):** 100% mẫu đều có URL trỏ trực tiếp đến dòng vật lý (`#L...`) trên các kho lưu trữ mở của đề tài nghiên cứu UIT hoặc bài báo trực tiếp.
 3. **Phân bổ Đa nguồn Cân bằng (Multi-Source Balance):** Không phụ thuộc vào một nguồn đơn lẻ:
-   - **UIT IE403 Ground Truth Smishing Dataset (`duynguyenhoang22`):** 241 mẫu (45.5%).
-   - **Vietnamese Quality-Assured SMS Dataset (`IEEE Access 2026`):** 287 mẫu (54.1%).
+   - **UIT IE403 Ground Truth Smishing Dataset (`duynguyenhoang22`):** 149 mẫu (29.0%).
+   - **Vietnamese Quality-Assured SMS Dataset (`IEEE Access 2026`):** 363 mẫu (70.6%).
    - **Báo chí Điều tra Chính thống (Báo Tuổi Trẻ):** 2 mẫu (0.4%).
 4. **Phân định Trách nhiệm Tuyệt đối với Hoàng Cao Sơn:** Toàn bộ tin nhắn thuộc nhóm Quyền lực (`fear_authority`: Công an, Viện kiểm sát bắt giam) và Cấp cứu (`family_emergency`: tai nạn, viện phí mổ gấp) đã được loại bỏ để dành trọn quyền thu thập cho Hoàng Cao Sơn.
 5. **Kiểm định Chất lượng Kép (Dual Quality Gate):**
    - Script chuẩn môn học `data_validation.py`: **PASSED 100%**.
-   - Script audit nguồn gốc độc lập `verify_cam_provenance.py`: **530 / 530 mẫu (100.0%) khớp nguyên văn từng ký tự với nguồn gốc**.
+   - Script audit nguồn gốc độc lập `verify_cam_provenance.py`: **514 / 514 mẫu (100.0%) khớp nguyên văn từng ký tự với nguồn gốc**.
 
 ---
 
@@ -35,10 +35,10 @@ Nhóm đã xóa bỏ hoàn toàn các mô hình tự sinh template giả lập t
 
 | Nguồn dữ liệu | Loại hình nguồn gốc | Số lượng mẫu | Tỷ lệ (%) | Phương thức kiểm chứng (Provenance Method) |
 |---|---|:---:|:---:|---|
-| **UIT IE403 Smishing Dataset** | Dữ liệu đời thực từ điện thoại sinh viên UIT (Course IE403) | **241** | **45.5%** | Permalink 1-1 chính xác dòng vật lý trên GitHub: `https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv#L{line}` |
-| **IEEE Access 2026 Dataset** | Bộ dữ liệu SMS chất lượng cao công bố quốc tế | **287** | **54.1%** | Permalink 1-1 chính xác dòng vật lý trên GitHub: `https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv#L{line}` |
+| **UIT IE403 Smishing Dataset** | Dữ liệu đời thực từ điện thoại sinh viên UIT (Course IE403) | **149** | **29.0%** | Permalink 1-1 chính xác dòng vật lý trên GitHub: `https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv#L{line}` |
+| **IEEE Access 2026 Dataset** | Bộ dữ liệu SMS chất lượng cao công bố quốc tế | **363** | **70.6%** | Permalink 1-1 chính xác dòng vật lý trên GitHub: `https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv#L{line}` |
 | **Báo chí Chính thống (Tuổi Trẻ)** | Trích dẫn nguyên văn tin nhắn trong bài điều tra cảnh báo | **2** | **0.4%** | URL bài báo sống, xác thực nguyên văn tồn tại trong thân bài báo |
-| **TỔNG CỘNG** | **Tập dữ liệu Staging Bùi Thị Mỷ Cẩm** | **530** | **100.0%** | **Đạt 106.0% chỉ tiêu (Chỉ tiêu tối thiểu: ≥ 500 mẫu)** |
+| **TỔNG CỘNG** | **Tập dữ liệu Staging Bùi Thị Mỷ Cẩm** | **514** | **100.0%** | **Đạt 102.8% chỉ tiêu (Chỉ tiêu tối thiểu: ≥ 500 mẫu)** |
 
 ---
 
@@ -108,7 +108,7 @@ KẾT QUẢ THẨM ĐỊNH NGUỒN GỐC:
 
 ## 6. Kết luận & Sẵn sàng cho Sprint 2
 
-Tập dữ liệu lừa đảo của thành viên **Bùi Thị Mỷ Cẩm** (`staging_cam_scam.csv`) đã chính thức hoàn thành với **530 mẫu đời thực 100%**, đáp ứng trọn vẹn và nghiêm ngặt mọi tiêu chuẩn học thuật của UIT:
+Tập dữ liệu lừa đảo của thành viên **Bùi Thị Mỷ Cẩm** (`staging_cam_scam.csv`) đã chính thức hoàn thành với **514 mẫu đời thực 100% (đã lọc sạch hoàn toàn cờ bạc, cá cược)**, đáp ứng trọn vẹn và nghiêm ngặt mọi tiêu chuẩn học thuật của UIT:
 - Không sử dụng bất kỳ một từ ngữ nào do AI tự sinh.
 - Mỗi bản ghi đều có thể kiểm tra chéo bằng cách nhấp chuột vào liên kết và đọc văn bản nguyên mẫu.
 - Sẵn sàng tiến hành hợp nhất cùng dữ liệu của Hoàng Cao Sơn để đóng băng `dataset.csv` và chuyển giao sang Phase 02 (Tiền xử lý văn bản tiếng Việt).

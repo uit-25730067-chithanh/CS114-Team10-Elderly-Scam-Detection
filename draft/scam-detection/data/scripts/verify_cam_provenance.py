@@ -14,6 +14,8 @@ Mục đích:
 import csv
 import io
 import re
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 import pandas as pd
@@ -25,19 +27,30 @@ assert csv_file.exists(), f"File not found: {csv_file}"
 df = pd.read_csv(csv_file)
 print(f"[*] Đang thẩm định tính chân thực của {len(df)} mẫu trong {csv_file.name}...")
 
+
+def fetch_github_raw_lines(url: str, timeout: int = 20, max_retries: int = 2) -> list[str]:
+    """Tải dòng dữ liệu đối chứng từ GitHub Raw an toàn với timeout và retry."""
+    req = urllib.request.Request(url, headers={"User-Agent": "CS114-ProvenanceAuditor/1.0"})
+    for attempt in range(1, max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read().decode("utf-8-sig", errors="replace").splitlines()
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt == max_retries:
+                raise RuntimeError(f"Lỗi tải dữ liệu kiểm toán sau {max_retries} lần thử từ {url}: {e}")
+            time.sleep(1)
+    return []
+
+
 # 1. Tải toàn bộ dòng vật lý từ UIT raw
 print("[*] Tải dữ liệu đối chứng từ GitHub UIT IE403...")
 url_uit = "https://raw.githubusercontent.com/duynguyenhoang22/SMS_Phishing_Detection/main/data/dataset_label_1.csv"
-req = urllib.request.Request(url_uit, headers={"User-Agent": "Mozilla/5.0"})
-with urllib.request.urlopen(req, timeout=20) as resp:
-    uit_lines = resp.read().decode("utf-8-sig", errors="replace").splitlines()
+uit_lines = fetch_github_raw_lines(url_uit, timeout=20)
 
 # 2. Tải toàn bộ dòng vật lý từ IEEE raw
 print("[*] Tải dữ liệu đối chứng từ GitHub IEEE Access 2026...")
 url_ieee = "https://raw.githubusercontent.com/trannguyenthaituan251209/vietnamese_sms_dataset/main/full_dataset.csv"
-req = urllib.request.Request(url_ieee, headers={"User-Agent": "Mozilla/5.0"})
-with urllib.request.urlopen(req, timeout=20) as resp:
-    ieee_lines = resp.read().decode("utf-8-sig", errors="replace").splitlines()
+ieee_lines = fetch_github_raw_lines(url_ieee, timeout=20)
 
 # 3. Kiểm tra từng mẫu 1-1
 passed = 0
@@ -95,12 +108,13 @@ for idx, row in df.iterrows():
         passed += 1
         continue
 
-    if "#L" not in source_url:
+    line_match = re.search(r"#L(\d+)", source_url)
+    if not line_match:
         failed += 1
-        failures.append((row_id, "Missing #L permalink", source_url))
+        failures.append((row_id, "Missing or malformed #L permalink", source_url))
         continue
 
-    line_num = int(source_url.split("#L")[1])
+    line_num = int(line_match.group(1))
     target_lines = uit_lines if source == "github_uit_ie403" else ieee_lines
 
     if line_num > len(target_lines):

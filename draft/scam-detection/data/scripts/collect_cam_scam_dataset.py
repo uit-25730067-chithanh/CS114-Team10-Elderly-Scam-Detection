@@ -29,6 +29,8 @@ import csv
 import io
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 import unicodedata
 from pathlib import Path
@@ -140,6 +142,20 @@ def normalize_text_for_dedup(text: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", "", text.lower())).strip()
 
 
+def fetch_github_raw_csv_text(url: str, timeout: int = 20, max_retries: int = 2) -> str:
+    """Tải nội dung CSV từ GitHub Raw an toàn với timeout và cơ chế retry."""
+    req = urllib.request.Request(url, headers={"User-Agent": "CS114-DataCollector/1.0"})
+    for attempt in range(1, max_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read().decode("utf-8-sig", errors="replace")
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt == max_retries:
+                raise RuntimeError(f"Lỗi tải dữ liệu sau {max_retries} lần thử từ {url}: {e}")
+            time.sleep(1)
+    return ""
+
+
 def fetch_uit_ie403_samples() -> list[dict]:
     """
     Thu thập các mẫu tin nhắn smishing đời thực từ bộ dữ liệu UIT IE403.
@@ -148,10 +164,7 @@ def fetch_uit_ie403_samples() -> list[dict]:
     """
     print("[1/3] Đang nạp dữ liệu từ UIT IE403 Ground Truth Smishing Dataset...")
     url = "https://raw.githubusercontent.com/duynguyenhoang22/SMS_Phishing_Detection/main/data/dataset_label_1.csv"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        raw_content = resp.read().decode("utf-8-sig", errors="replace")
+    raw_content = fetch_github_raw_csv_text(url, timeout=20)
 
     f = io.StringIO(raw_content)
     reader = csv.reader(f)
@@ -215,10 +228,7 @@ def fetch_ieee_access_samples(limit: int = 450) -> list[dict]:
     """
     print(f"[3/3] Đang nạp dữ liệu từ IEEE Access 2026 (giới hạn ngạch ~{limit} mẫu)...")
     url = "https://raw.githubusercontent.com/trannguyenthaituan251209/vietnamese_sms_dataset/main/full_dataset.csv"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-
-    with urllib.request.urlopen(req, timeout=20) as resp:
-        raw_content = resp.read().decode("utf-8-sig", errors="replace")
+    raw_content = fetch_github_raw_csv_text(url, timeout=20)
 
     f = io.StringIO(raw_content)
     reader = csv.reader(f)
