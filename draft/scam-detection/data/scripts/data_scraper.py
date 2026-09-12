@@ -134,6 +134,17 @@ def infer_scam_category(text: str) -> str:
 def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str, list[str]]:
     """
     Fetch an article page and extract (title, text_content, raw_html_hash, blockquotes).
+
+    Args:
+        url: The web URL to scrape.
+        timeout: Network request timeout in seconds (default: 10).
+
+    Returns:
+        tuple containing:
+            - title (str): Title of the article.
+            - full_text (str): Clean text content of the article paragraphs (deduplicated).
+            - raw_hash (str): SHA256 hex digest of the raw HTML content.
+            - extracted_blockquotes (list[str]): Explicit blockquote/q elements.
     """
     headers = {"User-Agent": USER_AGENT}
     resp = requests.get(url, headers=headers, timeout=timeout)
@@ -150,10 +161,30 @@ def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str, list
     quote_elements = soup.find_all(["blockquote", "q"])
     extracted_blockquotes = [q.get_text().strip() for q in quote_elements if len(q.get_text().strip()) >= 25]
 
-    for s in soup(["script", "style", "nav", "footer", "header"]):
+    for s in soup(["script", "style", "nav", "footer", "header", "aside"]):
         s.decompose()
 
-    paragraphs = [p.get_text().strip() for p in soup.find_all(["p", "div"]) if p.get_text().strip()]
+    # Chỉ trích xuất từ container nội dung bài báo để tránh trùng lặp giữa thẻ div cha và p con
+    content_container = soup.find(["article", "main"]) or soup.body or soup
+    paragraphs = []
+    seen_texts = set()
+
+    # Ưu tiên lấy các thẻ p văn bản chính
+    for p in content_container.find_all("p"):
+        txt = p.get_text(strip=True)
+        if txt and len(txt) >= 15 and txt not in seen_texts:
+            seen_texts.add(txt)
+            paragraphs.append(txt)
+
+    # Nếu trang không dùng thẻ p mà dùng thẻ div lẻ lá (leaf divs), bổ sung fallback an toàn
+    if not paragraphs:
+        for d in content_container.find_all("div"):
+            if not d.find(["p", "div"]):
+                txt = d.get_text(strip=True)
+                if txt and len(txt) >= 15 and txt not in seen_texts:
+                    seen_texts.add(txt)
+                    paragraphs.append(txt)
+
     full_text = "\n".join(paragraphs)
 
     return title, full_text, raw_hash, extracted_blockquotes
