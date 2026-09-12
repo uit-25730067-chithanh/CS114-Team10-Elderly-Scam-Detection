@@ -103,7 +103,7 @@ print(f"  - Số mẫu sai lệch: {failed}")
 print("=" * 60)
 
 if failed == 0:
-    print("✅ TẤT CẢ 530 MẪU ĐỀU CÓ MINH CHỨNG NGUỒN GỐC THỰC TẾ 100% CHÍNH XÁC!")
+    print(f"✅ TẤT CẢ {len(df)} MẪU ĐỀU CÓ MINH CHỨNG NGUỒN GỐC THỰC TẾ 100% CHÍNH XÁC!")
 else:
     print(f"❌ PHÁT HIỆN {failed} MẪU LỖI:")
     for f_id, reason, detail in failures[:10]:

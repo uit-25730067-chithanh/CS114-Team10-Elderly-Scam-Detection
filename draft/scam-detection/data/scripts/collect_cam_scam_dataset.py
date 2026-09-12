@@ -30,6 +30,7 @@ import io
 import re
 import sys
 import urllib.request
+import unicodedata
 from pathlib import Path
 from typing import Final
 
@@ -51,28 +52,87 @@ from src.utils.helpers import (
 
 COLLECTOR_NAME: Final[str] = "Bùi Thị Mỷ Cẩm"
 
-# Từ khóa cờ bạc / cá cược / game bài bị loại trừ hoàn toàn
-GAMBLING_KEYWORDS: Final[list[str]] = [
-    "kubet", "casino", "đánh bài", "lô đề", "nổ hũ", "bắn cá",
-    "tài xỉu", "đá gà", "cá cược", "game bài", "thần tài", "nohu",
-    "slot", "nhà cái", "baccarat", "quay hũ", "đặt cược"
+# Biểu thức chính quy phát hiện cờ bạc / cá cược / nổ hũ / khiêu dâm / game bài
+GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
+    r"kubet", r"casino", r"danh\s*ba[`i]?", r"lo\s*de", r"so\s*xo", r"xo\s*so", r"x0s0",
+    r"no\s*hu", r"no\s*hu", r"n[/\s]*o[/\s]*h[/\s]*u", r"quay\s*hu",
+    r"ban\s*ca", r"ba?n'\s*ca", r"b[/\s]*a[/\s]*n[/\s]*c[/\s]*a",
+    r"tai\s*xiu", r"da\s*ga", r"ca\s*cuoc", r"\bcuoc\b", r"game\s*bai", r"nohu",
+    r"slot", r"nha\s*cai", r"baccarat", r"bcr", r"dat\s*cuoc", r"jili", r"8day",
+    r"giaitri\d*q", r"nap\s*dau", r"na?p\s*dau", r"tan\s*thu", r"hoan\s*tra", r"ho?an\s*tra",
+    r"cuuthua", r"rut\s*sieu\s*toc", r"vong\s*cuoc", r"x\d\s*vong\s*cuoc",
+    r"tang\s*\d+k", r"thuong\s*\d+k", r"nap\s*\d+k", r"\bli\s*xi\b",
+    r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia"
 ]
 
-# Từ khóa Quyền lực / Cấp cứu thuộc trách nhiệm của Hoàng Cao Sơn (phải loại trừ)
-SON_KEYWORDS: Final[list[str]] = [
-    "lệnh truy nã", "cơ quan cảnh sát điều tra", "bắt tạm giam", "lệnh bắt",
-    "khởi tố", "viện kiểm sát", "tòa án nhân dân", "điều tra hình sự",
-    "cháu bị tai nạn", "con bị tai nạn", "tai nạn giao thông cấp cứu",
-    "mổ gấp", "chuyển viện phí gấp"
+# Biểu thức chính quy Quyền lực / Cấp cứu thuộc trách nhiệm của Hoàng Cao Sơn (phải loại trừ)
+SON_PATTERNS: Final[list[str]] = [
+    r"truy\s*na", r"canh\s*sat\s*dieu\s*tra", r"bat\s*tam\s*giam", r"lenh\s*bat",
+    r"khoi\s*to", r"vien\s*kiem\s*sat", r"toa\s*an", r"dieu\s*tra\s*hinh\s*su",
+    r"tai\s*nan", r"cap\s*cuu", r"mo\s*gap", r"vien\s*phi"
 ]
 
-# Từ khóa phân loại Sức khỏe & Quà tặng (health_gift)
-HEALTH_GIFT_KEYWORDS: Final[list[str]] = [
-    "covid", "thuốc", "chữa bệnh", "sức khỏe", "trúng", "quà", "tri ân",
-    "tặng", "chúc mừng", "việc làm", "tuyển dụng", "hoa hồng", "voucher",
-    "ưu đãi", "điểm", "priority", "thưởng", "khuyến mại", "khám bệnh",
-    "bốc thăm", "quà tặng", "trúng thưởng", "đổi điểm"
+# Biểu thức chính quy phân loại Sức khỏe & Quà tặng (health_gift)
+HEALTH_GIFT_PATTERNS: Final[list[str]] = [
+    r"covid", r"thuoc", r"chua\s*benh", r"suc\s*khoe", r"kham\s*benh", r"benh\s*vien",
+    r"trung\s*thuong", r"\btrung\b", r"qua\s*tang", r"tri\s*an", r"voucher", r"\bqua\b",
+    r"tuyen\s*dung", r"viec\s*lam", r"kiem\s*tien", r"hoa\s*hong", r"nhan\s*qua",
+    r"uu\s*dai", r"chuc\s*mung"
 ]
+
+# Biểu thức chính quy phân loại Dịch vụ công & Viễn thông / Ngân hàng / Điện lực (public_service)
+PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
+    r"dich\s*vu\s*cong", r"\bdvc\b", r"vneid", r"vne-id", r"dinh\s*danh", r"can\s*cuoc", r"cccd",
+    r"bao\s*hiem", r"bhxh", r"bhyt", r"bhtn", r"so\s*ho\s*khau", r"ho\s*khau",
+    r"thue", r"cuc\s*thue", r"quyet\s*toan", r"hoan\s*thue",
+    r"dien\s*luc", r"\bevn\b", r"tien\s*dien", r"cat\s*dien",
+    r"khoa\s*sim", r"chuan\s*hoa", r"thue\s*bao", r"nha\s*mang", r"viettel", r"vinaphone", r"mobifone",
+    r"ngan\s*hang", r"vietcombank", r"bidv", r"vietinbank", r"techcombank", r"mbbank", r"acb",
+    r"sacombank", r"vpbank", r"agribank", r"tpbank", r"shb", r"hdbank", r"msb", r"\bvcb\b",
+    r"tai\s*khoan", r"the\s*tin\s*dung", r"bien\s*dong\s*so\s*du", r"tam\s*khoa", r"khoa\s*the",
+    r"smart\s*banking", r"digibank", r"\botp\b", r"ma\s*xac\s*thuc", r"phat\s*nguoi", r"giao\s*thong",
+    r"giay\s*to", r"bang\s*lai", r"dang\s*ky", r"ho\s*so", r"bo\s*sung", r"loi\s*he\s*thong",
+    r"dong\s*bo"
+]
+
+
+def remove_vietnamese_accents(text: str) -> str:
+    """Loại bỏ dấu tiếng Việt để đối sánh từ khóa chống lách luật spam."""
+    norm = unicodedata.normalize("NFD", text)
+    result = re.sub(r"[\u0300-\u036f]", "", norm)
+    return result.replace("đ", "d").replace("Đ", "D").lower()
+
+
+def classify_cam_sample(raw_text: str) -> str | None:
+    """
+    Phân loại nghiêm ngặt mẫu lừa đảo cho phần việc của Bùi Thị Mỷ Cẩm.
+    - Loại bỏ 100% cờ bạc / cá cược / game bài / khiêu dâm.
+    - Loại bỏ 100% quyền lực / cấp cứu (phần việc của Hoàng Cao Sơn).
+    - Chỉ gán nhãn khi khớp đúng tín hiệu ngữ nghĩa của public_service hoặc health_gift.
+    - TUYỆT ĐỐI KHÔNG FALLBACK tự tiện.
+    """
+    norm = remove_vietnamese_accents(raw_text)
+
+    # 1. Loại bỏ cờ bạc & nhạy cảm
+    for pattern in GAMBLING_ADULT_PATTERNS:
+        if re.search(pattern, norm, re.IGNORECASE):
+            return None
+
+    # 2. Loại bỏ quyền lực & cấp cứu của Sơn
+    for pattern in SON_PATTERNS:
+        if re.search(pattern, norm, re.IGNORECASE):
+            return None
+
+    # 3. Phân loại chuẩn xác theo bẫy tâm lý
+    is_ps = any(re.search(pattern, norm, re.IGNORECASE) for pattern in PUBLIC_SERVICE_PATTERNS)
+    is_hg = any(re.search(pattern, norm, re.IGNORECASE) for pattern in HEALTH_GIFT_PATTERNS)
+
+    if is_ps:
+        return CATEGORY_PUBLIC_SERVICE
+    if is_hg:
+        return CATEGORY_HEALTH_GIFT
+
+    return None
 
 
 def normalize_text_for_dedup(text: str) -> str:
@@ -89,30 +149,23 @@ def fetch_uit_ie403_samples() -> list[dict]:
     print("[1/3] Đang nạp dữ liệu từ UIT IE403 Ground Truth Smishing Dataset...")
     url = "https://raw.githubusercontent.com/duynguyenhoang22/SMS_Phishing_Detection/main/data/dataset_label_1.csv"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    
+
     with urllib.request.urlopen(req) as resp:
         raw_content = resp.read().decode("utf-8-sig", errors="replace")
-        
+
     f = io.StringIO(raw_content)
     reader = csv.reader(f)
     next(reader)  # Header
     start_line = 2
-    
+
     samples = []
     for row in reader:
         end_line = reader.line_num
         raw_text = row[0].strip() if len(row) > 0 else ""
-        
+
         if len(raw_text) >= 25:
-            low = raw_text.lower()
-            
-            # Loại trừ phần việc của Sơn & cờ bạc
-            if not any(k in low for k in SON_KEYWORDS) and not any(k in low for k in GAMBLING_KEYWORDS):
-                if any(k in low for k in HEALTH_GIFT_KEYWORDS):
-                    cat = CATEGORY_HEALTH_GIFT
-                else:
-                    cat = CATEGORY_PUBLIC_SERVICE
-                    
+            cat = classify_cam_sample(raw_text)
+            if cat is not None:
                 permalink = f"https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv#L{start_line}"
                 samples.append({
                     "raw_text": raw_text,
@@ -121,9 +174,9 @@ def fetch_uit_ie403_samples() -> list[dict]:
                     "source_url": permalink,
                     "notes": f"UIT IE403 Ground Truth Smishing Dataset line {start_line}"
                 })
-                
+
         start_line = end_line + 1
-        
+
     print(f"      -> Thu thập được {len(samples)} mẫu hợp lệ từ UIT IE403.")
     return samples
 
@@ -154,7 +207,7 @@ def fetch_verified_news_quotes() -> list[dict]:
     return quotes
 
 
-def fetch_ieee_access_samples(limit: int = 350) -> list[dict]:
+def fetch_ieee_access_samples(limit: int = 450) -> list[dict]:
     """
     Thu thập các mẫu tin nhắn lừa đảo từ Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026).
     Repo: trannguyenthaituan251209/vietnamese_sms_dataset
@@ -163,30 +216,23 @@ def fetch_ieee_access_samples(limit: int = 350) -> list[dict]:
     print(f"[3/3] Đang nạp dữ liệu từ IEEE Access 2026 (giới hạn ngạch ~{limit} mẫu)...")
     url = "https://raw.githubusercontent.com/trannguyenthaituan251209/vietnamese_sms_dataset/main/full_dataset.csv"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    
+
     with urllib.request.urlopen(req) as resp:
         raw_content = resp.read().decode("utf-8-sig", errors="replace")
-        
+
     f = io.StringIO(raw_content)
     reader = csv.reader(f)
     next(reader)  # Header
     start_line = 2
-    
+
     samples = []
     for row in reader:
         end_line = reader.line_num
         if len(row) > 3 and row[3].strip() == "1":
             raw_text = row[2].strip()
             if len(raw_text) >= 25:
-                low = raw_text.lower()
-                
-                # Loại trừ phần việc của Sơn & cờ bạc
-                if not any(k in low for k in SON_KEYWORDS) and not any(k in low for k in GAMBLING_KEYWORDS):
-                    if any(k in low for k in HEALTH_GIFT_KEYWORDS):
-                        cat = CATEGORY_HEALTH_GIFT
-                    else:
-                        cat = CATEGORY_PUBLIC_SERVICE
-                        
+                cat = classify_cam_sample(raw_text)
+                if cat is not None:
                     permalink = f"https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv#L{start_line}"
                     samples.append({
                         "raw_text": raw_text,
@@ -195,12 +241,12 @@ def fetch_ieee_access_samples(limit: int = 350) -> list[dict]:
                         "source_url": permalink,
                         "notes": f"IEEE Access 2026 Vietnamese SMS Dataset line {start_line}"
                     })
-                    
+
                     if len(samples) >= limit:
                         break
-                        
+
         start_line = end_line + 1
-        
+
     print(f"      -> Thu thập được {len(samples)} mẫu hợp lệ từ IEEE Access 2026.")
     return samples
 
@@ -214,7 +260,7 @@ def build_and_validate_cam_dataset() -> pd.DataFrame:
     # 1. Thu thập từ các nguồn
     uit_samples = fetch_uit_ie403_samples()
     news_samples = fetch_verified_news_quotes()
-    ieee_samples = fetch_ieee_access_samples(limit=350)
+    ieee_samples = fetch_ieee_access_samples(limit=450)
     
     all_candidates = uit_samples + news_samples + ieee_samples
     
