@@ -61,36 +61,79 @@ USER_AGENT: Final[str] = (
 
 # Heuristic patterns for inferring psychological trap category from quoted text
 CATEGORY_KEYWORDS: Final[dict[str, list[str]]] = {
+    CATEGORY_PUBLIC_SERVICE: [
+        "vneid", "định danh", "mức 2", "dịch vụ công", "bộ công an", "cccd", "căn cước",
+        "đồng bộ dữ liệu", "sai lệch thông tin", "bảo hiểm xã hội", "bhxh", "vssid",
+        "lương hưu", "trợ cấp", "bảo hiểm y tế", "bhyt", "sim 4g", "sim 5g", "khoá sim",
+        "khoa sim", "khóa sim", "chuẩn hóa", "thuê bao", "cục viễn thông", "evn",
+        "tiền điện", "cắt điện", "tổng cục thuế", "hoàn thuế", "quyết toán thuế",
+        "thuế điện tử", "cập nhật thông tin",
+    ],
+    CATEGORY_HEALTH_GIFT: [
+        "tặng thuốc", "chữa dứt điểm", "cao xương khớp", "tiểu đường", "sữa non",
+        "viện 108", "bệnh viện quân y", "thảo dược", "đông y gia truyền", "tri ân",
+        "quà tặng", "quà tri ân", "miễn phí", "trúng thưởng", "hưu trí", "sâm",
+        "mã quay thưởng", "nhận quà", "hội thảo sức khỏe", "khám bệnh miễn phí",
+        "tiền ship", "phí vận chuyển", "voucher", "trúng vàng", "thực phẩm chức năng",
+    ],
     CATEGORY_FEAR_AUTHORITY: [
         "công an", "viện kiểm sát", "toà án", "tòa án", "bắt tạm giam",
         "rửa tiền", "lệnh triệu tập", "phong tỏa tài khoản", "tạm giữ",
+        "thi hành án", "lệnh bắt",
     ],
     CATEGORY_FAMILY_EMERGENCY: [
         "cấp cứu", "tai nạn", "bệnh viện", "viện phí", "mổ gấp", "con bị ngã",
-    ],
-    CATEGORY_HEALTH_GIFT: [
-        "tặng thuốc", "tri ân", "miễn phí", "trúng thưởng", "hưu trí",
-        "cao xương khớp", "sâm", "thảo dược",
-    ],
-    CATEGORY_PUBLIC_SERVICE: [
-        "vneid", "định danh", "dịch vụ công", "sim 4g", "sim 5g",
-        "khoá sim", "cập nhật thông tin", "trợ cấp",
+        "cháu bị tai nạn", "chuyển tiền gấp",
     ],
 }
 
+# Regex patterns to strip journalist narrative framing from extracted quotes
+JOURNALIST_PREFIX_PATTERNS: Final[list[re.Pattern]] = [
+    re.compile(r"^(?:(?:Chị|Anh|Bà|Ông|Nạn nhân)\s+[A-ZĐ]\.?\s+(?:cho biết|kể lại|chia sẻ|nhận được|phản ánh)(?::|,)?\s*)", re.IGNORECASE),
+    re.compile(r"^(?:(?:Theo|Cụ thể|Điển hình là|Theo thông tin từ|Theo phản ánh|Theo cơ quan công an)(?::|,)?\s*)", re.IGNORECASE),
+    re.compile(r"^(?:(?:Nội dung tin nhắn|Tin nhắn có nội dung|Kẻ gian nhắn tin|Đối tượng gửi tin nhắn)(?:\s+như sau)?(?::|,)?\s*)", re.IGNORECASE),
+]
+
+
+def clean_scam_quote(text: str) -> str:
+    """Strip leading/trailing quotes and journalistic narrative framing."""
+    cleaned = text.strip()
+    cleaned = re.sub(r"^[\"“'«]+|[\"”'»]+$", "", cleaned).strip()
+    for pat in JOURNALIST_PREFIX_PATTERNS:
+        cleaned = pat.sub("", cleaned).strip()
+    cleaned = re.sub(r"^[\"“'«]+|[\"”'»]+$", "", cleaned).strip()
+    return cleaned
+
 
 def infer_scam_category(text: str) -> str:
-    """Heuristic rule to suggest a preliminary scam category based on keywords."""
-    lower = text.lower()
-    for category, keywords in CATEGORY_KEYWORDS.items():
-        if any(kw in lower for kw in keywords):
-            return category
-    return CATEGORY_FEAR_AUTHORITY  # Default fallback for manual review
-
-
-def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str]:
     """
-    Fetch an article page and extract (title, text_content, raw_html_hash).
+    Deterministic rule to categorize scam messages into standard categories.
+    Evaluates specific institutional/trap patterns before general fallbacks.
+    """
+    lower = text.lower()
+
+    # 1. Public service / identity / utilities / taxes
+    if any(kw in lower for kw in CATEGORY_KEYWORDS[CATEGORY_PUBLIC_SERVICE]):
+        return CATEGORY_PUBLIC_SERVICE
+
+    # 2. Health / gifts / medical miracles
+    if any(kw in lower for kw in CATEGORY_KEYWORDS[CATEGORY_HEALTH_GIFT]):
+        return CATEGORY_HEALTH_GIFT
+
+    # 3. Fear authority (police, prosecutors, arrest warrants)
+    if any(kw in lower for kw in CATEGORY_KEYWORDS[CATEGORY_FEAR_AUTHORITY]):
+        return CATEGORY_FEAR_AUTHORITY
+
+    # 4. Family emergency (hospital fee, urgent surgery)
+    if any(kw in lower for kw in CATEGORY_KEYWORDS[CATEGORY_FAMILY_EMERGENCY]):
+        return CATEGORY_FAMILY_EMERGENCY
+
+    return CATEGORY_PUBLIC_SERVICE  # Default fallback for administrative/SMS scams
+
+
+def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str, list[str]]:
+    """
+    Fetch an article page and extract (title, text_content, raw_html_hash, blockquotes).
     """
     headers = {"User-Agent": USER_AGENT}
     resp = requests.get(url, headers=headers, timeout=timeout)
@@ -103,37 +146,57 @@ def fetch_article_text(url: str, timeout: int = 10) -> tuple[str, str, str]:
     title_tag = soup.find("h1") or soup.find("title")
     title = title_tag.get_text().strip() if title_tag else "No Title"
 
+    # Capture explicit quote tags before decomposing
+    quote_elements = soup.find_all(["blockquote", "q"])
+    extracted_blockquotes = [q.get_text().strip() for q in quote_elements if len(q.get_text().strip()) >= 25]
+
     for s in soup(["script", "style", "nav", "footer", "header"]):
         s.decompose()
 
-    paragraphs = [p.get_text().strip() for p in soup.find_all("p") if p.get_text().strip()]
+    paragraphs = [p.get_text().strip() for p in soup.find_all(["p", "div"]) if p.get_text().strip()]
     full_text = "\n".join(paragraphs)
 
-    return title, full_text, raw_hash
+    return title, full_text, raw_hash, extracted_blockquotes
 
 
-def extract_candidate_quotes(full_text: str) -> list[str]:
+def extract_candidate_quotes(full_text: str, extra_quotes: list[str] | None = None) -> list[str]:
     """
     Extract candidate SMS/dialogue quotes embedded in article text.
-    Looks for text in double quotation marks or starting with SMS tags.
+    Looks for text in double quotation marks, HTML quotes, or SMS tags.
+    Strips journalistic framing to keep clean victim-facing message text.
     """
     candidates: list[str] = []
 
-    quote_matches = re.findall(r'["“]([^"”]{25,500})["”]', full_text)
+    # 1. Quoted segments
+    quote_matches = re.findall(r'["“«]([^"”»]{25,500})["”»]', full_text)
     for q in quote_matches:
-        cleaned = q.strip()
+        cleaned = clean_scam_quote(q)
         has_keywords = any(
             kw in cleaned.lower()
             for kw_list in CATEGORY_KEYWORDS.values()
             for kw in kw_list
         )
-        has_alert_clues = any(clue in cleaned.lower() for clue in ["http", "0", "vnd", "chuyển", "gửi", "bấm"])
-        if has_keywords or has_alert_clues:
+        has_alert_clues = any(clue in cleaned.lower() for clue in ["http", "0", "vnd", "chuyển", "gửi", "bấm", "cập nhật", "liên hệ", "hotline"])
+        if (has_keywords or has_alert_clues) and len(cleaned) >= 25:
             candidates.append(cleaned)
 
-    sms_lines = re.findall(r"(?:\[CẢNH BÁO\]|\[TB\]|\[THÔNG BÁO\])[^\n]{30,500}", full_text, re.IGNORECASE)
+    # 2. SMS lines starting with headers like [VNeID], [BHXH], [CẢNH BÁO], [TB], [DVC]
+    sms_lines = re.findall(
+        r"(?:\[(?:VNeID|BHXH|EVN|DVC|TTCS|156|CẢNH BÁO|TB|THÔNG BÁO)\]|[0-9]{3,4}:)[^\n]{25,500}",
+        full_text,
+        re.IGNORECASE,
+    )
     for line in sms_lines:
-        candidates.append(line.strip())
+        cleaned = clean_scam_quote(line)
+        if len(cleaned) >= 25:
+            candidates.append(cleaned)
+
+    # 3. Add explicit HTML blockquotes/elements
+    if extra_quotes:
+        for eq in extra_quotes:
+            cleaned = clean_scam_quote(eq)
+            if len(cleaned) >= 25:
+                candidates.append(cleaned)
 
     unique_candidates: list[str] = []
     seen = set()
@@ -151,16 +214,16 @@ def process_url(url: str, collector_name: str = "Crawler") -> list[dict]:
     """
     print(f"[*] Fetching: {url}")
     try:
-        title, text_content, raw_hash = fetch_article_text(url)
+        title, text_content, raw_hash, extra_quotes = fetch_article_text(url)
     except Exception as e:
         print(f"[!] Error fetching {url}: {e}")
         return []
 
-    quotes = extract_candidate_quotes(text_content)
+    quotes = extract_candidate_quotes(text_content, extra_quotes=extra_quotes)
     print(f"    Found {len(quotes)} candidate quotes in '{title[:50]}...'")
 
     records = []
-    evidence_type = "gov_portal" if any(g in url for g in [".gov.vn", "canhsat.vn", "chongthurac.vn"]) else "news_press"
+    evidence_type = "gov_portal" if any(g in url for g in [".gov.vn", "canhsat.vn", "chongthurac.vn", "tinnhiemmang.vn"]) else "news_press"
 
     parsed_url = urlparse(url)
     source_domain = parsed_url.netloc if parsed_url.netloc else (parsed_url.path.split("/")[0] if parsed_url.path else "unknown")
