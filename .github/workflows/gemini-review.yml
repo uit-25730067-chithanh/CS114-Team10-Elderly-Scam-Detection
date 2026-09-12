@@ -218,7 +218,7 @@ jobs:
                   "temperature": 0.1,
                   "topP": 0.95,
                   "topK": 40,
-                  "maxOutputTokens": 4096
+                  "maxOutputTokens": 8192
               },
               "safetySettings": [
                   {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
@@ -286,8 +286,15 @@ jobs:
                       finish_reason = candidates[0].get("finishReason", "")
                       print(f"Candidate finishReason: {finish_reason}")
                       parts = candidates[0].get("content", {}).get("parts", [])
-                      review_content = "".join(p.get("text", "") for p in parts).strip()
-                      if review_content:
+                      # Lọc bỏ thinking/thought của mô hình suy luận (Gemini 2.5 Flash)
+                      review_parts = [p.get("text", "") for p in parts if not p.get("thought", False)]
+                      if not review_parts:
+                          review_parts = [p.get("text", "") for p in parts]
+                      review_content = "".join(review_parts).strip()
+                      # Đảm bảo neo vào đúng tiêu đề review nếu còn sót token suy nghĩ
+                      if "## 🤖 Gemini PR Code Review" in review_content:
+                          review_content = review_content[review_content.find("## 🤖 Gemini PR Code Review"):]
+                      if review_content and finish_reason != "SAFETY":
                           active_model_name = model
                           success = True
                           print(f"Successfully generated review with model '{model}'.")
