@@ -65,7 +65,12 @@ GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
     r"cuuthua", r"rut\s*sieu\s*toc", r"vong\s*cuoc", r"x\d\s*vong\s*cuoc",
     r"tang\s*\d+k", r"thuong\s*\d+k", r"nap\s*\d+k", r"\bli\s*xi\b",
     r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia",
-    r"gai\s*lam", r"lam\s*tjnh", r"lam\s*tinh"
+    r"gai\s*lam", r"lam\s*tjnh", r"lam\s*tinh",
+    # Họ spam cờ bạc bị làm rối (leetspeak + domain giả mạo tên ngân hàng, vd
+    # "DeBidv.com", "Bidvjr.com") luôn có đuôi rác đặc trưng "groupsgooglecom"
+    # (mảnh vỡ của "groups.google.com" dính liền). Phát hiện 14/09/2026: 16 mẫu
+    # thuộc họ này bị gán nhầm public_service chỉ vì domain giả chứa chữ "bidv".
+    r"groupsgooglecom"
 ]
 
 # Biểu thức chính quy Quyền lực / Cấp cứu thuộc trách nhiệm của Hoàng Cao Sơn (phải loại trừ)
