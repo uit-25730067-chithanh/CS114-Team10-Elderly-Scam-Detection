@@ -64,7 +64,8 @@ GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
     r"giaitri\d*q", r"nap\s*dau", r"na?p\s*dau", r"tan\s*thu", r"hoan\s*tra", r"ho?an\s*tra",
     r"cuuthua", r"rut\s*sieu\s*toc", r"vong\s*cuoc", r"x\d\s*vong\s*cuoc",
     r"tang\s*\d+k", r"thuong\s*\d+k", r"nap\s*\d+k", r"\bli\s*xi\b",
-    r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia"
+    r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia",
+    r"gai\s*lam", r"lam\s*tjnh", r"lam\s*tinh"
 ]
 
 # Biểu thức chính quy Quyền lực / Cấp cứu thuộc trách nhiệm của Hoàng Cao Sơn (phải loại trừ)
@@ -72,7 +73,24 @@ SON_PATTERNS: Final[list[str]] = [
     r"truy\s*na", r"canh\s*sat\s*dieu\s*tra", r"bat\s*tam\s*giam", r"lenh\s*bat",
     r"khoi\s*to", r"khoi\s*kien", r"trieu\s*tap", r"to\s*giac",
     r"vien\s*kiem\s*sat", r"toa\s*an", r"dieu\s*tra\s*hinh\s*su",
-    r"tai\s*nan", r"cap\s*cuu", r"mo\s*gap", r"vien\s*phi"
+    r"tai\s*nan", r"cap\s*cuu", r"mo\s*gap", r"vien\s*phi",
+    r"chiem\s*doat\s*tai\s*san", r"canh\s*bao\s*lan\s*cuoi", r"trung\s*tam\s*tin\s*dung"
+]
+
+# Biểu thức chính quy nội dung ngoài phạm vi lừa đảo tài chính (tuyên truyền, chính trị...) — phải loại trừ
+OFF_TOPIC_PATTERNS: Final[list[str]] = [
+    r"phap\s*luan\s*cong"
+]
+
+# Biểu thức chính quy lừa đảo Việc làm/CTV online & Đầu tư/Crypto — KHÁC bản chất với
+# "quà tặng/sức khỏe" nên phải loại trừ khỏi health_gift (re-audit 13/09/2026 phát hiện
+# ~34/93 mẫu health_gift cũ thực chất là 2 nhóm lừa đảo này, không phải quà tặng tri ân)
+JOB_AND_INVESTMENT_PATTERNS: Final[list[str]] = [
+    r"tuyen\s*dung", r"tuyen\s*ctv", r"tuyen\s*nhan\s*vien", r"cong\s*tac\s*vien", r"\bctv\b",
+    r"viec\s*lam", r"viec\s*nhe", r"ban\s*thoi\s*gian", r"lam\s*viec\s*tai\s*nha",
+    r"kiem\s*tien", r"kiem\s*them", r"luong\s*cung", r"hoa\s*hong", r"nhiem\s*vu",
+    r"dau\s*tu", r"sinh\s*loi", r"lai\s*suat", r"\btrade\b", r"robot\s*tu\s*dong",
+    r"gop\s*von", r"\bcrypto\b", r"\busdt\b", r"\bcoin\b", r"nhan\s*doi\s*tai\s*san", r"bao\s*loi"
 ]
 
 # Biểu thức chính quy phân loại Sức khỏe & Quà tặng (health_gift)
@@ -81,15 +99,14 @@ SON_PATTERNS: Final[list[str]] = [
 HEALTH_GIFT_PATTERNS: Final[list[str]] = [
     r"covid", r"thuoc", r"chua\s*benh", r"suc\s*khoe", r"kham\s*benh", r"benh\s*vien",
     r"trung\s*thuong", r"trung\s*tuyen", r"qua\s*tang", r"tri\s*an", r"voucher",
-    r"tuyen\s*dung", r"viec\s*lam", r"kiem\s*tien", r"hoa\s*hong", r"nhan\s*qua",
-    r"uu\s*dai", r"chuc\s*mung"
+    r"nhan\s*qua", r"uu\s*dai", r"chuc\s*mung"
 ]
 
 # Biểu thức chính quy phân loại Dịch vụ công & Viễn thông / Ngân hàng / Điện lực (public_service)
 PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
     r"dich\s*vu\s*cong", r"\bdvc\b", r"vneid", r"vne-id", r"dinh\s*danh", r"can\s*cuoc", r"cccd",
     r"bao\s*hiem", r"bhxh", r"bhyt", r"b[\s/\.\-]*h[\s/\.\-]*t[\s/\.\-]*n", r"so\s*ho\s*khau", r"ho\s*khau",
-    r"thue", r"cuc\s*thue", r"quyet\s*toan", r"hoan\s*thue",
+    r"thue", r"cuc\s*thue", r"quyet\s*toan", r"hoan\s*thue", r"tong\s*cuc",
     r"dien\s*luc", r"\bevn\b", r"tien\s*dien", r"cat\s*dien",
     r"khoa\s*sim", r"chuan\s*hoa", r"thue\s*bao", r"nha\s*mang", r"viettel", r"vinaphone", r"mobifone",
     r"ngan\s*hang", r"vietcombank", r"bidv", r"vietinbank", r"techcombank", r"mbbank", r"acb",
@@ -125,6 +142,17 @@ def classify_cam_sample(raw_text: str) -> str | None:
 
     # 2. Loại bỏ quyền lực & cấp cứu của Sơn
     for pattern in SON_PATTERNS:
+        if re.search(pattern, norm, re.IGNORECASE):
+            return None
+
+    # 2b. Loại bỏ nội dung ngoài phạm vi lừa đảo tài chính (tuyên truyền, chính trị...)
+    for pattern in OFF_TOPIC_PATTERNS:
+        if re.search(pattern, norm, re.IGNORECASE):
+            return None
+
+    # 2c. Loại bỏ lừa đảo Việc làm/CTV online & Đầu tư/Crypto — khác bản chất
+    # "quà tặng/sức khỏe", dù có thể vô tình chứa chữ "chúc mừng"/"ưu đãi"/"quà"
+    for pattern in JOB_AND_INVESTMENT_PATTERNS:
         if re.search(pattern, norm, re.IGNORECASE):
             return None
 
