@@ -104,7 +104,13 @@ JOB_AND_INVESTMENT_PATTERNS: Final[list[str]] = [
     r"kiem\s*tien", r"kiem\s*them", r"luong\s*cung", r"hoa\s*hong", r"nhiem\s*vu",
     r"dau\s*tu", r"sinh\s*loi", r"lai\s*suat", r"\btrade\b", r"robot\s*tu\s*dong",
     r"gop\s*von", r"\bcrypto\b", r"\busdt\b", r"\bcoin\b", r"nhan\s*doi\s*tai\s*san", r"bao\s*loi",
-    r"tuyen\s*doi\s*tac", r"tuyen\s*tai\s*xe"
+    r"tuyen\s*doi\s*tac", r"tuyen\s*tai\s*xe",
+    # Phát hiện 14/09/2026 (review độc lập): "nhân viên bình luận" (tuyển CTV
+    # bình luận dạo kiếm tiền) và "tăng doanh thu" (dịch vụ tăng trưởng bán
+    # hàng qua sàn TMĐT) là 2 biến thể việc làm/kinh doanh online chưa được
+    # các pattern tuyển dụng/đầu tư ở trên bắt được, khiến 2 mẫu lọt nhầm vào
+    # health_gift chỉ vì có chữ "chúc mừng"/"ưu đãi" đi kèm.
+    r"nhan\s*vien\s*binh\s*luan", r"tang\s*doanh\s*thu"
 ]
 
 # Biểu thức chính quy phân loại Sức khỏe & Quà tặng (health_gift)
@@ -127,11 +133,17 @@ PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
     r"sacombank", r"vpbank", r"agribank", r"tpbank", r"shb", r"hdbank", r"msb", r"\bvcb\b",
     r"the\s*tin\s*dung", r"bien\s*dong\s*so\s*du", r"tam\s*khoa", r"khoa\s*the",
     r"smart\s*banking", r"digibank", r"\botp\b", r"ma\s*xac\s*thuc", r"phat\s*nguoi", r"giao\s*thong",
-    r"giay\s*to", r"bang\s*lai", r"bo\s*sung", r"loi\s*he\s*thong",
     r"dong\s*bo", r"tai\s*chinh\s*toan\s*cau", r"tieu\s*dung\s*o\s*nuoc\s*ngoai", r"phong\s*toa",
     r"gian\s*lan", r"buu\s*dien", r"luong\s*huu", r"an\s*sinh\s*xa\s*hoi", r"sinh\s*trac\s*hoc",
     r"bo\s*y\s*te", r"\bscb\b", r"dang\s*kiem", r"cap\s*nuoc", r"internet\s*cap\s*quang"
 ]
+# LƯU Ý 3: đã bỏ tiếp `giay\s*to` (giấy tờ), `bang\s*lai` (bằng lái), `bo\s*sung`
+# (bổ sung), `loi\s*he\s*thong` (lỗi hệ thống) (14/09/2026, review độc lập) — cùng
+# họ "từ hành chính chung chung" như `tai_khoan`/`dang_ky`/`ho_so` đã bỏ trước đó.
+# Xác nhận đã gây lọt 2 mẫu ngoài phạm vi: "bổ sung hồ sơ" (lừa hải quan giả mạo
+# FedEx) và "giữ giấy tờ gốc" (quảng cáo vay nặng lãi) — cả 2 không phải dịch vụ
+# công/ngân hàng/viễn thông cụ thể. Đã kiểm tra: không có mẫu public_service hợp
+# lệ nào trong dataset hiện tại chỉ dựa riêng vào 4 pattern này.
 # LƯU Ý: đã bỏ pattern chung chung `tai\s*khoan` (16/09/2026) — quá rộng, nuốt nhầm
 # các mẫu quà tặng thương hiệu (vd "tài khoản Shopee/Messenger của bạn được tặng...")
 # vào public_service dù không hề mạo danh cơ quan/ngân hàng cụ thể nào. Các mẫu
@@ -162,15 +174,31 @@ def remove_vietnamese_accents(text: str) -> str:
 # hoàn toàn bình thường trong tin nhắn quà tặng/khuyến mãi thật). Vì health_gift đang
 # rất khan hiếm dữ liệu, chấp nhận đánh đổi: dùng danh sách chính xác (an toàn tuyệt
 # đối, không rủi ro loại nhầm) thay vì heuristic tổng quát (rủi ro cao hơn giá trị).
+#
+# Mở rộng 14/09/2026 (review độc lập): thêm 2 mẫu spam cờ bạc/nổ hũ trá hình nghi
+# thuộc cùng họ obfuscation (leetspeak + dấu nháy đơn phá từ + domain rút gọn lạ,
+# không nêu thương hiệu quà tặng cụ thể nào) nhưng không có đúng đuôi "groupsgooglecom"
+# nên né được GAMBLING_ADULT_PATTERNS, và 1 mẫu lời chúc Tết chung chung không có kịch
+# bản quà tặng/trúng thưởng rõ ràng (quá yếu để tính là scam quà tặng thật) — cả 3 đã
+# được Cẩm xác nhận thủ công loại khỏi dataset.
 GARBLED_TEXT_DENYLIST: Final[set[str]] = {
     "JaKDiemDanh(phsqqgk.oerapple.com(TriAnx2NapYgroupsgooglecomul",
     "CgDOiXoiOi<mmmQqM.uszalo.me(TriAnMootTRaamNghjnYggroupsgooglecom?O",
+    "1A uu dai cuc hot nhan ngay 588k free tu app, Gui loi chuc ban rinh thuong khung ddlsxP.LnEwR.tech ep",
+    "Ky Tham Gja' Nha'n Ngay Qu'a Khung Len De'n 5'O'OK.Va Nhie'u Uu Dai Kha'c! W8RQ.mogfC.org Sp",
+    "CHUC MUNG NAM MOI! TDTC Chuc quy kh@ch van su nhu y, an khang thinh vuong, phat tai phat loc! c.de ojyv09wt5q3j .",
 }
 
 
 def is_garbled_text(raw_text: str) -> bool:
-    """Kiểm tra dòng text có nằm trong danh sách text lỗi/không đọc được đã xác nhận."""
-    return raw_text.strip() in GARBLED_TEXT_DENYLIST
+    """Kiểm tra dòng text có nằm trong danh sách text lỗi/không đọc được đã xác nhận.
+
+    So khớp trên bản đã chuẩn hóa khoảng trắng (giống bước cuối của mask_pii) để
+    không bị lệch bởi khoảng trắng thừa trong text thô gốc (phát hiện 14/09/2026:
+    2 mẫu denylist không khớp vì text thô có khoảng trắng khác với bản đã mask).
+    """
+    normalized = re.sub(r"\s+", " ", raw_text.strip())
+    return normalized in GARBLED_TEXT_DENYLIST
 
 
 def classify_cam_sample(raw_text: str) -> str | None:
