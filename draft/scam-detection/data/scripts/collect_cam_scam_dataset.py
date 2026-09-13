@@ -77,9 +77,17 @@ SON_PATTERNS: Final[list[str]] = [
     r"chiem\s*doat\s*tai\s*san", r"canh\s*bao\s*lan\s*cuoi", r"trung\s*tam\s*tin\s*dung"
 ]
 
-# Biểu thức chính quy nội dung ngoài phạm vi lừa đảo tài chính (tuyên truyền, chính trị...) — phải loại trừ
+# Biểu thức chính quy nội dung ngoài phạm vi lừa đảo tài chính (tuyên truyền, chính trị,
+# quảng cáo hội thảo/tư vấn tuyển sinh hợp pháp...) — phải loại trừ
 OFF_TOPIC_PATTERNS: Final[list[str]] = [
-    r"phap\s*luan\s*cong"
+    r"phap\s*luan\s*cong",
+    # "khong trung tuyen" (không trúng tuyển) là chủ đề hội thảo tư vấn tuyển sinh
+    # hợp pháp — NGƯỢC nghĩa với lừa đảo giả mạo trúng tuyển thật (luôn nói "ĐÃ
+    # trúng tuyển" để dụ nạn nhân, không bao giờ mở đầu bằng phủ định "không trúng
+    # tuyển"). Phát hiện 14/09/2026 khi Cẩm rà lại: 3 mẫu hội thảo tư vấn tâm lý
+    # "Biến nguy thành cơ" bị gán nhầm health_gift chỉ vì chữ "trúng tuyển" xuất
+    # hiện trong câu hỏi tu từ.
+    r"khong\s*trung\s*tuyen"
 ]
 
 # Biểu thức chính quy lừa đảo Việc làm/CTV online & Đầu tư/Crypto — KHÁC bản chất với
