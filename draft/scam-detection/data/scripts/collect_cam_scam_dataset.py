@@ -70,14 +70,17 @@ GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
 # Biểu thức chính quy Quyền lực / Cấp cứu thuộc trách nhiệm của Hoàng Cao Sơn (phải loại trừ)
 SON_PATTERNS: Final[list[str]] = [
     r"truy\s*na", r"canh\s*sat\s*dieu\s*tra", r"bat\s*tam\s*giam", r"lenh\s*bat",
-    r"khoi\s*to", r"vien\s*kiem\s*sat", r"toa\s*an", r"dieu\s*tra\s*hinh\s*su",
+    r"khoi\s*to", r"khoi\s*kien", r"trieu\s*tap", r"to\s*giac",
+    r"vien\s*kiem\s*sat", r"toa\s*an", r"dieu\s*tra\s*hinh\s*su",
     r"tai\s*nan", r"cap\s*cuu", r"mo\s*gap", r"vien\s*phi"
 ]
 
 # Biểu thức chính quy phân loại Sức khỏe & Quà tặng (health_gift)
+# LƯU Ý: KHÔNG dùng \bqua\b / \btrung\b đơn lẻ — sau khi bỏ dấu, "quà" và "qua"
+# (giới từ rất phổ biến) trùng nhau, gây fallback sai nhãn hàng loạt.
 HEALTH_GIFT_PATTERNS: Final[list[str]] = [
     r"covid", r"thuoc", r"chua\s*benh", r"suc\s*khoe", r"kham\s*benh", r"benh\s*vien",
-    r"trung\s*thuong", r"\btrung\b", r"qua\s*tang", r"tri\s*an", r"voucher", r"\bqua\b",
+    r"trung\s*thuong", r"trung\s*tuyen", r"qua\s*tang", r"tri\s*an", r"voucher",
     r"tuyen\s*dung", r"viec\s*lam", r"kiem\s*tien", r"hoa\s*hong", r"nhan\s*qua",
     r"uu\s*dai", r"chuc\s*mung"
 ]
@@ -85,7 +88,7 @@ HEALTH_GIFT_PATTERNS: Final[list[str]] = [
 # Biểu thức chính quy phân loại Dịch vụ công & Viễn thông / Ngân hàng / Điện lực (public_service)
 PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
     r"dich\s*vu\s*cong", r"\bdvc\b", r"vneid", r"vne-id", r"dinh\s*danh", r"can\s*cuoc", r"cccd",
-    r"bao\s*hiem", r"bhxh", r"bhyt", r"bhtn", r"so\s*ho\s*khau", r"ho\s*khau",
+    r"bao\s*hiem", r"bhxh", r"bhyt", r"b[\s/\.\-]*h[\s/\.\-]*t[\s/\.\-]*n", r"so\s*ho\s*khau", r"ho\s*khau",
     r"thue", r"cuc\s*thue", r"quyet\s*toan", r"hoan\s*thue",
     r"dien\s*luc", r"\bevn\b", r"tien\s*dien", r"cat\s*dien",
     r"khoa\s*sim", r"chuan\s*hoa", r"thue\s*bao", r"nha\s*mang", r"viettel", r"vinaphone", r"mobifone",

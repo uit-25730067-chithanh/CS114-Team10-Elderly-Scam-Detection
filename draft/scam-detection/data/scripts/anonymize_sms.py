@@ -57,9 +57,34 @@ REGEX_CCCD: Final[re.Pattern] = re.compile(
     re.IGNORECASE,
 )
 REGEX_TRANSACTION_ID: Final[re.Pattern] = re.compile(
-    r"(?:mã\s+gd|magd|ref\s+no|số\s+gd)[:\s]*([A-Za-z0-9]{8,20})\b",
+    r"(?:mã\s+gd|magd|mgd|ref(?:\s+no)?|số\s+gd)[:\s]*([A-Za-z0-9]{8,20})\b",
     re.IGNORECASE,
 )
+
+# ─── Che họ tên riêng (nạn nhân / người được nêu tên trong tin nhắn) ────────────
+_VN_UPPER: Final[str] = "A-ZÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ"
+_VN_LOWER: Final[str] = "a-zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ"
+_VN_SURNAMES: Final[list[str]] = [
+    "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng",
+    "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Tạ", "Đoàn", "Vương",
+]
+_VN_SURNAMES_CAPS: Final[list[str]] = [
+    "NGUYEN", "TRAN", "PHAM", "HOANG", "HUYNH", "PHAN", "VU", "VO", "DANG",
+    "BUI", "DO", "HO", "NGO", "DUONG", "LY", "DINH", "TA", "DOAN", "VUONG",
+]
+
+REGEX_FULL_NAME_TITLE: Final[re.Pattern] = re.compile(
+    r"\b(?:" + "|".join(_VN_SURNAMES) + r")"
+    r"(?!\s+Chí\s+Minh)"  # tránh nhầm địa danh "Hồ Chí Minh" thành họ tên người
+    rf"(?:\s+[{_VN_UPPER}][{_VN_LOWER}]+){{1,3}}\b"
+)
+REGEX_FULL_NAME_CAPS: Final[re.Pattern] = re.compile(
+    r"\b(?:" + "|".join(_VN_SURNAMES_CAPS) + r")"
+    rf"(?:\s+[{_VN_UPPER}]{{2,}}){{2,3}}\b"
+)
+
+# ─── Bắt lưới cuối: mọi dãy số dài còn sót (STK/mã HĐ/mã GD chưa khớp rule trên) ─
+REGEX_GENERIC_LONG_DIGITS: Final[re.Pattern] = re.compile(r"\b\d{8,}\b")
 
 
 def mask_pii(text: str) -> str:
@@ -87,7 +112,14 @@ def mask_pii(text: str) -> str:
     # 5. Ẩn số điện thoại liên lạc cá nhân
     result = REGEX_PHONE.sub(r"[SỐ_ĐIỆN_THOẠI]", result)
 
-    # 6. Chuẩn hóa khoảng trắng dư thừa
+    # 6. Ẩn họ tên riêng (thường/hoa) xuất hiện trong tin nhắn
+    result = REGEX_FULL_NAME_TITLE.sub("[HỌ_VÀ_TÊN]", result)
+    result = REGEX_FULL_NAME_CAPS.sub("[HỌ_VÀ_TÊN]", result)
+
+    # 7. Bắt lưới cuối: dãy số dài còn sót chưa khớp các rule PII cụ thể ở trên
+    result = REGEX_GENERIC_LONG_DIGITS.sub("[SỐ_ĐỊNH_DANH]", result)
+
+    # 8. Chuẩn hóa khoảng trắng dư thừa
     result = re.sub(r"\s+", " ", result).strip()
 
     return result

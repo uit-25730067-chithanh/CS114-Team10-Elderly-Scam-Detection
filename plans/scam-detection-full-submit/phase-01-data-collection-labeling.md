@@ -26,9 +26,9 @@
 | Thành viên | Phụ trách dữ liệu | Mục tiêu mẫu | Đã thu thập | Minh chứng nguồn gốc | Trạng thái |
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
-| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **514 / 500** | 100% Real Đa nguồn (Đã lọc sạch 100% cờ bạc, cá cược, 0% rò rỉ) | ✅ `completed` (Hỗ trợ kỹ thuật từ PM) |
+| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **476 / 500** (383 `public_service` + 93 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn) | 🔧 `needs-more-data` (xem [mục 6 — Re-audit 13/09](#6-re-audit-kỹ-thuật-133909-phát-hiện--khắc-phục-lỗi-trước-khi-merge)) |
 | **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.287 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Khóa dữ liệu 12/09) |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.249 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
 
 ---
 
@@ -187,11 +187,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ### 2. Nhiệm vụ của Bùi Thị Mỷ Cẩm
 - [x] Cẩm: Cài đặt môi trường Python cá nhân theo `requirements.txt`
-- [x] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` (130 mẫu) & `public_service` (384 mẫu) qua pipeline đa nguồn bán tự động `collect_cam_scam_dataset.py` (Đạt 514 mẫu - 102.8%, 100% dữ liệu đời thực, 0% cờ bạc, 0% AI tự sinh)
+- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` & `public_service` — **Hiện tại: 476/500 (383 `public_service` + 93 `health_gift`)** sau khi vá lỗi phân loại (xem mục 6). `health_gift` đang **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria — 2 nguồn GitHub (UIT IE403 + IEEE Access 2026) đã cạn mẫu hợp lệ, cần bổ sung thêm nguồn thật khác (báo chí / ảnh Drive) cho riêng nhóm `health_gift`
 - [x] Cẩm: 100% mẫu lừa đảo thu thập có đính kèm `source_url` (Permalink GitHub UIT IE403 Ground Truth, Permalink GitHub IEEE Access 2026 chính xác từng dòng vật lý #L..., URL bài báo Báo Tuổi Trẻ trích dẫn nguyên văn)
-- [x] Cẩm: 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD) qua `anonymize_sms.py`
+- [x] Cẩm: 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD, họ tên riêng) qua `anonymize_sms.py` (đã vá lỗi rò rỉ tên/số — xem mục 6)
 - [x] Cẩm: Xuất tệp staging kiểm định độc lập `draft/scam-detection/data/raw/staging_cam_scam.csv` pass `data_validation.py` và `verify_cam_provenance.py` 100%
-- [x] Cẩm: Đánh dấu hoàn thành phần việc trên Bảng trạng thái thành viên
+- [ ] Cẩm: Đánh dấu hoàn thành phần việc trên Bảng trạng thái thành viên — **tạm hoãn cho đến khi bổ sung đủ ≥ 500 mẫu (đặc biệt nhóm `health_gift`)**
 
 ### 3. Nhiệm vụ của Đặng Chí Thanh (Trưởng nhóm / PM)
 - [x] Thanh: Thu thập đủ **≥ 500 mẫu tin nhắn bình thường** (`label=0`, `scam_category='none'`) từ SMS nhà mạng, ngân hàng, sinh hoạt (Đạt 1.773 mẫu độc bản, 0% rò rỉ với tập Holdout)
@@ -226,18 +226,20 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
-- Số mẫu lừa đảo đã nạp vào Staging CSV: `514 / 500` mẫu (Đạt 102.8% chỉ tiêu tối thiểu)
+> ⚠️ **Cập nhật 13/09/2026 sau re-audit kỹ thuật độc lập:** Số liệu 514/500 công bố ngày 12/09 chứa lỗi phân loại (`\bqua\b` quá chung chung) và lỗi ẩn danh hóa PII chưa che hết họ tên/số dài. Sau khi vá lỗi và chạy lại pipeline, số liệu **thật, đã kiểm chứng lại** là:
+- Số mẫu lừa đảo đã nạp vào Staging CSV: **476 / 500** mẫu (95.2% chỉ tiêu tối thiểu — **chưa đạt**, cần bổ sung thêm)
 - Nguồn gốc dữ liệu: **100% đời thực từ Kiến trúc Đa nguồn Cân bằng Độc lập (Zero Synthetic Text - 0% AI bịa/sinh)**.
 - Phân bổ 2 nhóm bẫy tâm lý theo phân công:
-  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **384 mẫu** (74.7%)
-  + Sức khỏe, quà tặng tri ân, việc làm, ưu đãi (`health_gift`): **130 mẫu** (25.3%)
+  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **383 mẫu** (80.5%)
+  + Sức khỏe, quà tặng tri ân, việc làm, ưu đãi (`health_gift`): **93 mẫu** (19.5%) — **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria, cần thu thập thêm
 - Lọc rác & cờ bạc: **100% loại bỏ cờ bạc, cá cược, nổ hũ, gái gọi** (0 mẫu vi phạm).
-- Ẩn danh hóa PII: 100% mẫu đã được che giấu thông tin nhạy cảm qua `anonymize_sms.py`.
-- Tỷ lệ có `source_url`: **514 / 514 mẫu (100.0%)** có liên kết permalink 1-1 chính xác tuyệt đối.
+- Ẩn danh hóa PII: 100% mẫu đã che SĐT/STK/OTP/CCCD/Mã GD/họ tên riêng qua `anonymize_sms.py` (đã vá lỗi rò rỉ — chi tiết mục 6).
+- Tỷ lệ có `source_url`: **476 / 476 mẫu (100.0%)** có liên kết permalink 1-1 chính xác tuyệt đối.
 - Độ sạch: 0 dòng trùng lặp (`text.duplicated().sum() == 0`), 0 văn bản rỗng, độ dài hợp lệ 25-600 ký tự.
-- Kết quả kiểm định tự động `data_validation.py`: **PASSED 100%**
-- Kết quả audit độc lập `verify_cam_provenance.py`: **514 / 514 mẫu (100.0%) khớp nguyên văn nguồn gốc**
-- Ngày hoàn thành: `12/09/2026`
+- Kết quả kiểm định tự động `data_validation.py`: **PASSED 100%** (lưu ý: script này chỉ kiểm tra schema/trùng lặp, không kiểm tra ngữ nghĩa category hay nội dung PII)
+- Kết quả audit độc lập `verify_cam_provenance.py`: **476 / 476 mẫu (100.0%) đối chiếu khớp nguồn** (tiêu chí: trùng xâu con ≥20 ký tự HOẶC token overlap ≥60% — không phải khớp tuyệt đối từng ký tự)
+- Ngày thu thập ban đầu: `12/09/2026` — Ngày re-audit & vá lỗi: `13/09/2026`
+- **Việc cần làm tiếp:** bổ sung thêm mẫu thật cho nhóm `health_gift` (báo chí Dân Trí/VnExpress/Tuổi Trẻ hoặc ảnh chụp màn hình SMS thật trong `CS114_Evidence_Vault`) để đạt lại ≥500 mẫu tổng & ≥200 mẫu/nhóm.
 
 ### 3. Minh chứng Đặng Chí Thanh:
 - Số mẫu bình thường đã nạp: `1.773 / 500` mẫu (Đạt 354.6% chỉ tiêu tối thiểu)
@@ -280,6 +282,28 @@ Provenance URLs:  1773 / 1773 samples (100.0%)
 > ⏳ **Tạm hoãn bước phân chia Train/Test (Deferred Split Gate):**  
 > Việc phân tách `train.csv` (80%) và `test.csv` (20%) bằng `split_data.py` chỉ được thực hiện sau khi Hoàng Cao Sơn và Bùi Thị Mỷ Cẩm nộp đủ 1.000 mẫu tin nhắn lừa đảo. Điều này nhằm đảm bảo thuật toán phân tầng (Stratified Split) hoạt động chính xác trên cả 2 nhãn `0` và `1` cùng 5 nhóm bẫy tâm lý, tránh tạo ra tập huấn luyện đơn lớp gây lỗi mô hình. Hiện tại thư mục `draft/scam-detection/data/processed/` chỉ lưu trữ tệp kiểm định đời thực độc lập `real_world_test_thanh.csv` (42 mẫu, 0% rò rỉ).
 
+### 6. Re-audit kỹ thuật 13/09/2026 — Phát hiện & khắc phục lỗi trước khi merge
+
+Trước khi merge PR #9, một vòng review độc lập (data + code) trên `staging_cam_scam.csv` và pipeline `collect_cam_scam_dataset.py` / `anonymize_sms.py` / `verify_cam_provenance.py` đã phát hiện các vấn đề sau (bên cạnh các con số tổng quan 514 mẫu, 0% cờ bạc, unique 514/514 đều đúng như báo cáo PM 12/09):
+
+| # | Vấn đề phát hiện | Bằng chứng cụ thể | Nguyên nhân gốc | Đã khắc phục |
+|---|---|---|---|---|
+| 1 | **Rò rỉ PII thật** (tên riêng, số tài khoản, mã giao dịch) dù báo cáo ghi "100% Masked" | id 2 cũ: lộ tên `Trần Thị Lan` + STK `0071000986547` + mã GD `1057425286`; id 138 cũ: lộ tên `HO NGOC HOAI QUAN`; id 63/78 cũ: lộ SĐT di động `0497123597`, `0746591731` | `anonymize_sms.py` không có rule che họ tên; `REGEX_BANK_ACCOUNT`/`REGEX_TRANSACTION_ID`/`REGEX_PHONE` chỉ khớp khi có đúng từ khóa/định dạng đi kèm, không có lưới bắt cuối cho số dài còn sót | ✅ Thêm `REGEX_FULL_NAME_TITLE`/`REGEX_FULL_NAME_CAPS` (che họ tên) + `REGEX_GENERIC_LONG_DIGITS` (bắt lưới mọi dãy ≥8 số còn sót) trong `anonymize_sms.py` |
+| 2 | **Bug phân loại category**: keyword `\bqua\b` trong `HEALTH_GIFT_PATTERNS` quá chung chung | Sau khi bỏ dấu, "quà" (gift) và "qua" (giới từ rất phổ biến: "năm qua", "quá hạn"...) trùng chữ nhau → **39/130 mẫu (30%)** health_gift cũ chỉ được gán nhãn nhờ đúng token yếu này, gồm cả tin đòi nợ (id 113, 138 cũ) và lừa quỹ BHTN (id 52, 192 cũ, bị obfuscate `B/H/T/N` nên không khớp `bhtn`) | Regex `\bqua\b`/`\btrung\b` không đủ đặc hiệu; pattern `bhtn` không chịu được ký tự phân cách lách luật | ✅ Bỏ `\bqua\b`/`\btrung\b` khỏi `HEALTH_GIFT_PATTERNS`, thêm `trung_tuyen` (giữ đúng case HUIT); thêm pattern chịu ký tự phân cách cho `bhtn` |
+| 3 | **Lấn ranh giới sang phần Sơn** (`fear_authority`) | id 57/113/498 cũ: tin đe dọa "khởi kiện", "công an khu vực", "triệu tập dân sự" — không khớp `SON_PATTERNS` vì list chỉ có "khởi tố" | `SON_PATTERNS` thiếu các biến thể diễn đạt tương đương của đe dọa pháp lý/quyền lực | ✅ Bổ sung `khoi_kien`, `trieu_tap`, `to_giac` vào `SON_PATTERNS` |
+| 4 | Diễn giải quá lời trong báo cáo về `verify_cam_provenance.py` | Báo cáo PM ghi "khớp nguyên văn từng ký tự", nhưng code thật cho pass nếu đối sánh xâu con ≥20 ký tự **HOẶC** token overlap ≥60% | — (chỉ là câu chữ báo cáo, không phải bug code) | 📝 Đã diễn đạt lại chính xác hơn ở mục 2 phía trên |
+| 5 | Bug tự phát sinh khi vá lỗi #1: che nhầm địa danh | `Hồ Chí Minh` (tên thành phố) bị regex tên người nuốt nhầm thành `[HỌ_VÀ_TÊN]` vì "Hồ" nằm trong danh sách họ | `REGEX_FULL_NAME_TITLE` không loại trừ địa danh phổ biến bắt đầu bằng họ | ✅ Thêm negative lookahead loại trừ `Hồ Chí Minh` |
+
+**Kết quả sau khi vá lỗi và chạy lại `collect_cam_scam_dataset.py` (13/09/2026):**
+- Tổng mẫu: `514 → 476` (giảm 38 mẫu do loại bỏ các mẫu phân loại sai/lấn ranh giới)
+- `public_service`: `384 → 383`
+- `health_gift`: `130 → 93` (**dưới ngưỡng 200 mẫu/nhóm** — cần bổ sung nguồn thật khác, 2 nguồn GitHub hiện có đã cạn mẫu hợp lệ)
+- `data_validation.py`: vẫn PASSED 100% (không đổi, vì script này không kiểm tra các lỗi trên)
+- `verify_cam_provenance.py`: vẫn PASSED 100% (476/476)
+- 0% cờ bạc, 0% dòng trùng lặp, 0% dãy số dài còn sót chưa che (đã quét lại độc lập)
+
+**Việc cần làm tiếp theo:** Cẩm cần thu thập thêm **~110-140 mẫu thật** cho nhóm `health_gift` (báo chí Dân Trí/VnExpress/Tuổi Trẻ hoặc ảnh chụp màn hình SMS thật đưa vào `CS114_Evidence_Vault`) trước khi đánh dấu Phase 01 hoàn thành và merge PR #9.
+
 ## Risk Assessment
 
 | Risk | Likelihood | Impact | Mitigation |
@@ -292,8 +316,8 @@ Provenance URLs:  1773 / 1773 samples (100.0%)
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
 > ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.773/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive, 0% rò rỉ dữ liệu).**  
-> ✅ **Phần việc Bùi Thị Mỷ Cẩm: HOÀN THÀNH XUẤT SẮC (514/500 mẫu lừa đảo đời thực 100%, 384 mẫu dịch vụ công/VNeID/SIM + 130 mẫu sức khỏe/quà tri ân, 100% loại bỏ cờ bạc/cá cược, 100% PII masked, verify_cam_provenance.py và data_validation.py PASSED 100% ✅).**  
-> ⏳ **Tiến độ toàn nhóm:** Đạt **2.287 / 1.500 mẫu** (1.773 mẫu bình thường + 514 mẫu lừa đảo). Hiện đang chờ Hoàng Cao Sơn hoàn tất 500 mẫu lừa đảo nhóm quyền lực & cấp cứu để hoàn thành 100% chỉ tiêu Phase 01 trước 23:59 đêm nay 12/09/2026, nghiệm thu hợp nhất và tiến hành Train/Test Split cho Sprint 2.
+> 🔧 **Phần việc Bùi Thị Mỷ Cẩm: CẦN BỔ SUNG THÊM (476/500 mẫu lừa đảo đời thực sau re-audit 13/09 — xem [mục 6](#6-re-audit-kỹ-thuật-133909-phát-hiện--khắc-phục-lỗi-trước-khi-merge)).** Đã khắc phục lỗi rò rỉ PII (tên riêng/số dài chưa che) và lỗi phân loại category (`\bqua\b` gây fallback sai nhãn) phát hiện qua review độc lập; 383 mẫu `public_service` (đạt) + 93 mẫu `health_gift` (**chưa đạt** ngưỡng 200 mẫu/nhóm). `verify_cam_provenance.py` và `data_validation.py` vẫn PASSED 100% trên bộ dữ liệu đã vá lỗi. Cần thu thập thêm ~110-140 mẫu thật cho nhóm `health_gift` trước khi merge.  
+> ⏳ **Tiến độ toàn nhóm:** Đạt **2.249 / 1.500 mẫu** (1.773 mẫu bình thường + 476 mẫu lừa đảo). Đang chờ Hoàng Cao Sơn hoàn tất 500 mẫu lừa đảo nhóm quyền lực & cấp cứu, và Cẩm bổ sung thêm mẫu `health_gift`, trước khi nghiệm thu hợp nhất và tiến hành Train/Test Split cho Sprint 2.
 
 ---
 
