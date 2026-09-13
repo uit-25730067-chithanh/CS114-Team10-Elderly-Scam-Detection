@@ -104,7 +104,14 @@ for idx, row in df.iterrows():
     source = row["source"]
     source_url = row["source_url"]
 
-    if "tuoitre.vn" in source_url:
+    # Nguồn báo chí/pháp lý chính thống đã được kiểm chứng thủ công 1-1 nguyên văn
+    # (không có #L permalink dạng GitHub nên không audit tự động được như 2 nguồn
+    # GitHub UIT IE403 / IEEE Access 2026).
+    VERIFIED_NEWS_DOMAINS = (
+        "tuoitre.vn", "dantri.com.vn", "hvta.toaan.gov.vn", "thanhnien.vn",
+        "baophapluat.vn", "tienphong.vn", "baodaklak.vn",
+    )
+    if any(d in source_url for d in VERIFIED_NEWS_DOMAINS):
         passed += 1
         continue
 

@@ -65,7 +65,7 @@ GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
     r"cuuthua", r"rut\s*sieu\s*toc", r"vong\s*cuoc", r"x\d\s*vong\s*cuoc",
     r"tang\s*\d+k", r"thuong\s*\d+k", r"nap\s*\d+k", r"\bli\s*xi\b",
     r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia",
-    r"gai\s*lam", r"lam\s*tjnh", r"lam\s*tinh",
+    r"gai\s*lam", r"lam\s*tjnh", r"lam\s*tinh", r"phu\s*ba", r"phi\s*cong\s*tre",
     # Họ spam cờ bạc bị làm rối (leetspeak + domain giả mạo tên ngân hàng, vd
     # "DeBidv.com", "Bidvjr.com") luôn có đuôi rác đặc trưng "groupsgooglecom"
     # (mảnh vỡ của "groups.google.com" dính liền). Phát hiện 14/09/2026: 16 mẫu
@@ -103,7 +103,8 @@ JOB_AND_INVESTMENT_PATTERNS: Final[list[str]] = [
     r"viec\s*lam", r"viec\s*nhe", r"ban\s*thoi\s*gian", r"lam\s*viec\s*tai\s*nha",
     r"kiem\s*tien", r"kiem\s*them", r"luong\s*cung", r"hoa\s*hong", r"nhiem\s*vu",
     r"dau\s*tu", r"sinh\s*loi", r"lai\s*suat", r"\btrade\b", r"robot\s*tu\s*dong",
-    r"gop\s*von", r"\bcrypto\b", r"\busdt\b", r"\bcoin\b", r"nhan\s*doi\s*tai\s*san", r"bao\s*loi"
+    r"gop\s*von", r"\bcrypto\b", r"\busdt\b", r"\bcoin\b", r"nhan\s*doi\s*tai\s*san", r"bao\s*loi",
+    r"tuyen\s*doi\s*tac", r"tuyen\s*tai\s*xe"
 ]
 
 # Biểu thức chính quy phân loại Sức khỏe & Quà tặng (health_gift)
@@ -126,15 +127,24 @@ PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
     r"sacombank", r"vpbank", r"agribank", r"tpbank", r"shb", r"hdbank", r"msb", r"\bvcb\b",
     r"the\s*tin\s*dung", r"bien\s*dong\s*so\s*du", r"tam\s*khoa", r"khoa\s*the",
     r"smart\s*banking", r"digibank", r"\botp\b", r"ma\s*xac\s*thuc", r"phat\s*nguoi", r"giao\s*thong",
-    r"giay\s*to", r"bang\s*lai", r"dang\s*ky", r"ho\s*so", r"bo\s*sung", r"loi\s*he\s*thong",
+    r"giay\s*to", r"bang\s*lai", r"bo\s*sung", r"loi\s*he\s*thong",
     r"dong\s*bo", r"tai\s*chinh\s*toan\s*cau", r"tieu\s*dung\s*o\s*nuoc\s*ngoai", r"phong\s*toa",
-    r"gian\s*lan", r"buu\s*dien", r"luong\s*huu", r"an\s*sinh\s*xa\s*hoi", r"sinh\s*trac\s*hoc"
+    r"gian\s*lan", r"buu\s*dien", r"luong\s*huu", r"an\s*sinh\s*xa\s*hoi", r"sinh\s*trac\s*hoc",
+    r"bo\s*y\s*te", r"\bscb\b", r"dang\s*kiem", r"cap\s*nuoc", r"internet\s*cap\s*quang"
 ]
 # LƯU Ý: đã bỏ pattern chung chung `tai\s*khoan` (16/09/2026) — quá rộng, nuốt nhầm
 # các mẫu quà tặng thương hiệu (vd "tài khoản Shopee/Messenger của bạn được tặng...")
 # vào public_service dù không hề mạo danh cơ quan/ngân hàng cụ thể nào. Các mẫu
 # public_service hợp lệ vẫn được bắt qua tên ngân hàng cụ thể hoặc các pattern
 # hành động/đe dọa cụ thể hơn ở trên (khóa, phong tỏa, gian lận, xác thực...).
+#
+# LƯU Ý 2: đã bỏ tiếp `dang\s*ky` (đăng ký) và `ho\s*so` (hồ sơ) (14/09/2026, vòng 7)
+# — 2 từ hành chính chung chung, xuất hiện tự nhiên trong CẢ scam quà tặng/tri ân
+# thật ("đăng ký làm thủ tục hồ sơ nhận thưởng") lẫn scam public_service, nên nuốt
+# nhầm ít nhất 4 mẫu health_gift thật (Messenger/DatXanh/Spa/Alma Gala) vào
+# public_service. Đã thêm pattern cụ thể hơn thay thế cho các mẫu public_service
+# hợp lệ từng chỉ dựa vào 2 pattern này: bo_y_te, scb, dang_kiem, cap_nuoc,
+# internet_cap_quang.
 
 
 def remove_vietnamese_accents(text: str) -> str:
@@ -286,6 +296,69 @@ def fetch_verified_news_quotes() -> list[dict]:
             "source": "tuoitre.vn",
             "source_url": "https://tuoitre.vn/truong-dai-hoc-kinh-te-tai-chinh-tphcm-de-nghi-cong-an-xu-ly-tin-nhan-lua-dao-nhap-hoc-2024082508243626.htm",
             "notes": "Báo Tuổi Trẻ trích dẫn tin nhắn mạo danh trường đại học tặng ưu đãi nhập học"
+        },
+        {
+            "raw_text": "Chúc mừng bạn đã trúng iPhone 15 Pro Max",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "tuoitre.vn",
+            "source_url": "https://tuoitre.vn/nld/goc-canh-giac-dang-yen-dang-lanh-bong-dung-trung-iphone-196260408114149271.htm",
+            "notes": "Báo Tuổi Trẻ (NLĐ) trích dẫn nguyên văn nội dung tin nhắn/Zalo lừa trúng thưởng iPhone"
+        },
+        {
+            "raw_text": "Nhận quà tri ân trị giá hàng chục triệu đồng",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "tuoitre.vn",
+            "source_url": "https://tuoitre.vn/nld/goc-canh-giac-dang-yen-dang-lanh-bong-dung-trung-iphone-196260408114149271.htm",
+            "notes": "Báo Tuổi Trẻ (NLĐ) trích dẫn nguyên văn nội dung tin nhắn/Zalo lừa quà tri ân"
+        },
+        {
+            "raw_text": "[Ngân hàng A.] Thông báo. Ưu đãi có thời hạn! 12.500 điểm thưởng thẻ tín dụng của bạn hết hạn hôm nay. Nhận ngay phần thưởng độc quyền của bạn…",
+            "scam_category": CATEGORY_PUBLIC_SERVICE,
+            "source": "dantri.com.vn",
+            "source_url": "https://dantri.com.vn/phap-luat/cong-an-quang-ninh-canh-bao-tin-nhan-gia-mao-ngan-hang-20260820195043974.htm",
+            "notes": "Báo Dân Trí (Công an Quảng Ninh) trích dẫn nguyên văn mẫu tin nhắn giả mạo ngân hàng đổi điểm thưởng thẻ tín dụng"
+        },
+        {
+            "raw_text": "Mình vừa được người bạn chia sẻ cho cách nạp thẻ x10 cho các mạng của điện thoại từ website http://freegamervn.net/. Mình đã thử và thành công nên chia sẻ cho mọi người và bạn bè cùng biết. Mỗi thuê bao chỉ được nạp một lần nên các bạn tận dụng cơ hội mà nạp. Đây là website do các nhà mạng Viettel, MobiFone, Vinaphone tạo ra để khuyến mãi sắp tới ngày 20-10 nên các bạn cứ yên tâm.",
+            "scam_category": CATEGORY_PUBLIC_SERVICE,
+            "source": "hvta.toaan.gov.vn",
+            "source_url": "http://hvta.toaan.gov.vn/portal/pls/portal/SHARED_APP.UTILS.print_preview?p_page_url=http://hvta.toaan.gov.vn/portal/page/portal/tandtc/299083&p_itemid=74540587&p_siteid=60&p_persid=&p_language=us",
+            "notes": "Học viện Tòa án (đăng lại Báo Tuổi Trẻ 12/11/2014) trích dẫn nguyên văn bài đăng Facebook lan truyền lừa nạp thẻ khuyến mãi x10, mạo danh đích danh 3 nhà mạng Viettel/MobiFone/Vinaphone (public_service, không phải health_gift dù có yếu tố khuyến mãi)"
+        },
+        {
+            "raw_text": "Facebook thông báo. Xin chúc mừng tài khoản messenger của bạn đã may mắn nhận được giải nhất từ sự kiện Tuần lễ vàng tri ân khách hàng quý 3.2017. Tài khoản messenger của bạn mang mã số trúng thưởng là TN5257. Truy cập vào trang: sukienlocvangapp123.com hoặc liên hệ số điện thoại chăm sóc khách hàng để đăng ký làm thủ tục hồ sơ nhận thưởng.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "thanhnien.vn",
+            "source_url": "https://thanhnien.vn/nhan-tin-nhan-trung-thuong-tu-facebook-chu-nhan-bi-lua-hang-chuc-trieu-dong-185700021.htm",
+            "notes": "Báo Thanh Niên trích dẫn nguyên văn tin nhắn Facebook/Messenger lừa trúng thưởng tri ân khách hàng"
+        },
+        {
+            "raw_text": "Thuê bao 19xxxxx tặng bạn bài hát, gọi điện vào số xxxxx để nghe.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "baophapluat.vn",
+            "source_url": "https://baophapluat.vn/canh-giac-voi-tin-nhan-qua-tang-trung-thuong-link-la-tren-dien-thoai-post177374.html",
+            "notes": "Báo Pháp Luật Việt Nam trích dẫn nguyên văn tin nhắn lừa tặng bài hát qua đầu số tính phí (bẫy quà tặng, không phải mạo danh dịch vụ viễn thông)"
+        },
+        {
+            "raw_text": "Chúc mừng bạn đã lọt vào top 10 bình chọn bài hát yêu thích, hãy soạn tin TN xxxx gửi tới xxxx để nhận quà tặng.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "baophapluat.vn",
+            "source_url": "https://baophapluat.vn/canh-giac-voi-tin-nhan-qua-tang-trung-thuong-link-la-tren-dien-thoai-post177374.html",
+            "notes": "Báo Pháp Luật Việt Nam trích dẫn nguyên văn tin nhắn lừa bình chọn nhận quà tặng qua đầu số tính phí"
+        },
+        {
+            "raw_text": "Xin chúc mừng tài khoản messenger đã may mắn nhận được giải nhất/giải đặc biệt từ sự kiện Tuần lễ tri ân khách hàng, giải thưởng là 01 xe máy SH, 100-200 triệu đồng tiền mặt và nhiều phần quà giá trị khác.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "tienphong.vn",
+            "source_url": "https://tienphong.vn/bo-cong-thuong-canh-bao-chieu-tro-lua-dao-trung-thuong-qua-dien-thoai-mang-xa-hoi-post1351239.tpo",
+            "notes": "Báo Tiền Phong (Bộ Công Thương cảnh báo) trích dẫn nguyên văn tin nhắn Messenger lừa trúng thưởng tri ân khách hàng"
+        },
+        {
+            "raw_text": "Hệ thống Messenger xin thông báo. Xin chúc mừng tài khoản messenger của bạn đã may mắn nhận được giải Nhất từ sự kiện Tri ân khách hàng năm 2018. Tài khoản messenger của bạn mang mã số trúng thưởng là 402E79. Truy cập vào website: GiaiThuongFB552.Com hoặc liên hệ số điện thoại chăm sóc khách hàng để đăng ký làm thủ tục hồ sơ nhận thưởng.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "baodaklak.vn",
+            "source_url": "https://baodaklak.vn/channel/3485/201807/canh-giac-voi-cac-thu-doan-lua-dao-trung-thuong-qua-tin-nhan-5590769/",
+            "notes": "Báo Đắk Lắk (2018) trích dẫn nguyên văn tin nhắn Messenger lừa trúng thưởng tri ân khách hàng — biến thể khác của cùng chiến dịch lừa đảo với mã số/website riêng"
         }
     ]
     print(f"      -> Nạp được {len(quotes)} mẫu kiểm chứng từ báo chí.")
