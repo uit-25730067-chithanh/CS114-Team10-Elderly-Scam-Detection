@@ -26,9 +26,9 @@
 | Thành viên | Phụ trách dữ liệu | Mục tiêu mẫu | Đã thu thập | Minh chứng nguồn gốc | Trạng thái |
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
-| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **392 / 500** (339 `public_service` + 53 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn, 0% lẫn việc làm/đầu tư) | 🔧 `needs-more-data` (xem [mục 7 — Re-audit ngữ nghĩa 13/09](#7-re-audit-ngữ-nghĩa-13092026-loại-bỏ-mẫu-lạc-nhóm-khỏi-health_gift)) |
+| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **389 / 500** (335 `public_service` + 54 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn, 0% lẫn việc làm/đầu tư, 0% text lỗi) | 🔧 `needs-more-data` (xem [mục 8 — Rà soát toàn diện 2 nguồn 14/09](#8-rà-soát-toàn-diện-2-nguồn-gốc-14092026-vét-lại-health_gift-thật-cẩn-thận)) |
 | **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.165 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.162 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
 
 ---
 
@@ -187,7 +187,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ### 2. Nhiệm vụ của Bùi Thị Mỷ Cẩm
 - [x] Cẩm: Cài đặt môi trường Python cá nhân theo `requirements.txt`
-- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` & `public_service` — **Hiện tại: 392/500 (339 `public_service` + 53 `health_gift`)** sau khi vá lỗi phân loại **theo ngữ nghĩa** (xem mục 7). `health_gift` đang **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria, khoảng cách còn lớn hơn số liệu 13/09 sáng — 2 nguồn GitHub (UIT IE403 + IEEE Access 2026) đã cạn mẫu hợp lệ, cần bổ sung thêm nguồn thật khác (báo chí / ảnh Drive) cho riêng nhóm `health_gift`
+- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` & `public_service` — **Hiện tại: 389/500 (335 `public_service` + 54 `health_gift`)** sau khi rà soát toàn diện cả 2 nguồn gốc thô theo ngữ nghĩa (xem mục 8). `health_gift` đang **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria — 2 nguồn GitHub (UIT IE403 + IEEE Access 2026) đã khai thác gần hết mẫu hợp lệ, cần bổ sung thêm nguồn thật khác (báo chí / ảnh Drive) cho riêng nhóm `health_gift`
 - [x] Cẩm: 100% mẫu lừa đảo thu thập có đính kèm `source_url` (Permalink GitHub UIT IE403 Ground Truth, Permalink GitHub IEEE Access 2026 chính xác từng dòng vật lý #L..., URL bài báo Báo Tuổi Trẻ trích dẫn nguyên văn)
 - [x] Cẩm: 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD, họ tên riêng) qua `anonymize_sms.py` (đã vá lỗi rò rỉ tên/số — xem mục 6)
 - [x] Cẩm: Xuất tệp staging kiểm định độc lập `draft/scam-detection/data/raw/staging_cam_scam.csv` pass `data_validation.py` và `verify_cam_provenance.py` 100%
@@ -226,20 +226,20 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
-> ⚠️ **Cập nhật 13/09/2026 (2 vòng re-audit trong ngày):** Số liệu 514/500 công bố 12/09 chứa lỗi phân loại (`\bqua\b` quá chung chung) + lỗi ẩn danh hóa PII (vòng 1, sáng 13/09, xem mục 6). Vòng 2 (chiều 13/09, xem mục 7) phát hiện thêm: bộ lọc `health_gift` vẫn dựa theo từ khóa nên lẫn cả tin nhắn tuyển dụng/CTV online, đầu tư/crypto, đe dọa tài chính, tuyên truyền, mại dâm (leetspeak) — không đúng bản chất "sức khỏe & quà tặng tri ân". Sau khi vá cả 2 vòng, số liệu **thật, đã kiểm chứng ngữ nghĩa** là:
-- Số mẫu lừa đảo đã nạp vào Staging CSV: **392 / 500** mẫu (78.4% chỉ tiêu tối thiểu — **chưa đạt**, cần bổ sung thêm nhiều hơn số liệu công bố sáng 13/09)
+> ⚠️ **Cập nhật 14/09/2026 (3 vòng re-audit):** Số liệu 514/500 công bố 12/09 chứa lỗi phân loại (`\bqua\b` quá chung chung) + lỗi ẩn danh hóa PII (vòng 1, sáng 13/09, mục 6). Vòng 2 (chiều 13/09, mục 7) loại các mẫu tuyển dụng/CTV online, đầu tư/crypto, đe dọa tài chính, tuyên truyền, mại dâm (leetspeak) — không đúng bản chất "sức khỏe & quà tặng tri ân". Vòng 3 (14/09, mục 8) rà soát lại **toàn bộ 2 nguồn gốc thô** (không chỉ đọc lại kết quả đã phân loại), phát hiện pattern `tai_khoan` quá chung chung khiến 3 mẫu health_gift thật (Messenger/Shopee/Club Med) bị nuốt nhầm vào `public_service`, và 2 mẫu text lỗi sót lại. Sau khi vá cả 3 vòng, số liệu **thật, đã kiểm chứng ngữ nghĩa kỹ nhất** là:
+- Số mẫu lừa đảo đã nạp vào Staging CSV: **389 / 500** mẫu (77.8% chỉ tiêu tối thiểu — **chưa đạt**)
 - Nguồn gốc dữ liệu: **100% đời thực từ Kiến trúc Đa nguồn Cân bằng Độc lập (Zero Synthetic Text - 0% AI bịa/sinh)**.
 - Phân bổ 2 nhóm bẫy tâm lý theo phân công:
-  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **339 mẫu** (86.5%)
-  + Sức khỏe, quà tặng tri ân, trúng thưởng thương hiệu (`health_gift`, KHÔNG còn gồm việc làm/CTV/đầu tư/crypto): **53 mẫu** (13.5%) — **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria, cách xa hơn số liệu 93 công bố sáng 13/09
+  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **335 mẫu** (86.1%)
+  + Sức khỏe, quà tặng tri ân, trúng thưởng thương hiệu (`health_gift`, KHÔNG còn gồm việc làm/CTV/đầu tư/crypto): **54 mẫu** (13.9%) — **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria
 - Lọc rác & cờ bạc: **100% loại bỏ cờ bạc, cá cược, nổ hũ, gái gọi (kể cả biến thể leetspeak)** (0 mẫu vi phạm).
 - Ẩn danh hóa PII: 100% mẫu đã che SĐT/STK/OTP/CCCD/Mã GD/họ tên riêng qua `anonymize_sms.py` (đã vá lỗi rò rỉ — chi tiết mục 6).
-- Tỷ lệ có `source_url`: **392 / 392 mẫu (100.0%)** có liên kết permalink 1-1 chính xác tuyệt đối.
-- Độ sạch: 0 dòng trùng lặp (`text.duplicated().sum() == 0`), 0 văn bản rỗng, độ dài hợp lệ 25-600 ký tự.
+- Tỷ lệ có `source_url`: **389 / 389 mẫu (100.0%)** có liên kết permalink 1-1 chính xác tuyệt đối.
+- Độ sạch: 0 dòng trùng lặp (`text.duplicated().sum() == 0`), 0 văn bản rỗng, độ dài hợp lệ 25-600 ký tự, 0 text lỗi/không đọc được.
 - Kết quả kiểm định tự động `data_validation.py`: **PASSED 100%** (lưu ý: script này chỉ kiểm tra schema/trùng lặp, không kiểm tra ngữ nghĩa category hay nội dung PII)
-- Kết quả audit độc lập `verify_cam_provenance.py`: **392 / 392 mẫu (100.0%) đối chiếu khớp nguồn** (tiêu chí: trùng xâu con ≥20 ký tự HOẶC token overlap ≥60% — không phải khớp tuyệt đối từng ký tự)
-- Ngày thu thập ban đầu: `12/09/2026` — Ngày re-audit & vá lỗi: `13/09/2026` (2 vòng)
-- **Việc cần làm tiếp:** bổ sung thêm mẫu thật cho nhóm `health_gift` (báo chí Dân Trí/VnExpress/Tuổi Trẻ hoặc ảnh chụp màn hình SMS thật trong `CS114_Evidence_Vault`) để đạt lại ≥500 mẫu tổng & ≥200 mẫu/nhóm — khoảng cách hiện tại lớn hơn ước tính trước đó, cần báo PM Thanh về mức độ thiếu hụt thực tế.
+- Kết quả audit độc lập `verify_cam_provenance.py`: **389 / 389 mẫu (100.0%) đối chiếu khớp nguồn** (tiêu chí: trùng xâu con ≥20 ký tự HOẶC token overlap ≥60% — không phải khớp tuyệt đối từng ký tự)
+- Ngày thu thập ban đầu: `12/09/2026` — Ngày re-audit & vá lỗi: `13-14/09/2026` (3 vòng)
+- **Việc cần làm tiếp:** bổ sung thêm mẫu thật cho nhóm `health_gift` (báo chí Dân Trí/VnExpress/Tuổi Trẻ hoặc ảnh chụp màn hình SMS thật trong `CS114_Evidence_Vault`) để đạt lại ≥500 mẫu tổng & ≥200 mẫu/nhóm — 2 nguồn GitHub hiện có đã khai thác gần hết, cần báo PM Thanh về mức độ thiếu hụt thực tế.
 
 ### 3. Minh chứng Đặng Chí Thanh:
 - Số mẫu bình thường đã nạp: `1.773 / 500` mẫu (Đạt 354.6% chỉ tiêu tối thiểu)
@@ -326,7 +326,41 @@ Sau vòng vá lỗi ở mục 6 (sáng 13/09), một vòng review thứ 2 trong 
 - `verify_cam_provenance.py`: vẫn PASSED 100% (392/392)
 - 10 mẫu template lặp lại (chỉ đổi tên nhân viên/spa, vd "Bạn được tặng 1 phần quà tri ân... gặp NV [X]") vẫn giữ lại vì là dòng thật khác nhau trong nguồn IEEE Access 2026 (không phải trùng lặp/tự sinh), nhưng cần lưu ý rủi ro đa dạng dữ liệu thấp khi huấn luyện.
 
-**Việc cần làm tiếp theo:** Cẩm cần thu thập thêm **~150-180 mẫu thật đúng bản chất "sức khỏe & quà tặng tri ân"** cho nhóm `health_gift` (báo chí Dân Trí/VnExpress/Tuổi Trẻ hoặc ảnh chụp màn hình SMS thật đưa vào `CS114_Evidence_Vault`) — khoảng cách lớn hơn ước tính trước đó, cần báo PM Thanh trước khi đánh dấu Phase 01 hoàn thành và merge PR #9.
+**Việc cần làm tiếp theo (đã lỗi thời — xem mục 8 bên dưới):**
+
+### 8. Rà soát toàn diện 2 nguồn gốc 14/09/2026 — vét lại `health_gift` thật cẩn thận
+
+Theo yêu cầu của Cẩm ("lọc lại 1 lần nữa thật cẩn thận từng chi tiết Nhóm 1: Sức khỏe & Quà tặng tri ân"), thay vì chỉ đọc lại 93 mẫu health_gift cũ, lần này tải **toàn bộ 2 nguồn gốc thô** (UIT IE403: 247 dòng, IEEE Access 2026: 798 dòng label=1, tổng 1.045 ứng viên) và đọc thủ công từng câu — không dựa vào kết quả `classify_cam_sample()` — để tìm cả 2 chiều: (a) mẫu bị gán sai vào `health_gift`, và (b) mẫu `health_gift` thật bị bỏ sót vì rơi vào `public_service`/bị loại nhầm.
+
+**Phát hiện quan trọng nhất — pattern `tai\s*khoan` (tài khoản) trong `PUBLIC_SERVICE_PATTERNS` quá chung chung:**
+
+Vì `classify_cam_sample()` kiểm tra `is_ps` trước `is_hg`, bất kỳ câu nào chứa chữ "tài khoản" — kể cả "tài khoản Messenger", "tài khoản Shopee" (không liên quan ngân hàng/cơ quan nhà nước) — đều bị nuốt vào `public_service`. Kiểm chứng: trong 1.045 ứng viên, có **19 mẫu chỉ khớp `public_service` nhờ đúng pattern chung chung này** (không có tín hiệu cụ thể nào khác). Đọc thủ công từng mẫu:
+
+| Kết quả | Số lượng | Xử lý |
+|---|:---:|---|
+| Thật sự là `health_gift` (quà tặng thương hiệu Messenger/Shopee/Club Med, bị `tai_khoan` nuốt nhầm) | 3 | ✅ Chuyển đúng về `health_gift` |
+| Thật sự là `public_service` (cảnh báo ngân hàng/Bưu điện VN chung chung, không nêu tên ngân hàng cụ thể) | 5 | ✅ Thêm pattern cụ thể hơn để không phụ thuộc `tai_khoan` |
+| Không thuộc 2 nhóm của Cẩm (lừa đảo vay app, hẹn hò/ảnh riêng tư, "con nhắn tin mượn tài khoản" giống `family_emergency`, chuyển nhầm tiền, thiết bị IoT, tài khoản Telegram bị khóa, cờ bạc nạp lần đầu) | 11 | ✅ Loại khỏi dataset của Cẩm (đúng phạm vi, không ép vào 1 trong 2 nhóm) |
+
+**Đã sửa trong `collect_cam_scam_dataset.py`:**
+- Bỏ hẳn pattern chung chung `tai\s*khoan` khỏi `PUBLIC_SERVICE_PATTERNS`
+- Thêm các pattern cụ thể hơn: `tai_chinh_toan_cau`, `tieu_dung_o_nuoc_ngoai`, `phong_toa`, `gian_lan`, `buu_dien`, `luong_huu`, `an_sinh_xa_hoi`, `sinh_trac_hoc`, `mb\s*bank` (bản có khoảng trắng, bổ sung cho `mbbank`)
+- Thêm `nap_lan_dau` vào `GAMBLING_ADULT_PATTERNS` — vì sau khi bỏ `tai_khoan`, 1 mẫu cờ bạc "nạp lần đầu 100%" suýt lọt vào `health_gift` qua pattern `uu_dai` sẵn có
+- Phát hiện thêm 2 mẫu text lỗi/không đọc được sót lại từ vòng trước (`id 158, 162` cũ trong lần chạy trung gian) — đã thử 3 phiên bản heuristic tự động (độ dài token, đếm camelCase, đếm camelCase sau khi bỏ URL) nhưng **cả 3 đều gây false-positive loại nhầm dữ liệu thật** (mẫu BHTN leetspeak hợp lệ, mẫu VPBANK nhắc "iPhone"/"512GB"/"4K" hoàn toàn bình thường). Vì `health_gift` đang rất khan hiếm, quyết định đánh đổi an toàn: dùng `GARBLED_TEXT_DENYLIST` — danh sách loại trừ **chính xác từng dòng đã xác nhận thủ công**, không dùng heuristic tổng quát.
+
+**Kết quả sau khi vá và chạy lại `collect_cam_scam_dataset.py` (14/09/2026, vòng 3):**
+- Tổng mẫu: `392 → 389`
+- `public_service`: `339 → 335`
+- `health_gift`: `53 → 54` (+3 mẫu health_gift thật được cứu khỏi `public_service`, trừ đi phần dao động do các pattern mới)
+- `data_validation.py`: vẫn PASSED 100%
+- `verify_cam_provenance.py`: vẫn PASSED 100% (389/389)
+
+**Các mục còn lại chưa tự động xử lý — cần Cẩm xem xét/quyết định thủ công (không tự ý xóa vì mang tính chủ quan):**
+- id 113-115 (bản mới): "Hội thảo trực tuyến... Không trúng tuyển nguyện vọng yêu thích?" — quảng cáo hội thảo tư vấn tuyển sinh của trường đại học, không rõ có thực sự là "lừa đảo chiếm đoạt tài sản" hay chỉ là spam quảng cáo hợp pháp bị gắn nhãn label=1 sai trong nguồn IEEE Access 2026 gốc
+- id 132, 158, 159 (bản mới): nội dung rất ngắn/yếu, chỉ có 1 câu chúc mừng/sức khỏe chung chung kèm link rút gọn, không có kịch bản lừa đảo rõ ràng
+- 10 mẫu template lặp lại (6 mẫu "quà tri ân... gặp NV [X]" + 4 mẫu "Spa [X] ưu đãi 70%") — vẫn giữ vì là dòng thật khác nhau trong nguồn, không phải trùng lặp/tự sinh, nhưng đa dạng ngữ nghĩa thấp
+
+**Việc cần làm tiếp theo:** `health_gift` vẫn còn cách ngưỡng 200 mẫu rất xa (54/200) — 2 nguồn GitHub hiện có đã khai thác gần hết mẫu hợp lệ đúng bản chất "sức khỏe & quà tặng tri ân" (kể cả sau khi sửa lỗi `tai_khoan`). Cẩm cần bổ sung nguồn thật hoàn toàn mới (báo chí Dân Trí/VnExpress/Tuổi Trẻ, hoặc ảnh chụp màn hình SMS thật đưa vào `CS114_Evidence_Vault`) trước khi đánh dấu Phase 01 hoàn thành và merge PR #9.
 
 ## Risk Assessment
 

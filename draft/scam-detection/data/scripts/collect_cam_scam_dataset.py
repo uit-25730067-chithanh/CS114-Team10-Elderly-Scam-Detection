@@ -61,7 +61,7 @@ GAMBLING_ADULT_PATTERNS: Final[list[str]] = [
     r"ban\s*ca", r"ba?n'\s*ca", r"b[/\s]*a[/\s]*n[/\s]*c[/\s]*a",
     r"tai\s*xiu", r"da\s*ga", r"ca\s*cuoc", r"\bcuoc\b", r"game\s*bai", r"nohu",
     r"slot", r"nha\s*cai", r"baccarat", r"bcr", r"dat\s*cuoc", r"jili", r"8day",
-    r"giaitri\d*q", r"nap\s*dau", r"na?p\s*dau", r"tan\s*thu", r"hoan\s*tra", r"ho?an\s*tra",
+    r"giaitri\d*q", r"nap\s*dau", r"na?p\s*dau", r"nap\s*lan\s*dau", r"tan\s*thu", r"hoan\s*tra", r"ho?an\s*tra",
     r"cuuthua", r"rut\s*sieu\s*toc", r"vong\s*cuoc", r"x\d\s*vong\s*cuoc",
     r"tang\s*\d+k", r"thuong\s*\d+k", r"nap\s*\d+k", r"\bli\s*xi\b",
     r"gai\s*goi", r"tinh\s*mot\s*dem", r"\bsex\b", r"show\s*hang", r"may\s*bay\s*ba\s*gia",
@@ -109,13 +109,19 @@ PUBLIC_SERVICE_PATTERNS: Final[list[str]] = [
     r"thue", r"cuc\s*thue", r"quyet\s*toan", r"hoan\s*thue", r"tong\s*cuc",
     r"dien\s*luc", r"\bevn\b", r"tien\s*dien", r"cat\s*dien",
     r"khoa\s*sim", r"chuan\s*hoa", r"thue\s*bao", r"nha\s*mang", r"viettel", r"vinaphone", r"mobifone",
-    r"ngan\s*hang", r"vietcombank", r"bidv", r"vietinbank", r"techcombank", r"mbbank", r"acb",
+    r"ngan\s*hang", r"vietcombank", r"bidv", r"vietinbank", r"techcombank", r"mbbank", r"mb\s*bank", r"acb",
     r"sacombank", r"vpbank", r"agribank", r"tpbank", r"shb", r"hdbank", r"msb", r"\bvcb\b",
-    r"tai\s*khoan", r"the\s*tin\s*dung", r"bien\s*dong\s*so\s*du", r"tam\s*khoa", r"khoa\s*the",
+    r"the\s*tin\s*dung", r"bien\s*dong\s*so\s*du", r"tam\s*khoa", r"khoa\s*the",
     r"smart\s*banking", r"digibank", r"\botp\b", r"ma\s*xac\s*thuc", r"phat\s*nguoi", r"giao\s*thong",
     r"giay\s*to", r"bang\s*lai", r"dang\s*ky", r"ho\s*so", r"bo\s*sung", r"loi\s*he\s*thong",
-    r"dong\s*bo"
+    r"dong\s*bo", r"tai\s*chinh\s*toan\s*cau", r"tieu\s*dung\s*o\s*nuoc\s*ngoai", r"phong\s*toa",
+    r"gian\s*lan", r"buu\s*dien", r"luong\s*huu", r"an\s*sinh\s*xa\s*hoi", r"sinh\s*trac\s*hoc"
 ]
+# LƯU Ý: đã bỏ pattern chung chung `tai\s*khoan` (16/09/2026) — quá rộng, nuốt nhầm
+# các mẫu quà tặng thương hiệu (vd "tài khoản Shopee/Messenger của bạn được tặng...")
+# vào public_service dù không hề mạo danh cơ quan/ngân hàng cụ thể nào. Các mẫu
+# public_service hợp lệ vẫn được bắt qua tên ngân hàng cụ thể hoặc các pattern
+# hành động/đe dọa cụ thể hơn ở trên (khóa, phong tỏa, gian lận, xác thực...).
 
 
 def remove_vietnamese_accents(text: str) -> str:
@@ -123,6 +129,25 @@ def remove_vietnamese_accents(text: str) -> str:
     norm = unicodedata.normalize("NFD", text)
     result = re.sub(r"[\u0300-\u036f]", "", norm)
     return result.replace("đ", "d").replace("Đ", "D").lower()
+
+
+# Danh sách loại trừ CHÍNH XÁC (không dùng heuristic) cho các dòng text lỗi/không đọc
+# được đã xác nhận thủ công trong nguồn IEEE Access 2026. LƯU Ý: đã thử 3 phiên bản
+# heuristic tự động (độ dài token sau khi bỏ URL, đếm camelCase, đếm camelCase sau khi
+# bỏ URL) — cả 3 đều gây false positive loại nhầm dữ liệu health_gift/public_service
+# hợp lệ, thật (mẫu BHTN leetspeak, mẫu VPBANK nhắc "iPhone"/"512GB"/"4K" — các cụm
+# hoàn toàn bình thường trong tin nhắn quà tặng/khuyến mãi thật). Vì health_gift đang
+# rất khan hiếm dữ liệu, chấp nhận đánh đổi: dùng danh sách chính xác (an toàn tuyệt
+# đối, không rủi ro loại nhầm) thay vì heuristic tổng quát (rủi ro cao hơn giá trị).
+GARBLED_TEXT_DENYLIST: Final[set[str]] = {
+    "JaKDiemDanh(phsqqgk.oerapple.com(TriAnx2NapYgroupsgooglecomul",
+    "CgDOiXoiOi<mmmQqM.uszalo.me(TriAnMootTRaamNghjnYggroupsgooglecom?O",
+}
+
+
+def is_garbled_text(raw_text: str) -> bool:
+    """Kiểm tra dòng text có nằm trong danh sách text lỗi/không đọc được đã xác nhận."""
+    return raw_text.strip() in GARBLED_TEXT_DENYLIST
 
 
 def classify_cam_sample(raw_text: str) -> str | None:
@@ -133,6 +158,9 @@ def classify_cam_sample(raw_text: str) -> str | None:
     - Chỉ gán nhãn khi khớp đúng tín hiệu ngữ nghĩa của public_service hoặc health_gift.
     - TUYỆT ĐỐI KHÔNG FALLBACK tự tiện.
     """
+    if is_garbled_text(raw_text):
+        return None
+
     norm = remove_vietnamese_accents(raw_text)
 
     # 1. Loại bỏ cờ bạc & nhạy cảm
