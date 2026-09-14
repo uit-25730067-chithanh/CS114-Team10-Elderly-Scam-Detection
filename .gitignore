@@ -5,6 +5,8 @@
 !**/data/raw/dataset_template.csv
 !**/data/raw/dataset.csv
 !**/data/raw/staging_cam_scam.csv
+!**/data/raw/staging_son_scam.csv
+!**/data/raw/backup_synthetic_son_scam.csv
 **/data/raw/*.json
 **/data/raw/*.xlsx
 **/data/evidence/**/*.jpg

@@ -1,0 +1,242 @@
+[
+  {
+    "backup_id": 1,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://tuoitre.vn/canh-bao-chieu-lua-phat-nguoi-50-000-vnd-qua-website-gia-dich-vu-cong-de-chiem-the-ngan-hang-20260427145237114.htm",
+    "original_investigative_scenario": "Kịch bản tin nhắn giả mạo Cổng dịch vụ công quốc gia thông báo phương tiện vi phạm giao thông đỗ xe trái phép, yêu cầu thanh toán phạt nguội trong 24h để tránh phong tỏa phương tiện",
+    "synthetic_text": "[CỔNG DỊCH VỤ CÔNG] Thông báo vi phạm giao thông số [SỐ_CCCD]. Phương tiện của quý khách vi phạm đỗ xe trái phép. Yêu cầu truy cập dichvucong-vn.com nộp phạt 50.000đ trong 24h để tránh bị tạm giữ đăng kiểm.",
+    "text_sha256": "0d2cc6863a7c14551f74cd7e4d327453e0d063209a6d64fdc83775a59d106fce",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 2,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://vnexpress.net/tai-xe-suyt-mat-tien-vi-chieu-nhan-tin-phat-nguoi-5113561.html",
+    "original_investigative_scenario": "Tin nhắn mạo danh Cục Cảnh sát giao thông đe dọa tăng mức phạt 50% và đình chỉ lưu hành phương tiện nếu không nộp phạt qua đường link chỉ định",
+    "synthetic_text": "[CỤC CSGT] Cảnh báo lần cuối: Quý khách chưa thanh toán biên bản vi phạm vượt đèn đỏ. Mức phạt sẽ tự động tăng thêm 50% sau 48h. Vui lòng thanh toán trực tuyến ngay tại congan-phatnguoi.gov.vn.",
+    "text_sha256": "9c97a4ab251782969eae1a91851727846be12a168eec36ddd64cd365e50ee2ef",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 3,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://cand.com.vn/Ban-tin-113/canh-bao-thu-doan-gia-danh-cong-an-vien-kiem-sat-de-lua-dao-chiem-doat-tai-san-i710526/",
+    "original_investigative_scenario": "Kịch bản giả danh Cơ quan Cảnh sát điều tra Bộ Công an thông báo số CCCD đứng tên mở tài khoản ngân hàng liên quan đường dây rửa tiền ma túy quốc tế",
+    "synthetic_text": "[CƠ QUAN CSĐT] Lệnh triệu tập khẩn cấp đối với công dân mang số CCCD [SỐ_CCCD] do liên quan chuyên án rửa tiền xuyên quốc gia. Yêu cầu có mặt tại Cơ quan điều tra hoặc liên hệ ngay [SỐ_ĐIỆN_THOẠI] để thẩm tra.",
+    "text_sha256": "800bc7465dadbcac0d7b10e8798c63ccc9dbbb0ceeb0bcb4d5233c9c5fdcecca",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 4,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://cand.com.vn/Ban-tin-113/canh-bao-thu-doan-gia-danh-cong-an-vien-kiem-sat-de-lua-dao-chiem-doat-tai-san-i710526/",
+    "original_investigative_scenario": "Kịch bản dọa dẫm viện kiểm sát tối cao ban hành lệnh bắt tạm giam, yêu cầu chuyển toàn bộ tiền tiết kiệm vào tài khoản bảo chứng an ninh",
+    "synthetic_text": "[VIỆN KIỂM SÁT] Đã phê chuẩn lệnh tạm giam 4 tháng đối với ông/bà do tiếp tay che giấu tội phạm. Yêu cầu chuyển toàn bộ tiền trong sổ tiết kiệm sang tài khoản an ninh [SỐ_TÀI_KHOẢN] để kiểm toán xác minh.",
+    "text_sha256": "c6c1ba8d1a2eaf6ce337623061702f7f3d5d16c7f9c3e7f61f0cc394a3266bfc",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 5,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://thanhnien.vn/gia-mao-tin-nhan-tu-cong-dich-vu-cong-de-lua-dao-truc-tuyen-185251117124033418.htm",
+    "original_investigative_scenario": "Tin nhắn mạo danh CSGT thông báo có hình phạt vi phạm hành chính kèm mã tra cứu và đường link độc hại cài mã độc chiếm đoạt tài khoản",
+    "synthetic_text": "CSGT TP.HCM: Hệ thống ghi nhận biên bản vi phạm luật giao thông đường bộ ngày hôm nay. Vui lòng nhấn link dichvucong-phatnguoi.com để nộp phạt trước 17h nhằm tránh bị tịch thu giấy phép lái xe.",
+    "text_sha256": "9152cc078737c873bdaceb47f48d5d90a5d820e031649dc127e05ad73bbeb844",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 6,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://vnexpress.net/lua-nhan-tin-thong-bao-phat-nguoi-de-danh-cap-thong-tin-5099971.html",
+    "original_investigative_scenario": "Thông báo đe dọa phạt tiền chậm nộp 8.51%/ngày và đình chỉ quyền chuyển nhượng sở hữu xe ô tô",
+    "synthetic_text": "[CẢNH SÁT GIAO THÔNG] Thông báo vi phạm tốc độ số 2026/VP-09. Quý khách vui lòng nộp phạt trước 0h tối nay. Quá hạn phạt chậm nộp 8,5%/ngày và phương tiện sẽ bị cấm đăng kiểm toàn quốc.",
+    "text_sha256": "485776fbdad0c0a778d43d52f18d6061204952c28183b8bfe33773ba714bb449",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 7,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://dantri.com.vn/phap-luat/chieu-tro-gia-danh-cong-an-de-doa-bat-giam-khien-nhieu-nguoi-sap-bay-20230321151240120.htm",
+    "original_investigative_scenario": "Kịch bản mạo danh Tòa án Nhân dân gửi thông báo hầu tòa liên quan đến đơn tố cáo lừa đảo tín dụng, dọa cưỡng chế tài sản nếu vắng mặt",
+    "synthetic_text": "[TÒA ÁN NHÂN DÂN] Giấy triệu tập đương sự có mặt tại Tòa lúc 8h30 để giải quyết vụ án lừa đảo tài chính. Nếu đương sự cố tình vắng mặt, Hội đồng xét xử sẽ phát lệnh cưỡng chế kê biên toàn bộ tài sản.",
+    "text_sha256": "4a2957e1b0886f4d473601084823b34127e3265fd008e6942fe032e4cdd68dbf",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 8,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://tuoitre.vn/cuc-an-toan-thong-tin-canh-bao-tin-nhan-khoa-sim-dien-thoai-20230315112233445.htm",
+    "original_investigative_scenario": "Tin nhắn mạo danh Cục Viễn thông thông báo thuê bao chưa chuẩn hóa thông tin sẽ bị khóa vĩnh viễn và chuyển hồ sơ sang cơ quan công an xử lý",
+    "synthetic_text": "[CỤC VIỄN THÔNG] Số thuê bao của quý khách chưa chuẩn hóa thông tin CCCD gắn chip và sẽ bị khóa 2 chiều sau 2 giờ. Gọi ngay tổng đài [SỐ_ĐIỆN_THOẠI] để hoàn tất xác thực thông tin chính chủ.",
+    "text_sha256": "17ea24fd2e492355922870f1185c9548e31318affd0572e6c5b0e1bc47dadf16",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 9,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://dantri.com.vn/kinh-doanh/tong-cuc-thue-canh-bao-chieu-tro-gia-danh-co-quan-thue-de-lua-dao-20230510162015890.htm",
+    "original_investigative_scenario": "Mạo danh Chi cục Thuế yêu cầu cài đặt ứng dụng thuế điện tử giả mạo để nhận tiền hoàn thuế và quyết toán nợ thuế nếu không sẽ bị phạt nặng",
+    "synthetic_text": "[CHI CỤC THUẾ] Thông báo quý khách còn nợ thuế thu nhập cá nhân năm 2025. Vui lòng cài đặt ứng dụng Etax-Mobile tại gdt-gov.vn để làm thủ tục hoàn thuế hoặc bị phạt trốn thuế theo Luật Quản lý thuế.",
+    "text_sha256": "2629048e83fb337fd5f6c12efb73df321e81dd7f9bbfd79d6ae94802a1be741b",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 10,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://tuoitre.vn/canh-bao-chieu-tro-goi-dien-huong-dan-cai-dat-dinh-danh-vneid-de-chiem-doat-tai-san-20231120091530221.htm",
+    "original_investigative_scenario": "Mạo danh Công an phường thông báo tài khoản VNeID mức độ 2 bị lỗi sai thông tin cư trú, đe dọa hủy mã định danh nếu không đồng bộ ngay",
+    "synthetic_text": "[CÔNG AN PHƯỜNG] Hồ sơ định danh điện tử VNeID mức 2 của quý công dân bị sai lệch dữ liệu cư trú. Yêu cầu liên hệ cán bộ trực ban [SỐ_ĐIỆN_THOẠI] trong ngày để hướng dẫn kích hoạt lại, tránh bị khóa CCCD.",
+    "text_sha256": "619a831d0af76a17057657fed8a4f698ec368a8731ad18b88dce57a388615ba7",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 11,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://cand.com.vn/Ban-tin-113/canh-bao-thu-doan-gia-danh-cong-an-vien-kiem-sat-de-lua-dao-chiem-doat-tai-san-i710526/",
+    "original_investigative_scenario": "Giả danh Cơ quan An ninh điều tra đe dọa nạn nhân tuyệt đối không được tiết lộ nội dung điều tra với người thân hoặc cán bộ ngân hàng",
+    "synthetic_text": "[AN NINH ĐIỀU TRA] Đây là chuyên án mật cấp quốc gia. Yêu cầu đồng chí hợp tác điều tra tại phòng riêng, tuyệt đối không tiết lộ với người thân hay giao dịch viên ngân hàng, nếu lộ sẽ bị bắt khẩn cấp.",
+    "text_sha256": "8ca40c66ec4ec27cb8347be6632f16dcb22f92409bce54d3f68c0e6fef114442",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 12,
+    "scenario_category": "fear_authority",
+    "evidence_url": "https://vnexpress.net/thu-doan-gia-danh-cong-an-goi-dien-doa-bat-giam-4612345.html",
+    "original_investigative_scenario": "Kịch bản giả danh Cảnh sát hình sự thông báo số điện thoại bị lợi dụng đăng ký tài khoản thanh toán cho sòng bạc trực tuyến tại Campuchia",
+    "synthetic_text": "[CẢNH SÁT HÌNH SỰ] Chúng tôi phát hiện số điện thoại của anh/chị đứng tên bảo lãnh đường dây cờ bạc quốc tế. Yêu cầu kê khai toàn bộ tài sản hiện có và gửi mã chứng thực [MÃ_OTP] về cơ quan điều tra.",
+    "text_sha256": "ea38cf6784955fd7b0603fd072e3d9ee3aee2f6be787b0cadbabaa38f8721b56",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 13,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://thanhnien.vn/vu-con-dang-cap-cuu-benh-vien-cho-ray-lua-dao-mat-nhan-tinh-185230304160913766.htm",
+    "original_investigative_scenario": "Mạo danh giáo viên và bác sĩ Bệnh viện Chợ Rẫy báo tin con bị ngã chấn thương sọ não, cần chuyển tiền tạm ứng viện phí gấp để đưa vào phòng mổ",
+    "synthetic_text": "Em là thầy giáo thể dục đây chị ơi! Con chị bị trượt ngã cầu thang đập đầu chảy nhiều máu đang cấp cứu ở Chợ Rẫy. Bác sĩ yêu cầu gia đình chuyển gấp 20 triệu vào STK [SỐ_TÀI_KHOẢN] để làm thủ tục mổ ngay!",
+    "text_sha256": "0c0d641b5275fbda53f217aaadc06b8837eec08d848871f9f76ce6bb68b3aca2",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 14,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://thanhnien.vn/vu-con-dang-cap-cuu-benh-vien-cho-ray-lua-dao-mat-nhan-tinh-185230304160913766.htm",
+    "original_investigative_scenario": "Kịch bản hối thúc chuyển thêm 50 triệu tiền máy móc và trang thiết bị chuyên dụng, tạo áp lực thời gian cực đoan khiến phụ huynh hoảng loạn",
+    "synthetic_text": "Chị ơi nhanh lên giùm em! Bác sĩ bảo ca phẫu thuật phức tạp cần dùng máy thở cao cấp và nẹp định vị xương, phải nộp thêm 50 triệu viện phí phát sinh gấp. Bác sĩ đang hối quá chị chuyển khoản liền đi!",
+    "text_sha256": "09daf44138e45b0461f765ecdbf0d8e687b06846b52ce667f1db3049b014d8a4",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 15,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://thanhnien.vn/vu-con-dang-cap-cuu-benh-vien-cho-ray-lua-dao-mat-nhan-tinh-185230304160913766.htm",
+    "original_investigative_scenario": "Kịch bản báo bệnh nhân mất máu nghiêm trọng, ngân hàng máu của viện đã hết, phải nộp 100 triệu để chuyển máu cấp tốc từ bệnh viện khác",
+    "synthetic_text": "Chị ơi bé đang mất máu nguy kịch mà kho máu viện đang cạn! Cần chuyển 100 triệu sang viện Huyết học để lấy 4 đơn vị máu cấp cứu khẩn. Chị gửi vào số tài khoản viện phí [SỐ_TÀI_KHOẢN] giùm em mau lên!",
+    "text_sha256": "f3f996d8b5653e008197f082427f3193ed1368b9132c70eef2b08910659b049b",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 16,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://dantri.com.vn/suc-khoe/vu-con-dang-cap-cuu-hang-loat-phu-huynh-sap-bay-lua-chuyen-tram-trieu-20230306114812345.htm",
+    "original_investigative_scenario": "Giả danh y tá phòng cấp cứu Bệnh viện Nhi Đồng gọi điện thông báo học sinh ngộ độc thực phẩm co giật, ép chuyển tiền cọc xét nghiệm chuyên sâu",
+    "synthetic_text": "[BV NHI ĐỒNG] Thông báo khẩn: Cháu nhà mình bị ngộ độc thực phẩm nặng, hiện đang co giật tại khoa Cấp cứu. Gia đình cần chuyển khoản tạm ứng 15 triệu vào STK bệnh viện [SỐ_TÀI_KHOẢN] để súc ruột và truyền dịch khẩn cấp.",
+    "text_sha256": "e4cf03ce4a8b69aa673870a79dfc1ae0e1711d2d597f5716b3df5aba52518dd9",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 17,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://cand.com.vn/Xa-hoi/canh-bao-chieu-tro-con-dang-cap-cuu-can-chuyen-tien-gap-i685514/",
+    "original_investigative_scenario": "Mạo danh người đi đường báo tin người thân bị tai nạn giao thông bất tỉnh trên đường quốc lộ, cần tiền xe cấp cứu và viện phí đặt cọc",
+    "synthetic_text": "Bác ơi, cháu là người đi đường thấy anh nhà mình bị xe tải tông ở ngã tư, chấn thương nặng bất tỉnh rồi. Cháu đang chở vào viện 115, bác gửi gấp 10 triệu vào STK [SỐ_TÀI_KHOẢN] để cháu đóng tiền cọc viện phí giúp bác.",
+    "text_sha256": "85a28c376a5aad46864043067835b1bd08c9f86cddffbbe29d9667fd72918a2c",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 18,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://cand.com.vn/Ban-tin-113/canh-bao-thu-doan-bat-coc-tong-tien-ao-nham-vao-phu-huynh-i702315/",
+    "original_investigative_scenario": "Kịch bản bắt cóc tống tiền ảo: gửi tin nhắn đe dọa con đang bị giam giữ, cấm báo công an, ép chuộc người trong vòng 1 giờ",
+    "synthetic_text": "Con mày đang nằm trong tay tao! Tao cho mày 60 phút để chuyển 200 triệu vào tài khoản [SỐ_TÀI_KHOẢN]. Nếu mày dám gọi công an hoặc báo cho ai biết thì mày chỉ có nước nhặt xác con mày về thôi!",
+    "text_sha256": "a07f19db6a894f92f460ca41dbca7cf388c4b51572ea9e53016f5af53ec17872",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 19,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://tuoitre.vn/canh-bao-chieu-tro-con-dang-cap-cuu-tai-benh-vien-chuyen-tien-gap-20230304153020112.htm",
+    "original_investigative_scenario": "Mạo danh bác sĩ trưởng khoa Ngoại thần kinh yêu cầu phụ huynh đóng phí mổ laser vi phẫu cấp cứu não khẩn cấp",
+    "synthetic_text": "Tôi là Bác sĩ Trưởng khoa Cấp cứu Ngoại thần kinh. Con của bác bị phù não sau tai nạn, phải can thiệp mổ vi phẫu gấp trong 30 phút. Đề nghị người nhà chuyển tạm ứng 30 triệu vào tài khoản tiếp nhận [SỐ_TÀI_KHOẢN].",
+    "text_sha256": "e8360bfad27566579d52f16bd3add0a7be81d47a893125b980b0bd457982bc38",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 20,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://vnexpress.net/chieu-lua-con-dang-cap-cuu-tai-benh-vien-4577589.html",
+    "original_investigative_scenario": "Mạo danh bạn cùng phòng trọ báo tin con trai bị tai nạn gãy chân cần tiền bó bột và chụp MRI khẩn cấp",
+    "synthetic_text": "Bác ơi con là bạn trọ cùng phòng với Nam đây! Nam đi xe máy bị té ngã gãy xương đùi hở, đang nằm ở viện Việt Đức. Bác chuyển khoản gấp 25 triệu cho con qua [SỐ_TÀI_KHOẢN] để con thanh toán viện phí chụp chiếu cho Nam nha bác.",
+    "text_sha256": "b04c555ccc2896d11915971ae1bb9ef5d453df9bb3407ad39f6f8c5268d9cf00",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 21,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://dantri.com.vn/phap-luat/nhung-cu-lua-tan-nhan-con-dang-cap-cuu-doi-tien-chuoc-mang-20230308101522331.htm",
+    "original_investigative_scenario": "Kịch bản tống tiền dọa con nợ tiền cờ bạc bị giang hồ đánh thương tích nặng, đe dọa người già chuyển tiền cứu mạng con",
+    "synthetic_text": "Bà già nghe rõ đây! Thằng con trai của bà vay nợ bên tao 50 triệu không trả, giờ đang bị tụi tao giữ đánh gãy tay rồi. Chuyển tiền chuộc vào STK [SỐ_TÀI_KHOẢN] ngay trước 12h, nếu không đừng trách tụi tao ác.",
+    "text_sha256": "932ded021c01e72fd3ec013baa21bed78aa51dc3d9e7108b1d6b85f8c5b12aff",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 22,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://thanhnien.vn/vu-con-dang-cap-cuu-benh-vien-cho-ray-lua-dao-mat-nhan-tinh-185230304160913766.htm",
+    "original_investigative_scenario": "Nhắn tin giả làm nhân viên thu ngân viện phí hối thúc thanh toán chi phí thuốc đặt ngoài bảo hiểm y tế cho ca cấp cứu",
+    "synthetic_text": "[PHÒNG THU NGÂN VIỆN PHÍ] Bệnh nhân [HỌ_VÀ_TÊN] đang cần dùng thuốc tiêm kháng sinh liều cao ngoài danh mục bảo hiểm để tránh sốc nhiễm khuẩn. Đề nghị thân nhân chuyển 12.500.000đ vào tài khoản viện [SỐ_TÀI_KHOẢN].",
+    "text_sha256": "ae141b2847150a07eff1da98a23c9e6dbcef67496fd709a22063bbf47808b307",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 23,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://dantri.com.vn/suc-khoe/vu-con-dang-cap-cuu-hang-loat-phu-huynh-sap-bay-lua-chuyen-tram-trieu-20230306114812345.htm",
+    "original_investigative_scenario": "Giả mạo nhân viên y tế trường học báo tin học sinh bị ngã cầu thang gãy xương hàm, yêu cầu phụ huynh đóng viện phí cấp cứu gấp",
+    "synthetic_text": "Alo phụ huynh bé [HỌ_VÀ_TÊN] ơi, em là y tế trường đây. Cháu giờ ra chơi bị bạn xô ngã cầu thang rách trán chảy máu nhiều, đang chuyển viện 175. Chị chuyển trước 15 triệu để em đóng cọc viện phí làm thủ tục nhập viện cho cháu.",
+    "text_sha256": "005000a89f32c891fecb6ee4ef703ef6ea8fe78923078df4568f9c7c4cbec4db",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  },
+  {
+    "backup_id": 24,
+    "scenario_category": "family_emergency",
+    "evidence_url": "https://cand.com.vn/Xa-hoi/canh-bao-chieu-tro-con-dang-cap-cuu-can-chuyen-tien-gap-i685514/",
+    "original_investigative_scenario": "Mạo danh cảnh sát giao thông thụ lý hiện trường tai nạn báo tin người thân đang nguy kịch tại trạm xá, cần người nhà liên hệ chuyển viện khẩn",
+    "synthetic_text": "[CSGT KHẨN CẤP] Người nhà của chủ xe biển số [SỐ_CCCD] gặp tai nạn va chạm liên hoàn trên quốc lộ, hiện đang nguy kịch tại trung tâm y tế. Đề nghị người nhà gọi ngay số [SỐ_ĐIỆN_THOẠI] để chuyển tuyến cấp cứu kịp thời.",
+    "text_sha256": "7d76ec108487fd7f8e317a21fa668a94a4835ec163b97161427c0c1f0a7d0ec7",
+    "generation_basis": "Real-world press investigative scenario grounding",
+    "team_approval_required": true
+  }
+]
