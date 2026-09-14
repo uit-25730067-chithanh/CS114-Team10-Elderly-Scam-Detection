@@ -1,0 +1,28 @@
+[
+  {
+    "article_url": "https://thanhnien.vn/nhan-tin-nhan-trung-thuong-tu-facebook-chu-nhan-bi-lua-hang-chuc-trieu-dong-185700021.htm",
+    "source_url": "https://thanhnien.vn/nhan-tin-nhan-trung-thuong-tu-facebook-chu-nhan-bi-lua-hang-chuc-trieu-dong-185700021.htm",
+    "publisher": "Báo Thanh Niên",
+    "article_title": "Nhận tin nhắn trúng thưởng từ Facebook, chủ nhân bị lừa hàng chục triệu đồng",
+    "quote_substring": "Facebook thông báo. Xin chúc mừng tài khoản messenger của bạn đã may mắn nhận được giải nhất từ sự kiện Tuần lễ vàng tri ân khách hàng quý 3.2017. Tài khoản messenger của bạn mang mã số trúng thưởng là 'TN5257' đã may mắn được hệ thống lựa chọn ngẫu nhiên, xác nhận là tài khoản đã trúng thưởng",
+    "quote_sha256": "5e27f7f6cf94bb9f71c633ffc7a212fa08dedcf5dafb1ceb7a88058aa5798312",
+    "hash_algorithm": "SHA-256",
+    "article_date": "2024-2026",
+    "accessed_date": "2026-09-14",
+    "verification_status": "VERIFIED_EXACT_DOM_SUBSTRING",
+    "masked_text": "[THƯƠNG_HIỆU] thông báo. Xin chúc mừng tài khoản messenger của bạn đã may mắn nhận được giải nhất từ sự kiện Tuần lễ vàng tri ân khách hàng [THỜI_GIAN]. Tài khoản messenger của bạn mang mã số trúng thưởng là [MÃ_THƯỞNG] đã may mắn được hệ thống lựa chọn ngẫu nhiên, xác nhận là tài khoản đã trúng thưởng"
+  },
+  {
+    "article_url": "https://thanhnien.vn/nhan-tin-nhan-trung-thuong-tu-facebook-chu-nhan-bi-lua-hang-chuc-trieu-dong-185700021.htm",
+    "source_url": "https://thanhnien.vn/nhan-tin-nhan-trung-thuong-tu-facebook-chu-nhan-bi-lua-hang-chuc-trieu-dong-185700021.htm",
+    "publisher": "Báo Thanh Niên",
+    "article_title": "Nhận tin nhắn trúng thưởng từ Facebook, chủ nhân bị lừa hàng chục triệu đồng",
+    "quote_substring": "Truy cập vào trang: sukienlocvangapp123.com hoặc liên hệ số điện thoại chăm sóc khách hàng để đăng ký làm thủ tục hồ sơ nhận thưởng… Và tin nhắn này thay cho giấy thông báo trực tiếp từ tập đoàn",
+    "quote_sha256": "e2e8229e6846903451a456193a68a5b34649cb499afe4b78447dd1360379c694",
+    "hash_algorithm": "SHA-256",
+    "article_date": "2024-2026",
+    "accessed_date": "2026-09-14",
+    "verification_status": "VERIFIED_EXACT_DOM_SUBSTRING",
+    "masked_text": "Truy cập vào trang: [ĐƯỜNG_DẪN]hoặc liên hệ số điện thoại chăm sóc khách hàng để đăng ký làm thủ tục hồ sơ nhận thưởng… Và tin nhắn này thay cho giấy thông báo trực tiếp từ tập đoàn"
+  }
+]
