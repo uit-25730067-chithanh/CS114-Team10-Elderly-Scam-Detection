@@ -3,9 +3,9 @@
 * **Người thực hiện kiểm toán:** Lead Researcher & Data Provenance Auditor (CS114 - Nhóm 10)
 * **Đối tượng bàn giao:** Bùi Thị Mỷ Cẩm (Phụ trách nhóm bẫy tâm lý `health_gift` & `public_service` trên PR #9)
 * **Tài liệu tham chiếu:** `draft/scam-detection/data/raw/staging_cam_scam.csv` (205 mẫu đời thực 100% sạch, đúng bản chất lừa đảo)
-* **Tệp dự phòng (Phương án 2):** `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv` (94 mẫu kèm evidence)
+* **Tệp dự phòng (Phương án 2):** `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv` (24 mẫu độc bản kèm evidence)
 * **Bộ công cụ kiểm định:** `draft/scam-detection/data/scripts/audit_cam_rigorous.py`, `draft/scam-detection/data/scripts/verify_cam_provenance.py`, `draft/scam-detection/data/scripts/data_validation.py`
-* **Manifests chứng thực:** `draft/scam-detection/data/evidence/press_provenance_audit.json` (2 mục SMS nguyên văn), `draft/scam-detection/data/evidence/youtube_transcript_manifest.json` (3 mục cuộc gọi telesale), `draft/scam-detection/data/evidence/backup_synthetic_manifest.json` (94 mục)
+* **Manifests chứng thực:** `draft/scam-detection/data/evidence/press_provenance_audit.json` (2 mục SMS nguyên văn), `draft/scam-detection/data/evidence/youtube_transcript_manifest.json` (3 mục cuộc gọi telesale), `draft/scam-detection/data/evidence/backup_synthetic_manifest.json` (24 mục độc bản)
 * **Bảng tra cứu đối chứng chi tiết:** `draft/scam-detection/reports/cam_cleaned_dataset_review.md`
 * **Trạng thái:** **HOÀN TOÀN ĐẠT CHUẨN NGHIỆM THU THEO PHƯƠNG ÁN 1 (100% ĐỜI THỰC - PASSED 100% TẤT CẢ 7 TẦNG)**
 
@@ -30,7 +30,7 @@ Báo cáo xác nhận hoàn tất rà soát thủ công từng dòng, thanh lọ
   * **100% dữ liệu đời thực**, **0% AI sinh**, **0% paraphrase**, **0% dịch máy thô**.
   * 100% mẫu có thể truy vết nguồn gốc vật lý 1-1 (GitHub Raw line `#L...`, Live DOM quote substring, hoặc YouTube investigative transcript timestamp).
 * **Tệp dự phòng Phương án 2 (Backup Synthetic with Evidence):**
-  * Tệp độc lập `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv` (94 mẫu) và manifest `draft/scam-detection/data/evidence/backup_synthetic_manifest.json`.
+  * Tệp độc lập `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv` (24 mẫu độc bản) và manifest `draft/scam-detection/data/evidence/backup_synthetic_manifest.json`.
   * Mỗi mẫu synthetic đều liên kết 1-1 với bằng chứng phóng sự điều tra gốc, sẵn sàng khi nhóm họp và biểu quyết mới tích hợp.
 
 ---
@@ -96,8 +96,8 @@ Hệ thống đã thực hiện kiểm định tự động 7 tầng độc lậ
   - Phân bổ bẫy tâm lý của Bùi Thị Mỷ Cẩm (Phương án 1: 100% Đời thực):
     * public_service        : 159 mẫu ( 77.6%)
     * health_gift           :  46 mẫu ( 22.4%)
-  - Tập dữ liệu dự phòng Phương án 2 (Backup Synthetic): 94 mẫu (sẵn sàng khi team phê duyệt)
-  - Tổng hợp tiềm năng (Chính thức + Dự phòng):       299 mẫu (140 health_gift)
+  - Tập dữ liệu dự phòng Phương án 2 (Backup Synthetic): 24 mẫu (sẵn sàng khi team phê duyệt)
+  - Tổng hợp tiềm năng (Chính thức + Dự phòng):       229 mẫu (70 health_gift)
   -> PASSED: Cả 2 nhóm bẫy tâm lý đều đạt chỉ tiêu tinh hoa, phân bổ cân bằng và 100% sạch.
 
 ================================================================================
@@ -132,8 +132,8 @@ Người kiểm thử hoặc reviewer có thể chạy độc lập các lệnh 
 * `draft/scam-detection/data/raw/staging_cam_scam.csv`: Tập dữ liệu 205 mẫu chính thức (100% đời thực).
 * `draft/scam-detection/data/evidence/press_provenance_audit.json`: Manifest minh chứng trích dẫn Báo chí chính thống.
 * `draft/scam-detection/data/evidence/youtube_transcript_manifest.json`: Manifest minh chứng trích dẫn Phóng sự YouTube VTV24.
-* `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv`: Tập dữ liệu dự phòng Phương án 2 (94 mẫu).
-* `draft/scam-detection/data/evidence/backup_synthetic_manifest.json`: Manifest chứng thực cho tập dự phòng.
+* `draft/scam-detection/data/raw/backup_synthetic_health_gift.csv`: Tập dữ liệu dự phòng Phương án 2 (24 mẫu độc bản).
+* `draft/scam-detection/data/evidence/backup_synthetic_manifest.json`: Manifest chứng thực cho tập dự phòng (24 mục độc bản).
 * `draft/scam-detection/reports/cam_cleaned_dataset_review.md`: Bảng tra cứu đối chiếu chi tiết 205 mẫu sạch.
 * `draft/scam-detection/data/scripts/audit_cam_rigorous.py`: Script kiểm định toàn diện 7 tầng.
 * `draft/scam-detection/data/scripts/verify_cam_provenance.py`: Script kiểm chứng nguồn gốc vật lý 1-1.
