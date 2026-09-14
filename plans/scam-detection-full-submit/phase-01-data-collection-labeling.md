@@ -26,9 +26,9 @@
 | Thành viên | Phụ trách dữ liệu | Mục tiêu mẫu | Đã thu thập | Minh chứng nguồn gốc | Trạng thái |
 |---|---|:---:|:---:|---|:---:|
 | **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
-| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **360 / 500** (301 `public_service` + 59 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn, 0% lẫn việc làm/đầu tư, 0% text lỗi/garbled, 0% quảng cáo hội thảo không phải scam, 0% lẫn lừa vay tiền/hải quan/CTV online ngoài phạm vi) | 🔧 `needs-more-data` (xem [Minh chứng Bùi Thị Mỷ Cẩm](#2-minh-chứng-bùi-thị-mỷ-cẩm)) |
+| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **365 / 500** (301 `public_service` + 64 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn, 0% lẫn việc làm/đầu tư, 0% text lỗi/garbled, 0% quảng cáo hội thảo không phải scam, 0% lẫn lừa vay tiền/hải quan/CTV online ngoài phạm vi) | 🔧 `needs-more-data` (xem [Minh chứng Bùi Thị Mỷ Cẩm](#2-minh-chứng-bùi-thị-mỷ-cẩm)) |
 | **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.133 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.138 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
 
 ---
 
@@ -187,7 +187,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ### 2. Nhiệm vụ của Bùi Thị Mỷ Cẩm
 - [x] Cẩm: Cài đặt môi trường Python cá nhân theo `requirements.txt`
-- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` & `public_service` — **Hiện tại: 360/500 (301 `public_service` + 59 `health_gift`)** sau rà soát toàn diện + bổ sung 9 trích dẫn báo chí/pháp lý xác thực thủ công + review độc lập 14/09 loại 7 mẫu ngoài phạm vi (xem [mục 11](#11-review-độc-lập-bổ-sung-1409-loại-7-mẫu-ngoài-phạm-vi)). `health_gift` đang **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria — 2 nguồn GitHub (UIT IE403 + IEEE Access 2026) đã khai thác gần hết mẫu hợp lệ, hướng báo chí/bản án tòa án cũng gần cạn (tỷ lệ thành công thấp), cần bổ sung thêm ảnh chụp màn hình SMS thật cho riêng nhóm `health_gift`
+- [ ] Cẩm: Thu thập đủ **≥ 500 mẫu lừa đảo** thuộc 2 nhóm `health_gift` & `public_service` — **Hiện tại: 365/500 (301 `public_service` + 64 `health_gift`)** sau rà soát toàn diện + bổ sung 9 trích dẫn báo chí/pháp lý xác thực thủ công + review độc lập 14/09 loại 7 mẫu ngoài phạm vi (xem [mục 11](#11-review-độc-lập-bổ-sung-1409-loại-7-mẫu-ngoài-phạm-vi)). `health_gift` đang **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria — 2 nguồn GitHub (UIT IE403 + IEEE Access 2026) đã khai thác gần hết mẫu hợp lệ, hướng báo chí/bản án tòa án cũng gần cạn (tỷ lệ thành công thấp), cần bổ sung thêm ảnh chụp màn hình SMS thật cho riêng nhóm `health_gift`
 - [x] Cẩm: 100% mẫu lừa đảo thu thập có đính kèm `source_url` (Permalink GitHub UIT IE403 Ground Truth, Permalink GitHub IEEE Access 2026 chính xác từng dòng vật lý #L..., URL bài báo Báo Tuổi Trẻ trích dẫn nguyên văn)
 - [x] Cẩm: 100% mẫu đã được ẩn danh hóa PII (che SĐT, STK, OTP, CCCD, họ tên riêng) qua `anonymize_sms.py` (đã vá lỗi rò rỉ tên/số — xem mục 6)
 - [x] Cẩm: Xuất tệp staging kiểm định độc lập `draft/scam-detection/data/raw/staging_cam_scam.csv` pass `data_validation.py` và `verify_cam_provenance.py` 100%
@@ -226,19 +226,19 @@ X_train, X_test, y_train, y_test = train_test_split(
 - Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
-> ⚠️ **Cập nhật 14/09/2026 (9 vòng re-audit, gồm 1 vòng review độc lập bởi AI khác):** Số liệu 514/500 công bố 12/09 chứa lỗi phân loại (`\bqua\b` quá chung chung) + lỗi ẩn danh hóa PII (vòng 1, sáng 13/09, mục 6). Vòng 2 (chiều 13/09, mục 7) loại các mẫu tuyển dụng/CTV online, đầu tư/crypto, đe dọa tài chính, tuyên truyền, mại dâm (leetspeak). Vòng 3 (14/09, mục 8) rà soát lại **toàn bộ 2 nguồn gốc thô**, phát hiện pattern `tai_khoan` quá chung chung. Vòng 4-5 (14/09): loại quảng cáo hội thảo tuyển sinh + spam cờ bạc giả mạo domain ngân hàng. Vòng 6 (14/09, mục 9): bổ sung 4 trích dẫn báo chí/pháp lý. Vòng 7 (14/09, mục 10): phát hiện tiếp pattern `đăng_ký`/`hồ_sơ` cũng quá rộng, cứu thêm 4 mẫu health_gift thật + 1 quote Thanh Niên. Vòng 8 (14/09, cùng commit với mục 10 nhưng chưa từng được viết thành mục riêng): săn thêm 4 trích dẫn báo chí mới (Pháp Luật VN x2, Tiền Phong, Đắk Lắk), nâng tổng từ 363→367 mẫu. **Vòng 9 (14/09, mục 11) — review độc lập bởi phiên AI khác (không phải phiên đã làm vòng 1-8):** phát hiện 2 pattern hành chính chung chung còn sót (`giay_to`, `bo_sung`) + thiếu pattern loại trừ CTV bình luận/dịch vụ tăng doanh thu + 3 mẫu spam nghi vấn né được bộ lọc cờ bạc, đã được Cẩm xác nhận thủ công và loại bỏ, đưa dataset về `360 / 500` mẫu. Sau khi vá cả 9 vòng, số liệu **thật, đã kiểm chứng ngữ nghĩa kỹ nhất** là:
-- Số mẫu lừa đảo đã nạp vào Staging CSV: **360 / 500** mẫu (72.0% chỉ tiêu tối thiểu — **chưa đạt**)
+> ⚠️ **Cập nhật 14/09/2026 (10 vòng re-audit, gồm 1 vòng review độc lập bởi AI khác):** Xem lịch sử chi tiết vòng 1-9 ở các mục 6-11 bên dưới. **Vòng 10 (14/09, sau vòng review độc lập):** PM Đặng Chí Thanh duyệt thêm nguồn thứ 4 — lời kể trực tiếp nạn nhân trích nguyên văn từ phỏng vấn báo chí thật (KHÔNG chấp nhận kịch bản AI viết lại), bổ sung 5 lời kể từ Dân Trí, VietnamNet, Tiin.vn và trang tin Khoa CNTT UIT (fit.uit.edu.vn), nâng dataset lên `365 / 500` mẫu. Số liệu **thật, mới nhất** là:
+- Số mẫu lừa đảo đã nạp vào Staging CSV: **365 / 500** mẫu (73.0% chỉ tiêu tối thiểu — **chưa đạt**)
 - Nguồn gốc dữ liệu: **100% đời thực từ Kiến trúc Đa nguồn Cân bằng Độc lập (Zero Synthetic Text - 0% AI bịa/sinh)**.
 - Phân bổ 2 nhóm bẫy tâm lý theo phân công:
-  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **301 mẫu** (83.6%)
-  + Sức khỏe, quà tặng tri ân, trúng thưởng thương hiệu (`health_gift`, KHÔNG còn gồm việc làm/CTV/đầu tư/crypto/hội thảo tuyển sinh): **59 mẫu** (16.4%) — **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria
+  + Dịch vụ công, VNeID, BHXH, SIM, EVN, Ngân hàng, Phạt nguội (`public_service`): **301 mẫu** (82.5%)
+  + Sức khỏe, quà tặng tri ân, trúng thưởng thương hiệu (`health_gift`, KHÔNG còn gồm việc làm/CTV/đầu tư/crypto/hội thảo tuyển sinh): **64 mẫu** (17.5%) — **dưới ngưỡng tối thiểu 200 mẫu/nhóm** ở Success Criteria
 - Lọc rác & cờ bạc: **100% loại bỏ cờ bạc, cá cược, nổ hũ, gái gọi, hẹn hò/sugar baby (kể cả biến thể leetspeak + domain giả mạo ngân hàng)** (0 mẫu vi phạm).
 - Ẩn danh hóa PII: 100% mẫu đã che SĐT/STK/OTP/CCCD/Mã GD/họ tên riêng qua `anonymize_sms.py` (đã vá lỗi rò rỉ — chi tiết mục 6; review độc lập mục 11 quét lại không phát hiện rò rỉ mới).
-- Tỷ lệ có `source_url`: **360 / 360 mẫu (100.0%)** có liên kết permalink hoặc URL báo chí/pháp lý xác thực thủ công 1-1 chính xác tuyệt đối.
+- Tỷ lệ có `source_url`: **365 / 365 mẫu (100.0%)** có liên kết permalink hoặc URL báo chí/pháp lý xác thực thủ công 1-1 chính xác tuyệt đối.
 - Độ sạch: 0 dòng trùng lặp (`text.duplicated().sum() == 0`), 0 văn bản rỗng, độ dài hợp lệ 25-600 ký tự, 0 text lỗi/không đọc được, 0 quảng cáo hội thảo không phải scam, 0 spam cờ bạc lẫn trong public_service, 0 lừa đảo vay tiền/hải quan/CTV online/tuyển tài xế lẫn trong 2 nhóm.
 - Kết quả kiểm định tự động `data_validation.py`: **PASSED 100%** (lưu ý: script này chỉ kiểm tra schema/trùng lặp, không kiểm tra ngữ nghĩa category hay nội dung PII)
-- Kết quả audit độc lập `verify_cam_provenance.py`: **360 / 360 mẫu (100.0%) đối chiếu khớp nguồn** (tiêu chí: trùng xâu con ≥20 ký tự HOẶC token overlap ≥60% cho 2 nguồn GitHub; đối chiếu thủ công 1-1 cho nguồn báo chí/pháp lý)
-- Ngày thu thập ban đầu: `12/09/2026` — Ngày re-audit & vá lỗi: `13-14/09/2026` (9 vòng, xem [mục 11](#11-review-độc-lập-bổ-sung-1409-loại-7-mẫu-ngoài-phạm-vi) cho vòng mới nhất)
+- Kết quả audit độc lập `verify_cam_provenance.py`: **365 / 365 mẫu (100.0%) đối chiếu khớp nguồn** (tiêu chí: trùng xâu con ≥20 ký tự HOẶC token overlap ≥60% cho 2 nguồn GitHub; đối chiếu thủ công 1-1 cho nguồn báo chí/pháp lý/lời kể nạn nhân)
+- Ngày thu thập ban đầu: `12/09/2026` — Ngày re-audit & vá lỗi: `13-14/09/2026` (10 vòng, xem mục 6-11 bên dưới cho lịch sử chi tiết)
 - **Việc cần làm tiếp:** bổ sung thêm mẫu thật cho nhóm `health_gift` (ảnh chụp màn hình SMS thật trong `CS114_Evidence_Vault` — hướng báo chí/bản án đã gần cạn) để đạt lại ≥500 mẫu tổng & ≥200 mẫu/nhóm — 2 nguồn GitHub hiện có đã khai thác gần hết, cần báo PM Thanh về mức độ thiếu hụt thực tế.
 
 ### 3. Minh chứng Đặng Chí Thanh:
@@ -478,7 +478,7 @@ Cả 7 mẫu đã được trình bày cho Cẩm xem xét từng dòng và **C�
 - `verify_cam_provenance.py`: **PASSED 100% (360/360)** (chạy lại từ đầu, tải trực tiếp 2 nguồn GitHub gốc)
 - Quét PII độc lập (tên riêng sau "Anh/Chị/Ông/Bà", chuỗi số dài ≥8 chữ số chưa che): **không phát hiện rò rỉ mới**.
 
-**Việc cần làm tiếp theo:** `health_gift` còn **59/200** (360/500 tổng, 301 `public_service`), khoảng cách với ngưỡng 200/nhóm vẫn còn xa. Nhận định không đổi so với các vòng trước: 2 nguồn GitHub + báo chí/pháp lý đã khai thác gần cạn — **hướng duy nhất còn scale được là ảnh chụp màn hình SMS/Zalo/Messenger thật** đưa vào `CS114_Evidence_Vault`. Ngoài ra, nếu tiếp tục rà thêm `PUBLIC_SERVICE_PATTERNS`, nên cảnh giác các từ hành chính chung chung còn lại (vd `dich_vu_cong`, `cap_nhat_thong_tin` — hiện đều đi kèm tín hiệu cụ thể nên chưa ghi nhận vấn đề, nhưng chưa rà kỹ như `tai_khoan`/`giay_to`).
+**Việc cần làm tiếp theo:** `health_gift` còn **64/200** (365/500 tổng, 301 `public_service`), khoảng cách với ngưỡng 200/nhóm vẫn còn xa. Nhận định không đổi so với các vòng trước: 2 nguồn GitHub + báo chí/pháp lý đã khai thác gần cạn — **hướng duy nhất còn scale được là ảnh chụp màn hình SMS/Zalo/Messenger thật** đưa vào `CS114_Evidence_Vault`. Ngoài ra, nếu tiếp tục rà thêm `PUBLIC_SERVICE_PATTERNS`, nên cảnh giác các từ hành chính chung chung còn lại (vd `dich_vu_cong`, `cap_nhat_thong_tin` — hiện đều đi kèm tín hiệu cụ thể nên chưa ghi nhận vấn đề, nhưng chưa rà kỹ như `tai_khoan`/`giay_to`).
 
 ## Risk Assessment
 
@@ -492,8 +492,8 @@ Cả 7 mẫu đã được trình bày cho Cẩm xem xét từng dòng và **C�
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
 > ✅ **Phần việc Đặng Chí Thanh: HOÀN THÀNH XUẤT SẮC (1.773/500 mẫu chuẩn IEEE Access 2026 + 42 mẫu kiểm định thực tế độc lập từ 20 ảnh Drive cá nhân, 100% PII masked, 100% có source_url permalink/Drive, 0% rò rỉ dữ liệu).**  
-> 🔧 **Phần việc Bùi Thị Mỷ Cẩm: CẦN BỔ SUNG THÊM (360/500 mẫu lừa đảo đời thực sau 9 vòng re-audit, gồm 1 vòng review độc lập 14/09 — xem [mục 11](#11-review-độc-lập-bổ-sung-1409-loại-7-mẫu-ngoài-phạm-vi)).** Đã khắc phục lỗi rò rỉ PII, lỗi phân loại category, và loại thêm 7 mẫu ngoài phạm vi (lừa vay tiền, lừa hải quan, lừa CTV bình luận, spam cờ bạc trá hình, lời chúc Tết chung chung) phát hiện qua 2 vòng review độc lập; 301 mẫu `public_service` (đạt) + 59 mẫu `health_gift` (**chưa đạt** ngưỡng 200 mẫu/nhóm). `verify_cam_provenance.py` và `data_validation.py` đã chạy lại từ đầu và vẫn PASSED 100% trên bộ dữ liệu mới nhất. Cần thu thập thêm ~140-150 mẫu thật cho nhóm `health_gift` trước khi merge — nguồn duy nhất còn khả thi là ảnh chụp màn hình SMS/Zalo/Messenger thật vào `CS114_Evidence_Vault`.  
-> ⏳ **Tiến độ toàn nhóm:** Đạt **2.133 / 1.500 mẫu** (1.773 mẫu bình thường + 360 mẫu lừa đảo). Đang chờ Hoàng Cao Sơn hoàn tất 500 mẫu lừa đảo nhóm quyền lực & cấp cứu, và Cẩm bổ sung thêm mẫu `health_gift`, trước khi nghiệm thu hợp nhất và tiến hành Train/Test Split cho Sprint 2.
+> 🔧 **Phần việc Bùi Thị Mỷ Cẩm: CẦN BỔ SUNG THÊM (365/500 mẫu lừa đảo đời thực sau 9 vòng re-audit, gồm 1 vòng review độc lập 14/09 — xem [mục 11](#11-review-độc-lập-bổ-sung-1409-loại-7-mẫu-ngoài-phạm-vi)).** Đã khắc phục lỗi rò rỉ PII, lỗi phân loại category, loại thêm 7 mẫu ngoài phạm vi, và bổ sung 5 lời kể trực tiếp nạn nhân (PM Thanh duyệt 14/09: chấp nhận lời nạn nhân thật, không chấp nhận kịch bản AI viết lại); 301 mẫu `public_service` (đạt) + 64 mẫu `health_gift` (**chưa đạt** ngưỡng 200 mẫu/nhóm). `verify_cam_provenance.py` và `data_validation.py` đã chạy lại từ đầu và vẫn PASSED 100% trên bộ dữ liệu mới nhất. Cần thu thập thêm ~135-145 mẫu thật cho nhóm `health_gift` trước khi merge — nguồn duy nhất còn khả thi là ảnh chụp màn hình SMS/Zalo/Messenger thật vào `CS114_Evidence_Vault`.  
+> ⏳ **Tiến độ toàn nhóm:** Đạt **2.138 / 1.500 mẫu** (1.773 mẫu bình thường + 365 mẫu lừa đảo). Đang chờ Hoàng Cao Sơn hoàn tất 500 mẫu lừa đảo nhóm quyền lực & cấp cứu (đã có 210 mẫu trên nhánh riêng `feat/phase-01-son-data-collection`, chưa merge), và Cẩm bổ sung thêm mẫu `health_gift`, trước khi nghiệm thu hợp nhất và tiến hành Train/Test Split cho Sprint 2.
 
 ---
 

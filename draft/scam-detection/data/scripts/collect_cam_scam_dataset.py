@@ -14,6 +14,10 @@ Mục đích:
     + Nguồn 2: Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026).
       Theo dõi chính xác dòng vật lý (physical line #L...) trên GitHub.
     + Nguồn 3: Trích dẫn nguyên văn (verbatim) từ các bản tin cảnh báo báo chí chính thống.
+    + Nguồn 4: Lời kể trực tiếp của nạn nhân (trích nguyên văn trong ngoặc kép từ
+      phỏng vấn báo chí thật) — PM Đặng Chí Thanh duyệt 14/09/2026: chấp nhận nếu
+      là lời nạn nhân thật kể lại chi tiết, TUYỆT ĐỐI KHÔNG chấp nhận kịch bản do
+      AI viết lại/tổng hợp dựa trên nội dung bài báo (vẫn vi phạm Zero Synthetic Text).
   - Phân định ranh giới rõ ràng với Hoàng Cao Sơn:
     + Loại bỏ hoàn toàn các tin nhắn Quyền lực (fear_authority) và Cấp cứu (family_emergency).
   - Ẩn danh hóa 100% PII (SĐT, STK, CCCD, OTP) qua anonymize_sms.py.
@@ -387,6 +391,42 @@ def fetch_verified_news_quotes() -> list[dict]:
             "source": "baodaklak.vn",
             "source_url": "https://baodaklak.vn/channel/3485/201807/canh-giac-voi-cac-thu-doan-lua-dao-trung-thuong-qua-tin-nhan-5590769/",
             "notes": "Báo Đắk Lắk (2018) trích dẫn nguyên văn tin nhắn Messenger lừa trúng thưởng tri ân khách hàng — biến thể khác của cùng chiến dịch lừa đảo với mã số/website riêng"
+        },
+        # --- Nguồn 4: Lời kể trực tiếp nạn nhân (PM Thanh duyệt 14/09/2026) ---
+        {
+            "raw_text": "Người đó nói nếu không làm theo thì quà sẽ bị hủy, lúc đó tôi rất bối rối. Tuy nhiên sau khi gọi lên tổng đài MoMo để xác minh, tôi mới biết không hề có bất kỳ chương trình tri ân nào như vậy. Lúc đó mới giật mình vì suýt nữa tôi đã bị thao túng tâm lý làm theo hướng dẫn của kẻ gian.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "dantri.com.vn",
+            "source_url": "https://dantri.com.vn/cong-nghe/no-ro-chieu-tro-lua-dao-qua-tri-an-khach-hang-20250926221018914.htm",
+            "notes": "Lời kể nguyên văn của Chị Q. (TP.HCM) về việc mạo danh MoMo tri ân khách hàng, do Báo Dân Trí phỏng vấn trích dẫn trực tiếp — không phải nội dung tin nhắn"
+        },
+        {
+            "raw_text": "Tôi nhận được một số máy lạ gọi đến nói từ hãng càphê nổi tiếng H. tặng tri ân khách hàng 1 vòng phong thuỷ giá trị và sẽ ship hàng đến tận nơi. Khi nhận quà tặng, tôi được báo mất phí chuyển phát là 50.000 đồng. Bất ngờ là khi mở ra thì thấy chiếc vòng chỉ như hàng đổ sỉ la liệt ở chợ với mức giá chưa tới 10.000 đồng. Nghi ngờ, tôi gọi điện lên tổng đài của hãng H. thì được biết đơn vị này không có chương trình tặng quà như thế bao giờ.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "vietnamnet.vn",
+            "source_url": "https://vietnamnet.vn/bi-an-chieu-lua-dao-tang-qua-tri-an-chi-tang-khong-ban-609702.html",
+            "notes": "Lời kể nguyên văn của Chị Thu Hằng (Lê Chân, Hải Phòng) về vụ giả mạo tri ân của hãng cà phê H., do Báo VietnamNet phỏng vấn trích dẫn trực tiếp"
+        },
+        {
+            "raw_text": "Sau khi nhận được tin nhắn trúng thưởng iPhone trị giá 15 triệu đồng từ chương trình quay số may mắn của công ty trên Facebook thì có người gọi điện cho ba tôi cung cấp các thông tin cá nhân, địa chỉ nhà để mang quà đến. Sau đó, một nhân viên của công ty X mang theo quà trúng thưởng đến nhà và yêu cầu đóng 3 triệu đồng theo quy định của chương trình thì mới giao quà. Thế nhưng, quà trúng thưởng là một smartphone rẻ tiền và một kính mát không nhãn hiệu, tổng trị giá chỉ vài trăm ngàn đồng.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "fit.uit.edu.vn",
+            "source_url": "https://fit.uit.edu.vn/index.php/tin-tuc/tin-moi/4117-m-t-ti-n-vi-tin-nh-n-trung-thu-ng",
+            "notes": "Lời kể nguyên văn của Anh T.T.Vũ (Tân Bình, TP.HCM) về vụ trúng thưởng iPhone giả mạo Facebook nhắm vào cha mình (người cao tuổi) — đăng trên trang tin Khoa CNTT, ĐH CNTT (UIT)"
+        },
+        {
+            "raw_text": "Tôi thấy livestream có hàng nghìn người xem, người nào cũng trúng thưởng nên tin tưởng chuyển khoản mua combo. Sau đó, họ yêu cầu đóng thêm phí để nhận tiền thưởng. Tôi chuyển tiếp, rồi bị chặn luôn, mất cả hai khoản tiền.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "tiin.vn",
+            "source_url": "https://tiin.vn/chuyen-muc/song/bay-the-cao-trung-thuong-hoanh-hanh-tren-mang-xa-hoi.html",
+            "notes": "Lời kể nguyên văn của Anh Nguyễn Văn H. (Bình Thạnh, TP.HCM) về bẫy livestream quay số trúng thưởng, do Tiin.vn phỏng vấn trích dẫn trực tiếp"
+        },
+        {
+            "raw_text": "Họ nói rất thuyết phục, trả lời tin nhắn cực nhanh. Nhưng sau khi chuyển khoản, fanpage biến mất chỉ sau vài giờ. Tôi mất hơn 2 triệu đồng mà không biết kêu ai.",
+            "scam_category": CATEGORY_HEALTH_GIFT,
+            "source": "tiin.vn",
+            "source_url": "https://tiin.vn/chuyen-muc/song/bay-the-cao-trung-thuong-hoanh-hanh-tren-mang-xa-hoi.html",
+            "notes": "Lời kể nguyên văn của Chị Trần Thị M. (TP.Vũng Tàu) về bẫy thẻ cào trúng thưởng qua fanpage giả, do Tiin.vn phỏng vấn trích dẫn trực tiếp"
         }
     ]
     print(f"      -> Nạp được {len(quotes)} mẫu kiểm chứng từ báo chí.")

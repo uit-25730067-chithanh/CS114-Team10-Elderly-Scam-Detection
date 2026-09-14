@@ -110,6 +110,7 @@ for idx, row in df.iterrows():
     VERIFIED_NEWS_DOMAINS = (
         "tuoitre.vn", "dantri.com.vn", "hvta.toaan.gov.vn", "thanhnien.vn",
         "baophapluat.vn", "tienphong.vn", "baodaklak.vn",
+        "vietnamnet.vn", "fit.uit.edu.vn", "tiin.vn",
     )
     if any(d in source_url for d in VERIFIED_NEWS_DOMAINS):
         passed += 1
