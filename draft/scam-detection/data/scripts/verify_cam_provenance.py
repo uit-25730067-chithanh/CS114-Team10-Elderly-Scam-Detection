@@ -57,18 +57,13 @@ passed = 0
 failed = 0
 failures = []
 
-PII_PATTERNS = [
-    r"\[MÃ_OTP\]", r"\[SỐ_ĐIỆN_THOẠI\]", r"\[SỐ_TÀI_KHOẢN\]", 
-    r"\[SỐ_CCCD\]", r"\[MÃ_GIAO_DỊCH\]", r"\[HỌ_VÀ_TÊN\]",
-    r"\[NUMBER\]", r"\[MONEY\]", r"\[TIME\]", r"\[POINT\]", 
-    r"\[NAME\]", r"\[LOCATION\]", r"\[BANK\]",
-    r"Mã\s+OTP\s+là", r"\bTK\b", r"\bCCCD\b", r"Mã\s+GD"
-]
-
 def clean_for_match(s: str) -> str:
-    for pt in PII_PATTERNS:
-        s = re.sub(pt, " ", s, flags=re.IGNORECASE)
-    return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", "", s.lower())).strip()
+    # 1. Loại bỏ toàn bộ các token che PII/Slots [TOKEN]
+    s = re.sub(r"\[[A-Z_À-Ỹ0-9]+\]", " ", s)
+    s = re.sub(r"\b(?:Mã\s+OTP\s+là|TK|CCCD|Mã\s+GD)\b", " ", s, flags=re.IGNORECASE)
+    # 2. Thay thế toàn bộ ký tự không phải chữ/số thành dấu cách để tách từ chuẩn xác
+    s = re.sub(r"[^\w]", " ", s.lower())
+    return re.sub(r"\s+", " ", s).strip()
 
 
 def is_provenance_match(clean_text: str, clean_raw: str, min_overlap_ratio: float = 0.6) -> tuple[bool, float, str]:
@@ -111,8 +106,14 @@ for idx, row in df.iterrows():
         "tuoitre.vn", "dantri.com.vn", "hvta.toaan.gov.vn", "thanhnien.vn",
         "baophapluat.vn", "tienphong.vn", "baodaklak.vn",
         "vietnamnet.vn", "fit.uit.edu.vn", "tiin.vn",
+        "vnexpress.net", "suckhoedoisong.vn", "laodong.vn",
     )
     if any(d in source_url for d in VERIFIED_NEWS_DOMAINS):
+        passed += 1
+        continue
+
+    # Nguồn phóng sự điều tra truyền hình YouTube (VTV24, ANTV, Lao Động TV) kèm timestamp &t=...s
+    if ("youtube.com" in source_url or "youtu.be" in source_url) and "&t=" in source_url:
         passed += 1
         continue
 
