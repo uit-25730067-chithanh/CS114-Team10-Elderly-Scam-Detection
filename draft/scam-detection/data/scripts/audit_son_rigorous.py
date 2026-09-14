@@ -159,8 +159,12 @@ def run_comprehensive_audit():
         thanh_texts = set(df_thanh["text"].dropna().apply(normalize_dedup))
 
     cam_texts = set()
+    sibling_cam = draft_dir.parent.parent.parent / "Final" / "draft" / "scam-detection" / "data" / "raw" / "staging_cam_scam.csv"
     if CAM_FILE.exists():
         df_cam = pd.read_csv(CAM_FILE)
+        cam_texts = set(df_cam["text"].dropna().apply(normalize_dedup))
+    elif sibling_cam.exists():
+        df_cam = pd.read_csv(sibling_cam)
         cam_texts = set(df_cam["text"].dropna().apply(normalize_dedup))
     else:
         import subprocess

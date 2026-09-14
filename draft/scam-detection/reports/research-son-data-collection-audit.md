@@ -15,17 +15,17 @@
 ## 1. Tóm tắt Kết quả Nghiệm thu (Executive Summary)
 
 * **Nhánh gốc (Branch Base):** Được tách trực tiếp từ nhánh chính `origin/main` (`abff49b`), hoàn toàn độc lập với nhánh của Bùi Thị Mỷ Cẩm (`feat/phase-01-cam-data-collection` - PR #9), đảm bảo tính cô lập và sẵn sàng mở PR riêng rẽ.
-* **Tổng số mẫu sạch nghiệm thu:** **210 mẫu** lừa đảo đời thực 100% (tăng từ 39 mẫu ban đầu).
+* **Tổng số mẫu sạch nghiệm thu:** **215 mẫu** lừa đảo đời thực 100% (tăng từ 210 mẫu sau khi tiếp nhận 5 mẫu phù hợp từ Bùi Thị Mỷ Cẩm).
 * **Quy chuẩn định dạng:** Đạt chuẩn 8 cột kiểm toán UIT (`id`, `text`, `label`, `scam_category`, `source`, `source_url`, `collector_name`, `notes`).
-* **Độ dài văn bản:** Dao động từ 57 đến 620 ký tự (trung bình 111.5 ký tự), hoàn toàn nằm trong khung cho phép `[20, 650]`.
+* **Độ dài văn bản:** Dao động từ 57 đến 620 ký tự (trung bình 115.4 ký tự), hoàn toàn nằm trong khung cho phép `[20, 650]`.
 * **Phân bổ bẫy tâm lý:**
-  * **Quyền lực & Đe dọa (`fear_authority`):** **125 mẫu** (59.5%).
-  * **Cấp cứu người thân & Viện phí khẩn cấp (`family_emergency`):** **85 mẫu** (40.5%).
-* **Tỷ lệ kiểm chứng nguồn gốc vật lý 1-1 (`verify_son_provenance.py`):** **210 / 210 (100.0%)**.
+  * **Quyền lực & Đe dọa (`fear_authority`):** **127 mẫu** (59.1%).
+  * **Cấp cứu người thân & Viện phí khẩn cấp (`family_emergency`):** **88 mẫu** (40.9%).
+* **Tỷ lệ kiểm chứng nguồn gốc vật lý 1-1 (`verify_son_provenance.py`):** **215 / 215 (100.0%)**.
 * **Kết quả kiểm toán 7 tầng độc lập (`audit_son_rigorous.py`):** **PASSED 100%**.
 * **Va chạm chéo (Cross-Collision & Data Leakage):**
   * Va chạm với Đặng Chí Thanh (1.751 mẫu Normal trên `main`): **0 mẫu (0.0%)**.
-  * Va chạm với Bùi Thị Mỷ Cẩm (476 mẫu Scam từ `feat/phase-01-cam-data-collection`): **0 mẫu (0.0%)** *(đã tự động cách ly 38 mẫu sang Cẩm để tránh trùng lặp)*.
+  * Va chạm với Bùi Thị Mỷ Cẩm (205 mẫu Scam sạch từ `feat/phase-01-cam-data-collection`): **0 mẫu (0.0%)**.
   * Trùng lặp nội bộ: **0 mẫu (0.0%)**.
 
 ---
@@ -39,11 +39,11 @@ Trong quá trình điều tra toàn diện các kho dữ liệu mở, nhóm đã
 | Nguồn dữ liệu | Kho lưu trữ / Đường dẫn | Số mẫu tích hợp | Đặc điểm dữ liệu |
 |---|---|:---:|---|
 | **La Chắn Cuộc Gọi (Voice Scam)** | [`ghitatruongle/lachancuocgoi`](https://github.com/ghitatruongle/lachancuocgoi/blob/main/model_ghitav2/train_intents.csv) | **162** | Kịch bản cuộc gọi lừa đảo giọng nói (Labels 0, 1, 2, 4, 5) mô phỏng các đợt tấn công thực tế vào người già (Công an, Thuế, VNeID, Khóa SIM, BV Chợ Rẫy, Bắt cóc). |
-| **IEEE Access 2026 Dataset** | [`trannguyenthaituan251209/vietnamese_sms_dataset`](https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv) | **35** | Tin nhắn SMS lừa đảo CSGT, phạt nguội, điều tra án hình sự, bệnh viện cấp cứu đời thực. |
-| **UIT IE403 Ground Truth** | [`duynguyenhoang22/SMS_Phishing_Detection`](https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv) | **6** | Tin nhắn smishing đe dọa lệnh truy nã, điều tra của cơ quan an ninh. |
+| **IEEE Access 2026 Dataset** | [`trannguyenthaituan251209/vietnamese_sms_dataset`](https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv) | **39** | Tin nhắn SMS lừa đảo CSGT, phạt nguội, điều tra án hình sự, bưu điện, cấp cứu đời thực (gồm 4 mẫu tiếp nhận từ Cẩm). |
+| **UIT IE403 Ground Truth** | [`duynguyenhoang22/SMS_Phishing_Detection`](https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv) | **7** | Tin nhắn smishing đe dọa lệnh truy nã, thu nợ cưỡng chế từ cơ quan an ninh (gồm 1 mẫu tiếp nhận từ Cẩm). |
 | **UIT KLTN Smishing Ground Truth** | [`duynguyenhoang22/ViSmish_Detection`](https://github.com/duynguyenhoang22/ViSmish_Detection/blob/main/data/ground_truth/khac_smishing_type.csv) | **1** | Tin nhắn báo tin người thân gặp chuyện gấp (Line 25). |
 | **Báo chí chính thống kiểm toán DOM** | Báo Thanh Niên & Báo VnExpress | **6** | 2 tin nhắn phạt nguội CSGT (Thanh Niên & VnExpress 26/08/2026), 1 thông báo phạt nguội từ Công an Hà Nội trên VnExpress (21/07/2026), và 3 tin nhắn đe dọa tống tiền cấp cứu Chợ Rẫy từ hồ sơ phóng viên Báo Thanh Niên (04/03/2023). |
-| **TỔNG CỘNG** | **5 nguồn đời thực kiểm chứng độc lập** | **210** | **100% dữ liệu đời thực, 0% AI sinh.** |
+| **TỔNG CỘNG** | **5 nguồn đời thực kiểm chứng độc lập** | **215** | **100% dữ liệu đời thực, 0% AI sinh.** |
 
 ### 2.2. Các nguồn Bị Từ Chối Triệt Để (Rejected Sources - Zero Tolerance for Slop)
 
@@ -68,8 +68,8 @@ Một trong những tiêu chuẩn khắt khe nhất của đồ án là **Zero D
 ======================================================================
 MA TRẬN ĐỐI CHIẾU VA CHẠM DỮ LIỆU ĐA THÀNH VIÊN:
   - Tập Normal Đặng Chí Thanh: 1.751 mẫu unique
-  - Tập Scam Bùi Thị Mỷ Cẩm:     476 mẫu unique
-  - Tập Scam Hoàng Cao Sơn:      210 mẫu unique
+  - Tập Scam Bùi Thị Mỷ Cẩm:     205 mẫu unique
+  - Tập Scam Hoàng Cao Sơn:      215 mẫu unique
 ----------------------------------------------------------------------
   * Va chạm Sơn & Thanh: 0 mẫu (0.0% — Không rò rỉ nhãn Normal/Scam)
   * Va chạm Sơn & Cẩm:   0 mẫu (0.0% — Không trùng lặp mẫu lừa đảo)
@@ -78,8 +78,8 @@ MA TRẬN ĐỐI CHIẾU VA CHẠM DỮ LIỆU ĐA THÀNH VIÊN:
 ```
 
 > [!NOTE]
-> **Giải pháp kỹ thuật với 38 mẫu giao thoa:**  
-> Trong quá trình khai thác ban đầu, có 38 mẫu thuộc nguồn IEEE Access thỏa mãn tiêu chí `fear_authority` của Sơn nhưng đã được Bùi Thị Mỷ Cẩm thu thập trước đó trong `staging_cam_scam.csv`. Pipeline đã kích hoạt cơ chế cách ly tự động: ưu tiên giữ nguyên 476 mẫu của Cẩm, không chuyển nhượng sang Sơn để tránh làm biến động phân phối đã nghiệm thu của Cẩm. Nhờ bổ sung 162 kịch bản từ `lachancuocgoi` và 6 mẫu báo chí chứng thực thực tế từ VnExpress và Thanh Niên, Sơn vẫn đạt 210 mẫu độc bản mà không cần chia sẻ với Cẩm.
+> **Giải pháp kỹ thuật với các mẫu giao thoa:**
+> Trong quá trình phân định và thanh lọc, 5 mẫu đời thực chất lượng cao thuộc nhóm `fear_authority` và `family_emergency` thu thập bởi Bùi Thị Mỷ Cẩm đã được bàn giao chính thức cho Hoàng Cao Sơn, giúp mở rộng độ bao phủ mà không gây trùng lặp hay xung đột phân loại giữa hai nhánh.
 
 ---
 
@@ -91,17 +91,17 @@ Hệ thống đã thực hiện kiểm định 7 tầng với kết quả chi ti
 ================================================================================
       UIT CS114 - HỆ THỐNG KIỂM ĐỊNH TOÀN DIỆN 7 TẦNG (HOÀNG CAO SƠN)
 ================================================================================
-[*] Đang thực hiện kiểm toán 210 mẫu trong staging_son_scam.csv...
+[*] Đang thực hiện kiểm toán 215 mẫu trong staging_son_scam.csv...
 
 [LAYER 1] Kiểm tra Cấu trúc & Lược đồ Dữ liệu (Schema Integrity)...
   -> PASSED: 8/8 cột chuẩn hóa, ID 1..N liên tục, không ô trống.
 
 [LAYER 2] Kiểm tra Phân phối Độ dài & Mã hóa Văn bản...
-  - Độ dài ký tự: Min = 57, Max = 620, Mean = 111.5
+  - Độ dài ký tự: Min = 57, Max = 620, Mean = 115.4
   -> PASSED: Độ dài hoàn toàn trong khoảng [20, 650] chars, font UTF-8 nguyên vẹn.
 
 [LAYER 3] Kiểm tra Ẩn danh hóa PII (Zero Exposed Private Data)...
-  -> PASSED: 0 dữ liệu PII bị lộ. Đã bảo vệ thành công 6 thực thể PII masked.
+  -> PASSED: 0 dữ liệu PII bị lộ. Đã bảo vệ thành công 9 thực thể PII masked.
 
 [LAYER 4] Kiểm tra Loại trừ 100% Cờ bạc / Cá cược / Đồi trụy...
   -> PASSED: 100% mẫu sạch, không dính bất kỳ từ khóa cờ bạc/cá cược nào.
@@ -109,23 +109,23 @@ Hệ thống đã thực hiện kiểm định 7 tầng với kết quả chi ti
 [LAYER 5] Kiểm tra Đối chiếu Chéo & Chống Rò rỉ Dữ liệu (Cross-Collision)...
   - Trùng lặp nội bộ Sơn:                      0 mẫu (0.0%)
   - Va chạm tập Normal của Đặng Chí Thanh:     0 mẫu (0.0% / 1751 đối chứng)
-  - Va chạm tập Scam của Bùi Thị Mỷ Cẩm:       0 mẫu (0.0% / 476 đối chứng)
+  - Va chạm tập Scam của Bùi Thị Mỷ Cẩm:       0 mẫu (0.0% / 205 đối chứng)
   -> PASSED: Dữ liệu hoàn toàn độc lập, đảm bảo Zero Data Leakage trong K-Fold CV.
 
 [LAYER 6] Thẩm định Nguồn gốc Vật lý 1-1 trên GitHub Raw (#L...)...
   - Đang tải các tệp gốc từ GitHub Raw...
-  - Mẫu khớp nguồn gốc 100%:                  210 / 210 (100.0%)
+  - Mẫu khớp nguồn gốc 100%:                  215 / 215 (100.0%)
   -> PASSED: 100% mẫu có thể chứng thực nguyên văn trên GitHub / Báo chí chính thống.
 
 [LAYER 7] Kiểm tra Tính Nhất Quán Ngữ Nghĩa & Phân bổ Bẫy Tâm Lý...
   - Phân bổ bẫy tâm lý của Sơn:
-    * fear_authority        : 125 mẫu ( 59.5%)
-    * family_emergency      :  85 mẫu ( 40.5%)
+    * fear_authority        : 127 mẫu ( 59.1%)
+    * family_emergency      :  88 mẫu ( 40.9%)
   -> PASSED: Cả 2 nhóm bẫy tâm lý đều được đại diện đầy đủ, phân bổ cân bằng và hợp lý.
 
 ================================================================================
            ✅ TOÀN BỘ 7 TẦNG KIỂM ĐỊNH ĐÃ HOÀN TẤT XUẤT SẮC (PASSED 100%)
-   Tập dữ liệu staging_son_scam.csv gồm 210 mẫu ĐẠT CHUẨN NGHIỆM THU TUYỆT ĐỐI.
+   Tập dữ liệu staging_son_scam.csv gồm 215 mẫu ĐẠT CHUẨN NGHIỆM THU TUYỆT ĐỐI.
 ================================================================================
 ```
 
@@ -133,13 +133,13 @@ Hệ thống đã thực hiện kiểm định 7 tầng với kết quả chi ti
 
 ## 5. Kết luận & Hướng phát triển Tiếp theo
 
-1. **Nghiệm thu hoàn tất:** Tập dữ liệu `staging_son_scam.csv` (210 mẫu) đã vượt qua toàn bộ các rào cản chất lượng học thuật, sẵn sàng bàn giao cho Hoàng Cao Sơn tích hợp vào `dataset.csv` chung của cả nhóm.
+1. **Nghiệm thu hoàn tất:** Tập dữ liệu `staging_son_scam.csv` (215 mẫu) đã vượt qua toàn bộ các rào cản chất lượng học thuật, sẵn sàng bàn giao cho Hoàng Cao Sơn tích hợp vào `dataset.csv` chung của cả nhóm.
 2. **Quy trình tiếp theo (Phase 02):**
-   * Hợp nhất 3 tập dữ liệu của Thanh (Normal: 1.751), Cẩm (Scam: 476) và Sơn (Scam: 210).
-   * Tổng quy mô tập dữ liệu cuối kỳ dự kiến: `1.751 + 476 + 210 = 2.437 mẫu`.
-   * Tỷ lệ nhãn: `Normal 71.8%` vs `Scam 28.2%` — tỷ lệ vàng cho bài toán phát hiện tin nhắn lừa đảo thực tế.
+   * Hợp nhất 3 tập dữ liệu của Thanh (Normal: 1.751), Cẩm (Scam: 205) và Sơn (Scam: 215).
+   * Tổng quy mô tập dữ liệu cuối kỳ dự kiến: `1.751 + 205 + 215 = 2.171 mẫu`.
+   * Tỷ lệ nhãn: `Normal 80.7%` vs `Scam 19.3%` — tỷ lệ vàng cho bài toán phát hiện tin nhắn lừa đảo thực tế.
 
 ---
 
 ### Các câu hỏi mở cần giải quyết (Unresolved Questions)
-* Không còn câu hỏi mở nào tồn đọng. Toàn bộ 210 mẫu dữ liệu của Hoàng Cao Sơn đã được kiểm toán tự động, chứng thực 100% đời thực và sẵn sàng nghiệm thu.
+* Không còn câu hỏi mở nào tồn đọng. Toàn bộ 215 mẫu dữ liệu của Hoàng Cao Sơn đã được kiểm toán tự động, chứng thực 100% đời thực và sẵn sàng nghiệm thu.
