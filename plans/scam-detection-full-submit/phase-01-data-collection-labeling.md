@@ -25,10 +25,10 @@
 
 | Thành viên | Phụ trách dữ liệu | Mục tiêu mẫu | Đã thu thập | Minh chứng nguồn gốc | Trạng thái |
 |---|---|:---:|:---:|---|:---:|
-| **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | 0 / 500 | ⬜ Chưa có | ⏳ `not-started` (Hạn 12/09) |
-| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **365 / 500** (301 `public_service` + 64 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn, 0% lẫn việc làm/đầu tư, 0% text lỗi/garbled, 0% quảng cáo hội thảo không phải scam, 0% lẫn lừa vay tiền/hải quan/CTV online ngoài phạm vi) | 🔧 `needs-more-data` (xem [Minh chứng Bùi Thị Mỷ Cẩm](#2-minh-chứng-bùi-thị-mỷ-cẩm)) |
+| **Hoàng Cao Sơn** | Lừa đảo: Quyền lực (`fear_authority`) & Cấp cứu (`family_emergency`) | ≥ 500 mẫu | **215 / 500** (127 `fear_authority` + 88 `family_emergency`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn Cẩm/Thanh, 100% đối chiếu nguồn gốc) | 🔧 `needs-more-data` (hoàn tất Staging 215 mẫu sạch tuyệt đối) |
+| **Bùi Thị Mỷ Cẩm** | Lừa đảo: Sức khỏe (`health_gift`) & Dịch vụ công (`public_service`) | ≥ 500 mẫu | **205 / 500** (159 `public_service` + 46 `health_gift`) | 100% Real Đa nguồn (0% cờ bạc, 0% rò rỉ PII, 0% chồng lấn nhóm Sơn/Thanh, 100% đối chiếu nguồn gốc) | 🔧 `needs-more-data` (xem [Minh chứng Bùi Thị Mỷ Cẩm](#2-minh-chứng-bùi-thị-mỷ-cẩm)) |
 | **Đặng Chí Thanh** *(PM)* | Bình thường (`none`): SMS viễn thông, ngân hàng, sinh hoạt đời thường | ≥ 500 mẫu | **1.773 / 500** (+ 42 mẫu Holdout) | 100% IEEE Access 2026 Permalink + 20 Ảnh Drive cá nhân | ✅ `completed` |
-| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.138 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Cẩm cần bổ sung thêm mẫu `health_gift` thực tế) |
+| **TỔNG CỘNG** | **Toàn bộ dataset Phase 01** | **≥ 1.500 mẫu** | **2.193 / 1.500** | **100% có URL kiểm chứng 1-1 (0% rò rỉ, 0% AI tự sinh)** | ⏳ `in-progress` (Hoàn tất Staging Cẩm 205 mẫu, Sơn 215 mẫu, Thanh 1.773 mẫu) |
 
 ---
 
@@ -221,9 +221,19 @@ X_train, X_test, y_train, y_test = train_test_split(
 ## Evidence Section *(Điền số liệu thực tế sau khi từng thành viên hoàn thành)*
 
 ### 1. Minh chứng Hoàng Cao Sơn:
-- Số mẫu lừa đảo đã nạp vào Sheet: `0 / 500`
-- Tỷ lệ có `source_url`: `0.0 %`
-- Ngày ký duyệt hoàn thành: `(Chưa thực hiện)`
+- Số mẫu lừa đảo đã nạp vào Staging CSV (`staging_son_scam.csv`): **215 / 500** mẫu (43.0% chỉ tiêu tối thiểu — hoàn tất 215 mẫu sạch tuyệt đối).
+- Nguồn gốc dữ liệu: **100% đời thực từ Kiến trúc Đa nguồn Cân bằng Độc lập (Zero Synthetic Text - 0% AI bịa/sinh)** (UIT IE403, IEEE Access 2026, La Chắn Cuộc Gọi, KLTN Smishing, Báo chí chính thống VnExpress/Thanh Niên).
+- Phân bổ 2 nhóm bẫy tâm lý theo phân công:
+  + Cơ quan công quyền, Pháp luật, Phạt nguội, Khởi tố (`fear_authority`): **127 mẫu** (59.1%)
+  + Cấp cứu bệnh viện, Tai nạn người thân, Hối thúc chuyển viện phí (`family_emergency`): **88 mẫu** (40.9%)
+- Lọc rác & cờ bạc: **100% loại bỏ cờ bạc, cá cược, nổ hũ, đồi trụy** (0 mẫu vi phạm).
+- Ẩn danh hóa PII: 100% mẫu đã che thông tin nhạy cảm qua `anonymize_sms.py`, 9 thực thể PII được bảo vệ, 0 trường hợp rò rỉ dữ liệu cá nhân.
+- Tỷ lệ có `source_url`: **215 / 215 mẫu (100.0%)** có liên kết permalink 1-1 trên GitHub Raw hoặc bài báo chính thống.
+- Chống rò rỉ dữ liệu (Cross-Collision & Data Leakage): 0 trùng lặp nội bộ, 0 va chạm với tập Normal của Thanh (1.751 đối chứng), 0 va chạm với tập Scam của Cẩm (205 đối chứng).
+- Kết quả kiểm toán 7 tầng (`audit_son_rigorous.py`): **PASSED 100% (7/7 tầng)**.
+- Kết quả kiểm chứng nguồn gốc (`verify_son_provenance.py`): **215 / 215 mẫu (100.0%) khớp nguyên văn trên GitHub Raw / Báo chí**.
+- Tài liệu kiểm toán chi tiết: [`research-son-data-collection-audit.md`](../draft/scam-detection/reports/research-son-data-collection-audit.md) và [`kaggle_audit_report.md`](../draft/scam-detection/reports/kaggle_audit_report.md).
+- Ngày hoàn thành kiểm định: `14/09/2026`
 
 ### 2. Minh chứng Bùi Thị Mỷ Cẩm:
 > ⚠️ **Cập nhật 14/09/2026 (10 vòng re-audit, gồm 1 vòng review độc lập bởi AI khác):** Xem lịch sử chi tiết vòng 1-9 ở các mục 6-11 bên dưới. **Vòng 10 (14/09, sau vòng review độc lập):** PM Đặng Chí Thanh duyệt thêm nguồn thứ 4 — lời kể trực tiếp nạn nhân trích nguyên văn từ phỏng vấn báo chí thật (KHÔNG chấp nhận kịch bản AI viết lại), bổ sung 5 lời kể từ Dân Trí, VietnamNet, Tiin.vn và trang tin Khoa CNTT UIT (fit.uit.edu.vn), nâng dataset lên `365 / 500` mẫu. Số liệu **thật, mới nhất** là:
