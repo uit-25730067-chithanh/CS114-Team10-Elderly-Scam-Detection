@@ -77,6 +77,6 @@ Nhóm từ khóa kiểm tra thực nghiệm (Regex Match):
    * Các tập dữ liệu trên Kaggle gắn nhãn "SMS tiếng Việt" hiện nay chỉ giải quyết bài toán phát hiện **tin nhắn rác thương mại (Spam/Ham)** hoặc **phishing link ngân hàng**.
    * Dạng thức lừa đảo nhắm vào người già (`fear_authority` - dọa bắt giam/rửa tiền/ma túy và `family_emergency` - con cấp cứu) là **tội phạm lừa đảo công nghệ cao có kịch bản thao túng tâm lý sâu**. Kẻ gian không gửi spam hàng loạt bằng máy móc mà sử dụng kịch bản đe dọa trực tiếp (qua SMS, Zalo, gọi điện). Vì vậy, các bộ lọc spam thông thường không thu thập được dạng dữ liệu này.
 
-2. **Khẳng định giá trị của Bộ 500 mẫu hiện tại (`staging_son_scam.csv`):**
-   * Tập dữ liệu 500 mẫu mà anh Sơn đang nắm giữ (được bóc tách từ các chuyên án điều tra của *Dân Trí, Tuổi Trẻ, VnExpress, VietNamNet, Thanh Niên, Báo Công An...* và các mẫu SMS chuẩn học thuật) là **nguồn dữ liệu chân thực, hiếm có và đạt chuẩn cao nhất cho bài toán người cao tuổi**.
+2. **Khẳng định giá trị của Bộ 215 mẫu lừa đảo đời thực hiện tại (`staging_son_scam.csv`):**
+   * Tập dữ liệu 215 mẫu lừa đảo đời thực mà anh Sơn đang nắm giữ (được bóc tách từ các chuyên án điều tra của *Dân Trí, Tuổi Trẻ, VnExpress, VietNamNet, Thanh Niên, Báo Công An...* và các mẫu SMS chuẩn học thuật) là **nguồn dữ liệu chân thực, hiếm có và đạt chuẩn cao nhất cho bài toán người cao tuổi**.
    * Dữ liệu hoàn toàn độc lập (0% trùng với Cẩm, 0% trùng với Thanh), đạt 100% về PII Masking và loại bỏ sạch sẽ các khuyến cáo của cơ quan chức năng để tránh mô hình học sai lệch đặc trưng.
