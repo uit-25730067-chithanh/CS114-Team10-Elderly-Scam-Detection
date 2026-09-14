@@ -15,7 +15,7 @@
 ## 1. Tóm tắt Kết quả Nghiệm thu (Executive Summary)
 
 * **Nhánh gốc (Branch Base):** Được tách trực tiếp từ nhánh chính `origin/main` (`abff49b`), hoàn toàn độc lập với nhánh của Bùi Thị Mỷ Cẩm (`feat/phase-01-cam-data-collection` - PR #9), đảm bảo tính cô lập và sẵn sàng mở PR riêng rẽ.
-* **Tổng số mẫu sạch nghiệm thu:** **215 mẫu** lừa đảo đời thực 100% (tăng từ 210 mẫu sau khi tiếp nhận 5 mẫu phù hợp từ Bùi Thị Mỷ Cẩm).
+* **Tổng số mẫu sạch nghiệm thu:** **215 mẫu** lừa đảo đời thực 100% (tăng từ 210 mẫu sau khi dỡ bỏ cách ly trùng lặp chéo và khôi phục 5 mẫu hợp lệ từ IEEE Access 2026 và UIT IE403).
 * **Quy chuẩn định dạng:** Đạt chuẩn 8 cột kiểm toán UIT (`id`, `text`, `label`, `scam_category`, `source`, `source_url`, `collector_name`, `notes`).
 * **Độ dài văn bản:** Dao động từ 57 đến 620 ký tự (trung bình 115.4 ký tự), hoàn toàn nằm trong khung cho phép `[20, 650]`.
 * **Phân bổ bẫy tâm lý:**
@@ -39,8 +39,8 @@ Trong quá trình điều tra toàn diện các kho dữ liệu mở, nhóm đã
 | Nguồn dữ liệu | Kho lưu trữ / Đường dẫn | Số mẫu tích hợp | Đặc điểm dữ liệu |
 |---|---|:---:|---|
 | **La Chắn Cuộc Gọi (Voice Scam)** | [`ghitatruongle/lachancuocgoi`](https://github.com/ghitatruongle/lachancuocgoi/blob/main/model_ghitav2/train_intents.csv) | **162** | Kịch bản cuộc gọi lừa đảo giọng nói (Labels 0, 1, 2, 4, 5) mô phỏng các đợt tấn công thực tế vào người già (Công an, Thuế, VNeID, Khóa SIM, BV Chợ Rẫy, Bắt cóc). |
-| **IEEE Access 2026 Dataset** | [`trannguyenthaituan251209/vietnamese_sms_dataset`](https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv) | **39** | Tin nhắn SMS lừa đảo CSGT, phạt nguội, điều tra án hình sự, bưu điện, cấp cứu đời thực (gồm 4 mẫu tiếp nhận từ Cẩm). |
-| **UIT IE403 Ground Truth** | [`duynguyenhoang22/SMS_Phishing_Detection`](https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv) | **7** | Tin nhắn smishing đe dọa lệnh truy nã, thu nợ cưỡng chế từ cơ quan an ninh (gồm 1 mẫu tiếp nhận từ Cẩm). |
+| **IEEE Access 2026 Dataset** | [`trannguyenthaituan251209/vietnamese_sms_dataset`](https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset/blob/main/full_dataset.csv) | **39** | Tin nhắn SMS lừa đảo CSGT, phạt nguội, điều tra án hình sự, bưu điện, cấp cứu đời thực (gồm 4 mẫu khôi phục sau khi dỡ bỏ cách ly trùng lặp). |
+| **UIT IE403 Ground Truth** | [`duynguyenhoang22/SMS_Phishing_Detection`](https://github.com/duynguyenhoang22/SMS_Phishing_Detection/blob/main/data/dataset_label_1.csv) | **7** | Tin nhắn smishing đe dọa lệnh truy nã, thu nợ cưỡng chế từ cơ quan an ninh (gồm 1 mẫu khôi phục sau khi dỡ bỏ cách ly trùng lặp). |
 | **UIT KLTN Smishing Ground Truth** | [`duynguyenhoang22/ViSmish_Detection`](https://github.com/duynguyenhoang22/ViSmish_Detection/blob/main/data/ground_truth/khac_smishing_type.csv) | **1** | Tin nhắn báo tin người thân gặp chuyện gấp (Line 25). |
 | **Báo chí chính thống kiểm toán DOM** | Báo Thanh Niên & Báo VnExpress | **6** | 2 tin nhắn phạt nguội CSGT (Thanh Niên & VnExpress 26/08/2026), 1 thông báo phạt nguội từ Công an Hà Nội trên VnExpress (21/07/2026), và 3 tin nhắn đe dọa tống tiền cấp cứu Chợ Rẫy từ hồ sơ phóng viên Báo Thanh Niên (04/03/2023). |
 | **TỔNG CỘNG** | **5 nguồn đời thực kiểm chứng độc lập** | **215** | **100% dữ liệu đời thực, 0% AI sinh.** |
@@ -78,8 +78,8 @@ MA TRẬN ĐỐI CHIẾU VA CHẠM DỮ LIỆU ĐA THÀNH VIÊN:
 ```
 
 > [!NOTE]
-> **Giải pháp kỹ thuật với các mẫu giao thoa:**
-> Trong quá trình phân định và thanh lọc, 5 mẫu đời thực chất lượng cao thuộc nhóm `fear_authority` và `family_emergency` thu thập bởi Bùi Thị Mỷ Cẩm đã được bàn giao chính thức cho Hoàng Cao Sơn, giúp mở rộng độ bao phủ mà không gây trùng lặp hay xung đột phân loại giữa hai nhánh.
+> **Giải pháp kỹ thuật với các mẫu giao thoa (Deduplication Resolution):**
+> Trong đợt khai thác ban đầu, một số mẫu thuộc IEEE Access và UIT IE403 thỏa mãn tiêu chí của Sơn nhưng đã bị cách ly tạm thời để tránh trùng lặp chéo với tập dữ liệu của Cẩm. Khi nhánh của Cẩm tinh lọc lại phạm vi (chỉ tập trung vào `public_service` và `health_gift`) và loại bỏ các mẫu không đúng phân công, cơ chế cách ly trùng lặp giữa hai nhánh được dỡ bỏ. Sơn đã khôi phục lại 5 mẫu đời thực hợp lệ này vào tập dữ liệu theo đúng phân công bẫy tâm lý `fear_authority` và `family_emergency`.
 
 ---
 
