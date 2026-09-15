@@ -59,13 +59,14 @@ X_tr, X_val, y_tr, y_val = train_test_split(
 ```python
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
 
 nb_model = MultinomialNB(alpha=1.0)
-nb_model.fit(X_train, y_train)
+nb_model.fit(X_tr, y_tr)  # train trên 85% của X_train (không dùng X_test)
 
-# Evaluate on validation set
+# Evaluate trên validation set
 y_val_pred = nb_model.predict(X_val)
-print(classification_report(y_val, y_val_pred, target_names=['Normal', 'Scam']))
+print(classification_report(y_val, y_val_pred, target_names=['Bình thường', 'Lừa đảo']))
 ```
 
 ### Step 3 — Hyperparameter Tuning (alpha)
