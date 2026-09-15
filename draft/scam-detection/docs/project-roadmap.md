@@ -18,20 +18,20 @@ gantt
     axisFormat  %d/%m
     tickInterval 2d
 
-    section Sprint 1: Hạ tầng & Khóa Data (06/09 – 12/09)
+    section Sprint 1: Hạ tầng & Khóa Data (06/09 – 14/09)
     Setup repo, venv & verify_final (Thanh)        :done, s1_1, 2026-09-06, 2026-09-09
     Thu thập 1.773 mẫu bình thường (Thanh)         :done, s1_2, 2026-09-06, 2026-09-10
-    Thu thập 1.000 mẫu lừa đảo (Sơn & Cẩm)         :active, s1_3, 2026-09-09, 2026-09-12
-    Khóa dataset.csv & chia 80/20 (Thanh)          :crit, s1_4, 2026-09-12, 1d
+    Thu thập 420 mẫu lừa đảo (Sơn & Cẩm)           :done, s1_3, 2026-09-09, 2026-09-14
+    Khóa dataset.csv 2.193 mẫu & chia 80/20 (Thanh):done, s1_4, 2026-09-14, 2026-09-15
 
-    section Sprint 2: Song song NLP & ML (13/09 – 18/09)
-    Tiền xử lý NLP tiếng Việt (Thanh)              :s2_1, 2026-09-13, 2026-09-14
-    EDA & Trích xuất TF-IDF (Thanh)                :s2_2, 2026-09-14, 2026-09-15
-    Naive Bayes Baseline (Cẩm)                     :s2_3, 2026-09-14, 2026-09-15
-    Random Forest & Hypertuning (Sơn)              :s2_4, 2026-09-15, 2026-09-17
-    XGBoost & SVM Linear/RBF (Cẩm)                 :s2_5, 2026-09-15, 2026-09-17
-    Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-15, 2026-09-17
-    Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-14, 2026-09-18
+    section Sprint 2: Song song NLP & ML (15/09 – 18/09)
+    Tiền xử lý NLP tiếng Việt (Thanh)              :active, s2_1, 2026-09-15, 2026-09-16
+    EDA & Trích xuất TF-IDF (Thanh)                :s2_2, 2026-09-16, 2026-09-17
+    Naive Bayes Baseline (Cẩm)                     :s2_3, 2026-09-15, 2026-09-16
+    Random Forest & Hypertuning (Sơn)              :s2_4, 2026-09-16, 2026-09-17
+    XGBoost & SVM Linear/RBF (Cẩm)                 :s2_5, 2026-09-16, 2026-09-17
+    Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-16, 2026-09-18
+    Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-15, 2026-09-18
 
     section Sprint 3: Đánh giá, PPT & Diễn tập (19/09 – 22/09)
     Đánh giá tổng hợp & XAI SHAP (Thanh & Cẩm)     :s3_1, 2026-09-18, 2026-09-19
@@ -47,72 +47,74 @@ gantt
 
 ---
 
-## 🏃 Sprint 1 — 06/09 → 12/09 (Khóa Hạ tầng & Dữ liệu)
+## 🏃 Sprint 1 — 06/09 → 14/09 (Khóa Hạ tầng & Dữ liệu)
 
-> **Mục tiêu:** Setup môi trường, hoàn tất thu thập ≥1.500 mẫu tiếng Việt, chạy `data_validation.py` PASSED và đóng băng `dataset.csv`.
+> **Mục tiêu:** Setup môi trường, hoàn tất thu thập ≥1.500 mẫu tiếng Việt, chạy `data_validation.py` PASSED và đóng băng `dataset.csv` 2.193 mẫu thực tế.
 
 ### Thanh (PM & Data Lead)
 | Task | Trạng thái |
 |------|:---:|
 | Setup repo, venv, requirements.txt, verify_final.py | ✅ Done (Phase 00) |
 | `src/utils/helpers.py`: constants, set_seeds(), random_state=42 | ✅ Done (Phase 00) |
-| Thu thập 1.773 mẫu bình thường, ẩn danh PII 100%, 42 mẫu Holdout Test | ✅ Done (Phase 01) |
-| Hỗ trợ review schema dữ liệu Google Sheet cho Sơn & Cẩm | ⏳ Đang thực hiện |
-| Khóa toàn bộ dữ liệu 23:59 ngày 12/09, chạy kiểm định và chia Train/Test 80/20 | 🔲 Chờ đồng bộ |
+| Thu thập 1.773 mẫu bình thường, ẩn danh PII 100%, 50 mẫu Holdout Test | ✅ Done (Phase 01) |
+| Hỗ trợ review schema và đối soát dữ liệu cho Sơn & Cẩm | ✅ Done |
+| Hợp nhất dữ liệu (2.193 mẫu), chạy kiểm định và khóa `dataset.csv` | ✅ Done |
 
 ### Sơn (Data Collection Lead)
 | Task | Trạng thái |
 |------|:---:|
-| Lập Google Sheet phân loại 4 nhóm bẫy tâm lý theo chuẩn kiểm toán | ⏳ Đang thực hiện |
-| Thu thập ≥500 mẫu lừa đảo (`fear_authority` và `family_emergency`) | ⏳ Đang thực hiện (Hạn 12/09) |
-| Export dữ liệu và nộp file CSV để merge vào pipeline | 🔲 Chờ hoàn thành |
+| Lập quy chuẩn phân loại 4 nhóm bẫy tâm lý theo chuẩn kiểm toán | ✅ Done |
+| Thu thập 215 mẫu lừa đảo (`fear_authority` và `family_emergency`) | ✅ Done (PR #10 merged) |
+| Export dữ liệu và vượt qua 7 tầng kiểm toán `audit_son_rigorous.py` | ✅ Done |
 
 ### Cẩm (Modeling Engineer)
 | Task | Trạng thái |
 |------|:---:|
 | Setup venv cá nhân, cài đặt thư viện ML | ✅ Done |
-| Thu thập ≥500 mẫu lừa đảo (`health_gift` và `public_service`) | ⏳ Đang thực hiện (Hạn 12/09) |
-| Export dữ liệu và nộp file CSV để merge vào pipeline | 🔲 Chờ hoàn thành |
+| Thu thập 205 mẫu lừa đảo (`health_gift` và `public_service`) | ✅ Done (PR #9 merged) |
+| Export dữ liệu và vượt qua 10 vòng kiểm toán `audit_cam_rigorous.py` | ✅ Done |
 
 ---
 
-## 🏃 Sprint 2 — 13/09 → 18/09 (Song song NLP & Huấn luyện Mô hình)
+## 🏃 Sprint 2 — 15/09 → 18/09 (Song song NLP & Huấn luyện Mô hình)
 
 > **Mục tiêu:** Pipeline tiền xử lý hoàn tất, trích xuất TF-IDF sẵn sàng, huấn luyện đồng thời 4 mô hình (NB, RF, XGBoost, SVM), dựng khung Demo UI Streamlit, viết xong Báo cáo Word Chương 1–3.
 
 ### Thanh (Data & NLP Lead)
 | Task | Trạng thái |
 |------|:---:|
-| `src/preprocessing/text_cleaner.py`: Unicode NFC, teencode mapper, xóa rác | 🔲 (13/09) |
-| `src/preprocessing/tokenizer.py` (pyvi / underthesea) + stopwords | 🔲 (13/09) |
-| `src/preprocessing/pipeline.py` + trích xuất đặc trưng phụ (URL, SĐT, cấp cứu) | 🔲 (13/09) |
-| `notebooks/02_eda.ipynb`: Phân phối nhãn, n-grams, word cloud, độ dài | 🔲 (14/09) |
-| Lưu trữ `models/vectorizer.pkl` và các ma trận đặc trưng `data/processed/` | 🔲 (14/09) |
+| `src/preprocessing/text_cleaner.py`: Unicode NFC, teencode mapper, xóa rác | 🚀 Đang làm (15/09) |
+| `src/preprocessing/tokenizer.py` (pyvi) + stopwords | ⏳ (15/09) |
+| `src/preprocessing/pipeline.py` + trích xuất đặc trưng phụ (URL, SĐT, cấp cứu) | ⏳ (15/09 – 16/09) |
+| `notebooks/01_preprocessing.ipynb`: Thực nghiệm pipeline và xuất CSV sạch | ⏳ (16/09) |
+| `notebooks/02_eda.ipynb`: Phân phối nhãn, n-grams, word cloud, độ dài | ⏳ (16/09) |
+| Lưu trữ `models/vectorizer.pkl` và các ma trận đặc trưng `data/processed/` | ⏳ (16/09 – 17/09) |
 
 ### Cẩm (Modeling Engineer — NB, XGBoost, SVM)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/03_model_naive_bayes.ipynb`: GridSearch alpha, Learning Curve, Confusion Matrix | 🔲 (14/09) |
-| `models/naive_bayes.pkl`: Lưu trọng số baseline | 🔲 (14/09) |
-| `notebooks/04_model_xgboost.ipynb`: Tinh chỉnh n_estimators, max_depth, learning_rate | 🔲 (15/09 – 16/09) |
-| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | 🔲 (16/09 – 17/09) |
-| Lưu `models/xgboost.pkl` và `models/svm.pkl` | 🔲 (17/09) |
+| `notebooks/03_model_naive_bayes.ipynb`: GridSearch alpha, Learning Curve, Confusion Matrix | ⏳ (15/09 – 16/09) |
+| `models/naive_bayes.pkl`: Lưu trọng số baseline | ⏳ (16/09) |
+| `notebooks/04_model_xgboost.ipynb`: Tinh chỉnh n_estimators, max_depth, learning_rate | ⏳ (16/09 – 17/09) |
+| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ⏳ (16/09 – 17/09) |
+| Lưu `models/xgboost.pkl` và `models/svm.pkl` | ⏳ (17/09) |
 
 ### Sơn (Modeling & UI Lead — Random Forest & Demo UI)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/04_model_random_forest.ipynb`: RandomizedSearch n_estimators, max_depth | 🔲 (15/09 – 16/09) |
-| `models/random_forest.pkl`: Lưu trọng số Random Forest | 🔲 (16/09) |
-| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | 🔲 (15/09 – 17/09) |
-| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | 🔲 (17/09) |
+| `notebooks/04_model_random_forest.ipynb`: RandomizedSearch n_estimators, max_depth | ⏳ (16/09 – 17/09) |
+| `models/random_forest.pkl`: Lưu trọng số Random Forest | ⏳ (17/09) |
+| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ⏳ (16/09 – 17/09) |
+| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ⏳ (17/09 – 18/09) |
 
 ### Cả nhóm (Academic Documentation)
 | Task | Trạng thái |
 |------|:---:|
-| Báo cáo Word: Chương 1 — Đặt vấn đề, bối cảnh lừa đảo NCT 2026, ý nghĩa xã hội | 🔲 (14/09 – 15/09) |
-| Báo cáo Word: Chương 2 — Khảo sát các công trình nghiên cứu & hướng tiếp cận | 🔲 (15/09 – 16/09) |
-| Báo cáo Word: Chương 3 — Phương pháp nhóm chọn: Tiền xử lý, TF-IDF, kiến trúc 3+ models | 🔲 (17/09 – 18/09) |
-| Lên khung cấu trúc Slide PowerPoint 15 phút (14–16 slides) | 🔲 (18/09) |
+| Báo cáo Word: Chương 1 — Đặt vấn đề, bối cảnh lừa đảo NCT 2026, ý nghĩa xã hội | ⏳ (15/09 – 16/09) |
+| Báo cáo Word: Chương 2 — Khảo sát các công trình nghiên cứu & hướng tiếp cận | ⏳ (16/09 – 17/09) |
+| Báo cáo Word: Chương 3 — Phương pháp nhóm chọn: Tiền xử lý, TF-IDF, kiến trúc 3+ models | ⏳ (17/09 – 18/09) |
+| Lên khung cấu trúc Slide PowerPoint 15 phút (14–16 slides) | ⏳ (18/09) |
+
 
 ---
 

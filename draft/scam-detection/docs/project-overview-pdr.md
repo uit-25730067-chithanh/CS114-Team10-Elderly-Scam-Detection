@@ -29,11 +29,11 @@ Người cao tuổi (NCT) tại Việt Nam là đối tượng bị nhắm mục
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| Nguồn | Tự thu thập: báo Dân Trí, VnExpress, FB groups cảnh báo, tin nhắn bình thường |
-| Số mẫu | ≥1500 (lý tưởng 2000-3000) |
-| Schema | `id, text, label, scam_category, source` |
-| Tỷ lệ | ~40-50% Lừa đảo / 50-60% Bình thường |
-| Augmentation | Hoán đổi tên riêng, số tiền, số điện thoại |
+| Nguồn | Đời thực: IEEE Access 2026, UIT IE403, Báo Dân Trí, VnExpress, Tuổi Trẻ, CS114 Evidence Vault |
+| Số mẫu | **2.193 mẫu thực tế** (vượt mốc ≥1500) |
+| Schema | `id, text, label, scam_category, source, source_url, collector_name, notes` |
+| Tỷ lệ | 1.773 Bình thường (80.8%) / 420 Lừa đảo (19.2%) across 4 scam categories |
+| Chính sách | **100% Zero Synthetic Text** (0% AI tự sinh, 0% PII leak, 0 duplicate, 100% provenance URLs) |
 
 ## Phạm vi đề tài
 

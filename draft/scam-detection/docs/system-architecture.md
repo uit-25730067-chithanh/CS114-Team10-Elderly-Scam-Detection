@@ -60,8 +60,12 @@
 
 | File | Mô tả |
 |------|-------|
-| `data/raw/dataset.csv` | Dataset tự thu thập (**không commit nếu > 10MB**) |
-| `data/raw/dataset_template.csv` | Template CSV với header chuẩn |
+| `data/raw/staging_thanh_normal.csv` | 1.773 mẫu SMS bình thường (IEEE Access 2026, 100% PII masked) |
+| `data/raw/staging_cam_scam.csv` | 205 mẫu lừa đảo dịch vụ công & sức khỏe (7 tầng kiểm toán) |
+| `data/raw/staging_son_scam.csv` | 215 mẫu lừa đảo quyền lực & cấp cứu (7 tầng kiểm toán) |
+| `data/raw/dataset.csv` | Dataset tích hợp chính thức 2.193 mẫu thực tế (100% Zero Synthetic Text) |
+| `data/raw/dataset_template.csv` | Template CSV với header chuẩn 8 cột |
+| `data/processed/real_world_test_thanh.csv` | 50 mẫu kiểm định thực tế độc lập từ ảnh Drive (0% data leakage) |
 | `data/processed/dataset_preprocessed.csv` | Sau clean + tokenize + auxiliary features |
 | `data/processed/tfidf_vectorizer.pkl` | Fitted TF-IDF (fit trên train set only) |
 | `data/processed/X_features.pkl` | TF-IDF + auxiliary features combined matrix |
