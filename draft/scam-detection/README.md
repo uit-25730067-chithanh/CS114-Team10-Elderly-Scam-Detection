@@ -25,7 +25,7 @@ scam-detection/
 │   │   ├── staging_cam_scam.csv     ← 205 mẫu lừa đảo đời thực của Bùi Thị Mỷ Cẩm (7 tầng kiểm toán)
 │   │   ├── staging_son_scam.csv     ← 215 mẫu lừa đảo đời thực của Hoàng Cao Sơn (7 tầng kiểm toán)
 │   │   └── dataset.csv              ← Bộ dữ liệu tích hợp chính thức (2.193 mẫu thực tế, 100% Zero Synthetic Text)
-│   ├── processed/                   ← real_world_test_thanh.csv (50 mẫu kiểm định thực tế), ma trận đặc trưng
+│   ├── processed/                   ← dataset_preprocessed.csv (2.193 dòng, 19 cột), real_world_test_thanh.csv, ma trận đặc trưng
 │   ├── evidence/                    ← Ảnh chụp màn hình SMS minh chứng đời thực (Drive Vault) & JSON metadata
 │   └── scripts/                     ← Bộ công cụ tự động hóa dữ liệu
 │       ├── anonymize_sms.py         ← Ẩn danh hóa PII (che SĐT, STK, OTP, CCCD)

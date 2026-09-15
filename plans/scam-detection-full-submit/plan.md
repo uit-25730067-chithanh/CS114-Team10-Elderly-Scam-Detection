@@ -42,8 +42,8 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 |---|-------|-------|--------|--------|------|
 | 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `passed` ✅ | Venv OK, utils helpers, template CSV ready, verify_final.py passed |
 | 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `passed` ✅ | Đạt 2.193 mẫu thực tế (Thanh: 1.773, Sơn: 215, Cẩm: 205); 100% Zero Synthetic; 0 duplicate; `data_validation.py` PASSED |
-| 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (15/09) | `in-progress` 🚀 | Unicode normalized, tokenized, cleaned text |
-| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (16/09) | `not-started` | TF-IDF matrix saved, EDA notebook complete |
+| 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (15/09) | `passed` ✅ | Unicode normalized, teencode expanded, PyVi tokenized, 10 aux features extracted, 0 nulls, 2.193 dòng hoàn chỉnh |
+| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (16/09) | `ready` 🚀 | Sẵn sàng tiếp nhận dataset_preprocessed.csv để trích xuất TF-IDF matrix |
 | 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15/09) | `not-started` | NB trained, baseline metrics recorded |
 | 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `not-started` | RF+XGB trained, hypertuned, metrics > NB |
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 3 (19–20/09) | `not-started` | SVM trained, all 3+ models compared *(dời sang Sprint 3 để tránh quá tải cho Cẩm trong Sprint 2)* |
