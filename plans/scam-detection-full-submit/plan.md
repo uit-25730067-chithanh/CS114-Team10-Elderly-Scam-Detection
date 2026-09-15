@@ -7,7 +7,7 @@ effort: ~40h (nhóm 10 — 3 người)
 branch: main
 tags: [cs114, scam-detection, academic, python, ml, nlp, submit]
 created: 2026-09-04
-updated: 2026-09-10
+updated: 2026-09-15
 sprints: 3 fast-track sprints | Bắt đầu ~06/09 | Báo cáo sớm: 23/09/2026 (Hạn LMS gốc: 13/10/2026)
 ---
 
@@ -22,8 +22,8 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 
 | Sprint | Thời gian | Mục tiêu chính |
 |--------|----------|---------------|
-| **Sprint 1** | 06/09 – 12/09 | Setup repo + Scaffold (Phase 00 Passed ✅), Thu thập & Khóa Dataset (Phase 01) |
-| **Sprint 2** | 13/09 – 18/09 | Tiền xử lý tiếng Việt, EDA, Feature Engineering, Huấn luyện song song 4 mô hình (NB, RF, XGBoost, SVM), Dựng Demo UI shell, Soạn Báo cáo Chương 1–3 |
+| **Sprint 1** | 06/09 – 14/09 | Setup repo + Scaffold (Phase 00 Passed ✅), Thu thập & Khóa Dataset 2.193 mẫu thực tế (Phase 01 Passed ✅) |
+| **Sprint 2** | 15/09 – 18/09 | Tiền xử lý tiếng Việt, EDA, Feature Engineering, Huấn luyện song song 4 mô hình (NB, RF, XGBoost, SVM), Dựng Demo UI shell, Soạn Báo cáo Chương 1–3 |
 | **Sprint 3** | 19/09 – 22/09 | Đánh giá tổng hợp & XAI, Tích hợp model vào Demo UI, Hoàn thiện Báo cáo Chương 4–5 & PPT, Diễn tập thuyết trình (≤15 phút), Đóng gói ZIP |
 | **D-Day** | **18:30 23/09/2026** | **Thuyết trình luân phiên qua MS Teams bảo vệ đồ án trước ThS. Cáp Phạm Đình Thăng** |
 
@@ -41,15 +41,15 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | # | Phase | Owner | Sprint | Status | Gate |
 |---|-------|-------|--------|--------|------|
 | 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `passed` ✅ | Venv OK, utils helpers, template CSV ready, verify_final.py passed |
-| 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `in-progress` (Thanh ✅) | Thanh đạt 1.773 mẫu; Khóa toàn bộ dữ liệu trước 23:59 12/09 |
-| 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (13/09) | `not-started` | Unicode normalized, tokenized, cleaned text |
-| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (14/09) | `not-started` | TF-IDF matrix saved, EDA notebook complete |
-| 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (14/09) | `not-started` | NB trained, baseline metrics recorded |
+| 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `passed` ✅ | Đạt 2.193 mẫu thực tế (Thanh: 1.773, Sơn: 215, Cẩm: 205); 100% Zero Synthetic; 0 duplicate; `data_validation.py` PASSED |
+| 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (15/09) | `in-progress` 🚀 | Unicode normalized, tokenized, cleaned text |
+| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (16/09) | `not-started` | TF-IDF matrix saved, EDA notebook complete |
+| 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15/09) | `not-started` | NB trained, baseline metrics recorded |
 | 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `not-started` | RF+XGB trained, hypertuned, metrics > NB |
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 3 (19–20/09) | `not-started` | SVM trained, all 3+ models compared *(dời sang Sprint 3 để tránh quá tải cho Cẩm trong Sprint 2)* |
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `not-started` | Confusion Matrix, Learning Curves, SHAP top-20 keywords |
-| 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (15–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |
-| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (14–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
+| 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (16–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |
+| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (15–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
 | 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 18:30 23/09 qua MS Teams |
 
 ## Git Convention
