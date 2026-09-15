@@ -15,14 +15,14 @@ VIETNAMESE_STOPWORDS: Set[str] = {
     "chỉ", "chỉ_là", "chính_là", "thật_ra", "thực_sự", "hầu_như", "dù_sao",
     "cho_nên", "do_vậy", "ngay_cả", "thậm_chí", "phải_chăng", "thay_vì",
     "tuy_thế", "nếu_như", "giá_như", "bởi_vì", "bởi_thế", "vì_thế", "cho_dù",
-    "dẫu_cho", "dẫu_sao", "bấy_lâu", "tự_nhiên", "tức_thì", "thế_nên", "ngay_lập_tức"
+    "dẫu_cho", "dẫu_sao", "bấy_lâu", "tự_nhiên", "tức_thì", "thế_nên"
 }
 
 # Domain words that MUST NEVER be eliminated because they indicate scam/urgency
 DOMAIN_PROTECTED_WORDS: Set[str] = {
     "công_an", "cảnh_sát", "viện_kiểm_sát", "tòa_án", "bộ_công_an",
     "phong_tỏa", "bắt_giam", "truy_nã", "lệnh_bắt", "điều_tra",
-    "khẩn_cấp", "khẩn", "gấp", "nguy_kịch", "cấp_cứu", "tai_nạn",
+    "khẩn_cấp", "khẩn", "gấp", "ngay_lập_tức", "nguy_kịch", "cấp_cứu", "tai_nạn",
     "tiền", "triệu", "tỷ", "nghìn", "tài_khoản", "ngân_hàng", "chuyển_khoản",
     "mã_xác_thực", "mật_khẩu", "otp", "stk", "sdt", "điện_thoại",
     "quà", "trúng_thưởng", "miễn_phí", "tri_ân", "trợ_cấp", "bảo_hiểm",

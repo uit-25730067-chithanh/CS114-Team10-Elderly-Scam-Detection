@@ -164,7 +164,7 @@ class TestTokenizerAndStopwords:
 
     def test_scam_domain_keywords_preserved(self) -> None:
         """Verify domain-specific scam indicators are strictly guarded from stopword removal."""
-        scam_tokens = "công_an phong_tỏa tiền triệu tài_khoản khẩn_cấp cấp_cứu bảo_hiểm"
+        scam_tokens = "công_an phong_tỏa tiền triệu tài_khoản khẩn_cấp cấp_cứu bảo_hiểm ngay_lập_tức"
         filtered = remove_stopwords(scam_tokens)
         for token in scam_tokens.split():
             assert token in filtered

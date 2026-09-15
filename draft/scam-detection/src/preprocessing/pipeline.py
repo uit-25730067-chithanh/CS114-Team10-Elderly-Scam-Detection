@@ -1,4 +1,4 @@
-"""Full Vietnamese NLP preprocessing pipeline and 14-dimension auxiliary feature extraction."""
+"""Full Vietnamese NLP preprocessing pipeline and 15-dimension auxiliary feature extraction."""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ ACCENT_PATTERN = re.compile(
 
 
 def extract_auxiliary_features(text: str) -> Dict[str, Any]:
-    """Extract 14 metadata, psychological manipulation, and domain features prior to cleaning."""
+    """Extract 15 metadata, psychological manipulation, and domain features prior to cleaning."""
     if not isinstance(text, str):
         text = ""
 
@@ -115,7 +115,7 @@ class TextPreprocessor:
         df: pd.DataFrame,
         text_column: str = "text",
     ) -> pd.DataFrame:
-        """Transform a pandas DataFrame, adding text_cleaned and 14 auxiliary columns."""
+        """Transform a pandas DataFrame, adding text_cleaned and 15 auxiliary columns."""
         df_copy = df.copy()
         pipeline_results = df_copy[text_column].apply(preprocess_pipeline)
 
