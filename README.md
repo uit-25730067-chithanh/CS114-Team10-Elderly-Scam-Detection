@@ -73,22 +73,22 @@
 
 ## 📊 Tiến độ (3-Sprint Fast-Track — Báo cáo sớm 23/09/2026)
 
-> ⚡ **Chiến lược Báo cáo sớm (Fast-Track):** Nhóm xin báo cáo sớm vào ngày **23/09/2026** (Hạn LMS gốc: 13/10/2026). Khóa dữ liệu vào ngày 12/09, kích hoạt 4 luồng song song (`--parallels`) từ 13/09, hoàn tất Báo cáo & Slide ngày 20/09, diễn tập ngày 21–22/09, thuyết trình chính thức ngày **23/09/2026**.
+> ⚡ **Chiến lược Báo cáo sớm (Fast-Track):** Nhóm xin báo cáo sớm vào ngày **23/09/2026** (Hạn LMS gốc: 13/10/2026). Đã hoàn tất Sprint 1 và khóa dữ liệu (2.193 mẫu thực tế, 100% Zero Synthetic Text), kích hoạt 4 luồng song song (`--parallels`) Sprint 2 từ 15/09, hoàn tất Báo cáo & Slide ngày 20/09, diễn tập ngày 21–22/09, thuyết trình chính thức ngày **23/09/2026**.
 
 | Sprint | Người | Task | Trạng thái |
 |--------|-------|------|-----------|
-| **Sprint 1** (06/09 – 12/09)<br>*Hạ tầng & Dữ liệu* | **Thanh** | Setup repo, utils, template, requirements.txt, verify_final.py | ✅ Done (Phase 00 passed) |
-| | **Thanh** | Thu thập 1.773 mẫu bình thường, mask PII, 42 mẫu Holdout Test | ✅ Done (Passed 100%) |
-| | **Sơn** | Thu thập ≥500 mẫu lừa đảo (`fear_authority`, `family_emergency`) | ⏳ Đang thực hiện |
-| | **Cẩm** | Thu thập ≥500 mẫu lừa đảo (`health_gift`, `public_service`) | ⏳ Đang thực hiện |
-| | **Thanh** | Khóa dữ liệu 23:59 ngày 12/09, chạy data_validation.py, chia 80/20 | 🔲 Chờ đồng bộ |
-| **Sprint 2** (13/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode, regex, pyvi) | 🔲 |
-| | **Thanh** | EDA notebook + Biểu đồ phân phối + TF-IDF Vectorizer | 🔲 |
-| | **Cẩm** | Naive Bayes baseline + Learning Curves (14/09) | 🔲 |
-| | **Sơn** | Random Forest training + hypertuning (15/09 – 16/09) | 🔲 |
-| | **Cẩm** | XGBoost + SVM Linear/RBF training (15/09 – 17/09) | 🔲 |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | 🔲 |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | 🔲 |
+| **Sprint 1** (06/09 – 14/09)<br>*Hạ tầng & Dữ liệu* | **Thanh** | Setup repo, utils, template, requirements.txt, verify_final.py | ✅ Done (Phase 00 passed) |
+| | **Thanh** | Thu thập 1.773 mẫu bình thường, mask PII, 50 mẫu Holdout Test | ✅ Done (PR #7 merged) |
+| | **Sơn** | Thu thập 215 mẫu lừa đảo (`fear_authority`, `family_emergency`), 7 tầng kiểm toán | ✅ Done (PR #10 merged) |
+| | **Cẩm** | Thu thập 205 mẫu lừa đảo (`health_gift`, `public_service`), 7 tầng kiểm toán | ✅ Done (PR #9 merged) |
+| | **Thanh** | Hợp nhất 2.193 mẫu thực tế, chạy `data_validation.py`, khóa `dataset.csv` | ✅ Done (Phase 01 PASSED) |
+| **Sprint 2** (15/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode NFC, regex, pyvi) | 🚀 Đang thực hiện |
+| | **Thanh** | EDA notebook + Biểu đồ phân phối + TF-IDF Vectorizer | ⏳ Tiếp theo |
+| | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09) | ⏳ Tiếp theo |
+| | **Sơn** | Random Forest training + hypertuning (15/09 – 16/09) | ⏳ Tiếp theo |
+| | **Cẩm** | XGBoost + SVM Linear/RBF training (16/09 – 17/09) | ⏳ Tiếp theo |
+| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Tiếp theo |
+| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Tiếp theo |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | Đánh giá tổng hợp: So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 |
 | | **Sơn** | Tích hợp Best Model vào Streamlit Demo UI, kiểm thử giao diện người cao tuổi | 🔲 |
 | | **Cả nhóm** | Báo cáo Word: Chương 4 (Thực nghiệm) + Chương 5 (Kết luận) + Tài liệu tham khảo | 🔲 |

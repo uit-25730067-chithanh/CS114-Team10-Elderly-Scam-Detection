@@ -48,7 +48,7 @@
 
 ---
 
-## Current State (2026-09-10 — Fast-Track 23/09 Mode)
+## Current State (2026-09-15 — Sprint 2 Kickoff Mode)
 
 | Component | Status |
 |-----------|--------|
@@ -57,16 +57,17 @@
 | Phase 00 (Env & Data Setup) | ✅ Passed — `requirements.txt`, `dataset_template.csv`, `verify_final.py` |
 | `src/utils/` | ✅ Done — `helpers.py`, `constants`, `set_seeds()` reproducibility |
 | `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
-| Dataset (`dataset.csv`) | ⏳ Sprint 1 Fast-Track (Deadline khóa data: 12/09) — Thanh hoàn thành 1.773 mẫu bình thường (100% PII masked); Chờ Sơn & Cẩm nộp 1.000 mẫu lừa đảo hoặc kích hoạt sinh tăng cường |
-| `src/preprocessing/` | ⏳ Sprint 2 Fast-Track (13/09 – 14/09) — text_cleaner, tokenizer, feature_extractor |
-| `src/models/` | ⏳ Sprint 2 Fast-Track (14/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
+| Phase 01 (Data Collection & Labeling) | ✅ Passed — Cả 3 thành viên hoàn thành và merge PR (#7, #9, #10); 100% Zero Synthetic Text; 0% rò rỉ PII; 7 tầng kiểm toán pass |
+| Dataset (`dataset.csv`) | ✅ Done — Hợp nhất 2.193 mẫu thực tế (1.773 normal + 420 scam qua 4 nhóm bẫy tâm lý); 100% provenance URLs; `data_validation.py` PASSED |
+| `src/preprocessing/` | 🚀 Sprint 2 Fast-Track (15/09 – 16/09) — text_cleaner, tokenizer (pyvi), feature_extractor, auxiliary features |
+| `src/models/` | ⏳ Sprint 2 Fast-Track (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (14/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
-| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (15/09 shell → 20/09 integrated) — app.py + components |
-| Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (14/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
+| Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
+| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components |
+| Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
-> **Verdict (10/09): Chuyển sang mô hình 3-Sprint Fast-Track (13 ngày đến ngày báo cáo 23/09 lúc 18h30). Phần việc của Đặng Chí Thanh trong Phase 01 đã HOÀN TẤT 100% (1.773 mẫu độc bản, 42 mẫu Holdout Test độc lập không rò rỉ, data_validation.py PASSED ✅). Khóa toàn bộ dữ liệu trước 23:59 ngày 12/09 để kích hoạt 4 luồng song song Sprint 2.**
+> **Verdict (15/09): Sprint 1 và Phase 01 (Thu thập dữ liệu) đã HOÀN THÀNH 100% XUẤT SẮC (2.193 mẫu đời thực độc bản từ cả 3 thành viên: Thanh 1.773 normal, Cẩm 205 scam, Sơn 215 scam; 50 mẫu Holdout Test độc lập không rò rỉ; dataset.csv hợp nhất pass `data_validation.py` 100%). Chính thức bước qua Sprint 2: Kích hoạt 4 luồng song song NLP & Machine Learning Modeling.**
 
 ---
 
@@ -250,28 +251,30 @@ Place in `Final/submit/` before zipping.
 
 ---
 
-## Next Actions (Fast-Track 23/09 Mode)
+## Next Actions (Sprint 2 Kickoff — Fast-Track 23/09 Mode)
  
-> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn 13 ngày).**
+> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn 8 ngày).**
 
 ### 🎯 Phân công luồng thực thi song song (`--parallels`):
-1. **Luồng A (Dữ liệu & Khóa Dataset — Thanh Lead):**
-   - Hạn chót khóa dữ liệu: **23:59 ngày 12/09/2026**.
-   - Sơn & Cẩm nộp 1.000 mẫu lừa đảo (500 mẫu/người). Nếu thiếu trước 12/09, kích hoạt script tăng cường dữ liệu / crawl bổ sung để đạt mốc ≥1.500 mẫu.
-   - Thanh nghiệm thu Phase 01 (`data_validation.py`), chia tập Stratified Train/Test 80/20 và đóng băng `dataset.csv`.
-2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):**
-   - Triển khai `src/preprocessing/` và trích xuất ma trận TF-IDF trong Sprint 2 (13/09 – 14/09).
-3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):**
-   - Cẩm: Naive Bayes baseline (14/09) → XGBoost & SVM (15/09 – 17/09).
-   - Sơn: Random Forest (15/09 – 16/09).
+1. **Luồng A (Dữ liệu & Khóa Dataset — Thanh Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
+   - Đã hợp nhất 2.193 mẫu đời thực độc bản (`staging_thanh_normal.csv`: 1.773, `staging_cam_scam.csv`: 205, `staging_son_scam.csv`: 215).
+   - Đạt 100% provenance URLs, 0% PII leak, 0 duplicate, pass `data_validation.py` 100%.
+   - Đóng băng `dataset.csv` và chuyển giao sang tiền xử lý.
+2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):** 🚀 **ĐANG TRIỂN KHAI (15/09 – 16/09)**
+   - Triển khai `src/preprocessing/` (text_cleaner, pyvi tokenizer, auxiliary feature extractor).
+   - Xây dựng `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv`.
+   - Thực hiện Stratified Train/Test 80/20 và trích xuất TF-IDF matrix.
+3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):** ⏳ **KHỞI ĐỘNG (15/09 – 17/09)**
+   - Cẩm: Naive Bayes baseline (`notebooks/03_model_naive_bayes.ipynb`) → XGBoost & SVM Linear/RBF (`notebooks/04_model_xgboost.ipynb`, `notebooks/05_model_svm.ipynb`).
+   - Sơn: Random Forest (`notebooks/04_model_random_forest.ipynb`).
    - Thanh & Cẩm: Đánh giá XAI, vẽ Learning Curves và trích xuất Top-20 từ khóa SHAP (18/09 – 19/09).
-4. **Luồng D (Demo UI — Sơn):**
-   - Dựng khung giao diện Streamlit (15/09 – 17/09), tích hợp model và hoàn thiện UX cho người cao tuổi (19/09 – 20/09).
-5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):**
+4. **Luồng D (Demo UI — Sơn):** ⏳ **TRIỂN KHAI (16/09 – 18/09)**
+   - Dựng khung giao diện Streamlit (`demo/app.py`), thiết kế UX thân thiện với người cao tuổi và tích hợp mô hình.
+5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** ⏳ **ĐỒNG THỜI (15/09 – 22/09)**
    - Báo cáo Word Chương 1–3: Hoàn thành trước 18/09.
    - Báo cáo Word Chương 4–5: Hoàn thành trước 20/09 ngay khi có kết quả thực nghiệm.
    - Slide PPT 15 phút: Dựng ngày 20/09 – 21/09 theo cẩm nang bảo vệ.
    - Diễn tập bấm giờ (≤15 phút): 21/09 – 22/09.
    - Đóng gói ZIP `25730067-25730013-25730061.zip` vào 22/09/2026.
-   - **23/09/2026: Thuyết trình chính thức với thầy Thăng!**
+   - **18:30 ngày 23/09/2026: Thuyết trình luân phiên chính thức với ThS. Cáp Phạm Đình Thăng qua MS Teams!**
 
