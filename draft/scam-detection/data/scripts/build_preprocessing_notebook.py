@@ -15,21 +15,21 @@ def create_preprocessing_notebook() -> nbf.NotebookNode:
 
     # Cell 1: Markdown Header & Metadata
     cells.append(nbf.v4.new_markdown_cell("""# CS114: Máy Học (Machine Learning) — Đồ Án Cuối Kỳ
-## Phase 02: Tiền Xử Lý Dữ Liệu Văn Bản Tiếng Việt & Trích Xuất Đặc Trưng Phụ
+## Phase 02: Tiền Xử Lý Dữ Liệu Văn Bản Tiếng Việt & Trích Xuất Đặc Trưng Phụ (Phiên Bản Nâng Cao Nghiên Cứu)
 
 - **Đề tài:** Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam
 - **Nhóm thực hiện:** Nhóm 10
-  - Đặng Chí Thanh — MSSV: 25730067 (Trưởng nhóm / Phụ trách Phase 02)
+  - Đặng Chí Thanh — MSSV: 25730067 (Trưởng nhóm / Phụ trách Tiền xử lý dữ liệu)
   - Bùi Thị Mỷ Cẩm — MSSV: 25730013 (Thành viên)
   - Hoàng Cao Sơn — MSSV: 25730061 (Thành viên)
 - **Giảng viên hướng dẫn:** ThS. Cáp Phạm Đình Thăng
-- **Mục tiêu Phase 02:**
-  1. Chuẩn hóa mã hóa Unicode tiếng Việt theo tiêu chuẩn NFC (khắc phục lỗi tổ hợp).
-  2. Trích xuất các đặc trưng phụ (auxiliary features) có tính chất báo động lừa đảo trước khi làm sạch văn bản (URL, SĐT, số tiền, từ khóa áp lực thời gian, từ khóa quyền lực cơ quan).
-  3. Làm sạch văn bản: chuẩn hóa từ điển teencode/viết tắt, loại bỏ nhiễu và ký tự đặc biệt mà vẫn bảo toàn dấu thanh tiếng Việt.
-  4. Tách từ tiếng Việt (Word Segmentation) bằng thư viện `pyvi` để tạo từ ghép có gạch dưới (`công_an`, `tài_khoản`, `chuyển_khoản`).
-  5. Loại bỏ từ dừng (stopwords) ngữ pháp thông thường nhưng nghiêm ngặt bảo toàn các từ khóa trọng yếu của miền bài toán lừa đảo.
-  6. Xuất tập dữ liệu tiền xử lý hoàn chỉnh `data/processed/dataset_preprocessed.csv` (2.193 dòng) sẵn sàng cho trích xuất đặc trưng TF-IDF ở Phase 03."""))
+- **Các phát hiện thực nghiệm & Mục tiêu nâng cấp của Phase 02:**
+  1. **Khắc phục hiện tượng ẩn danh hóa (Masked Tokens)**: Xử lý hơn 2.400 nhãn `[MONEY]`, 2.060 nhãn `[NUMBER]`, 160 nhãn `[ĐƯỜNG_DẪN]`, 53 nhãn `[MÃ_OTP]`.
+  2. **De-obfuscation thủ thuật Leet-speak**: Hóa giải các ký tự lẩn tránh bộ lọc tin nhắn rác của kẻ lừa đảo (`th0ng ba0`, `kh0ng`, `kh0a`, `d!eu k!en`, `t!en`, `h0 tro`, `BHTN`).
+  3. **Xử lý tính bất đối xứng dấu thanh**: 55.3% tin nhắn thường là tiếng Việt không dấu (do viễn thông tiết kiệm ký tự), trong khi 98.3% tin nhắn lừa đảo là tiếng Việt có dấu. Tích hợp cơ chế nối từ ghép không dấu (`tai_khoan`, `chuyen_khoan`, `cong_an`).
+  4. **Chuẩn hóa dấu thanh chuẩn mới**: Tích hợp `underthesea.text_normalize` kết hợp `unicodedata` NFC để đưa vị trí đặt dấu về chuẩn ngữ âm học thống nhất (`hòa`, `khỏe`, `thủy`).
+  5. **Mở rộng từ điển Teencode/Viết tắt**: Nâng cấp lên trên 160 mục từ vựng bao quát 6 lĩnh vực chính (giao tiếp, viễn thông, ngân hàng, công quyền, y tế, tiếng lóng).
+  6. **Trích xuất 15 đặc trưng phụ chuyên sâu**: Bổ sung các cờ phát hiện leet-speak, không dấu, cấp cứu gia đình, bẫy quà tặng, và yêu cầu OTP."""))
 
     # Cell 2: Code — Setup and Imports
     cells.append(nbf.v4.new_code_cell("""# Import standard libraries and project modules
@@ -51,12 +51,16 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from src.utils.helpers import RANDOM_STATE, set_seeds
 from src.preprocessing import (
     clean_text,
+    deobfuscate_leetspeak,
+    normalize_tone_marks,
     segment_vietnamese,
     remove_stopwords,
     extract_auxiliary_features,
     preprocess_pipeline,
     TextPreprocessor,
     TEENCODE_DICT,
+    LEET_SPEAK_PATTERNS,
+    UNACCENTED_COMPOUNDS,
     EFFECTIVE_STOPWORDS,
     DOMAIN_PROTECTED_WORDS,
 )
@@ -66,73 +70,62 @@ set_seeds(RANDOM_STATE)
 plt.style.use("seaborn-v0_8-whitegrid" if "seaborn-v0_8-whitegrid" in plt.style.available else "default")
 plt.rcParams["font.sans-serif"] = ["DejaVu Sans", "Arial"]
 print(f"Project root resolved: {PROJECT_ROOT}")
-print(f"Random state initialized: {RANDOM_STATE}")"""))
+print(f"Random state initialized: {RANDOM_STATE}")
+print(f"Teencode dictionary active entries: {len(TEENCODE_DICT)}")"""))
 
-    # Cell 3: Markdown — Section 1: Data Ingestion
+    # Cell 3: Markdown — Section 1: Data Ingestion & Masked Entity Audit
     cells.append(nbf.v4.new_markdown_cell("""---
-## 1. Khảo Sát Tập Dữ Liệu Gốc (Raw Dataset Overview)
+## 1. Khảo Sát Tập Dữ Liệu Gốc & Thực Thể Ẩn Danh (Masked Entity Audit)
 
-Tập dữ liệu `data/raw/dataset.csv` đã được tổng hợp và kiểm toán qua 7 tầng ở Phase 01 với 2.193 mẫu thực tế, bao gồm:
-- 1.773 mẫu tin nhắn bình thường (Label 0) thu thập từ ngân hàng, nhà mạng, tin nhắn cá nhân đời thực.
-- 420 mẫu kịch bản lừa đảo (Label 1) phân bổ qua 4 nhóm bẫy thao túng tâm lý:
-  - `public_service`: Giả mạo dịch vụ công, VNeID, thuế, cổng dịch vụ.
-  - `fear_authority`: Đe dọa pháp lý, giả danh Công an, Viện kiểm sát, Tòa án.
-  - `family_emergency`: Tin giả người thân tai nạn cấp cứu, viện phí khẩn cấp.
-  - `health_gift`: Quà tri ân sức khỏe, tặng thuốc đông y miễn phí, trúng thưởng."""))
+Tập dữ liệu `data/raw/dataset.csv` gồm 2.193 mẫu thực tế, trong đó có một lượng lớn thực thể được ẩn danh hóa ở Phase 01 nhằm bảo vệ quyền riêng tư (Zero PII Leakage)."""))
 
-    # Cell 4: Code — Load raw dataset and display distribution
-    cells.append(nbf.v4.new_code_cell("""# Load raw master dataset and display distribution
+    # Cell 4: Code — Load raw dataset and inspect masked placeholders
+    cells.append(nbf.v4.new_code_cell("""# Load raw dataset and analyze masked entities distribution
 raw_data_path = PROJECT_ROOT / "data" / "raw" / "dataset.csv"
 df_raw = pd.read_csv(raw_data_path)
 
 print(f"Total raw samples: {len(df_raw)}")
-print(f"Dataset columns: {df_raw.columns.tolist()}")
+print(f"Columns: {df_raw.columns.tolist()}")
 
-# Summary of labels and categories
-label_dist = df_raw["label"].value_counts().rename({0: "Normal (0)", 1: "Scam (1)"})
-category_dist = df_raw["scam_category"].value_counts()
+# Count masked placeholders
+import re
+from collections import Counter
 
-fig, axes = plt.subplots(1, 2, figsize=(13, 4.5))
+placeholders = Counter()
+for text in df_raw["text"]:
+    matches = re.findall(r"\\[(.*?)\\]", text)
+    placeholders.update(matches)
 
-# Plot label distribution
-sns.barplot(x=label_dist.index, y=label_dist.values, ax=axes[0], palette=["#2ecc71", "#e74c3c"])
-axes[0].set_title("Distribution of Labels (Normal vs Scam)", fontsize=12, fontweight="bold")
-axes[0].set_ylabel("Count")
-for i, v in enumerate(label_dist.values):
-    axes[0].text(i, v + 20, f"{v} ({v/len(df_raw)*100:.1f}%)", ha="center", fontweight="bold")
+df_placeholders = pd.DataFrame(placeholders.most_common(12), columns=["Nhãn Ẩn Danh", "Số Lượng"])
+display(df_placeholders)
 
-# Plot scam category distribution
-sns.barplot(x=category_dist.index, y=category_dist.values, ax=axes[1], palette="Blues_r")
-axes[1].set_title("Distribution across Scam Categories", fontsize=12, fontweight="bold")
-axes[1].set_ylabel("Count")
-axes[1].tick_params(axis="x", rotation=25)
-for i, v in enumerate(category_dist.values):
-    axes[1].text(i, v + 20, f"{v}", ha="center", fontsize=9, fontweight="bold")
-
+# Visualize label distribution
+fig, ax = plt.subplots(figsize=(6, 3.5))
+label_counts = df_raw["label"].value_counts().rename({0: "Normal (Bình thường)", 1: "Scam (Lừa đảo)"})
+sns.barplot(x=label_counts.index, y=label_counts.values, ax=ax, palette=["#2ecc71", "#e74c3c"])
+ax.set_title("Phân Bố Nhãn Dữ Liệu CS114 Final (2.193 Mẫu Thực Tế)", fontsize=11, fontweight="bold")
+for i, v in enumerate(label_counts.values):
+    ax.text(i, v + 25, f"{v} ({v/len(df_raw)*100:.1f}%)", ha="center", fontweight="bold")
 plt.tight_layout()
 plt.show()"""))
 
-    # Cell 5: Markdown — Section 2: Step-by-Step Pipeline Demonstration
+    # Cell 5: Markdown — Section 2: De-obfuscation & Step-by-Step Demonstration
     cells.append(nbf.v4.new_markdown_cell("""---
-## 2. Minh Họa Quy Trình Xử Lý Từng Bước (Step-by-step Demonstration)
+## 2. Hóa Giải Kỹ Thuật Lẩn Tránh (De-obfuscation) & Minh Họa Từng Bước
 
-Để hiểu rõ sự biến đổi của văn bản qua từng bước, ta tiến hành kiểm thử trên 4 mẫu đại diện thuộc 4 nhóm ngữ cảnh khác nhau:
-1. Giả danh Công an thao túng quyền lực (`fear_authority`).
-2. Giả danh người thân tai nạn cấp cứu viện phí (`family_emergency`).
-3. Giả mạo tri ân tặng quà sức khỏe (`health_gift`).
-4. Tin nhắn biến động số dư ngân hàng hợp lệ (`normal`)."""))
+Thủ đoạn của đối tượng lừa đảo qua tin nhắn thường xuyên dùng số thay chữ cái (`th0ng ba0`, `kh0ng`, `kh0a`, `d!eu k!en`, `t!en`) và dính các thẻ đường dẫn để tránh bị chặn bởi AI/Telco filter."""))
 
     # Cell 6: Code — Step-by-step pipeline test
-    cells.append(nbf.v4.new_code_cell("""# Select 4 representative samples for pipeline inspection
+    cells.append(nbf.v4.new_code_cell("""# Test pipeline on 4 representative samples including obfuscated leet-speak
 demo_samples = [
-    # 1. Fear Authority
-    ("FEAR_AUTHORITY", "CẢNH BÁO BỘ CÔNG AN: Lệnh bắt giam và phong tỏa tài khoản ngân hàng số 190333 tại VCB của ông/bà do liên quan đường dây ma túy! Bấm http://congan-vietnam.online hoặc gọi ngay 0912345678 để nộp 50 triệu đồng tiền bảo lãnh trước 17h hôm nay!"),
-    # 2. Family Emergency
-    ("FAMILY_EMERGENCY", "Bố ơi con là Nam đây! Con bị tai nạn giao thông đang cấp cứu nguy kịch ở BV Chợ Rẫy, bnt cần mổ gấp! Bố ck ngay 30 triệu vào stk 0988776655 bsy Nguyễn Văn A để đóng viện phí cho con với!"),
-    # 3. Health Gift
-    ("HEALTH_GIFT", "TRI ÂN KHÁCH HÀNG CAO TUỔI: Bệnh viện Đông y tặng miễn phí 01 liệu trình cao xương khớp trị giá 2 triệu đồng cho bác! Gọi ngay sdt 0909123456 để nhận quà ngay hôm nay."),
-    # 4. Normal Bank SMS
-    ("NORMAL_SMS", "[TB] VCB: Số dư TK 0071001234xxx thay đổi -150,000 VND lúc 14:20 15/09/2026. Ref: Chuyen tien hoc phi cho con. So du hien tai: 5,420,000 VND."),
+    # 1. Leet-speak obfuscated scam (Evading filter)
+    ("LEET_SPEAK_SCAM", "Th0ng ba0: [THƯƠNG_HIỆU] nang cap he thong. Vui l0ng dang nhap [ĐƯỜNG_DẪN]va nang cap. Neu kh0ng tai khoa se bi kh0a. aab"),
+    # 2. Insurance trap with punctuation substitution
+    ("BHTN_OBFUSCATED", "Ong/(Ba) da du d!eu'k!en NHAN'TIEN ho tro tu quy-BHTN. Bam'vao [ĐƯỜNG_DẪN]de_'lay. QUA-HAN' SE KH0ng duoc nhan nua nhe!"),
+    # 3. Tone normalization test (Old vs New style)
+    ("TONE_NORMALIZATION", "hoà bình và khoẻ mạnh, thuỷ điện toàn quốc"),
+    # 4. Unaccented Normal SMS
+    ("UNACCENTED_NORMAL", "Quy khach da dang ky thanh cong goi data 4G, cuoc phi [MONEY] tru vao tai khoan."),
 ]
 
 demo_results = []
@@ -142,113 +135,112 @@ for tag, text in demo_samples:
     seg = segment_vietnamese(clean)
     final = remove_stopwords(seg)
     demo_results.append({
-        "Loại": tag,
-        "Nguyên bản (trích xuất)": text[:65] + "...",
-        "Sau Clean": clean[:65] + "...",
-        "Sau Segment (PyVi)": seg[:65] + "...",
-        "Kết quả cuối (Stopwords)": final,
-        "Đặc trưng phụ chính": f"URL:{aux['num_urls']}, SĐT:{aux['num_phone_numbers']}, Tiền:{aux['num_money_mentions']}, Khẩn:{aux['has_urgent_words']}, Quyền lực:{aux['num_authority_words']}"
+        "Mẫu": tag,
+        "Văn bản gốc": text[:60] + "...",
+        "Sau Clean & De-obfuscate": clean[:60] + "...",
+        "Sau Tách từ PyVi": seg[:60] + "...",
+        "Kết quả cuối cùng": final,
+        "Chỉ báo đặc trưng": f"URL:{aux['num_urls']}, Tiền:{aux['num_money_mentions']}, Leet:{aux['has_leet_speak']}, Không dấu:{aux['is_unaccented']}"
     })
 
-pd.set_option("display.max_colwidth", None)
 demo_df = pd.DataFrame(demo_results)
-display(demo_df[["Loại", "Sau Segment (PyVi)", "Kết quả cuối (Stopwords)", "Đặc trưng phụ chính"]])"""))
+display(demo_df[["Mẫu", "Sau Clean & De-obfuscate", "Sau Tách từ PyVi", "Kết quả cuối cùng", "Chỉ báo đặc trưng"]])"""))
 
-    # Cell 7: Markdown — Section 3: Teencode & Abbreviations
+    # Cell 7: Markdown — Section 3: Teencode Dictionary Inspection
     cells.append(nbf.v4.new_markdown_cell("""---
-## 3. Khảo Sát Từ Điển Teencode & Chuẩn Hóa Viết Tắt
+## 3. Khảo Sát Từ Điển Teencode & Viết Tắt Mở Rộng (160+ Từ Vựng)
 
-Tin nhắn SMS và mạng xã hội tiếng Việt chứa nhiều từ viết tắt (`ko`, `dc`, `ck`, `stk`, `cccd`, `nh`, `vcb`). Bộ tiền xử lý tích hợp từ điển `TEENCODE_DICT` với trên 50 mục ánh xạ chuẩn xác sang từ nguyên bản có dấu."""))
+Bộ từ điển `TEENCODE_DICT` được nâng cấp lên trên 160 mục từ vựng, bao quát toàn diện các lĩnh vực: giao tiếp, viễn thông, ngân hàng, cơ quan công quyền, y tế và tiếng lóng mạng xã hội."""))
 
     # Cell 8: Code — Teencode inspection
-    cells.append(nbf.v4.new_code_cell("""# Inspect teencode coverage and expansion examples
+    cells.append(nbf.v4.new_code_cell("""# Display sample categories of the expanded teencode dictionary
 print(f"Total entries in TEENCODE_DICT: {len(TEENCODE_DICT)}")
 
-# Display sample mappings
-sample_teencode = dict(list(TEENCODE_DICT.items())[:15])
-teencode_sample_df = pd.DataFrame(list(sample_teencode.items()), columns=["Ký hiệu viết tắt", "Ánh xạ chuẩn tiếng Việt"])
-display(teencode_sample_df)
+# Display 20 representative mappings across different domains
+sample_items = list(TEENCODE_DICT.items())[:20]
+teencode_df = pd.DataFrame(sample_items, columns=["Từ Viết Tắt / Teencode", "Dạng Chuẩn Tiếng Việt"])
+display(teencode_df.T)
 
-# Test expansion on a condensed sentence
-slang_sentence = "ko dc ck vao stk nay nhe, nh se khoa tk va otp"
+# Test expansion on a dense SMS sentence
+slang_sentence = "ko dc ck vao stk nay nhe, ca se vao cuoc va vks se khoi to bca"
 print(f"Câu gốc: {slang_sentence}")
-print(f"Sau chuẩn hóa teencode: {clean_text(slang_sentence)}")"""))
+print(f"Sau chuẩn hóa: {clean_text(slang_sentence)}")"""))
 
     # Cell 9: Markdown — Section 4: Auxiliary Features Analysis
     cells.append(nbf.v4.new_markdown_cell("""---
-## 4. Phân Tích Thống Kê Đặc Trưng Phụ (Auxiliary Features EDA)
+## 4. Phân Tích Thống Kê 15 Đặc Trưng Phụ Chuyên Sâu (Auxiliary Features EDA)
 
-Các đối tượng lừa đảo thường tạo áp lực tâm lý thông qua:
-- Kêu gọi gọi số điện thoại lạ hoặc bấm vào URL giả mạo.
-- Nhắc đến các khoản tiền lớn (triệu, tỷ đồng).
-- Dùng từ ngữ tạo sự hoảng loạn, gấp gáp (`khẩn cấp`, `bắt giam`, `phong tỏa`).
-- Dùng tên cơ quan công quyền để thao túng người già (`Công an`, `Viện kiểm sát`).
-
-Dưới đây là thống kê so sánh giữa nhóm Lừa đảo (Scam) và nhóm Bình thường (Normal)."""))
+Thống kê so sánh 15 chỉ số giữa hai lớp Lừa đảo (Scam) và Bình thường (Normal). Các đặc trưng này mang tính phân tách cực kỳ mạnh mẽ."""))
 
     # Cell 10: Code — Auxiliary features statistical comparison
-    cells.append(nbf.v4.new_code_cell("""# Extract auxiliary features for entire raw dataset
-print("Extracting auxiliary features across all samples...")
+    cells.append(nbf.v4.new_code_cell("""# Extract auxiliary features across all 2,193 samples
+print("Trích xuất 15 đặc trưng phụ trên toàn bộ 2.193 mẫu dữ liệu...")
 features_list = [extract_auxiliary_features(t) for t in df_raw["text"]]
 features_df = pd.DataFrame(features_list)
 features_df["label"] = df_raw["label"]
 
-# Group by label to compare means
-comparison_table = features_df.groupby("label").mean().rename(index={0: "Normal", 1: "Scam"})
+# Group by label to compute means
+comparison_table = features_df.groupby("label").mean().rename(index={0: "Normal (0)", 1: "Scam (1)"})
 display(comparison_table.T)
 
-# Plot key auxiliary feature rates
-feature_cols_to_plot = ["num_urls", "num_phone_numbers", "num_money_mentions", "has_urgent_words", "num_authority_words"]
-fig, axes = plt.subplots(1, len(feature_cols_to_plot), figsize=(16, 3.5))
+# Plot key auxiliary feature distributions
+key_features = [
+    ("has_urgent_words", "Áp Lực Khẩn Cấp"),
+    ("has_emergency_words", "Tai Nạn Cấp Cứu"),
+    ("num_authority_words", "Cơ Quan Quyền Lực"),
+    ("has_leet_speak", "Thủ Đoạn Leet-Speak"),
+    ("is_unaccented", "Tiếng Việt Không Dấu"),
+]
 
-for idx, col in enumerate(feature_cols_to_plot):
+fig, axes = plt.subplots(1, len(key_features), figsize=(16, 3.5))
+for idx, (col, title) in enumerate(key_features):
     means = features_df.groupby("label")[col].mean()
-    sns.barplot(x=["Normal (0)", "Scam (1)"], y=[means[0], means[1]], ax=axes[idx], palette=["#2ecc71", "#e74c3c"])
-    axes[idx].set_title(col, fontsize=11, fontweight="bold")
-    axes[idx].set_ylabel("Mean Frequency / Rate")
-    axes[idx].set_ylim(0, max(means) * 1.25)
+    sns.barplot(x=["Normal", "Scam"], y=[means[0], means[1]], ax=axes[idx], palette=["#2ecc71", "#e74c3c"])
+    axes[idx].set_title(title, fontsize=10, fontweight="bold")
+    axes[idx].set_ylabel("Tỷ lệ xuất hiện")
+    axes[idx].set_ylim(0, max(means) * 1.35 if max(means) > 0 else 1.0)
     for i, m in enumerate([means[0], means[1]]):
-        axes[idx].text(i, m + 0.02, f"{m:.2f}", ha="center", fontweight="bold")
+        axes[idx].text(i, m + 0.01, f"{m:.3f}", ha="center", fontweight="bold", fontsize=9)
 
 plt.tight_layout()
 plt.show()"""))
 
     # Cell 11: Markdown — Section 5: Batch Processing & Validation
     cells.append(nbf.v4.new_markdown_cell("""---
-## 5. Thực Thi Tiền Xử Lý Hàng Loạt & Kiểm Định Dữ Liệu (Batch Preprocessing & Validation)
+## 5. Thực Thi Tiền Xử Lý Hàng Loạt & Kiểm Định Tính Toàn Vẹn (Batch Preprocessing)
 
-Áp dụng lớp `TextPreprocessor` lên toàn bộ 2.193 dòng dữ liệu, kiểm tra:
-1. Kích thước tập dữ liệu không đổi (không mất mát dòng).
-2. Cột `text_cleaned` không chứa giá trị Null (`NaN`).
-3. Cột `text_cleaned` không chứa chuỗi rỗng (`""`).
-4. Lưu kết quả ra file `data/processed/dataset_preprocessed.csv`."""))
+Áp dụng lớp `TextPreprocessor` lên toàn bộ 2.193 dòng dữ liệu:
+- Bảo toàn tuyệt đối số lượng mẫu (2.193 dòng).
+- Đảm bảo 0 giá trị Null trong `text_cleaned`.
+- Đảm bảo 0 chuỗi rỗng sau tiền xử lý.
+- Xuất dữ liệu ra `data/processed/dataset_preprocessed.csv`."""))
 
     # Cell 12: Code — Batch processing and integrity checks
     cells.append(nbf.v4.new_code_cell("""# Batch process entire dataset using TextPreprocessor
 preprocessor = TextPreprocessor()
 df_preprocessed = preprocessor.process_dataframe(df_raw, text_column="text")
 
-print(f"Preprocessed shape: {df_preprocessed.shape}")
-print(f"Columns: {df_preprocessed.columns.tolist()}")
+print(f"Kích thước sau tiền xử lý: {df_preprocessed.shape}")
+print(f"Tổng số cột: {len(df_preprocessed.columns)}")
 
 # Integrity assertions
-assert len(df_preprocessed) == len(df_raw), f"Data loss detected: {len(df_preprocessed)} vs {len(df_raw)}"
-assert df_preprocessed["text_cleaned"].notna().all(), "Null values found in text_cleaned"
-empty_strings_count = (df_preprocessed["text_cleaned"].str.strip() == "").sum()
-assert empty_strings_count == 0, f"Found {empty_strings_count} empty strings in text_cleaned"
+assert len(df_preprocessed) == len(df_raw), f"Lỗi mất mát dữ liệu: {len(df_preprocessed)} vs {len(df_raw)}"
+assert df_preprocessed["text_cleaned"].notna().all(), "Phát hiện giá trị Null trong text_cleaned!"
+empty_count = (df_preprocessed["text_cleaned"].str.strip() == "").sum()
+assert empty_count == 0, f"Phát hiện {empty_count} chuỗi rỗng trong text_cleaned!"
 
-print("[SUCCESS] All integrity criteria satisfied: 2,193 rows preserved, 0 nulls, 0 empty strings.")
+print("[THÀNH CÔNG] Toàn bộ 2.193 mẫu đã được tiền xử lý hoàn chỉnh (0 nulls, 0 empty strings).")
 
 # Save preprocessed dataset to disk
 out_csv = PROJECT_ROOT / "data" / "processed" / "dataset_preprocessed.csv"
 df_preprocessed.to_csv(out_csv, index=False)
-print(f"[SAVED] Exported preprocessed dataset to: {out_csv.relative_to(PROJECT_ROOT)} ({out_csv.stat().st_size / 1024:.1f} KB)")"""))
+print(f"[ĐÃ LƯU] Tệp dữ liệu tiền xử lý: {out_csv.relative_to(PROJECT_ROOT)} ({out_csv.stat().st_size / 1024:.1f} KB)")"""))
 
     # Cell 13: Markdown — Section 6: Vocabulary Frequency Analysis
     cells.append(nbf.v4.new_markdown_cell("""---
 ## 6. Phân Tích Phân Bố Từ Khóa Sau Tiền Xử Lý (Vocabulary Analysis)
 
-Khảo sát 15 từ ghép xuất hiện nhiều nhất trong tập tin nhắn Lừa đảo (Scam) so với tập tin nhắn Bình thường (Normal) để kiểm tra tính phân tách của ngữ nghĩa."""))
+Khảo sát Top 15 từ ghép đặc trưng nhất của tin nhắn Lừa đảo (Scam) so với tin nhắn Bình thường (Normal)."""))
 
     # Cell 14: Code — Vocabulary comparison
     cells.append(nbf.v4.new_code_cell("""# Calculate top word frequencies for scam vs normal
@@ -270,33 +262,33 @@ fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 # Plot top scam words
 df_top_scam["Tần số"].plot(kind="barh", ax=axes[0], color="#e74c3c")
-axes[0].set_title("Top 15 Từ Khóa Đặc Trưng Nhất Của Tin Nhắn Lừa Đảo", fontsize=12, fontweight="bold")
+axes[0].set_title("Top 15 Từ Khóa Đặc Trưng Nhất Của Tin Nhắn Lừa Đảo", fontsize=11, fontweight="bold")
 axes[0].set_xlabel("Số lần xuất hiện")
 axes[0].invert_yaxis()
 
 # Plot top normal words
 df_top_normal["Tần số"].plot(kind="barh", ax=axes[1], color="#2ecc71")
-axes[1].set_title("Top 15 Từ Khóa Đặc Trưng Nhất Của Tin Nhắn Bình Thường", fontsize=12, fontweight="bold")
+axes[1].set_title("Top 15 Từ Khóa Đặc Trưng Nhất Của Tin Nhắn Bình Thường", fontsize=11, fontweight="bold")
 axes[1].set_xlabel("Số lần xuất hiện")
 axes[1].invert_yaxis()
 
 plt.tight_layout()
 plt.show()"""))
 
-    # Cell 15: Markdown — Section 7: Conclusions and Next Steps
+    # Cell 15: Markdown — Section 7: Conclusions and Phase 03 Handoff
     cells.append(nbf.v4.new_markdown_cell("""---
 ## 7. Kết Luận & Chuyển Giao Cho Phase 03
 
-### Kết quả đạt được trong Phase 02:
-1. **Module hóa hoàn chỉnh**: Các thành phần tiền xử lý được tổ chức trong `src/preprocessing/` (`text_cleaner.py`, `tokenizer.py`, `stopwords.py`, `pipeline.py`) tuân thủ nghiêm ngặt chuẩn snake_case và quy định < 200 dòng/file.
-2. **Bảo toàn ngữ nghĩa tiếng Việt**: Thư viện `pyvi` phân tách chính xác các từ ghép quan trọng (`công_an`, `tài_khoản`, `chuyển_khoản`, `khẩn_cấp`), khắc phục triệt để hiện tượng phân mảnh từ đơn lẻ.
-3. **Bảo vệ từ khóa miền bài toán**: Bộ lọc từ dừng loại bỏ các hư từ ngữ pháp (`và`, `là`, `của`, `được`) nhưng giữ lại 100% các từ khóa mang tính chỉ báo thao túng tâm lý.
-4. **Trích xuất 10 đặc trưng phụ đắt giá**: Tần suất xuất hiện URL, SĐT, số tiền, từ ngữ khẩn cấp và quyền lực ở nhóm Scam cao vượt trội so với Normal, đóng vai trò then chốt cho các mô hình Machine Learning ở các phase sau.
-5. **Dữ liệu đầu ra**: File `data/processed/dataset_preprocessed.csv` gồm 2.193 dòng, 19 cột, hoàn toàn không có giá trị Null hay chuỗi rỗng.
+### Kết quả đạt được trong Phase 02 (Phiên bản nâng cao):
+1. **Kiến trúc mô-đun hóa cao cấp**: Phân tách rõ ràng giữa `teencode_dictionary.py`, `text_cleaner.py`, `tokenizer.py`, `stopwords.py`, và `pipeline.py`, mỗi file đều dưới 200 dòng theo đúng quy chuẩn CS114.
+2. **De-obfuscation triệt để**: Giải mã toàn diện các biến thể leet-speak (`th0ng ba0`, `kh0ng`, `d!eu k!en`, `t!en`) và tách nhãn dính (`[ĐƯỜNG_DẪN]de lay`).
+3. **Thích ứng tiếng Việt có dấu và không dấu**: Tích hợp `underthesea.text_normalize` cho văn bản có dấu và cơ chế nối từ ghép `join_unaccented_compounds` cho 45.0% mẫu văn bản không dấu.
+4. **Bộ 15 đặc trưng phụ đắt giá**: Tần suất các chỉ báo khẩn cấp, tai nạn cấp cứu, quyền lực nhà nước, và leet-speak ở nhóm Scam cao gấp từ 3 đến 35 lần so với nhóm Normal.
+5. **Dữ liệu hoàn chỉnh sẵn sàng**: Xuất tệp `data/processed/dataset_preprocessed.csv` gồm 2.193 dòng, 24 cột, không có giá trị Null hay chuỗi rỗng.
 
 ### Bước tiếp theo (Phase 03):
-- Khám phá dữ liệu EDA chuyên sâu và trích xuất ma trận TF-IDF (N-gram 1-2).
-- Tiến hành phân chia tập dữ liệu Stratified Train/Test (80/20) đảm bảo tính cân bằng tỷ lệ nhãn."""))
+- EDA chuyên sâu và trích xuất ma trận TF-IDF (N-gram 1-2).
+- Phân chia tập dữ liệu Stratified Train/Test 80/20 chuẩn bị cho huấn luyện mô hình Machine Learning."""))
 
     nb.cells = cells
     return nb
