@@ -258,7 +258,7 @@ Place in `Final/submit/` before zipping.
 > **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn 8 ngày).**
 
 ### 🎯 Phân công luồng thực thi song song (`--parallels`):
-1. **Luồng A (Dữ liệu & Khóa Dataset — Thanh Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
+1. **Luồng A (Dữ liệu & Khóa Dataset — Sơn Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
    - Đã hợp nhất 2.193 mẫu đời thực độc bản (`staging_thanh_normal.csv`: 1.773, `staging_cam_scam.csv`: 205, `staging_son_scam.csv`: 215).
    - Đạt 100% provenance URLs, 0% PII leak, 0 duplicate, pass `data_validation.py` 100%.
    - Đóng băng `dataset.csv` và chuyển giao sang tiền xử lý.
