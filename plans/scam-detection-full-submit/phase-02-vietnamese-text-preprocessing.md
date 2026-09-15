@@ -12,10 +12,10 @@
 |-------|-------|
 | Owner | **Thanh** |
 | Priority | P1 — Blocker cho feature extraction |
-| Status | `not-started` |
-| Review | ⬜ Not reviewed |
+| Status | `in-progress` 🚀 |
+| Review | ⬜ Sẵn sàng triển khai Sprint 2 |
 | Estimated effort | 3–4h |
-| Sprint | Sprint 2 Fast-Track (13/09/2026) |
+| Sprint | Sprint 2 Fast-Track (15/09/2026) |
 
 ## Context
 

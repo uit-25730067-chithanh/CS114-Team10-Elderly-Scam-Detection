@@ -32,29 +32,31 @@
 | **Outcome (Đầu ra mong đợi)** | • File Báo cáo đồ án (.docx) theo chuẩn quy định môn học CS114.<br>• File Slide thuyết trình (PowerPoint / HTML) tối ưu chuẩn 15 phút.<br>• Source code hoàn chỉnh + Pipeline huấn luyện 3+ mô hình ML.<br>• Web App Demo (Streamlit/Gradio) giả lập khung chat kiểm tra tin nhắn & giải thích bẫy tâm lý. |
 | **Constraints (Ràng buộc)** | • Tuân thủ yêu cầu thầy Thăng: So sánh ít nhất 3 mô hình, đánh giá Train vs Val (Overfitting), Precision-Recall, Confusion Matrix.<br>• Không dùng Computer Vision, không làm Fraud Detection ngân hàng (tránh trùng môn CS106).<br>• Dữ liệu văn bản tiếng Việt thực tế. |
 | **Non-goals (Không làm)** | • Không phát triển ứng dụng di động native phức tạp (iOS/Android).<br>• Không can thiệp chặn cuộc gọi viễn thông ở mức phần cứng/nhà mạng. |
-| **Acceptance Criteria (Tiêu chí nghiệm thu)** | • Độ chính xác F1-Score $\ge 88\%$ trên tập kiểm thử.<br>• Chỉ số **Recall của lớp Lừa đảo $\ge 92\%$** (hạn chế tối đa bỏ lọt lừa đảo).<br>• Có bảng giải thích các từ khóa kích hoạt tâm lý (SHAP / Feature Weights). |
+| **Acceptance Criteria (Tiêu chí nghiệm thu)** | • Độ chính xác F1-Score ≥ 88% trên tập kiểm thử.<br>• Chỉ số **Recall của lớp Lừa đảo ≥ 92%** (hạn chế tối đa bỏ lọt lừa đảo).<br>• Có bảng giải thích các từ khóa kích hoạt tâm lý (SHAP / Feature Weights). |
 
 ---
 
 ## III. THIẾT KẾ DỮ LIỆU (DATASET DESIGN)
 
 ### 1. Cấu trúc tập dữ liệu (`dataset.csv`)
-Bộ dữ liệu gồm ít nhất **1.500 – 3.000 mẫu** văn bản tiếng Việt với cấu trúc các cột:
-* `id`: Định danh duy nhất.
-* `text`: Nội dung tin nhắn đơn lẻ hoặc đoạn hội thoại 2-4 câu.
-* `label`: Nhãn nhị phân (`1`: Lừa đảo, `0`: Bình thường).
-* `scam_category`: Nhóm bẫy tâm lý (`fear_authority`, `family_emergency`, `health_gift`, `public_service`, `none`).
-* `source`: Nguồn thu thập (Báo chí, Cục ATTT, phản ánh người dùng, CSKH...).
+Bộ dữ liệu gồm **2.193 mẫu thực tế** (1.773 mẫu bình thường + 420 mẫu lừa đảo) vượt mốc chỉ tiêu ban đầu (≥1.500 mẫu), tuân thủ 100% chính sách **Zero Synthetic Text** (0% văn bản do AI tự bịa):
+* `id`: Định danh duy nhất (1 – 2193).
+* `text`: Nội dung tin nhắn đơn lẻ hoặc đoạn hội thoại SMS/Zalo thực tế.
+* `label`: Nhãn nhị phân (`1`: Lừa đảo [420 mẫu], `0`: Bình thường [1.773 mẫu]).
+* `scam_category`: Nhóm bẫy tâm lý (`fear_authority` [127], `family_emergency` [88], `health_gift` [46], `public_service` [159], `none` [1.773]).
+* `source`: Nguồn thu thập đời thực (IEEE Access 2026, UIT IE403, La Chắn Cuộc Gọi, KLTN Smishing, Báo Dân Trí, VnExpress, Tuổi Trẻ, CS114 Evidence Vault).
+* `source_url`: 100% liên kết permalink kiểm chứng 1-1 trên GitHub Raw hoặc bài báo chính thống.
+* `collector_name`: Ghi nhận đóng góp độc lập của cả 3 thành viên (Thanh: 1.773, Sơn: 215, Cẩm: 205).
+* `notes`: Ghi chú kỹ thuật và thông tin kiểm toán bổ sung.
 
-### 2. Tỷ lệ & Nguồn thu thập
-* **Mẫu Lừa đảo (`label = 1`):**
-  * Crawl / Tổng hợp từ các bản tin cảnh báo của Bộ Công an, Cục An toàn thông tin (chongthurac.vn, canhsat.vn).
-  * Chụp / Chép lại từ các bài phản ánh lừa đảo trên báo Dân Trí, VnExpress, Tuổi Trẻ.
-  * Các hội nhóm mạng xã hội chia sẻ chiêu trò lừa đảo người cao tuổi.
-* **Mẫu Bình thường (`label = 0`):**
-  * Tin nhắn thông báo nhà mạng, hóa đơn điện nước, nhắc lịch khám bệnh.
-  * Tin nhắn hỏi thăm sinh hoạt đời thường gia đình.
-* **Data Augmentation (Tăng cường dữ liệu):** Sử dụng kỹ thuật hoán đổi từ đồng nghĩa tiếng Việt, thay đổi tên riêng/số tiền để tăng độ đa dạng.
+### 2. Tỷ lệ & Nguồn thu thập thực tế
+* **Mẫu Lừa đảo (`label = 1` — 420 mẫu):**
+  * Thu thập độc lập bởi Hoàng Cao Sơn (215 mẫu) và Bùi Thị Mỷ Cẩm (205 mẫu).
+  * 100% dữ liệu đời thực, vượt qua 7 tầng kiểm toán (`audit_son_rigorous.py`, `audit_cam_rigorous.py`), 0% cờ bạc/gái gọi, 0% rò rỉ PII, 0% trùng lặp nội bộ và chéo nhóm.
+* **Mẫu Bình thường (`label = 0` — 1.773 mẫu):**
+  * Thu thập bởi Đặng Chí Thanh từ tập chuẩn Vietnamese Quality-Assured SMS Dataset (IEEE Access 2026), 100% permalink 1-1.
+  * Kèm 50 mẫu Holdout Test độc lập từ ảnh chụp điện thoại đời thực trong `CS114_Evidence_Vault` (0% rò rỉ với tập huấn luyện).
+* **Chính sách Không sử dụng AI tự sinh (Zero Synthetic Text):** Nhóm kiên quyết loại bỏ mọi mẫu do LLM tự bịa, bảo vệ tính trung thực học thuật tuyệt đối trước Hội đồng chấm thi.
 
 ---
 
