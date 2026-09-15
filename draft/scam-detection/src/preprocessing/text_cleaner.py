@@ -2,94 +2,28 @@
 
 from __future__ import annotations
 
+import logging
 import re
 import unicodedata
 
-# Dictionary of common Vietnamese SMS abbreviations, teencode, and domain terms
-TEENCODE_DICT: dict[str, str] = {
-    # Pronouns & Common slang
-    "ko": "không",
-    "k": "không",
-    "kh": "không",
-    "hok": "không",
-    "hông": "không",
-    "dc": "được",
-    "đc": "được",
-    "ng": "người",
-    "vs": "với",
-    "mk": "mình",
-    "mik": "mình",
-    "mềnh": "mình",
-    "bn": "bạn",
-    "mn": "mọi người",
-    "r": "rồi",
-    "ch": "chưa",
-    "bt": "bình thường",
-    "tks": "cảm ơn",
-    "ty": "cảm ơn",
-    "thks": "cảm ơn",
-    "thanks": "cảm ơn",
-    "nhug": "nhưng",
-    # Communication & Interaction
-    "ib": "nhắn tin",
-    "inbox": "nhắn tin",
-    "rep": "trả lời",
-    "tl": "trả lời",
-    "nt": "nhắn tin",
-    "kb": "kết bạn",
-    "dt": "điện thoại",
-    "đt": "điện thoại",
-    "sdt": "số điện thoại",
-    "fb": "facebook",
-    "zalo": "zalo",
-    # Banking & Transaction terminology
-    "ck": "chuyển khoản",
-    "tk": "tài khoản",
-    "stk": "số tài khoản",
-    "acc": "tài khoản",
-    "pass": "mật khẩu",
-    "nh": "ngân hàng",
-    "atm": "thẻ ngân hàng",
-    "otp": "mã xác thực",
-    "vnd": "đồng",
-    "vnđ": "đồng",
-    "tr": "triệu",
-    "ngàn": "nghìn",
-    "k": "nghìn",
-    # Administrative & Public Authority abbreviations
-    "cmnd": "chứng minh nhân dân",
-    "cccd": "căn cước công dân",
-    "bhyt": "bảo hiểm y tế",
-    "bhxh": "bảo hiểm xã hội",
-    "ca": "công an",
-    "cs": "cảnh sát",
-    "vks": "viện kiểm sát",
-    "ta": "tòa án",
-    "bca": "bộ công an",
-    "byt": "bộ y tế",
-    "bv": "bệnh viện",
-    "vneid": "vneid",
-    # Common banks
-    "vcb": "vietcombank",
-    "tcb": "techcombank",
-    "bidv": "bidv",
-    "ctg": "vietinbank",
-    "acb": "acb",
-    "mb": "mbbank",
-    "vpb": "vpbank",
-    "tpb": "tpbank",
-    "shb": "shb",
-    "hdb": "hdbank",
-    "vib": "vib",
-    "msb": "msb",
-    "ocb": "ocb",
-    "scb": "scb",
-}
+from .teencode_dictionary import LEET_SPEAK_PATTERNS, TEENCODE_DICT
+
+try:
+    from underthesea import text_normalize
+except ImportError:  # pragma: no cover
+    text_normalize = None
+    logging.warning("underthesea not available. Using fallback unicode NFC normalization.")
 
 # Regex pattern for retaining valid Vietnamese characters, alphanumeric tokens, and spaces
 VIETNAMESE_CHARS_PATTERN = re.compile(
     r"[^\w\sàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]",
     re.IGNORECASE | re.UNICODE,
+)
+
+# Regex for repeated characters (e.g. 'nhaaaaa' -> 'nha', 'gấpppp' -> 'gấp')
+REPEATED_CHARS_PATTERN = re.compile(
+    r"([a-zA-Zàáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ])\1{2,}",
+    re.IGNORECASE,
 )
 
 
@@ -100,8 +34,38 @@ def normalize_unicode(text: str) -> str:
     return unicodedata.normalize("NFC", text)
 
 
+def normalize_tone_marks(text: str) -> str:
+    """Normalize Vietnamese tone mark placement (quy tắc đặt dấu mới) using underthesea."""
+    if not isinstance(text, str) or not text.strip():
+        return ""
+    normalized = normalize_unicode(text)
+    if text_normalize is not None:
+        try:
+            return text_normalize(normalized)
+        except Exception:  # pragma: no cover
+            return normalized
+    return normalized
+
+
+def deobfuscate_leetspeak(text: str) -> str:
+    """De-obfuscate deliberate character/number substitutions used in scam messages."""
+    if not text:
+        return ""
+    # Separate bracketed tokens that are glued to adjacent words (e.g. '[ĐƯỜNG_DẪN]de' -> '[ĐƯỜNG_DẪN] de')
+    text = re.sub(r"(\[[A-Z0-9_ÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲÝỶỸỴĐ]+\])([a-zA-Zà-ỹ0-9])", r"\1 \2", text)
+    text = re.sub(r"([a-zA-Zà-ỹ0-9])(\[[A-Z0-9_ÀÁẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÈÉẺẼẸÊẾỀỂỄỆÌÍỈĨỊÒÓỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÙÚỦŨỤƯỨỪỬỮỰỲÝỶỸỴĐ]+\])", r"\1 \2", text)
+
+    # Apply leet-speak regex substitutions
+    for pattern, replacement in LEET_SPEAK_PATTERNS:
+        text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+    # Collapse elongated repeated characters
+    text = REPEATED_CHARS_PATTERN.sub(r"\1", text)
+    return text
+
+
 def teencode_normalize(text: str) -> str:
-    """Normalize abbreviations and teencode words according to dictionary."""
+    """Normalize abbreviations and teencode words according to comprehensive dictionary."""
     if not text:
         return ""
     words = text.split()
@@ -109,34 +73,47 @@ def teencode_normalize(text: str) -> str:
     return " ".join(normalized_words)
 
 
-def clean_text(text: str, apply_teencode: bool = True) -> str:
-    """Execute text cleaning pipeline on raw Vietnamese text."""
+def clean_text(text: str, apply_teencode: bool = True, apply_deobfuscation: bool = True) -> str:
+    """Execute deep text cleaning pipeline on raw Vietnamese text."""
     if not isinstance(text, str) or not text.strip():
         return ""
 
-    # Step 1: Unicode NFC normalization
-    cleaned = normalize_unicode(text)
+    # Step 1: De-obfuscate leet-speak & separate glued entity tags
+    if apply_deobfuscation:
+        cleaned = deobfuscate_leetspeak(text)
+    else:
+        cleaned = text
 
-    # Step 2: Lowercase conversion
+    # Step 2: Tone mark placement normalization (underthesea) & Unicode NFC
+    cleaned = normalize_tone_marks(cleaned)
+
+    # Step 3: Lowercase conversion
     cleaned = cleaned.lower()
 
-    # Step 3: Remove URLs (http, https, www)
+    # Step 4: Remove raw URLs (http, https, www) and normalize bracketed URLs
     cleaned = re.sub(r"https?://\S+|www\.\S+", " ", cleaned)
+    cleaned = re.sub(r"\[đường_dẫn\]|\[url\]", " link_truy_cap ", cleaned)
 
-    # Step 4: Remove phone numbers (10-11 digit Vietnamese prefixes)
-    cleaned = re.sub(r"\b(0|\+?84)\d{9,10}\b", " ", cleaned)
+    # Step 5: Remove raw phone numbers and normalize bracketed phone tags
+    cleaned = re.sub(r"\b(0|\+?84)\d{8,10}\b", " ", cleaned)
+    cleaned = re.sub(r"\[số_điện_thoại\]|\[hotline\]", " so_dien_thoai ", cleaned)
 
-    # Step 5: Remove email addresses
+    # Step 6: Remove email addresses
     cleaned = re.sub(r"\S+@\S+", " ", cleaned)
 
-    # Step 6: Normalize teencode and abbreviations
+    # Step 7: Normalize money and OTP tags to meaningful semantic tokens
+    cleaned = re.sub(r"\[money\]|\[số_tiền\]", " so_tien ", cleaned)
+    cleaned = re.sub(r"\[mã_otp\]", " ma_otp ", cleaned)
+    cleaned = re.sub(r"\[thương_hiệu\]", " thuong_hieu ", cleaned)
+
+    # Step 8: Normalize teencode and abbreviations
     if apply_teencode:
         cleaned = teencode_normalize(cleaned)
 
-    # Step 7: Filter special characters while preserving Vietnamese diacritics
+    # Step 9: Filter special characters while preserving Vietnamese diacritics
     cleaned = VIETNAMESE_CHARS_PATTERN.sub(" ", cleaned)
 
-    # Step 8: Collapse multiple spaces and strip
+    # Step 10: Collapse multiple spaces and strip
     cleaned = re.sub(r"\s+", " ", cleaned).strip()
 
     # Fallback: If cleaning completely wiped out text, preserve alphanumeric base

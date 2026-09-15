@@ -14,23 +14,35 @@ from .stopwords import (
     get_stopwords,
     remove_stopwords,
 )
-from .text_cleaner import (
+from .teencode_dictionary import (
+    LEET_SPEAK_PATTERNS,
     TEENCODE_DICT,
+    UNACCENTED_COMPOUNDS,
+)
+from .text_cleaner import (
     clean_text,
+    deobfuscate_leetspeak,
+    normalize_tone_marks,
     normalize_unicode,
     teencode_normalize,
 )
 from .tokenizer import (
     ViTextTokenizer,
+    join_unaccented_compounds,
     segment_vietnamese,
     tokenize_words,
 )
 
 __all__ = [
     "normalize_unicode",
+    "normalize_tone_marks",
+    "deobfuscate_leetspeak",
     "teencode_normalize",
     "clean_text",
     "TEENCODE_DICT",
+    "LEET_SPEAK_PATTERNS",
+    "UNACCENTED_COMPOUNDS",
+    "join_unaccented_compounds",
     "segment_vietnamese",
     "tokenize_words",
     "ViTextTokenizer",
