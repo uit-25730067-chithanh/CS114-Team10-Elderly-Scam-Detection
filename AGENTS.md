@@ -59,9 +59,9 @@
 | `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
 | Phase 01 (Data Collection & Labeling) | ✅ Passed — Cả 3 thành viên hoàn thành và merge PR (#7, #9, #10); 100% Zero Synthetic Text; 0% rò rỉ PII; 7 tầng kiểm toán pass |
 | Dataset (`dataset.csv`) | ✅ Done — Hợp nhất 2.193 mẫu thực tế (1.773 normal + 420 scam qua 4 nhóm bẫy tâm lý); 100% provenance URLs; `data_validation.py` PASSED |
-| `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, 60+ teencode), tokenizer (pyvi), stopwords (domain guard), pipeline (10 auxiliary features) |
-| Preprocessed Data (`dataset_preprocessed.csv`) | ✅ Passed (Phase 02) — 2.193 dòng, 19 cột, 0 nulls, 0 empty strings |
-| `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end với đầy đủ bảng biểu & biểu đồ so sánh Scam vs Normal |
+| `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, modern underthesea tone), teencode_dictionary (160 teencode, 22 leet-speak patterns, 50+ unaccented compounds), tokenizer (pyvi), stopwords (domain guard), pipeline (15 auxiliary features) |
+| Preprocessed Data (`dataset_preprocessed.csv`) | ✅ Passed (Phase 02) — 2.193 dòng, 24 cột (8 cột raw + text_cleaned + 15 features), 0 nulls, 0 empty strings |
+| `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end (39.5 KB, không bloat base64) với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
 | `src/models/` | ⏳ Sprint 2 Fast-Track (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
 | Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
@@ -69,7 +69,7 @@
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
-> **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (13/13 tests passed; 2.193 mẫu được làm sạch và trích xuất 10 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất; dataset_preprocessed.csv sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
+> **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (21/21 tests passed; 2.193 mẫu được làm sạch và trích xuất 15 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất nhẹ nhàng 39.5 KB; dataset_preprocessed.csv 24 cột sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
 
 ---
 

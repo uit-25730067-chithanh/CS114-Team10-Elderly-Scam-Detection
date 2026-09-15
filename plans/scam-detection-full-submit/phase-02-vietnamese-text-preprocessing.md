@@ -178,30 +178,30 @@ df.to_csv("data/processed/dataset_preprocessed.csv", index=False)
 draft/scam-detection/
 ├── src/preprocessing/
 │   ├── __init__.py
-│   ├── text_cleaner.py         ← Unicode, regex, teencode
-│   ├── tokenizer.py            ← Vietnamese word segmentation
-│   ├── stopwords.py            ← Stopword list & removal
-│   └── pipeline.py             ← Full pipeline orchestrator
+│   ├── teencode_dictionary.py  ← Centralized dictionary & compound mappings
+│   ├── text_cleaner.py         ← Unicode NFC, regex, tone marks, deobfuscation
+│   ├── tokenizer.py            ← Vietnamese word segmentation & unaccented joiner
+│   ├── stopwords.py            ← Stopword list & domain protection whitelist
+│   └── pipeline.py             ← Full pipeline orchestrator & 15 aux features
 ├── data/processed/
 │   └── dataset_preprocessed.csv
 └── notebooks/
-    └── 01_preprocessing.ipynb   ← Exploration & validation
+    └── 01_preprocessing.ipynb   ← Exploration & validation (39.5 KB)
 ```
 
 ## Checklist
 
 - [x] Unicode normalization (NFC) hoạt động
-- [x] Teencode dictionary ≥30 entries (60 entries thực tế)
 - [x] Unicode normalization (NFC) & chuẩn hóa dấu thanh hiện đại (`underthesea.text_normalize`)
-- [x] Teencode dictionary mở rộng ≥160 entries (169 entries thực tế phân loại theo 6 lĩnh vực)
+- [x] Teencode dictionary mở rộng 160 entries chuẩn xác (0 duplicate keys, loại bỏ từ đa nghĩa gây méo mó ngữ nghĩa)
 - [x] De-obfuscation thủ thuật Leet-speak lừa đảo (`th0ng ba0`, `kh0ng`, `kh0a`, `d!eu k!en`, `t!en`)
-- [x] Hóa giải 45.0% văn bản không dấu qua cơ chế ghép cụm từ không dấu (`tai_khoan`, `chuyen_khoan`)
+- [x] Hóa giải 45.0% văn bản không dấu qua cơ chế ghép cụm từ không dấu (`tai_khoan`, `chuyen_khoan`, `vao_cuoc`, `cuoc_goi`)
 - [x] Auxiliary features chuyên sâu gồm 15 chỉ báo (URL, SĐT, số tiền, khẩn cấp, quyền lực, tai nạn cấp cứu, quà tặng, OTP, leet-speak, không dấu, độ dài, dấu câu, chữ in hoa)
 - [x] Bao quát 100% các nhãn ẩn danh masked entities (`[MONEY]`, `[ĐƯỜNG_DẪN]`, `[MÃ_OTP]`, `[SỐ_ĐIỆN_THOẠI]`)
 - [x] `pyvi` tokenizer hoạt động (`ViTokenizer`) kết hợp xử lý cụm từ không dấu
-- [x] Stopwords list ≥50 words (80+ words với whitelist bảo vệ từ khóa lừa đảo)
+- [x] Stopwords list ≥50 words (80+ words với whitelist bảo vệ từ khóa lừa đảo & nguy cấp `ngay_lập_tức`)
 - [x] `data/processed/dataset_preprocessed.csv` saved (2.193 dòng, 24 cột hoàn chỉnh)
-- [x] Notebook `01_preprocessing.ipynb` chạy end-to-end có đầy đủ visual cell outputs và bảng biểu chuyên sâu
+- [x] Notebook `01_preprocessing.ipynb` chạy end-to-end (39.5 KB, không bloat base64) có đầy đủ visual cell outputs và bảng biểu chuyên sâu
 - [x] Không có text_cleaned rỗng sau preprocessing (0/2.193 dòng rỗng)
 
 ## Success Criteria
@@ -219,7 +219,6 @@ draft/scam-detection/
 === Phase 02 Execution Evidence (Research-Driven Upgrade & Code Review Curated) ===
 - Date: 2026-09-15
 - Research Report: draft/scam-detection/reports/research-thanh-phase02-vietnamese-preprocessing-audit.md
-- PM Tracking Report: draft/scam-detection/reports/pm-20260915-phase02-preprocessing-refactor-plan.md
 - Clean Module Structure (strictly < 150 lines per file, adhering to 200-line rule & DRY):
   * src/preprocessing/teencode_dictionary.py (147 lines, centralized dictionary with 0 key collisions, 22 leet-speak patterns, and 50+ unaccented compounds)
   * src/preprocessing/text_cleaner.py (124 lines, NFC + underthesea tone normalization + deobfuscation)
@@ -240,11 +239,8 @@ draft/scam-detection/
   * num_authority_words: Scam (12.6%) vs Normal (4.1%) — gấp 3 lần
   * has_leet_speak: Scam (2.9%) vs Normal (0.0%) — chỉ xuất hiện ở tin nhắn lừa đảo
   * is_unaccented: Scam (1.7%) vs Normal (55.3%)
-- Notebook & Report Figures:
+- Notebook:
   * draft/scam-detection/notebooks/01_preprocessing.ipynb: 15 cells (7 code cells) executed cleanly (39.5 KB, zero base64 bloat)
-  * draft/scam-detection/reports/figures/01_label_distribution.png: Phân bố nhãn 2.193 mẫu
-  * draft/scam-detection/reports/figures/02_auxiliary_features_distribution.png: Phân tách đặc trưng phụ
-  * draft/scam-detection/reports/figures/03_top_words_comparison.png: Top 15 từ khóa lừa đảo vs bình thường
 - System integrity:
   * python3 verify_final.py: PASSED (code 0)
 ```
@@ -254,13 +250,13 @@ draft/scam-detection/
 > ✅ **HOÀN THÀNH 100% XUẤT SẮC (RESEARCH-DRIVEN & REVIEW CURATED)**:
 > - Thực hiện thẩm định toàn diện 2.193 dòng dữ liệu thực tế, phát hiện và hóa giải 4 thách thức lớn: nhãn ẩn danh (hơn 4.000 nhãn `[MONEY]`, `[NUMBER]`, `[ĐƯỜNG_DẪN]`), thủ đoạn leet-speak (`th0ng ba0`, `d!eu k!en`, `t!en`), tính bất đối xứng dấu thanh (45.0% không dấu), và bất cập trong vị trí dấu thanh tiếng Việt.
 > - Tiếp thu triệt để phản hồi từ Gemini PR Code Review: Loại bỏ triệt để hiện tượng over-normalization của các từ đa nghĩa (`cuoc` -> `cước`, `ty` -> `cảm ơn`, `the` -> `thẻ`, `vay` -> `khoản vay`), chuyển sang ghép cụm từ cố định an toàn (`vao_cuoc`, `cuoc_goi`, `the_tin_dung`).
-> - Gộp và chuẩn hóa kiến trúc mã nguồn theo DRY vào duy nhất `teencode_dictionary.py` (147 dòng), loại bỏ các file thừa; chọn lọc và xóa bỏ các script sinh tạm khỏi git tracking; tách ảnh đồ thị ra `reports/figures/` giúp notebook nhẹ nhàng (39.5 KB).
+> - Gộp và chuẩn hóa kiến trúc mã nguồn theo DRY vào duy nhất `teencode_dictionary.py` (147 dòng), loại bỏ các file thừa; chọn lọc và xóa bỏ các script sinh tạm, file nháp và ảnh nhị phân tĩnh khỏi git tracking; làm sạch notebook (39.5 KB).
 > - Đạt 21/21 unit tests pass, bảo đảm dữ liệu `data/processed/dataset_preprocessed.csv` (2.193 dòng, 24 cột) sạch đẹp 100%.
 
 ## Commit
 
 ```bash
-git add src/preprocessing/ data/processed/ notebooks/01_preprocessing.ipynb tests/ reports/
-git commit -m "refactor(preprocessing): address code review feedback on over-normalization, dry structure, and curate repository artifacts"
+git add src/preprocessing/ data/processed/ notebooks/01_preprocessing.ipynb tests/ reports/ plans/ AGENTS.md README.md
+git commit -m "refactor(preprocessing): curate repository deliverables and synchronize phase documentation"
 ```
 
