@@ -102,6 +102,32 @@ class TestUnicodeAndCleaning:
         assert "đường_dẫn" in cleaned or "link_truy_cap" in cleaned
         assert "lay" in cleaned or "lấy" in cleaned
 
+    def test_no_over_normalization_on_ambiguous_words(self) -> None:
+        """Verify ambiguous unaccented words ('cuoc', 'the', 'vay', 'ty') are not naively distorted."""
+        # Case 1: 'vao cuoc' should NOT become 'vao cước'
+        text_police = "ca se vao cuoc dieu tra"
+        cleaned_police = clean_text(text_police)
+        assert "cước" not in cleaned_police
+        assert "công an" in cleaned_police
+
+        # Case 2: '62 ty dong' should NOT become '62 cảm ơn đồng'
+        text_jackpot = "trung thuong hon 62 ty dong"
+        cleaned_jackpot = clean_text(text_jackpot)
+        assert "cảm ơn" not in cleaned_jackpot
+
+        # Case 3: 'co the vay' should NOT become 'co thẻ khoản vay'
+        text_loan = "ban co the vay den 50 trieu"
+        cleaned_loan = clean_text(text_loan)
+        assert "thẻ" not in cleaned_loan
+        assert "khoản vay" not in cleaned_loan
+
+        # Case 4: Standalone 'k' should become 'không', not 'nghìn'
+        text_k = "toi k biet gi het"
+        cleaned_k = clean_text(text_k)
+        assert "không" in cleaned_k
+        assert "nghìn" not in cleaned_k
+
+
 
 class TestTokenizerAndStopwords:
     """Test suite for Vietnamese word segmentation and stopword removal."""
