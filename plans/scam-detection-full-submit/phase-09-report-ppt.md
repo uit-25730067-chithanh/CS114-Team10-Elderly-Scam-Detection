@@ -46,10 +46,19 @@ Theo yêu cầu trong [README.md](../../README.md):
 
 ### Chương 4 — Thực nghiệm
 
-#### 4.1. Dataset
-- Mô tả dataset tự thu thập
-- Phân bố class, scam categories
-- Data augmentation (nếu có)
+#### 4.1. Dataset & Phân tích Khám phá (EDA)
+- Mô tả bộ dữ liệu 2.193 mẫu thực tế (100% Zero Synthetic Text, 0% rò rỉ PII, 7 tầng kiểm toán).
+- Phân bố 4 nhóm bẫy tâm lý: Đe dọa quyền lực (127), Thúc ép khẩn cấp gia đình (88), Dụ dỗ quà tặng sức khỏe (46), Giả mạo dịch vụ công (159).
+- Chiến lược phân chia dữ liệu Zero-Leakage: Stratified Split 80/20 (1.754 Train / 439 Test).
+- 7 biểu đồ trực quan hóa khám phá dữ liệu chuẩn 300 DPI (`reports/figures/`):
+  1. `label_distribution.png` — Phân bố nhãn & tỷ lệ mất cân bằng (4.2 : 1).
+  2. `scam_category_distribution.png` — Cơ cấu 4 nhóm bẫy tâm lý.
+  3. `text_length_comparison.png` — Biểu đồ phân bố độ dài ký tự và số lượng từ.
+  4. `wordcloud_scam_vs_normal.png` — Đám mây từ vựng phân tách lừa đảo vs tin thường.
+  5. `top_ngrams_scam_vs_normal.png` — Top-20 N-grams có tần suất chênh lệch mạnh nhất.
+  6. `auxiliary_correlation_heatmap.png` — Ma trận tương quan 15 đặc trưng phụ với nhãn lừa đảo.
+  7. `source_distribution.png` — Phân bố các nguồn dữ liệu chính thống.
+- Không gian vector đặc trưng: 5.015 chiều (5.000 TF-IDF N-gram 1-2 + 15 đặc trưng phụ qua StandardScaler fit duy nhất trên Train).
 
 #### 4.2. Phương pháp đánh giá
 - Metrics: Accuracy, Precision, Recall, F1, AUC-ROC

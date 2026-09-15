@@ -29,26 +29,31 @@
 ├── draft/
 │   └── scam-detection/    ← Working project
 │       ├── src/            ← Python source code
-│       │   ├── preprocessing/   ⏳ text_cleaner, tokenizer, feature_extractor
-│       │   ├── models/          ⏳ naive_bayes_model, random_forest_model, svm_model
-│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator
-│       │   └── utils/           ⏳ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
-│       ├── notebooks/      ← Jupyter notebooks
+│       │   ├── preprocessing/   ✅ text_cleaner, tokenizer, feature_extractor (Phase 02 Passed)
+│       │   ├── models/          🚀 naive_bayes, random_forest, xgboost, svm (Phase 04-06 Active)
+│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator (Phase 07)
+│       │   ├── utils/           ✅ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
+│       │   ├── feature_engineering.py        ✅ Zero-leakage pipeline (Phase 03 Passed)
+│       │   ├── feature_engineering_config.py ✅ Hằng số TF-IDF & đặc trưng (Phase 03 Passed)
+│       │   ├── eda_plots_part1.py            ✅ Biểu đồ nhãn, bẫy tâm lý, độ dài, wordcloud
+│       │   ├── eda_plots_part2.py            ✅ Biểu đồ n-grams, tương quan, nguồn dữ liệu
+│       │   └── eda_visualizations.py         ✅ EDA Orchestrator (7 figures @ 300 DPI)
+│       ├── notebooks/      ← Jupyter notebooks (01-preprocessing, 02-eda, 03–06 models)
 │       ├── data/
-│       │   ├── raw/        ← dataset.csv gốc (KHÔNG commit git nếu > 50MB)
-│       │   └── processed/  ← Vectorized features, splits (TF-IDF matrices, etc.)
+│       │   ├── raw/        ← dataset.csv gốc (2.193 mẫu thực tế, 100% Zero Synthetic Text)
+│       │   └── processed/  ← dataset_preprocessed.csv, X_train.pkl (1754×5015), X_test.pkl (439×5015), y_train.pkl, y_test.pkl, tfidf_vectorizer.pkl, aux_scaler.pkl, feature_names.json
 │       ├── models/         ← Trained model files (.pkl, .json)
-│       ├── docs/           ← Tài liệu kỹ thuật nội bộ
-│       ├── reports/        ← Kết quả, biểu đồ, figures
+│       ├── docs/           ← Tài liệu kỹ thuật nội bộ (roadmap, architecture, pdr, code-standards)
+│       ├── reports/        ← Kết quả, biểu đồ 7 figures @ 300 DPI
 │       ├── demo/           ← Streamlit/Gradio web app
 │       └── requirements.txt
-├── plans/             ← Implementation plans (phase-based)
+├── plans/             ← Implementation plans (phase-based 00..10)
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
 ```
 
 ---
 
-## Current State (2026-09-15 — Sprint 2 Kickoff Mode)
+## Current State (2026-09-15 — Sprint 2 Active Modeling Mode)
 
 | Component | Status |
 |-----------|--------|
@@ -61,11 +66,14 @@
 | Dataset (`dataset.csv`) | ✅ Done — Hợp nhất 2.193 mẫu thực tế (1.773 normal + 420 scam qua 4 nhóm bẫy tâm lý); 100% provenance URLs; `data_validation.py` PASSED |
 | `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, modern underthesea tone), teencode_dictionary (160 teencode, 22 leet-speak patterns, 50+ unaccented compounds), tokenizer (pyvi), stopwords (domain guard), pipeline (15 auxiliary features) |
 | Preprocessed Data (`dataset_preprocessed.csv`) | ✅ Passed (Phase 02) — 2.193 dòng, 24 cột (8 cột raw + text_cleaned + 15 features), 0 nulls, 0 empty strings |
-| `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end (39.5 KB, không bloat base64) với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
+| `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
+| `notebooks/02_eda.ipynb` | ✅ Passed (Phase 03) — Chạy end-to-end với 7 biểu đồ phân tích sâu & bảng số liệu chi tiết |
 | Phase 03 (EDA & Feature Engineering) | ✅ Passed (15/09/2026) — Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures @ 300 DPI; 34 tests PASS |
-| `src/models/` | ⏳ Sprint 2 Fast-Track (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
+| Phase 04 (Naive Bayes Baseline) | 🚀 Sprint 2 Active (15/09 – 16/09) — Cẩm nạp ma trận Phase 03 để huấn luyện & phân tích Overfitting |
+| Phase 05 (Random Forest & XGBoost) | 🚀 Sprint 2 Active (15/09 – 16/09) — Sơn (RF) và Cẩm (XGBoost) huấn luyện & hypertuning |
+| `src/models/` | 🚀 Sprint 2 Active (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (02-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
+| Notebooks (03-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
 | Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |

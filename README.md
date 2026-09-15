@@ -21,12 +21,12 @@
 │
 ├── draft/                         ← Workspace làm việc của nhóm
 │   └── scam-detection/            ← Project chính (đang phát triển)
-│       ├── data/                  ← Dataset (raw: template + processed: TF-IDF)
+│       ├── data/                  ← Dataset (raw: 2.193 mẫu thực tế + processed: matrices 1754×5015)
 │       ├── demo/                  ← Demo UI (Streamlit)
-│       ├── docs/                  ← Tài liệu kỹ thuật kiến trúc, tiêu chuẩn mã
-│       ├── notebooks/             ← Jupyter notebooks (01–06)
-│       ├── reports/               ← Kết quả, biểu đồ figures
-│       ├── src/                   ← Source code Python (utils, preprocessing, models, eval)
+│       ├── docs/                  ← Tài liệu kỹ thuật kiến trúc, tiêu chuẩn mã, roadmap
+│       ├── notebooks/             ← Jupyter notebooks (01-preprocessing, 02-eda, 03–06 models)
+│       ├── reports/               ← Kết quả, 7 biểu đồ EDA figures @ 300 DPI
+│       ├── src/                   ← Source code Python (utils, preprocessing, feature engineering, models, eval)
 │       ├── requirements.txt       ← Thư viện phụ thuộc
 │       └── README.md              ← Hướng dẫn workspace
 │
@@ -82,13 +82,13 @@
 | | **Sơn** | Thu thập 215 mẫu lừa đảo (`fear_authority`, `family_emergency`), 7 tầng kiểm toán | ✅ Done (PR #10 merged) |
 | | **Cẩm** | Thu thập 205 mẫu lừa đảo (`health_gift`, `public_service`), 7 tầng kiểm toán | ✅ Done (PR #9 merged) |
 | | **Thanh** | Hợp nhất 2.193 mẫu thực tế, chạy `data_validation.py`, khóa `dataset.csv` | ✅ Done (Phase 01 PASSED) |
-| **Sprint 2** (15/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode NFC, regex, pyvi) | 🚀 Đang thực hiện |
-| | **Thanh** | EDA notebook + Biểu đồ phân phối + TF-IDF Vectorizer | ⏳ Tiếp theo |
-| | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09) | ⏳ Tiếp theo |
-| | **Sơn** | Random Forest training + hypertuning (15/09 – 16/09) | ⏳ Tiếp theo |
-| | **Cẩm** | XGBoost + SVM Linear/RBF training (16/09 – 17/09) | ⏳ Tiếp theo |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Tiếp theo |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Tiếp theo |
+| **Sprint 2** (15/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode NFC, regex, pyvi, 160 teencode, 15 aux features) | ✅ Done (Phase 02 PASSED — PR #12 merged) |
+| | **Thanh** | EDA notebook + Zero-leakage Feature Pipeline (TF-IDF + Scaler, 7 figures 300 DPI) | ✅ Done (Phase 03 PASSED — PR #13 merged) |
+| | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09 – 16/09) | 🚀 Đang thực hiện (Phase 04) |
+| | **Sơn** | Random Forest training + hypertuning (15/09 – 16/09) | 🚀 Đang thực hiện (Phase 05) |
+| | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ⏳ Sẵn sàng (Phase 05) |
+| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng (Phase 08) |
+| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng (Phase 09) |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | Đánh giá tổng hợp: So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 |
 | | **Sơn** | Tích hợp Best Model vào Streamlit Demo UI, kiểm thử giao diện người cao tuổi | 🔲 |
 | | **Cả nhóm** | Báo cáo Word: Chương 4 (Thực nghiệm) + Chương 5 (Kết luận) + Tài liệu tham khảo | 🔲 |

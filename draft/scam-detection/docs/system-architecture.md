@@ -10,15 +10,16 @@
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────▼───────────────────────────────────┐
-│              PREPROCESSING PIPELINE                      │
-│  1. Unicode NFC normalization                           │
-│  2. Extract auxiliary features (phone, url, money, ...)  │
-│  3. Clean: lowercase, remove URL/phone, teencode norm   │
+│              PREPROCESSING & FEATURE PIPELINE            │
+│  1. Unicode NFC & tone normalization (underthesea)      │
+│  2. Extract 15 auxiliary features (phone, money, flags)  │
+│  3. Clean: lowercase, deobfuscate leetspeak, teencode    │
 │  4. Vietnamese word segmentation (pyvi ViTokenizer)     │
-│  5. Stopword removal                                    │
-│  6. TF-IDF vectorization (max_features=5000, ngram 1-2) │
-│  7. Combine: TF-IDF + auxiliary features matrix         │
-│  8. Stratified Train/Val/Test split (60/20/20)          │
+│  5. Domain-guarded stopword removal                     │
+│  6. Stratified 80/20 Train/Test split FIRST             │
+│  7. TF-IDF vectorization (fit on Train only, 5000 feats) │
+│  8. StandardScaler (fit on Train aux features only)     │
+│  9. Combine sparse matrix: X_train (1754×5015), X_test  │
 └─────────────────────┬───────────────────────────────────┘
                       │
          ┌────────────┼──────────────┐
@@ -67,9 +68,13 @@
 | `data/raw/dataset_template.csv` | Template CSV với header chuẩn 8 cột |
 | `data/processed/real_world_test_thanh.csv` | 50 mẫu kiểm định thực tế độc lập từ ảnh Drive (0% data leakage) |
 | `data/processed/dataset_preprocessed.csv` | Sau clean + tokenize + auxiliary features |
-| `data/processed/tfidf_vectorizer.pkl` | Fitted TF-IDF (fit trên train set only) |
-| `data/processed/X_features.pkl` | TF-IDF + auxiliary features combined matrix |
-| `data/processed/y_labels.pkl` | Labels array |
+| `data/processed/tfidf_vectorizer.pkl` | Fitted TF-IDF (fit trên train set only, max_features=5000) |
+| `data/processed/aux_scaler.pkl` | Fitted StandardScaler (fit trên 15 đặc trưng phụ của train set) |
+| `data/processed/X_train.pkl` | Combined sparse CSR matrix tập Train (1.754 × 5.015) |
+| `data/processed/X_test.pkl` | Combined sparse CSR matrix tập Test (439 × 5.015) |
+| `data/processed/y_train.pkl` | Nhãn nhị phân tập Train (1.418 normal / 336 scam) |
+| `data/processed/y_test.pkl` | Nhãn nhị phân tập Test (355 normal / 84 scam) |
+| `data/processed/feature_names.json` | 5.015 tên đặc trưng hoàn chỉnh (5.000 TF-IDF + 15 aux) |
 | `models/naive_bayes.pkl` | Trained Naive Bayes |
 | `models/random_forest.pkl` | Trained Random Forest |
 | `models/xgboost.pkl` | Trained XGBoost |
@@ -79,22 +84,31 @@
 
 | Module | Chức năng |
 |--------|-----------|
-| `text_cleaner.py` | Unicode NFC, regex clean, teencode normalization |
-| `tokenizer.py` | Vietnamese word segmentation (pyvi) |
-| `stopwords.py` | Vietnamese stopword list & removal |
-| `pipeline.py` | Full pipeline orchestrator: clean → tokenize → stopwords |
+| `text_cleaner.py` | Unicode NFC, regex clean, modern tone marks (underthesea), 160 teencode, leet-speak deobfuscation |
+| `tokenizer.py` | Vietnamese word segmentation (pyvi) & unaccented compounds joining |
+| `stopwords.py` | Vietnamese stopword list with domain guard protection for scam tokens |
+| `pipeline.py` | Full pipeline orchestrator: clean → tokenize → stopwords → 15 auxiliary features |
 
 ### 3. Feature Engineering (`src/feature_engineering.py`)
 
-| Feature | Mô tả |
-|---------|-------|
-| TF-IDF matrix | max_features=5000, ngram=(1,2), sublinear_tf=True |
-| `num_phone_numbers` | Đếm số điện thoại trong text |
-| `num_urls` | Đếm URL trong text |
-| `num_money_mentions` | Đếm cụm tiền tệ (triệu, tỷ, VND...) |
-| `has_urgent_words` | 1 nếu có từ khẩn cấp |
-| `text_length` | Độ dài text gốc |
-| `num_exclamation` | Số dấu ! |
+| Nhóm đặc trưng | Tên đặc trưng | Mô tả chi tiết |
+|----------------|---------------|----------------|
+| **TF-IDF Matrix** | 5.000 n-grams | N-gram (1, 2), sublinear_tf=True, min_df=2, max_df=0.95 (fit on train only) |
+| **Liên hệ & Số học** | `num_phone_numbers` | Số lượng số điện thoại trong văn bản |
+| | `num_urls` | Số lượng liên kết URL |
+| | `num_money_mentions` | Số lần nhắc đến đơn vị tiền tệ (triệu, tỷ, đ, VND...) |
+| | `num_digits` | Tổng số lượng chữ số xuất hiện |
+| **Độ dài & Định dạng** | `text_length` | Độ dài ký tự văn bản gốc |
+| | `num_exclamation` | Số lượng dấu chấm than (!) tạo cảm giác thúc ép |
+| | `uppercase_ratio` | Tỷ lệ ký tự IN HOA trên tổng số chữ cái |
+| **Nhãn ẩn danh hóa** | `has_masked_money` | Cờ (0/1) xuất hiện token `[MONEY]` |
+| | `has_masked_otp` | Cờ (0/1) xuất hiện token `[MÃ_OTP]` |
+| | `has_masked_url` | Cờ (0/1) xuất hiện token `[ĐƯỜNG_DẪN]` |
+| **Kỹ thuật lẩn tránh** | `has_unaccented_keywords` | Cờ (0/1) chứa từ khóa bất đối xứng không dấu (`cong_an`, `tai_khoan`) |
+| | `has_leetspeak` | Cờ (0/1) chứa biến thể leet-speak (`th0ng ba0`, `kh0ng`) |
+| **Bẫy tâm lý đặc thù** | `has_urgent_words` | Cờ (0/1) chứa từ khẩn cấp (gấp, khẩn, ngay lập tức) |
+| | `has_emergency_keywords` | Cờ (0/1) chứa kịch bản cấp cứu, tai nạn, bệnh viện |
+| | `has_gift_keywords` | Cờ (0/1) chứa kịch bản trúng thưởng, tri ấn, quà tặng |
 
 ### 4. Models (`src/models/`)
 

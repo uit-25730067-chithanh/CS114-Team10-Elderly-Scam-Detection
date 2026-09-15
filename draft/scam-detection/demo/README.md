@@ -32,8 +32,10 @@ Người dùng nhập tin nhắn (raw text)
 - **Cấu trúc Bundle Dictionary:**
 ```python
 {
-    "model": classifier,            # sklearn / xgboost model instance
-    "vectorizer": tfidf_vectorizer, # TfidfVectorizer instance đã fit
+    "model": classifier,            # sklearn / xgboost model instance (đã train trên 5.015 features)
+    "vectorizer": tfidf_vectorizer, # TfidfVectorizer instance đã fit (5.000 n-grams)
+    "aux_scaler": auxiliary_scaler, # StandardScaler instance đã fit (15 đặc trưng phụ)
+    "feature_names": feature_names, # List 5.015 tên đặc trưng
     "model_name": "XGBoost",        # str: Tên hiển thị trên giao diện
     "threshold": 0.5                # float: Ngưỡng cảnh báo (mặc định 0.5)
 }
@@ -46,14 +48,13 @@ Trong `demo/app.py` hoặc module hỗ trợ:
 import os
 import joblib
 import numpy as np
+import pandas as pd
+from scipy.sparse import hstack, csr_matrix
 
-# Cho phép fallback xử lý chuỗi nếu module tiền xử lý chưa hoàn tất
-try:
-    from src.preprocessing.text_cleaner import clean_text
-    from src.preprocessing.tokenizer import tokenize_text
-except ImportError:
-    clean_text = lambda text: text.strip().lower()
-    tokenize_text = lambda text: text
+from src.preprocessing.text_cleaner import clean_text
+from src.preprocessing.tokenizer import segment_vietnamese
+from src.preprocessing.pipeline import extract_auxiliary_features
+from src.feature_engineering_config import AUXILIARY_FEATURE_NAMES
 
 def load_bundle(model_path="models/best_model_bundle.pkl"):
     if not os.path.exists(model_path):
@@ -62,7 +63,7 @@ def load_bundle(model_path="models/best_model_bundle.pkl"):
 
 def predict_message(raw_text: str, bundle: dict) -> dict:
     """
-    Hàm chuẩn đầu ra cho giao diện Streamlit
+    Hàm chuẩn đầu ra cho giao diện Streamlit (hỗ trợ không gian 5.015 đặc trưng)
     """
     if bundle is None:
         # Fallback Mock Mode nếu chưa có file model thực tế
@@ -75,19 +76,30 @@ def predict_message(raw_text: str, bundle: dict) -> dict:
             "message": "Model chưa sẵn sàng (Chế độ mô phỏng giao diện)"
         }
 
-    # Tiền xử lý
-    cleaned = clean_text(raw_text)
-    tokenized = tokenize_text(cleaned)
-
-    # Vector hóa & Phân loại
-    vec = bundle["vectorizer"].transform([tokenized])
-    clf = bundle["model"]
-
-    if hasattr(clf, "predict_proba"):
-        proba = float(clf.predict_proba(vec)[0][1])
+    # 1. Trích xuất đặc trưng phụ (15 đặc trưng) & chuẩn hóa qua aux_scaler
+    aux_dict = extract_auxiliary_features(raw_text)
+    aux_df = pd.DataFrame([aux_dict])[AUXILIARY_FEATURE_NAMES]
+    if "aux_scaler" in bundle:
+        aux_scaled = bundle["aux_scaler"].transform(aux_df)
     else:
-        # Với mô hình không có predict_proba (như LinearSVC thô)
-        decision = clf.decision_function(vec)[0]
+        aux_scaled = aux_df.values
+
+    # 2. Tiền xử lý & tách từ tiếng Việt
+    cleaned = clean_text(raw_text)
+    tokenized = segment_vietnamese(cleaned)
+
+    # 3. Vector hóa TF-IDF (5.000 chiều)
+    tfidf_vec = bundle["vectorizer"].transform([tokenized])
+
+    # 4. Hợp nhất thành vector 5.015 chiều
+    full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
+
+    # 5. Dự đoán xác suất
+    clf = bundle["model"]
+    if hasattr(clf, "predict_proba"):
+        proba = float(clf.predict_proba(full_vec)[0][1])
+    else:
+        decision = clf.decision_function(full_vec)[0]
         proba = float(1.0 / (1.0 + np.exp(-decision)))
 
     threshold = bundle.get("threshold", 0.5)
@@ -96,7 +108,8 @@ def predict_message(raw_text: str, bundle: dict) -> dict:
     # Trích xuất từ khóa bẫy tâm lý cơ bản (phục vụ hiển thị UI)
     risk_keywords = [
         "chuyển khoản", "mã otp", "công an", "viện kiểm sát", 
-        "trúng thưởng", "bắt giam", "phạt nguội", "khóa tài khoản"
+        "trúng thưởng", "bắt giam", "phạt nguội", "khóa tài khoản",
+        "vneid", "bảo hiểm", "cấp cứu", "bệnh viện"
     ]
     highlight_keywords = [kw for kw in risk_keywords if kw in raw_text.lower()]
 

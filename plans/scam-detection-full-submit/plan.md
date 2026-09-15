@@ -44,8 +44,8 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `passed` ✅ | Đạt 2.193 mẫu thực tế (Thanh: 1.773, Sơn: 215, Cẩm: 205); 100% Zero Synthetic; 0 duplicate; `data_validation.py` PASSED |
 | 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (15/09) | `passed` ✅ | Unicode NFC, 160 teencode, PyVi tokenized, 15 aux features, 21 tests passed, 2.193 dòng & 24 cột hoàn chỉnh |
 | 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (15/09) | `passed` ✅ | Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures; 34 tests PASS |
-| 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15/09) | `not-started` | NB trained, baseline metrics recorded |
-| 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `not-started` | RF+XGB trained, hypertuned, metrics > NB |
+| 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15–16/09) | `in-progress` 🚀 | NB training on Phase 03 matrices, baseline metrics & learning curve |
+| 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `in-progress` 🚀 | RF+XGB training on Phase 03 matrices, hypertuning, metrics > NB |
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 3 (19–20/09) | `not-started` | SVM trained, all 3+ models compared *(dời sang Sprint 3 để tránh quá tải cho Cẩm trong Sprint 2)* |
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `not-started` | Confusion Matrix, Learning Curves, SHAP top-20 keywords |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (16–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |

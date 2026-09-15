@@ -12,10 +12,10 @@
 |-------|-------|
 | Owner | **Cẩm** |
 | Priority | P1 |
-| Status | `not-started` |
-| Review | ⬜ Not reviewed |
+| Status | `in-progress` 🚀 |
+| Review | ⏳ Đang tiến hành thực nghiệm |
 | Estimated effort | 2–3h |
-| Sprint | Sprint 2 Fast-Track (14/09/2026) |
+| Sprint | Sprint 2 Fast-Track (15/09 – 16/09/2026) |
 
 ## Context
 
