@@ -146,99 +146,54 @@ dataset.csv (1,500+ mẫu tin nhắn tiếng Việt)
 
 ## Agent Workflow — Post-Implementation Checklist
 
-> **BẮT BUỘC cho mọi AI agent sau khi implement xong 1 phase.**
+> **BẮT BUỘC cho mọi AI agent và thành viên (Thanh, Cẩm, Sơn) sau khi triển khai xong 1 task hoặc 1 phase.**
+> Repository này (`CS114-Team10-Elderly-Scam-Detection`) là một dự án hoàn toàn độc lập, tự chứa (self-contained). Mọi đường dẫn và quy tắc dưới đây áp dụng trực tiếp từ thư mục gốc của repository này.
 
-### Sau khi code xong, agent phải làm theo thứ tự:
+### 1. Phân định hai cấp độ đồng bộ tài liệu
 
-```
-[1] Verify pipeline chạy đúng
-    → Chạy lại script chính, kiểm tra output khớp Success Criteria
-    → Không claim "done" nếu chưa chạy thực tế
+*   **Cấp 1 — Task-Level Sync (Vi mô — Trong từng đầu việc nhỏ):**
+    1. Đánh dấu `[x]` vào checkbox todo trong file kế hoạch phase (`plans/scam-detection-full-submit/phase-XX-*.md`).
+    2. Commit atomic bằng Conventional Commit (ví dụ: `feat(phase04): train naive bayes baseline`).
+    3. Tuyệt đối **KHÔNG** cập nhật lan tràn sang `AGENTS.md`, `project-roadmap.md` hoặc `plan.md` khi phase chưa hoàn thành trọn vẹn.
+*   **Cấp 2 — Phase-Level Sync (Vĩ mô — Khi hoàn thành trọn vẹn 1 Phase):**
+    *   Bắt buộc thực thi đồng bộ theo **Ma trận 10 Tài liệu Nội bộ (Internal Documentation Matrix)** bên dưới trước khi mở PR.
 
-[2] Update phase file (plans/scam-detection-full-submit/phase-XX-*.md)
-    → Điền Evidence section bằng output THỰC TẾ
-    → Tick [x] tất cả checklist items
-    → Viết Summary sau khi code xong
+### 2. Ma trận 10 Tài liệu Bắt buộc Đồng bộ Nội bộ Repo (Internal Documentation Matrix)
 
-[3] Update plan.md (plans/scam-detection-full-submit/plan.md)
-    → Đổi status phase vừa xong: pending → passed ✅
-    → Cập nhật field updated: với ngày thực tế
+| STT | Nhóm tài liệu | File đích | Điều kiện & Nội dung cập nhật bắt buộc |
+|:---:|---|---|---|
+| 1 | Kế hoạch chi tiết | `plans/scam-detection-full-submit/phase-XX-*.md` | Điền số liệu output thực tế vào mục `## Evidence`, viết `## Summary` sau triển khai, tick 100% checklist. |
+| 2 | Kế hoạch tổng thể | `plans/scam-detection-full-submit/plan.md` | Đổi status Phase từ `in-progress` sang `passed` ✅, cập nhật ngày hoàn thành `updated: YYYY-MM-DD`. |
+| 3 | Lộ trình & Phân công | `draft/scam-detection/docs/project-roadmap.md` | Cập nhật tiến độ biểu đồ Mermaid Gantt, đánh dấu hoàn thành trong bảng Sprint task của 3 thành viên. |
+| 4 | Bối cảnh điều phối AI | `AGENTS.md` (file này) | Cập nhật bảng `Current State`, bổ sung khối `Verdict` kết quả thực nghiệm, cập nhật `Next Actions`. |
+| 5 | Kiến trúc hệ thống | `draft/scam-detection/docs/system-architecture.md` | Cập nhật sơ đồ luồng dữ liệu, bảng không gian đặc trưng hoặc bảng artifacts nếu có thay đổi kỹ thuật. |
+| 6 | Technical Registries | `draft/scam-detection/{data,models,notebooks,reports}/README.md` | Đăng ký artifacts mới:<br>• `models/README.md`: Đăng ký tên model, hyperparams, 5 metrics (Acc, Prec, Rec, F1, ROC-AUC), file path.<br>• `data/processed/README.md`: Đăng ký schema 24 cột hoặc ma trận `.pkl` mới.<br>• `notebooks/README.md`: Xác nhận notebook 01–06 chạy hoàn tất, đã dọn sạch output cells (stripped outputs < 50MB).<br>• `reports/figures/README.md`: Đăng ký biểu đồ mới (300 DPI) kèm chú giải học thuật. |
+| 7 | Cổng thông tin nhóm | `README.md` & `draft/scam-detection/README.md` | Cập nhật trạng thái pipeline và bảng tiến độ Sprint tổng thể. |
+| 8 | Đề cương báo cáo | `plans/scam-detection-full-submit/phase-09-report-ppt.md` | Nạp ngay số liệu định lượng mới (metrics, bảng so sánh) vào outline Chương 4 để chuẩn bị xuất Word/Slide. |
+| 9 | Đóng gói nộp bài | `submit/README.md` | Rà soát danh mục artifacts cần đóng gói vào ZIP `25730067-25730013-25730061.zip`. |
+| 10 | Pull Request chuẩn UIT | GitHub Pull Request | Mở PR theo đúng quy chuẩn: Tiêu đề Title Case không prefix, Body Tiếng Việt danh sách gạch đầu dòng lồng nhau, kết thúc bằng `- Xác minh kiểm định thực nghiệm:`. |
 
-[4] Update AGENTS.md (file này)
-    → Cập nhật bảng Current State
-    → Cập nhật Next Actions
+### 3. Quy tắc về .pkl và artifacts
 
-[5] Update docs/ (nếu architecture/data thay đổi)
-    → system-architecture.md: cập nhật pipeline diagram nếu có bước mới
-    → project-overview-pdr.md: cập nhật số liệu nếu thay đổi
+*   `data/raw/dataset.csv` → **Commit nếu < 50MB** (dataset 2.193 mẫu thực tế, 100% Zero Synthetic Text)
+*   `data/processed/*.pkl` (TF-IDF matrices, splits) → **Commit luôn** nếu < 50MB
+*   `models/vectorizer.pkl`, `models/best_model_bundle.pkl` → **Commit luôn** nếu < 50MB (phục vụ Demo UI và kiểm định)
+*   `models/*.pkl` lớn (> 50MB) → **Gitignore** → ghi hướng dẫn reproduce rõ ràng trong `models/README.md`
 
-[6] Update README files (nếu cần)
-    → draft/scam-detection/README.md: cập nhật Workflow status
-    → Final/README.md: cập nhật Sprint progress
+### 4. Quy chuẩn tạo Pull Request (PR Standards) — BẮT BUỘC
 
-[7] Xử lý artifacts (data, models)
-    → Kiểm tra file .pkl nào team cần → đảm bảo KHÔNG bị gitignore
-    → Processed data (< ~50MB) → commit luôn để team dùng
-    → Model lớn (> 50MB) → để trong gitignore, ghi hướng dẫn reproduce
-
-[8] Commit
-    → feat(phaseXX): <mô tả ngắn>  ← code + notebook
-    → docs(phaseXX): <mô tả ngắn> ← docs/README riêng nếu nhiều thay đổi
-
-[9] Tạo Pull Request (PR) theo chuẩn quy định
-    → Title: Tiếng Anh, Title Case, KHÔNG dùng tiền tố commit (không feat/fix/chore)
-    → Body: Tóm tắt công việc đã làm trên PR đó, tiếng Việt, các gạch đầu dòng chi tiết
-    → Assignee: Tự gán chính mình (--assignee "@me")
-```
-
-### Quy chuẩn tạo Pull Request (PR Standards) — BẮT BUỘC
-
-> 📌 **Mọi Agent AI khi tạo PR bắt buộc phải tuân theo khuôn mẫu chuẩn của [PR #1](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection/pull/1) & [PR #2](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection/pull/2):**
-
-1. **PR Title (Tiêu đề PR):**
-   - Sử dụng **Tiếng Anh** hoàn toàn, viết hoa dạng Title Case.
-   - **TUYỆT ĐỐI KHÔNG dùng tiền tố commit message** (KHÔNG dùng `feat:`, `feat(ci):`, `fix:`, `chore:`, `docs:`...).
-   - *Ví dụ chuẩn:*
-     - ✅ `Setup Development Environment, Utility Helpers, and Dataset Ingestion Template` (PR #1)
-     - ✅ `Setup Automated PR Code Review with Google Gemini Flash` (PR #2)
-     - ❌ `feat(ci): integrate automated PR code review via Google Gemini Flash` (Sai convention)
-
-2. **PR Body (Nội dung mô tả PR):**
-   - Tóm tắt công việc đã làm trên PR bằng **Tiếng Việt**.
-   - Trình bày dạng **các gạch đầu dòng phân cấp rõ ràng**:
-     - Cấp 1 (`-`): Nhóm đầu việc lớn kèm đường dẫn/file liên quan trong dấu backticks.
-     - Cấp 2 (`  -`): Chi tiết kỹ thuật, cấu hình, logic triển khai hoặc tiêu chí nghiệm thu đạt được.
-   - Thuật ngữ kỹ thuật, tên thư viện, hàm, biến số, đường dẫn tệp bắt buộc đặt trong dấu code backticks (ví dụ: `requirements.txt`, `RANDOM_STATE = 42`).
-
-3. **Assignee (Người phụ trách):**
-   - **Tự assign chính mình** vào PR ngay khi tạo thông qua cờ `--assignee "@me"`.
-   - *Mẫu lệnh chuẩn qua GitHub CLI:*
-     ```bash
-     gh pr create \
-       --base main \
-       --head <branch-name> \
-       --title "<Title In English Without Commit Prefix>" \
-       --body-file <path/to/pr_body.md> \
-       --assignee "@me"
-     ```
-
-### File nào phải update sau mỗi phase
-
-| File | Khi nào cập nhật |
-|------|----------------|
-| `plans/.../phase-XX-*.md` | Luôn luôn — điền Evidence + Summary |
-| `plans/.../plan.md` | Luôn luôn — đổi status + updated date |
-| `AGENTS.md` | Luôn luôn — Current State + Next Actions |
-| `draft/scam-detection/README.md` | Khi có file mới hoặc workflow thay đổi |
-| `Final/README.md` | Khi sprint status thay đổi |
-| `docs/system-architecture.md` | Khi pipeline có thêm/bớt bước |
-
-### Quy tắc về .pkl và artifacts
-
-- `data/raw/dataset.csv` → **Commit nếu < 50MB** (dataset tự tạo)
-- `data/processed/*.pkl` (TF-IDF matrices, splits) → **Commit luôn** nếu < 50MB
-- `models/vectorizer.pkl` → **Commit luôn** (nhỏ, team UI cần)
-- `models/*.pkl` lớn → **Gitignore** (thường > 50MB) → ghi hướng dẫn reproduce
+> 📌 **Mọi Agent AI và thành viên khi tạo PR bắt buộc phải tuân theo quy chuẩn:**
+> 1. **PR Title**: Viết bằng Tiếng Anh chuẩn **Title Case**, bắt đầu bằng Imperative Verb, **TUYỆT ĐỐI KHÔNG** dùng tiền tố (`feat:`, `chore:`, `fix:`, `docs:`...).
+> 2. **PR Body**: Viết bằng **Tiếng Việt**, sử dụng cấu trúc **danh sách gạch đầu dòng lồng nhau (nested bullet points)** súc tích:
+>    * Mục lớn: `- [Động từ hành động tóm tắt công việc]:`
+>    * Mục con: `  - [Mô tả chi tiết]:` ghi rõ đường dẫn tệp trong backticks (`path/to/file`), hàm được sửa đổi, số liệu kỹ thuật.
+>    * Mục cuối cùng luôn là: `- Xác minh kiểm định thực nghiệm:` ghi rõ kết quả kiểm định (`pytest`, test scripts), dung lượng tệp an toàn Git (< 50MB).
+>    * **TUYỆT ĐỐI KHÔNG** chèn bảng lớn, checklist `[x]`, hay badges rườm rà vào PR body.
+> 3. **Assignee**: Tự gán chính mình `--assignee "@me"`.
+> 4. **Lệnh kiểm tra trước khi mở PR:**
+>    ```bash
+>    python3 verify_final.py
+>    ```
 
 ---
 

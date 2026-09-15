@@ -15,7 +15,7 @@ Hệ thống đã kết nối trực tiếp đến Kaggle API, tải về toàn 
 | **1** | `pak3k8/scamshield-vn-vietnamese-scam-and-phishing-detection` | PAK Phan | **16.673 dòng**<br>(`scamshield_vn_public.csv`) | 15.648 URLs lừa đảo, 1.000 tên miền, 25 tin nhắn cảnh báo OTP an toàn. **0 mẫu tin nhắn lừa đảo dạng text.** |
 | **2** | `trnminhmn/vietnamese-sms-spam-detection-dataset` | Trần Minh Mẫn (ĐH Nam Cần Thơ) | **5.819 dòng**<br>(`vi_dataset.csv`) | Gồm 4.823 `ham`, 746 `spam`, 250 nhãn `1`. Là bản dịch máy từ bộ UCI tiếng Anh + spam vay tiền template. |
 | **3** | `phcohng/vietnamese-sms-spam-dataset` | Phước Đào Hồng | **10.961 dòng**<br>(`vi_dataset.csv`) | Gồm 8.555 `ham`, 2.406 `spam`. Toàn bộ là tin rác quảng cáo trúng thưởng tiếng Anh dịch tự động. |
-| **4** | `tuan251209/vietnamese-sms-dataset` | Thái Tuấn (`tranguyenthaituan`) | **2.991 dòng**<br>(`full_dataset.csv`) | Gồm 2.193 `ham`, 798 `spam`. Chuyên phishing mạo danh ngân hàng và cờ bạc. **(Đã được Nhóm trưởng Đặng Chí Thanh sử dụng)**. |
+| **4** | `tuan251209/vietnamese-sms-dataset` | Thái Tuấn (`tranguyenthaituan`) | **2.991 dòng**<br>(`full_dataset.csv`) | Gồm 2.193 `ham`, 798 `spam`. Chuyên phishing mạo danh ngân hàng và cờ bạc. **(Đã được lead Đặng Chí Thanh sử dụng)**. |
 
 ---
 
@@ -63,11 +63,11 @@ Nhóm từ khóa kiểm tra thực nghiệm (Regex Match):
 
 ### D. Bộ `tuan251209/vietnamese-sms-dataset` (2.991 dòng)
 * **Tác giả:** Trần Nguyễn Thái Tuấn.
-* **Đối soát với Nhóm 10:** Đây là bộ dữ liệu mà **Đặng Chí Thanh (Nhóm trưởng)** đã lấy phần tin nhắn bình thường (Normal).
+* **Đối soát với Nhóm 10:** Đây là bộ dữ liệu mà **Đặng Chí Thanh (lead)** đã lấy phần tin nhắn bình thường (Normal).
 * **Kết quả bóc tách nhãn `label = 1` (798 dòng):**
   * Tập trung vào: Mạo danh Brandname ngân hàng (Vietcombank, Techcombank, ACB...) gắn link phishing, tin nhắn mời đánh bạc trực tuyến, tin nhắn Pháp Luân Công.
   * **Số mẫu khớp `fear_authority` và `family_emergency`:** **0 mẫu**.
-* **Kết luận:** Vừa không có 2 chủ đề của anh Sơn, vừa **trùng nguồn với Nhóm trưởng Thanh** nên tuyệt đối không được đưa vào.
+* **Kết luận:** Vừa không có 2 chủ đề của anh Sơn, vừa **trùng nguồn với lead Thanh** nên tuyệt đối không được đưa vào.
 
 ---
 
