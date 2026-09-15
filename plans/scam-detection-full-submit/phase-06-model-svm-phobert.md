@@ -23,6 +23,23 @@ SVM (Support Vector Machine) là mô hình thứ 3 bắt buộc theo yêu cầu 
 
 ## Implementation Steps
 
+### Step 0 — Nạp Feature Matrices Từ Phase 03 (KHÔNG tự split lại)
+
+> ⚠️ **BẮT BUỘC:** Load `X_train.pkl` / `X_test.pkl` đã có từ Phase 03. TUYỆT ĐỐI KHÔNG fit lại TF-IDF hay split lại dataset — sẽ tạo split khác, phá vỡ consistency với Phase 04 và Phase 07.
+
+```python
+import joblib
+from pathlib import Path
+from src.utils import RANDOM_STATE
+
+DATA_DIR = Path("data/processed")
+
+X_train = joblib.load(DATA_DIR / "X_train.pkl")   # (1754, 5015) sparse CSR
+X_test  = joblib.load(DATA_DIR / "X_test.pkl")    # (439, 5015)  sparse CSR
+y_train = joblib.load(DATA_DIR / "y_train.pkl")   # 336 scam / 1418 normal
+y_test  = joblib.load(DATA_DIR / "y_test.pkl")    # 84 scam / 355 normal
+```
+
 ### Step 1 — SVM Linear
 
 ```python

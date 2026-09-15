@@ -102,6 +102,8 @@ Nhằm tránh xung đột mã nguồn (merge conflicts), mỗi thành viên ch�
 | **Bùi Thị Mỷ Cẩm** | `25730013` | Baseline & Advanced Models (NB, XGBoost, SVM) | `03_model_naive_bayes.ipynb`<br>`04_model_xgboost.ipynb`<br>`05_model_svm.ipynb` |
 | **Hoàng Cao Sơn** | `25730061` | Data Collection Lead, Random Forest, Streamlit Demo UI | `04_model_random_forest.ipynb`<br>`demo/app.py` |
 
+> 💡 **Quy tắc Git Hygiene cho Notebooks:** Các notebook `01_preprocessing.ipynb` và `02_eda.ipynb` đã hoàn tất thực nghiệm kiểm chứng 100% (đã sinh ra `dataset_preprocessed.csv`, các ma trận `.pkl` trong `data/processed/`, và 7 biểu đồ 300 DPI trong `reports/figures/`). Định dạng commit trên Git được dọn sạch cell output thừa (stripped outputs) để duy trì dung lượng repo gọn nhẹ theo tiêu chuẩn Git của UIT và tránh xung đột merge nhị phân.
+
 ---
 
 ## 🎯 Chỉ số Nghiệm thu Cốt lõi (Acceptance Criteria)
@@ -121,7 +123,7 @@ Nhằm tránh xung đột mã nguồn (merge conflicts), mỗi thành viên ch�
 |-------|-------------|------------------|
 | Phase 02 (Preprocessing) | ✅ PASSED | `dataset_preprocessed.csv` (2193×24) |
 | Phase 03 (EDA + Features) | ✅ PASSED | `X_train.pkl` (1754×5015), `X_test.pkl` (439×5015), 7 EDA figures @ 300 DPI |
-| Phase 04 (Naive Bayes) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
-| Phase 05 (RF) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
+| Phase 04 (Naive Bayes) | 🚀 Đang thực hiện | Cần: `X_train.pkl`, `y_train.pkl` |
+| Phase 05 (RF & XGBoost) | 🚀 Đang thực hiện | Cần: `X_train.pkl`, `y_train.pkl` |
 | Phase 06 (SVM) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
 

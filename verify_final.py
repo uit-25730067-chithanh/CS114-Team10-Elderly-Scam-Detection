@@ -175,6 +175,71 @@ def main() -> int:
             log_error(f"MSSV {mssv} missing in README.md")
             all_passed = False
 
+    # 8. Verify Documentation Semantic Parity & 11-File Matrix
+    log_info("Checking Documentation Semantic Parity & 11-File Matrix...")
+    matrix_files = [
+        ("Kế hoạch chi tiết (phase files)", list(plans_dir.glob("phase-*.md"))),
+        ("Kế hoạch tổng thể (plan.md)", [plans_dir / "plan.md"]),
+        ("Lộ trình & Phân công (project-roadmap.md)", [draft_dir / "docs" / "project-roadmap.md"]),
+        ("Bối cảnh điều phối AI (AGENTS.md)", [final_dir / "AGENTS.md"]),
+        ("Kiến trúc hệ thống (system-architecture.md)", [draft_dir / "docs" / "system-architecture.md"]),
+        ("Data Dictionary Registry", [draft_dir / "data" / "processed" / "README.md"]),
+        ("Model Registry", [draft_dir / "models" / "README.md"]),
+        ("Notebook Registry", [draft_dir / "notebooks" / "README.md"]),
+        ("Figure Catalog Registry", [draft_dir / "reports" / "figures" / "README.md"]),
+        ("Cổng thông tin nhóm (README files)", [final_dir / "README.md", draft_dir / "README.md"]),
+        ("Đề cương báo cáo (phase-09-report-ppt.md)", [plans_dir / "phase-09-report-ppt.md"]),
+        ("Đóng gói nộp bài (submit/README.md)", [final_dir / "submit" / "README.md"]),
+    ]
+
+    for label, files in matrix_files:
+        for f in files:
+            if f.is_file() and f.stat().st_size > 100:
+                log_success(f"[Parity] {label}: {f.name} verified ({f.stat().st_size} bytes)")
+            else:
+                log_error(f"[Parity] Missing or empty matrix file: {label} ({f})")
+                all_passed = False
+
+    plan_file = plans_dir / "plan.md"
+    agents_file = final_dir / "AGENTS.md"
+    roadmap_file = draft_dir / "docs" / "project-roadmap.md"
+
+    if plan_file.is_file() and agents_file.is_file() and roadmap_file.is_file():
+        plan_content = plan_file.read_text(encoding="utf-8")
+        agents_content = agents_file.read_text(encoding="utf-8")
+        roadmap_content = roadmap_file.read_text(encoding="utf-8")
+
+        phase_matches = re.findall(r"\|\s*(\d{2})\s*\|.*?\|\s*`?([a-z-]+)`?\s*[✅🚀]*\s*\|", plan_content)
+        for phase_id_str, status in phase_matches:
+            phase_tag = f"Phase {phase_id_str}"
+            if status == "passed":
+                phase_mds = list(plans_dir.glob(f"phase-{phase_id_str}-*.md"))
+                if phase_mds:
+                    phase_text = phase_mds[0].read_text(encoding="utf-8")
+                    if "## Evidence" in phase_text or "### Evidence" in phase_text:
+                        evidence_part = re.split(r"#{2,3}\s*Evidence", phase_text)[-1][:300]
+                        if len(evidence_part.strip()) > 30:
+                            log_success(f"[Parity] {phase_tag} ({status}): Evidence verified in {phase_mds[0].name}")
+                        else:
+                            log_warning(f"[Parity] {phase_tag} marked passed but Evidence section is brief/empty")
+                    else:
+                        log_error(f"[Parity] {phase_tag} marked passed but missing '## Evidence' section")
+                        all_passed = False
+
+                sync_pattern = rf"(?:done|passed|hoàn thành).*?phase\s*{phase_id_str}|phase\s*{phase_id_str}.*?(?:done|passed|hoàn thành)"
+
+                if re.search(sync_pattern, agents_content, re.IGNORECASE):
+                    log_success(f"[Parity] {phase_tag} status synchronized in AGENTS.md")
+                else:
+                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in AGENTS.md")
+                    all_passed = False
+
+                if re.search(sync_pattern, roadmap_content, re.IGNORECASE):
+                    log_success(f"[Parity] {phase_tag} status synchronized in project-roadmap.md")
+                else:
+                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in project-roadmap.md")
+                    all_passed = False
+
     # Final Summary
     print("-" * 50)
     if all_passed:

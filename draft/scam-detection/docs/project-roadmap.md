@@ -25,10 +25,10 @@ gantt
     Khóa dataset.csv 2.193 mẫu & chia 80/20 (Thanh):done, s1_4, 2026-09-14, 2026-09-15
 
     section Sprint 2: Song song NLP & ML (15/09 – 18/09)
-    Tiền xử lý NLP tiếng Việt (Thanh)              :active, s2_1, 2026-09-15, 2026-09-16
-    EDA & Trích xuất TF-IDF (Thanh)                :s2_2, 2026-09-16, 2026-09-17
-    Naive Bayes Baseline (Cẩm)                     :s2_3, 2026-09-15, 2026-09-16
-    Random Forest & Hypertuning (Sơn)              :s2_4, 2026-09-16, 2026-09-17
+    Tiền xử lý NLP tiếng Việt (Thanh)              :done, s2_1, 2026-09-15, 2026-09-15
+    EDA & Zero-Leakage Features (Thanh)            :done, s2_2, 2026-09-15, 2026-09-15
+    Naive Bayes Baseline (Cẩm)                     :active, s2_3, 2026-09-15, 2026-09-16
+    Random Forest & Hypertuning (Sơn)              :active, s2_4, 2026-09-15, 2026-09-16
     XGBoost & SVM Linear/RBF (Cẩm)                 :s2_5, 2026-09-16, 2026-09-17
     Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-16, 2026-09-18
     Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-15, 2026-09-18
@@ -83,17 +83,18 @@ gantt
 ### Thanh (Data & NLP Lead)
 | Task | Trạng thái |
 |------|:---:|
-| `src/preprocessing/text_cleaner.py`: Unicode NFC, teencode mapper, xóa rác | 🚀 Đang làm (15/09) |
-| `src/preprocessing/tokenizer.py` (pyvi) + stopwords | ⏳ (15/09) |
-| `src/preprocessing/pipeline.py` + trích xuất đặc trưng phụ (URL, SĐT, cấp cứu) | ⏳ (15/09 – 16/09) |
-| `notebooks/01_preprocessing.ipynb`: Thực nghiệm pipeline và xuất CSV sạch | ⏳ (16/09) |
-| `notebooks/02_eda.ipynb`: Phân phối nhãn, n-grams, word cloud, độ dài | ⏳ (16/09) |
-| Lưu trữ `models/vectorizer.pkl` và các ma trận đặc trưng `data/processed/` | ⏳ (16/09 – 17/09) |
+| `src/preprocessing/text_cleaner.py`: Unicode NFC, teencode mapper, 160 teencode, 15 aux features | ✅ Done (Phase 02 PASSED — PR #12) |
+| `src/preprocessing/tokenizer.py` (pyvi) + stopwords domain-guard | ✅ Done (Phase 02 PASSED — PR #12) |
+| `src/preprocessing/pipeline.py` + `dataset_preprocessed.csv` (2.193 dòng, 24 cột) | ✅ Done (Phase 02 PASSED — PR #12) |
+| `notebooks/01_preprocessing.ipynb`: Thực nghiệm pipeline và xuất CSV sạch | ✅ Done (Phase 02 PASSED — PR #12) |
+| `notebooks/02_eda.ipynb`: Phân phối nhãn, n-grams, word cloud, độ dài, heatmap (7 figures @ 300 DPI) | ✅ Done (Phase 03 PASSED — PR #13) |
+| `src/feature_engineering.py`: Zero-leakage pipeline (Split FIRST 80/20 → TF-IDF & Scaler fit on train only) | ✅ Done (Phase 03 PASSED — PR #13) |
+| Xuất ma trận `data/processed/`: `X_train.pkl` (1754×5015), `X_test.pkl` (439×5015), `y_train.pkl`, `y_test.pkl` | ✅ Done (Phase 03 PASSED — PR #13) |
 
 ### Cẩm (Modeling Engineer — NB, XGBoost, SVM)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/03_model_naive_bayes.ipynb`: GridSearch alpha, Learning Curve, Confusion Matrix | ⏳ (15/09 – 16/09) |
+| `notebooks/03_model_naive_bayes.ipynb`: Nạp ma trận Phase 03, GridSearch alpha, Learning Curve | 🚀 Đang làm (15/09 – 16/09) |
 | `models/naive_bayes.pkl`: Lưu trọng số baseline | ⏳ (16/09) |
 | `notebooks/04_model_xgboost.ipynb`: Tinh chỉnh n_estimators, max_depth, learning_rate | ⏳ (16/09 – 17/09) |
 | `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ⏳ (16/09 – 17/09) |
@@ -102,8 +103,8 @@ gantt
 ### Sơn (Modeling & UI Lead — Random Forest & Demo UI)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/04_model_random_forest.ipynb`: RandomizedSearch n_estimators, max_depth | ⏳ (16/09 – 17/09) |
-| `models/random_forest.pkl`: Lưu trọng số Random Forest | ⏳ (17/09) |
+| `notebooks/04_model_random_forest.ipynb`: Nạp ma trận Phase 03, RandomizedSearch n_estimators, max_depth | 🚀 Đang làm (15/09 – 16/09) |
+| `models/random_forest.pkl`: Lưu trọng số Random Forest | ⏳ (16/09 – 17/09) |
 | `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ⏳ (16/09 – 17/09) |
 | `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ⏳ (17/09 – 18/09) |
 
