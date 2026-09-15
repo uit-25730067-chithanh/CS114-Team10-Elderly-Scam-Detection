@@ -23,34 +23,50 @@ Multinomial Naive Bayes là baseline model cho bài toán text classification. �
 
 ## Implementation Steps
 
-### Step 1 — Train/Val/Test Split
+### Step 1 — Nạp Feature Matrices Từ Phase 03 (KHÔNG tự split lại)
+
+> ⚠️ **BẮT BUỘC:** Dùng lại `X_train.pkl` / `X_test.pkl` từ Phase 03. TUYỆT ĐỐI KHÔNG gọi `train_test_split` hay `TfidfVectorizer.fit_transform` lại — sẽ tạo split khác và phá vỡ zero-leakage protocol.
 
 ```python
-from sklearn.model_selection import train_test_split
-from src.utils import RANDOM_STATE, TEST_SIZE
+import joblib
+import numpy as np
+from pathlib import Path
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X_combined, y, test_size=TEST_SIZE,
-    random_state=RANDOM_STATE, stratify=y
-)
-X_train, X_val, y_train, y_val = train_test_split(
+DATA_DIR = Path("data/processed")
+
+# Nạp feature matrices (sparse CSR) và labels
+X_train = joblib.load(DATA_DIR / "X_train.pkl")   # shape (1754, 5015)
+X_test  = joblib.load(DATA_DIR / "X_test.pkl")    # shape (439, 5015)
+y_train = joblib.load(DATA_DIR / "y_train.pkl")   # 336 scam / 1418 normal
+y_test  = joblib.load(DATA_DIR / "y_test.pkl")    # 84 scam / 355 normal
+
+print(f"X_train: {X_train.shape}, X_test: {X_test.shape}")
+# → X_train: (1754, 5015), X_test: (439, 5015)
+
+# Nếu cần validation set (15% của train), tạo từ X_train:
+from sklearn.model_selection import train_test_split
+from src.utils import RANDOM_STATE
+
+X_tr, X_val, y_tr, y_val = train_test_split(
     X_train, y_train, test_size=0.15,
     random_state=RANDOM_STATE, stratify=y_train
 )
 ```
+
 
 ### Step 2 — Train Naive Bayes
 
 ```python
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
 
 nb_model = MultinomialNB(alpha=1.0)
-nb_model.fit(X_train, y_train)
+nb_model.fit(X_tr, y_tr)  # train trên 85% của X_train (không dùng X_test)
 
-# Evaluate on validation set
+# Evaluate trên validation set
 y_val_pred = nb_model.predict(X_val)
-print(classification_report(y_val, y_val_pred, target_names=['Normal', 'Scam']))
+print(classification_report(y_val, y_val_pred, target_names=['Bình thường', 'Lừa đảo']))
 ```
 
 ### Step 3 — Hyperparameter Tuning (alpha)

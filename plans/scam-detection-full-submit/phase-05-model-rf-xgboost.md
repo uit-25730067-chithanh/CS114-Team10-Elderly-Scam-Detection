@@ -23,11 +23,35 @@ Ensemble models (Random Forest, XGBoost) thường vượt trội NB trên tabul
 
 ## Implementation Steps
 
+### Step 0 — Nạp Feature Matrices Từ Phase 03 (KHÔNG tự split lại)
+
+> ⚠️ **BẮT BUỘC:** Load `X_train.pkl` / `X_test.pkl` đã có từ Phase 03. TUYỆT ĐỐI KHÔNG fit lại TF-IDF hay split lại dataset — sẽ tạo split khác, phá vỡ consistency với Phase 04 và Phase 07.
+
+```python
+import joblib
+import numpy as np
+from pathlib import Path
+from sklearn.model_selection import train_test_split
+from src.utils import RANDOM_STATE
+
+DATA_DIR = Path("data/processed")
+
+X_train = joblib.load(DATA_DIR / "X_train.pkl")   # (1754, 5015) sparse CSR
+X_test  = joblib.load(DATA_DIR / "X_test.pkl")    # (439, 5015)  sparse CSR
+y_train = joblib.load(DATA_DIR / "y_train.pkl")   # 336 scam / 1418 normal
+y_test  = joblib.load(DATA_DIR / "y_test.pkl")    # 84 scam / 355 normal
+
+# Tạo validation set từ X_train (15%)
+X_tr, X_val, y_tr, y_val = train_test_split(
+    X_train, y_train, test_size=0.15,
+    random_state=RANDOM_STATE, stratify=y_train
+)
+```
+
 ### Step 1 — Random Forest
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
-from src.utils import RANDOM_STATE
 
 rf_model = RandomForestClassifier(
     n_estimators=200,
@@ -37,7 +61,7 @@ rf_model = RandomForestClassifier(
     random_state=RANDOM_STATE,
     n_jobs=-1,
 )
-rf_model.fit(X_train, y_train)
+rf_model.fit(X_tr, y_tr)
 ```
 
 ### Step 2 — XGBoost
@@ -45,17 +69,20 @@ rf_model.fit(X_train, y_train)
 ```python
 import xgboost as xgb
 
+# scale_pos_weight = normal/scam = 1418/336 ≈ 4.22 (bù class imbalance)
+scale_pw = len(y_tr[y_tr == 0]) / len(y_tr[y_tr == 1])
+
 xgb_model = xgb.XGBClassifier(
     n_estimators=200,
     max_depth=6,
     learning_rate=0.1,
-    scale_pos_weight=len(y_train[y_train==0]) / len(y_train[y_train==1]),
+    scale_pos_weight=scale_pw,
     random_state=RANDOM_STATE,
     eval_metric='logloss',
-    use_label_encoder=False,
+    # use_label_encoder đã bị bỏ trong XGBoost 2.x — KHÔNG thêm vào
 )
 xgb_model.fit(
-    X_train, y_train,
+    X_tr, y_tr,
     eval_set=[(X_val, y_val)],
     verbose=False,
 )

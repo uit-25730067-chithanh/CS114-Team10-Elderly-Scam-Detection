@@ -143,9 +143,9 @@ Raw Text (2,193 mẫu thực tế)
 ## 4. Kế Hoạch Chuyển Giao & Tái Cấu Trúc
 
 1. **Mã nguồn**:
-   - Nâng cấp [`text_cleaner.py`](file:///Users/tcdtist/dev/uit/cs114/assignments/Final/draft/scam-detection/src/preprocessing/text_cleaner.py): Tích hợp `underthesea.text_normalize`, bổ sung de-obfuscation leet-speak, mở rộng `TEENCODE_DICT` lên 160+ từ.
-   - Nâng cấp [`tokenizer.py`](file:///Users/tcdtist/dev/uit/cs114/assignments/Final/draft/scam-detection/src/preprocessing/tokenizer.py): Thêm phrase-joining cho tin nhắn không dấu trước khi gọi `ViTokenizer`.
-   - Nâng cấp [`pipeline.py`](file:///Users/tcdtist/dev/uit/cs114/assignments/Final/draft/scam-detection/src/preprocessing/pipeline.py): Nâng cấp bộ trích xuất đặc trưng phụ lên 14 cột, bao quát toàn diện nhãn masked entities.
+   - Nâng cấp [`text_cleaner.py`](src/preprocessing/text_cleaner.py): Tích hợp `underthesea.text_normalize`, bổ sung de-obfuscation leet-speak, mở rộng `TEENCODE_DICT` lên 160+ từ.
+   - Nâng cấp [`tokenizer.py`](src/preprocessing/tokenizer.py): Thêm phrase-joining cho tin nhắn không dấu trước khi gọi `ViTokenizer`.
+   - Nâng cấp [`pipeline.py`](src/preprocessing/pipeline.py): Nâng cấp bộ trích xuất đặc trưng phụ lên 14 cột, bao quát toàn diện nhãn masked entities.
 2. **Kiểm thử**: Mở rộng `test_preprocessing.py` từ 13 lên 20+ test cases kiểm định leet-speak, không dấu, và nhãn masked.
 3. **Dữ liệu & Sổ tay**: Tái tạo `dataset_preprocessed.csv` và chạy lại `01_preprocessing.ipynb`.
 4. **Git & PR**: Commit các cải tiến và cập nhật PR #12.

@@ -111,32 +111,60 @@ plt.savefig("reports/figures/precision_recall_curves.png", dpi=150)
 ### Step 6 — XAI: Top-20 Scam Keywords
 
 ```python
-# Method 1: TF-IDF feature weights from best model
-feature_names = tfidf.get_feature_names_out()
+import json
+import numpy as np
+
+# Load feature names từ Phase 03 artifact (5000 TF-IDF + 15 aux)
+with open("data/processed/feature_names.json") as f:
+    feature_names = json.load(f)   # list của 5015 tên
+tfidf_names = feature_names[:5000]  # chỉ lấy phần TF-IDF cho XAI text
 
 # For Naive Bayes: log probabilities
 nb_scam_features = nb_model.feature_log_prob_[1] - nb_model.feature_log_prob_[0]
+top_20_nb = np.argsort(nb_scam_features[:5000])[-20:][::-1]
 
 # For RF/XGB: feature_importances_
-rf_importances = rf_model.feature_importances_[:len(feature_names)]
+rf_importances = rf_model.feature_importances_[:5000]  # chỉ lấy TF-IDF part
+xgb_importances = xgb_model.feature_importances_[:5000]
 
-# For SVM: coef_
-svm_weights = svm_model.estimator.coef_[0][:len(feature_names)]
+# For SVM (CalibratedClassifierCV): độ quan trọng qua calibrated estimators
+# LinearSVC được bao trong CalibratedClassifierCV — không dùng .estimator.coef_ trực tiếp
+svm_weights_list = [
+    est.estimator.coef_[0][:5000]
+    for est in svm_model.calibrated_classifiers_
+]
+svm_weights = np.mean(svm_weights_list, axis=0)
 
 # Top-20 keywords per model
-top_20_indices = np.argsort(rf_importances)[-20:][::-1]
-top_20_keywords = [(feature_names[i], rf_importances[i]) for i in top_20_indices]
+for name, importances in [("NB", nb_scam_features[:5000]), ("RF", rf_importances),
+                          ("XGB", xgb_importances), ("SVM", svm_weights)]:
+    top20_idx = np.argsort(importances)[-20:][::-1]
+    top20 = [(tfidf_names[i], float(importances[i])) for i in top20_idx]
+    print(f"\nTop-20 Scam Keywords [{name}]:")
+    for kw, score in top20:
+        print(f"  {kw}: {score:.4f}")
 ```
 
 ### Step 7 — (Optional) SHAP Values
 
+> ⚠️ Cài đặt SHAP nếu chưa có: `pip install shap>=0.45.0`  
+> **Hiện tại `shap` chưa trong môi trường — chạy `pip install shap` trước khi thực hiện step này.**
+
 ```python
 import shap
 
-# SHAP for XGBoost
+# SHAP for XGBoost (nếp nhanh hơn các model khác)
 explainer = shap.TreeExplainer(xgb_model)
-shap_values = explainer.shap_values(X_test[:100])
-shap.summary_plot(shap_values, X_test[:100], feature_names=all_feature_names)
+shap_values = explainer.shap_values(X_test[:100])  # chỉ lấy 100 mẫu đầu tiên cho tốc độ
+shap.summary_plot(
+    shap_values, X_test[:100].toarray(),  # sparse → dense cho SHAP
+    feature_names=tfidf_names,
+    max_display=20,
+    show=False,
+)
+import matplotlib.pyplot as plt
+plt.tight_layout()
+plt.savefig("reports/figures/shap_summary.png", dpi=150, bbox_inches='tight')
 ```
 
 ## Related Files
