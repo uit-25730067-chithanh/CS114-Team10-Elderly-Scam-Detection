@@ -25,7 +25,7 @@ scam-detection/
 │   │   ├── staging_cam_scam.csv     ← 205 mẫu lừa đảo đời thực của Bùi Thị Mỷ Cẩm (7 tầng kiểm toán)
 │   │   ├── staging_son_scam.csv     ← 215 mẫu lừa đảo đời thực của Hoàng Cao Sơn (7 tầng kiểm toán)
 │   │   └── dataset.csv              ← Bộ dữ liệu tích hợp chính thức (2.193 mẫu thực tế, 100% Zero Synthetic Text)
-│   ├── processed/                   ← dataset_preprocessed.csv (2.193 dòng, 24 cột), real_world_test_thanh.csv, ma trận đặc trưng
+│   ├── processed/                   ← dataset_preprocessed.csv (2.193 dòng, 24 cột), X_train.pkl (1754×5015), X_test.pkl (439×5015), y_train.pkl, y_test.pkl, tfidf_vectorizer.pkl, aux_scaler.pkl, feature_names.json (5015 tên đặc trưng).
 │   ├── evidence/                    ← Ảnh chụp màn hình SMS minh chứng đời thực (Drive Vault) & JSON metadata
 │   └── scripts/                     ← Bộ công cụ tự động hóa dữ liệu
 │       ├── anonymize_sms.py         ← Ẩn danh hóa PII (che SĐT, STK, OTP, CCCD)
@@ -57,7 +57,12 @@ scam-detection/
 │   ├── evaluation/                  ← Tính metrics, vẽ đồ thị, trích xuất XAI
 │   ├── models/                      ← Định nghĩa wrapper các mô hình
 │   ├── preprocessing/               ← Chuẩn hóa Unicode, tách từ pyvi, stopwords
-│   └── utils/                       ← Helpers, constants, random seeds
+│   ├── utils/                       ← Helpers, constants, random seeds
+│   ├── feature_engineering.py       ← [Phase 03] Zero-leakage pipeline (DataSplitter, TextFeatureExtractor, AuxiliaryFeatureScaler)
+│   ├── feature_engineering_config.py ← [Phase 03] Hằng số TF-IDF, tên cột, EXPECTED_N_FEATURES=5015
+│   ├── eda_plots_part1.py           ← [Phase 03] EDA plots: label, category, text length, wordcloud
+│   ├── eda_plots_part2.py           ← [Phase 03] EDA plots: n-grams, correlation heatmap, source
+│   └── eda_visualizations.py        ← [Phase 03] EDA orchestrator (7 figures @ 300 DPI)
 ├── requirements.txt                 ← Danh mục thư viện phụ thuộc
 └── README.md                        ← Tài liệu hướng dẫn này
 ```
@@ -107,3 +112,16 @@ Nhằm tránh xung đột mã nguồn (merge conflicts), mỗi thành viên ch�
 - **Phân tích Overfitting:** Learning Curves (Train vs Validation) qua 5-Fold Cross Validation.
 - **Explainable AI (XAI):** Trích xuất top 20 từ khóa kích hoạt tâm lý lừa đảo.
 - **Demo Web:** Chạy ổn định trên localhost với tính năng phân loại + thanh đo nguy cơ + bôi đỏ từ khóa cảnh báo.
+
+---
+
+## 📊 Trạng thái Pipeline (2026-09-15)
+
+| Phase | Trạng thái | Artifact đầu ra |
+|-------|-------------|------------------|
+| Phase 02 (Preprocessing) | ✅ PASSED | `dataset_preprocessed.csv` (2193×24) |
+| Phase 03 (EDA + Features) | ✅ PASSED | `X_train.pkl` (1754×5015), `X_test.pkl` (439×5015), 7 EDA figures @ 300 DPI |
+| Phase 04 (Naive Bayes) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
+| Phase 05 (RF) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
+| Phase 06 (SVM) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
+

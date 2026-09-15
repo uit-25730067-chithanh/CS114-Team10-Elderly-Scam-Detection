@@ -62,14 +62,17 @@
 | `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, modern underthesea tone), teencode_dictionary (160 teencode, 22 leet-speak patterns, 50+ unaccented compounds), tokenizer (pyvi), stopwords (domain guard), pipeline (15 auxiliary features) |
 | Preprocessed Data (`dataset_preprocessed.csv`) | ✅ Passed (Phase 02) — 2.193 dòng, 24 cột (8 cột raw + text_cleaned + 15 features), 0 nulls, 0 empty strings |
 | `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end (39.5 KB, không bloat base64) với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
+| Phase 03 (EDA & Feature Engineering) | ✅ Passed (15/09/2026) — Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures @ 300 DPI; 34 tests PASS |
 | `src/models/` | ⏳ Sprint 2 Fast-Track (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
+| Notebooks (02-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
 | Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
 > **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (21/21 tests passed; 2.193 mẫu được làm sạch và trích xuất 15 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất nhẹ nhàng 39.5 KB; dataset_preprocessed.csv 24 cột sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
+
+> **Verdict (15/09): Phase 03 (EDA & Zero-Leakage Feature Engineering) đã HOÀN THÀNH 100% XUẤT SẮC. Đã phát hiện và sửa triệt để lỗi rò rỉ dữ liệu (data leakage) trong bản nháp cũ. Pipeline mới: Stratified Split 80/20 ĐẦU TIÊN → TF-IDF & Scaler fit CHỈ trên train → transform test. X_train (1754×5015) và X_test (439×5015) đã xuất. 34/34 tests PASSED. 7 EDA figures @ 300 DPI. Cẩm (Phase 04/NB, Phase 06/SVM) và Sơn (Phase 05/RF) có thể bắt đầu train model ngay bây giờ.**
 
 ---
 

@@ -7,7 +7,7 @@ effort: ~40h (nhóm 10 — 3 người)
 branch: main
 tags: [cs114, scam-detection, academic, python, ml, nlp, submit]
 created: 2026-09-04
-updated: 2026-09-15
+updated: 2026-09-15 (Phase 03 passed)
 sprints: 3 fast-track sprints | Bắt đầu ~06/09 | Báo cáo sớm: 23/09/2026 (Hạn LMS gốc: 13/10/2026)
 ---
 
@@ -43,7 +43,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | **Thanh** | Sprint 1 | `passed` ✅ | Venv OK, utils helpers, template CSV ready, verify_final.py passed |
 | 01 | [Data Collection & Labeling](./phase-01-data-collection-labeling.md) | **Sơn** (lead) + cả nhóm | Sprint 1 | `passed` ✅ | Đạt 2.193 mẫu thực tế (Thanh: 1.773, Sơn: 215, Cẩm: 205); 100% Zero Synthetic; 0 duplicate; `data_validation.py` PASSED |
 | 02 | [Vietnamese Text Preprocessing](./phase-02-vietnamese-text-preprocessing.md) | **Thanh** | Sprint 2 (15/09) | `passed` ✅ | Unicode NFC, 160 teencode, PyVi tokenized, 15 aux features, 21 tests passed, 2.193 dòng & 24 cột hoàn chỉnh |
-| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (16/09) | `ready` 🚀 | Sẵn sàng tiếp nhận dataset_preprocessed.csv để trích xuất TF-IDF matrix |
+| 03 | [EDA & Feature Engineering](./phase-03-eda-feature-engineering.md) | **Thanh** | Sprint 2 (15/09) | `passed` ✅ | Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures; 34 tests PASS |
 | 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15/09) | `not-started` | NB trained, baseline metrics recorded |
 | 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–16/09) | `not-started` | RF+XGB trained, hypertuned, metrics > NB |
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 3 (19–20/09) | `not-started` | SVM trained, all 3+ models compared *(dời sang Sprint 3 để tránh quá tải cho Cẩm trong Sprint 2)* |
