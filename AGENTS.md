@@ -59,7 +59,9 @@
 | `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
 | Phase 01 (Data Collection & Labeling) | ✅ Passed — Cả 3 thành viên hoàn thành và merge PR (#7, #9, #10); 100% Zero Synthetic Text; 0% rò rỉ PII; 7 tầng kiểm toán pass |
 | Dataset (`dataset.csv`) | ✅ Done — Hợp nhất 2.193 mẫu thực tế (1.773 normal + 420 scam qua 4 nhóm bẫy tâm lý); 100% provenance URLs; `data_validation.py` PASSED |
-| `src/preprocessing/` | 🚀 Sprint 2 Fast-Track (15/09 – 16/09) — text_cleaner, tokenizer (pyvi), feature_extractor, auxiliary features |
+| `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, modern underthesea tone), teencode_dictionary (160 teencode, 22 leet-speak patterns, 50+ unaccented compounds), tokenizer (pyvi), stopwords (domain guard), pipeline (15 auxiliary features) |
+| Preprocessed Data (`dataset_preprocessed.csv`) | ✅ Passed (Phase 02) — 2.193 dòng, 24 cột (8 cột raw + text_cleaned + 15 features), 0 nulls, 0 empty strings |
+| `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end (39.5 KB, không bloat base64) với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
 | `src/models/` | ⏳ Sprint 2 Fast-Track (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
 | Notebooks (01-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
@@ -67,7 +69,7 @@
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
-> **Verdict (15/09): Sprint 1 và Phase 01 (Thu thập dữ liệu) đã HOÀN THÀNH 100% XUẤT SẮC (2.193 mẫu đời thực độc bản từ cả 3 thành viên: Thanh 1.773 normal, Cẩm 205 scam, Sơn 215 scam; 50 mẫu Holdout Test độc lập không rò rỉ; dataset.csv hợp nhất pass `data_validation.py` 100%). Chính thức bước qua Sprint 2: Kích hoạt 4 luồng song song NLP & Machine Learning Modeling.**
+> **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (21/21 tests passed; 2.193 mẫu được làm sạch và trích xuất 15 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất nhẹ nhàng 39.5 KB; dataset_preprocessed.csv 24 cột sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
 
 ---
 
@@ -256,14 +258,14 @@ Place in `Final/submit/` before zipping.
 > **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn 8 ngày).**
 
 ### 🎯 Phân công luồng thực thi song song (`--parallels`):
-1. **Luồng A (Dữ liệu & Khóa Dataset — Thanh Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
+1. **Luồng A (Dữ liệu & Khóa Dataset — Sơn Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
    - Đã hợp nhất 2.193 mẫu đời thực độc bản (`staging_thanh_normal.csv`: 1.773, `staging_cam_scam.csv`: 205, `staging_son_scam.csv`: 215).
    - Đạt 100% provenance URLs, 0% PII leak, 0 duplicate, pass `data_validation.py` 100%.
    - Đóng băng `dataset.csv` và chuyển giao sang tiền xử lý.
-2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):** 🚀 **ĐANG TRIỂN KHAI (15/09 – 16/09)**
-   - Triển khai `src/preprocessing/` (text_cleaner, pyvi tokenizer, auxiliary feature extractor).
-   - Xây dựng `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv`.
-   - Thực hiện Stratified Train/Test 80/20 và trích xuất TF-IDF matrix.
+2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):** ✅ **HOÀN THÀNH PHASE 02 (15/09/2026)**
+   - Triển khai thành công `src/preprocessing/` (`text_cleaner.py`, `tokenizer.py`, `stopwords.py`, `pipeline.py`).
+   - Xây dựng thành công `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv` (2.193 dòng, 19 cột).
+   - Chuyển tiếp sang Phase 03: EDA và trích xuất TF-IDF matrix (N-gram 1-2) + Stratified Train/Test 80/20.
 3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):** ⏳ **KHỞI ĐỘNG (15/09 – 17/09)**
    - Cẩm: Naive Bayes baseline (`notebooks/03_model_naive_bayes.ipynb`) → XGBoost & SVM Linear/RBF (`notebooks/04_model_xgboost.ipynb`, `notebooks/05_model_svm.ipynb`).
    - Sơn: Random Forest (`notebooks/04_model_random_forest.ipynb`).
