@@ -12,8 +12,8 @@
 |-------|-------|
 | Owner | **Cẩm** |
 | Priority | P1 |
-| Status | `in-progress` 🚀 |
-| Review | ⏳ Đang tiến hành thực nghiệm |
+| Status | `done` ✅ |
+| Review | ✅ Hoàn thành — xem Evidence Section |
 | Estimated effort | 2–3h |
 | Sprint | Sprint 2 Fast-Track (15/09 – 16/09/2026) |
 
@@ -109,13 +109,13 @@ joblib.dump(nb_model, "models/naive_bayes.pkl")
 
 ## Checklist
 
-- [ ] Train/Val/Test split thực hiện (stratified)
-- [ ] Naive Bayes trained với best alpha
-- [ ] Classification report (Precision, Recall, F1) recorded
-- [ ] Confusion Matrix plotted & saved
-- [ ] Learning Curve plotted (Train vs Val — overfitting check)
-- [ ] Model saved `models/naive_bayes.pkl`
-- [ ] Notebook `03_model_naive_bayes.ipynb` chạy end-to-end
+- [x] Train/Val/Test split thực hiện (stratified)
+- [x] Naive Bayes trained với best alpha
+- [x] Classification report (Precision, Recall, F1) recorded
+- [x] Confusion Matrix plotted & saved
+- [x] Learning Curve plotted (Train vs Val — overfitting check)
+- [x] Model saved `models/naive_bayes.pkl`
+- [x] Notebook `03_model_naive_bayes.ipynb` chạy end-to-end
 
 ## Success Criteria
 
@@ -129,12 +129,53 @@ joblib.dump(nb_model, "models/naive_bayes.pkl")
 ## Evidence Section *(điền sau khi làm)*
 
 ```
-(Chưa thực hiện)
+Ngày chạy: 2026-09-16
+Notebook: notebooks/03_model_naive_bayes.ipynb (executed end-to-end via nbconvert, outputs stripped post-run)
+
+Vấn đề kỹ thuật phát hiện & xử lý:
+  MultinomialNB/ComplementNB yêu cầu input non-negative (multinomial event model).
+  15 đặc trưng phụ trong X_train.pkl/X_test.pkl đã được StandardScaler chuẩn hóa
+  (mean=0) nên chứa giá trị âm → ValueError khi fit trên đủ 5.015 chiều.
+  Giải pháp: chỉ dùng khối TF-IDF không âm (5.000 cột đầu, đúng dữ liệu Phase 03,
+  không tính toán lại) cho model NB. XGBoost (Phase 05) không bị ràng buộc này.
+
+Baseline comparison (validation set, alpha=1.0 mặc định):
+  MultinomialNB: Acc=0.9356, Precision=0.7833, Recall=0.9216, F1=0.8468, ROC-AUC=0.9873
+  ComplementNB:  Acc=0.9091, Precision=0.6849, Recall=0.9804, F1=0.8065, ROC-AUC=0.9873
+  → MultinomialNB thắng theo F1, được chọn cho GridSearchCV.
+
+GridSearchCV (5-fold CV, scoring=f1, trên X_train_nb 1754×5000):
+  Best alpha = 0.01, Best CV F1 = 0.9058
+
+Final model (MultinomialNB, alpha=0.01, refit trên toàn bộ X_train_nb) — TEST SET (439 mẫu):
+  Accuracy  = 0.9544
+  Precision = 0.8478
+  Recall    = 0.9286   (> 80% baseline target ✅, đạt luôn target dự án ≥92% xấp xỉ)
+  F1        = 0.8864   (gần mục tiêu dự án F1≥0.88 — ĐẠT)
+  ROC-AUC   = 0.9911
+
+Classification report (test):
+                precision  recall  f1-score  support
+  Bình thường     0.98      0.96     0.97      355
+  Lừa đảo         0.85      0.93     0.89       84
+
+Learning curve: Train F1 giảm dần từ 1.00 → 0.96, Validation F1 tăng dần từ 0.73 → 0.91,
+  hội tụ dần khi tăng số mẫu, không có dấu hiệu overfitting nghiêm trọng.
+
+Artifacts:
+  models/naive_bayes.pkl, models/naive_bayes_metrics.json
+  reports/figures/nb_confusion_matrix.png, nb_roc_curve.png, nb_learning_curve.png
 ```
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa bắt đầu.
+> ✅ **Hoàn thành 2026-09-16.** MultinomialNB (alpha=0.01, tuned qua GridSearchCV 5-fold)
+> đạt F1=0.8864, Recall=92.86%, ROC-AUC=0.9911 trên test set (439 mẫu) — vượt baseline
+> ComplementNB và đạt mục tiêu dự án. Phát hiện & xử lý đúng ràng buộc kỹ thuật:
+> NB chỉ tương thích với khối TF-IDF không âm, không dùng được 15 đặc trưng phụ đã
+> chuẩn hóa (chứa giá trị âm) — quyết định này không vi phạm zero-leakage protocol vì
+> vẫn dùng đúng `X_train.pkl`/`X_test.pkl` gốc, chỉ chọn subset cột tương thích thuật toán.
+> Sẵn sàng cho Phase 05 (XGBoost).
 
 ## Commit
 
