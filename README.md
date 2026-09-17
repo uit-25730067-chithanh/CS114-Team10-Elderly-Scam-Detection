@@ -86,10 +86,10 @@
 | | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09 – 16/09) | ✅ Done (Phase 04 PASSED — F1=0.8864, PR #15) |
 | | **Sơn** | Random Forest training + hypertuning (15/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9425, Recall=97.62%, PR #16) |
 | | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
+| | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (17/09 – 18/09) | ⏳ Kích hoạt ngay (Phase 06) |
 | | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng triển khai (Phase 08) |
 | | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai (Phase 09) |
-| **Sprint 3** (18/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (Optional: PhoBERT) | ⏳ Kích hoạt ngay (Phase 06) |
-| | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 Sẵn sàng triển khai (Phase 07) |
+| **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 Sẵn sàng triển khai (Phase 07) |
 | | **Sơn** | Tích hợp Best Model vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi | 🔲 Sẵn sàng triển khai (Phase 08) |
 | | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Chương 4–5 + Slide 15 phút (14–16 slides) + Diễn tập bấm giờ | 🔲 Sẵn sàng triển khai (Phase 09) |
 | | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067-25730013-25730061.zip` (22/09) | 🔲 Sẵn sàng triển khai (Phase 10) |
