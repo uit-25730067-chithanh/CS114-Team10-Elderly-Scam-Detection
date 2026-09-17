@@ -15,7 +15,7 @@
 | Status | `not-started` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 3–5h |
-| Sprint | Sprint 3 Fast-Track (19/09 – 20/09/2026) *(dời từ Sprint 2 để tránh overcapacity cho Cẩm)* |
+| Sprint | Sprint 2 Fast-Track (17/09 – 18/09/2026) |
 
 ## Context
 
