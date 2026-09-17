@@ -128,20 +128,23 @@ joblib.dump(svm_model, "models/svm_linear.pkl")
 ```python
 # Mẫu sử dụng chuẩn trong Streamlit (Phase 08 — hỗ trợ 5.015 chiều)
 import joblib
-from scipy.sparse import hstack, csr_matrix
-from src.preprocessing.text_cleaner import clean_text
-from src.preprocessing.tokenizer import segment_vietnamese
-from src.preprocessing.pipeline import extract_auxiliary_features
 import pandas as pd
+from scipy.sparse import csr_matrix, hstack
+from src.feature_engineering_config import AUX_FEATURE_COLS
+from src.preprocessing.pipeline import preprocess_pipeline
 
 bundle = joblib.load('models/best_model_bundle.pkl')
-# 1. Trích xuất đặc trưng phụ & scale
-aux_df = pd.DataFrame([extract_auxiliary_features(user_input)])
+# 1. Tiền xử lý văn bản & trích xuất đặc trưng phụ (chuẩn train: clean, segment, remove_stopwords)
+cleaned_text, aux_dict = preprocess_pipeline(user_input)
+
+# 2. Chuẩn hóa 15 đặc trưng phụ theo đúng thứ tự cột AUX_FEATURE_COLS
+aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]
 aux_scaled = bundle['aux_scaler'].transform(aux_df)
-# 2. TF-IDF
-cleaned = clean_text(user_input)
-tfidf_vec = bundle['vectorizer'].transform([segment_vietnamese(cleaned)])
-# 3. Hợp nhất 5.015 chiều & dự đoán
+
+# 3. Biến đổi TF-IDF 5.000 chiều
+tfidf_vec = bundle['vectorizer'].transform([cleaned_text])
+
+# 4. Hợp nhất 5.015 chiều & dự đoán
 full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
 proba = float(bundle['model'].predict_proba(full_vec)[0][1])
 label = 1 if proba >= bundle.get('threshold', 0.5) else 0

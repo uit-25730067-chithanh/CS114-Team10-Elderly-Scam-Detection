@@ -65,6 +65,8 @@ Mỗi notebook tuân theo cấu trúc:
 
 ```python
 import joblib
+import sklearn
+from datetime import datetime
 
 # 1. Lưu Bundle (Áp dụng khi train xong mô hình chính thức)
 bundle = {
@@ -74,6 +76,8 @@ bundle = {
     'feature_names': feature_names, # Danh sách 5.015 tên đặc trưng
     'model_name': 'XGBoost',        # Tên hiển thị trên UI
     'threshold': 0.5,                # Ngưỡng phân loại (mặc định 0.5)
+    'sklearn_version': sklearn.__version__,
+    'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
 }
 joblib.dump(bundle, 'models/best_model_bundle.pkl')
 

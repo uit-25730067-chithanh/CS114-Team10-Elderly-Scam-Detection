@@ -25,10 +25,9 @@
 │       ├── demo/                  ← Demo UI (Streamlit)
 │       ├── docs/                  ← Tài liệu kỹ thuật kiến trúc, tiêu chuẩn mã, roadmap
 │       ├── notebooks/             ← Jupyter notebooks (01-preprocessing, 02-eda, 03–06 models)
-│       ├── reports/               ← Kết quả, 7 biểu đồ EDA figures @ 300 DPI
+│       ├── reports/               ← Kết quả, 14 biểu đồ @ 300 DPI (7 EDA + 7 Model Evaluation)
 │       ├── src/                   ← Source code Python (utils, preprocessing, feature engineering, models, eval)
-│       ├── requirements.txt       ← Thư viện phụ thuộc
-│       └── README.md              ← Hướng dẫn workspace
+│       └── requirements.txt       ← Thư viện phụ thuộc
 │
 ├── plans/                         ← Kế hoạch triển khai (11 phases)
 │   └── scam-detection-full-submit/

@@ -125,7 +125,7 @@
   > *"Thưa Thầy, nhóm đã kiểm soát và đánh giá Overfitting qua 3 tầng bảo vệ:*
   > 1. *Tầng 1 (K-Fold Cross Validation): Sử dụng 5-Fold Stratified CV trong suốt quá trình tinh chỉnh siêu tham số (GridSearchCV/RandomizedSearchCV), đảm bảo tỷ lệ lớp cân đối.*
   > 2. *Tầng 2 (Learning Curves): Nhóm đã vẽ đường cong học tập giữa Train Score và Validation Score theo số lượng mẫu tăng dần. Đồ thị cho thấy khi số lượng mẫu tăng, Validation Score tiệm cận gần sát Train Score và khoảng cách không vượt quá 3-5%, chứng minh mô hình có khả năng tổng quát hóa tốt.*
-  > 3. *Tầng 3 (Independent Holdout Test Set): Nhóm giữ lại một tập 42 mẫu Holdout hoàn toàn tách biệt, chưa từng xuất hiện trong quá trình train hay validation để kiểm tra lần cuối."*
+  > 3. *Tầng 3 (Independent Holdout Test Set): Nhóm giữ lại một tập 50 mẫu Holdout hoàn toàn tách biệt, chưa từng xuất hiện trong quá trình train hay validation để kiểm tra lần cuối."*
 
 ---
 
@@ -136,7 +136,7 @@
   > 1. *Nhóm thực hiện phân chia Stratified Train/Test (80/20) **ngay sau bước làm sạch cơ bản**, trước khi thực hiện trích xuất TF-IDF.*
   > 2. *`TfidfVectorizer` chỉ được `fit` trên tập Train (`fit_transform(X_train)`), sau đó chỉ dùng `transform(X_test)` trên tập Test. Tuyệt đối không fit trên toàn bộ dữ liệu.*
   > 3. *Đối với các mẫu tăng cường dữ liệu (Data Augmentation), việc sinh mẫu mới chỉ được thực hiện bên trong tập Train, tuyệt đối không tăng cường tập Test.*
-  > 4. *Mọi thông tin PII (tên riêng, số điện thoại người thật) đều được mask chuẩn hóa thành token `<PHONE>`, `<NAME>` để tránh mô hình học thuộc lòng danh tính cục bộ."*
+  > 4. *Mọi thông tin PII (tên riêng, số điện thoại người thật) đều được mask chuẩn hóa thành token `[số_điện_thoại]`, `[họ_và_tên]` để tránh mô hình học thuộc lòng danh tính cục bộ."*
 
 ---
 

@@ -43,7 +43,7 @@
 │       │   ├── raw/        ← dataset.csv gốc (2.193 mẫu thực tế, 100% Zero Synthetic Text)
 │       │   └── processed/  ← dataset_preprocessed.csv, X_train.pkl (1754×5015), X_test.pkl (439×5015), y_train.pkl, y_test.pkl, tfidf_vectorizer.pkl, aux_scaler.pkl, feature_names.json
 │       ├── models/         ← Trained model files (.pkl, .json — naive_bayes_metrics.json, xgboost_metrics.json)
-│       ├── docs/           ← Tài liệu kỹ thuật nội bộ (roadmap, architecture, pdr, code-standards)
+│       ├── docs/           ← Tài liệu kỹ thuật nội bộ (roadmap, architecture, code-standards)
 │       ├── reports/        ← Kết quả, 14 biểu đồ @ 300 DPI (7 EDA + 7 Model Evaluation)
 │       ├── demo/           ← Streamlit/Gradio web app
 │       └── requirements.txt
@@ -61,7 +61,7 @@
 | `BRAINSTORM.md` | ✅ Done — đề tài đã chọn, hợp đồng đầu ra đã cập nhật báo cáo sớm 23/09 |
 | Phase 00 (Env & Data Setup) | ✅ Passed — `requirements.txt`, `dataset_template.csv`, `verify_final.py` |
 | `src/utils/` | ✅ Done — `helpers.py`, `constants`, `set_seeds()` reproducibility |
-| `draft/scam-detection/README.md` | ✅ Done — workspace developer guide đầy đủ |
+| `README.md` | ✅ Done — cổng thông tin nhóm & hướng dẫn thực thi đầy đủ |
 | Phase 01 (Data Collection & Labeling) | ✅ Passed — Cả 3 thành viên hoàn thành và merge PR (#7, #9, #10); 100% Zero Synthetic Text; 0% rò rỉ PII; 7 tầng kiểm toán pass |
 | Dataset (`dataset.csv`) | ✅ Done — Hợp nhất 2.193 mẫu thực tế (1.773 normal + 420 scam qua 4 nhóm bẫy tâm lý); 100% provenance URLs; `data_validation.py` PASSED |
 | `src/preprocessing/` | ✅ Passed (Phase 02) — text_cleaner (Unicode NFC, modern underthesea tone), teencode_dictionary (160 teencode, 22 leet-speak patterns, 50+ unaccented compounds), tokenizer (pyvi), stopwords (domain guard), pipeline (15 auxiliary features) |
@@ -163,45 +163,27 @@ dataset.csv (1,500+ mẫu tin nhắn tiếng Việt)
 *   **Cấp 2 — Phase-Level Sync (Vĩ mô — Khi hoàn thành trọn vẹn 1 Phase):**
     *   Bắt buộc thực thi đồng bộ theo **Ma trận 10 Tài liệu Nội bộ (Internal Documentation Matrix)** bên dưới trước khi mở PR.
 
-### 2. Ma trận 7 Tầng Kiểm toán & Đồng bộ Toàn diện (/uit:project-audit Protocol)
+### 2. Quy trình Kiểm toán Tinh gọn Phân định Trách nhiệm (Audit & Hand-off Protocol)
 
-Khi một Phase hoặc một Milestone hoàn thành, hoặc khi kích hoạt skill `/uit:project-audit`, AI Agent và thành viên **BẮT BUỘC** phải rà soát và đồng bộ đầy đủ toàn bộ 7 tầng tài liệu dưới đây, tuyệt đối không được bỏ sót bất kỳ tầng nào:
+Nhằm đảm bảo tính tự chủ của từng thành viên (Member Agent) và tránh quá tải cho Trưởng nhóm (PM), quy trình kiểm toán được phân định rõ ràng thành hai cấp độ:
 
-| Tầng | Nhóm tài liệu | File đích | Điều kiện & Nội dung đồng bộ bắt buộc |
+#### A. 4 Tầng Tự Kiểm Toán của Thành viên (Member Self-Audit)
+Khi hoàn thành một Phase kỹ thuật (ví dụ: huấn luyện mô hình, tiền xử lý dữ liệu), Agent của thành viên đó **BẮT BUỘC** phải tự giác thực thi và hoàn tất 4 tầng bàn giao sau trước khi mở PR:
+
+| Tầng | Tên tầng kiểm toán | Tệp đích bàn giao | Tiêu chuẩn nghiệm thu của Member |
 |:---:|---|---|---|
-| **Tầng 1** | **Tiến độ & Kế hoạch** | • `plans/.../plan.md`<br>• `plans/.../phase-XX-*.md`<br>• `draft/scam-detection/docs/project-roadmap.md` | • Đổi status Phase từ `in-progress` sang `passed` ✅, cập nhật ngày `updated`.<br>• Điền số liệu thực nghiệm vào `## Evidence`, viết `## Summary`, tick 100% checklist.<br>• Đồng bộ tiến độ biểu đồ Mermaid Gantt và bảng phân công Sprint 3 thành viên. |
-| **Tầng 2** | **Bối cảnh Điều phối AI** | • `AGENTS.md` (file này) | • Cập nhật bảng `Current State` (status, số lượng mẫu, metrics, artifact count).<br>• Bổ sung khối `Verdict` tổng kết thực nghiệm và cập nhật nhiệm vụ `Next Actions`. |
-| **Tầng 3** | **Cổng thông tin & Cây Thư mục** | • `assignments/Final/README.md`<br>• `draft/scam-detection/README.md` | • Cập nhật bảng tiến độ Sprint tổng thể và trạng thái từng thành viên.<br>• Cập nhật cây thư mục (`tree`), khai báo đầy đủ các module mới, script sinh notebook, metrics JSONs và số lượng figures. |
-| **Tầng 4** | **Sổ bộ Đăng ký Kỹ thuật (Technical Registries)** | • `draft/scam-detection/models/README.md`<br>• `draft/scam-detection/reports/figures/README.md`<br>• `draft/scam-detection/notebooks/README.md`<br>• `draft/scam-detection/data/processed/README.md` | • `models/README.md`: Đăng ký tên model, hyperparams, 5 metrics (Acc, Prec, Rec, F1, ROC-AUC), file path.<br>• `reports/figures/README.md`: Đăng ký toàn bộ biểu đồ 300 DPI mới kèm chú giải học thuật sâu.<br>• `notebooks/README.md`: Xác nhận notebook chạy hoàn tất, dọn sạch output cells (stripped outputs < 50MB), seed 42.<br>• `data/processed/README.md`: Đăng ký schema 24 cột hoặc ma trận `.pkl` mới. |
-| **Tầng 5** | **Báo cáo Nghiên cứu & Bảng Đối chứng** | • `draft/scam-detection/reports/research-*.md`<br>• `draft/scam-detection/reports/model_comparison.csv`<br>• `docs/journals/YYYY-MM-DD-*.md` (repo gốc) | • `reports/research-*.md`: Lập báo cáo kiểm toán học thuật cho từng Phase hoàn thành (Zero-Leakage, Ablation Study, hyperparameter tuning).<br>• `reports/model_comparison.csv`: Bảng tổng hợp so sánh chỉ số định lượng các mô hình.<br>• `docs/journals/`: Khởi tạo nhật ký kỹ thuật ghi nhận mốc hoàn thành tại repo gốc. |
-| **Tầng 6** | **Kiến trúc, Chuẩn mực & Cẩm nang Bảo vệ** | • `draft/scam-detection/docs/system-architecture.md`<br>• `draft/scam-detection/docs/code-standards.md`<br>• `draft/scam-detection/docs/project-overview-pdr.md`<br>• `docs/DEFENSE_PREPARATION_GUIDE.md`<br>• `draft/scam-detection/docs/brainstorm-*.md` | • `system-architecture.md`: Cập nhật luồng dữ liệu, bảng artifacts data/models/evaluation.<br>• `code-standards.md`: Cập nhật convention đóng gói model bundle (5.015 chiều kết hợp `aux_scaler`).<br>• `project-overview-pdr.md`: Cập nhật các chỉ số mục tiêu đã đạt/vượt ngưỡng.<br>• `DEFENSE_PREPARATION_GUIDE.md`: Cập nhật số liệu dataset thực tế, metrics cụ thể vào Slide 7; **tuyệt đối không dùng raw LaTeX** (`$` hoặc `$$`), dùng Unicode toán học.<br>• `brainstorm-*.md`: Khử raw LaTeX, cập nhật các cam kết kỹ thuật. |
-| **Tầng 7** | **Đề cương, Đóng gói & Kiểm định** | • `plans/.../phase-09-report-ppt.md`<br>• `submit/README.md`<br>• `verify_final.py` & `pytest` | • `phase-09-report-ppt.md`: Nạp số liệu định lượng mới vào outline Chương 4 Báo cáo đồ án.<br>• `submit/README.md`: Rà soát danh mục artifacts đóng gói ZIP `25730067-25730013-25730061.zip`.<br>• Chạy kiểm định tự động: `python3 verify_final.py` (100% Semantic Parity) và `pytest` (100% PASS). |
+| **Tầng 1** | **Code & Test Hygiene** | • `notebooks/0X_*.ipynb`<br>• `tests/` | • Chạy bộ kiểm thử tự động đạt 100% PASS: `python3 -m pytest assignments/Final/draft/scam-detection/tests/`.<br>• Dọn sạch ô kết quả (stripped outputs) trong notebooks để dung lượng < 50KB, seed `RANDOM_STATE = 42`. |
+| **Tầng 2** | **Artifact & Metrics Registry** | • `models/{model}_metrics.json`<br>• `reports/model_comparison.csv`<br>• `reports/figures/*.png` | • Xuất đầy đủ siêu tham số và 5 chỉ số (Accuracy, Precision, Recall, F1, ROC-AUC) vào tệp metrics JSON.<br>• Nạp một dòng kết quả định lượng vào bảng tổng hợp `model_comparison.csv`.<br>• Xuất đầy đủ các biểu đồ đánh giá chất lượng cao chuẩn 300 DPI (Confusion Matrix, ROC, Learning Curves). |
+| **Tầng 3** | **Evidence & Research Report** | • `plans/.../phase-XX-*.md`<br>• `reports/research-{member}-*.md` | • Điền số liệu thực tế vào mục `## Evidence` và viết tóm tắt `## Summary` trong file kế hoạch phase tương ứng.<br>• Lập báo cáo kiểm toán học thuật giải trình phương pháp, bài toán kỹ thuật và nghiên cứu đối chứng (Ablation Study) để phục vụ hỏi đáp với GV. |
+| **Tầng 4** | **Thesis Outline Sync** | • `plans/.../phase-09-report-ppt.md` | • Nạp trực tiếp các bảng số liệu thực nghiệm và danh mục biểu đồ vào đề cương Chương 4 của Báo cáo đồ án để sẵn sàng biên soạn bản Word. |
 
-### 3. Quy trình Thực thi Chuẩn khi kích hoạt skill /uit:project-audit
-
-> ⚠️ **NGUYÊN TẮC BẤT DI BẤT DỊCH (INVARIANT):**  
-> Khi người dùng gọi `/uit:project-audit` để review PR hoặc kiểm toán tiến độ, Agent đóng vai trò là **Project Manager (PM)** của dự án.  
-> **TUYỆT ĐỐI KHÔNG** chỉ xem xét code bề nổi hay chỉ sửa vài dòng checklist trong phase plan. Agent phải thực thi quét trọn vẹn cả **7 Tầng Ma trận** trên và tuân thủ chu trình 4 bước:
-
-1. **Bước 1 — Quét Radar Toàn Diện (Deep Scout First):**  
-   Dùng `/skill:scout` quét toàn bộ working directory, commit history, các notebooks, models, figures và tài liệu. Đối chiếu chéo từng tầng trong Ma trận 7 Tầng xem tệp nào chưa được cập nhật, tệp nào có số liệu lệch pha, hoặc tệp nào còn thiếu.
-2. **Bước 2 — Lập Bảng Khoảng Trống & Cổng Quyết Định (Gap Table & Decision Gate):**  
-   Tổng hợp danh sách các tệp cần xử lý theo 3 mức độ nghiêm trọng:
-   - **Critical:** Lệch pha Semantic Parity (`plan.md` ↔ `AGENTS.md` ↔ `project-roadmap.md`), rò rỉ dữ liệu (data leakage), tệp > 50MB chưa gitignore.
-   - **Medium:** Chưa cập nhật Technical Registries, chưa có báo cáo nghiên cứu `reports/research-*.md`, chưa đồng bộ cây thư mục `README.md` hoặc đề cương báo cáo `phase-09-report-ppt.md`.
-   - **Low:** Lỗi format raw LaTeX, chưa cập nhật cẩm nang bảo vệ hoặc nhật ký kỹ thuật.  
-   Trình bày bảng phát hiện và chờ chỉ thị của PM/User.
-3. **Bước 3 — Đồng Bộ Có Tính Toán & Trọn Gói (Calculated Remediation):**  
-   Khi được duyệt thực thi, Agent phải tiến hành cập nhật **đồng bộ toàn bộ các tệp trong cả 7 tầng**, không để dở việc.  
-   *Lưu ý bảo vệ Git:* Nếu người dùng chỉ thị *"không commit để anh kiểm tra đã"*, Agent giữ toàn bộ thay đổi ở trạng thái working tree/unstaged, tuyệt đối không tự ý chạy `git commit`.
-4. **Bước 4 — Kiểm Định Cổng Đóng (Semantic Parity Gate Sign-off):**  
-   Trước khi báo cáo hoàn thành, bắt buộc chạy:
-   ```bash
-   python3 assignments/Final/verify_final.py
-   python3 scripts/validate_assignment.py --id Final
-   python3 -m pytest assignments/Final/draft/scam-detection/tests/
-   ```
-   Chỉ khi tất cả các kiểm định đạt 100% PASS thì mới nghiệm thu bàn giao cho người dùng.
+#### B. Quy trình Nghiệm thu & Ký duyệt của Trưởng nhóm (PM Sign-off)
+Khi nhận PR từ thành viên, PM Agent đóng vai trò kiểm toán độc lập:
+1. **Kiểm tra 4 Tầng Bàn giao:** Rà soát xem PR của thành viên đã hoàn tất đủ 4 tầng trên chưa.
+2. **Ký duyệt Kế hoạch (Plan Sign-off):** Đổi trạng thái Phase sang `passed` ✅ và cập nhật ngày `updated` trong [`plans/scam-detection-full-submit/plan.md`](plans/scam-detection-full-submit/plan.md).
+3. **Đồng bộ Bối cảnh Điều phối:** Cập nhật bảng `Current State` và khối `Verdict` trong `AGENTS.md`.
+4. **Cập nhật Cẩm nang Bảo vệ:** Đồng bộ số liệu thực nghiệm mới vào Slide 7 của [`docs/DEFENSE_PREPARATION_GUIDE.md`](docs/DEFENSE_PREPARATION_GUIDE.md).
+5. **Kiểm định Cổng đóng:** Chạy `python3 verify_final.py` và `pytest` đạt 100% PASS trước khi merge PR vào `main`.
 
 ### 4. Quy tắc về .pkl và artifacts
 
