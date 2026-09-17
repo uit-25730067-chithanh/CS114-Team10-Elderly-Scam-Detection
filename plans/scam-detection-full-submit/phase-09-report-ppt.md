@@ -65,13 +65,20 @@ Theo yêu cầu trong [README.md](../../README.md):
 - K-Fold Cross Validation
 - Train/Val/Test split strategy
 
-#### 4.3. Kết quả đạt được
-- Bảng so sánh tất cả models
-- Confusion Matrix
-- ROC Curves
-- Learning Curves (Train vs Val — Overfitting)
-- Precision-Recall Curves
-- Top-20 từ khóa cảnh báo
+#### 4.3. Kết quả đạt được (Test Set: 439 mẫu — 355 Normal / 84 Scam)
+- **Bảng so sánh hiệu năng các mô hình đã nghiệm thu:**
+
+| Mô hình | Đặc trưng | Hyperparameters | Accuracy | Precision | Recall (Lừa đảo) | F1-Score | ROC-AUC | Ghi chú |
+|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
+| **MultinomialNB** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | **0.8864** | 0.9911 | Baseline vượt ngưỡng F1≥0.88, FN=6, FP=14 (Phase 04 — Cẩm) |
+| **XGBoost** | 5.015 (TF-IDF + 15 aux) | `n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | **0.9984** | Vượt trội toàn diện, FN=2, FP=6 (Phase 05 — Cẩm) |
+| *Random Forest* | 5.015 | *(đang tinh chỉnh)* | — | — | — | — | — | Đang thực hiện (Phase 05 — Sơn) |
+| *SVM Linear* | 5.015 | *(chưa huấn luyện)* | — | — | — | — | — | Kế hoạch Sprint 3 (Phase 06 — Cẩm) |
+
+- **Hệ thống 7 biểu đồ đánh giá mô hình chuẩn 300 DPI (`reports/figures/`):**
+  - `nb_confusion_matrix.png`, `nb_roc_curve.png`, `nb_learning_curve.png` (MultinomialNB: Train F1 giảm 1.00→0.96, Val F1 tăng 0.73→0.91, hội tụ tốt).
+  - `xgb_confusion_matrix.png`, `xgb_roc_curve.png`, `xgb_learning_curve.png` (XGBoost: Train F1 ~0.98–1.00, Val F1 0.83→0.96, kiểm soát quá khớp tối ưu).
+  - `xgb_feature_importance.png`: Top-5 đặc trưng quyền lực/viễn thông: `liên_hệ 198` (0.139), `money` (0.079), `198` (0.065), `number` (0.037), `tran` (0.036).
 
 ### Chương 5 — Kết luận và Hướng phát triển
 
