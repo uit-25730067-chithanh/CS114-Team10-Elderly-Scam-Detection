@@ -19,11 +19,11 @@ Người cao tuổi (NCT) tại Việt Nam là đối tượng bị nhắm mục
 
 ## Mục tiêu
 
-- Xây dựng pipeline NLP tiếng Việt: thu thập → tiền xử lý → feature extraction → modeling
-- Thử nghiệm ≥3 models: Naive Bayes, Random Forest/XGBoost, SVM
+- Xây dựng pipeline NLP tiếng Việt: thu thập → tiền xử lý → feature extraction → modeling (Đã hoàn thành Phase 01–03)
+- Thử nghiệm ≥3 models: Naive Bayes (✅ F1=0.8864), Random Forest (🚀 đang làm), XGBoost (✅ F1=0.9535), SVM (⏳ kế tiếp)
 - Phân loại 4 nhóm bẫy tâm lý: `fear_authority`, `family_emergency`, `health_gift`, `public_service`
-- Đánh giá: F1-Score ≥ 88%, Recall Scam ≥ 92%
-- Demo Streamlit với UX dành cho người cao tuổi
+- Đánh giá: F1-Score ≥ 88%, Recall Scam ≥ 92% (Cả Naive Bayes [Recall 92.86%] và XGBoost [Recall 97.62%, F1 0.9535] đã đạt và vượt mục tiêu)
+- Demo Streamlit với UX dành cho người cao tuổi (Sprint 2–3)
 
 ## Dataset
 

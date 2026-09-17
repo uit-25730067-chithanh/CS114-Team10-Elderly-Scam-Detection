@@ -61,30 +61,29 @@ Mỗi notebook tuân theo cấu trúc:
 
 ## Model Bundle Save/Load Convention (BẮT BUỘC)
 
-Để tránh lỗi không khớp feature space hoặc thiếu vectorizer khi tích hợp Demo UI (`demo/app.py`), **tuyệt đối không lưu model và vectorizer riêng lẻ**. Luôn đóng gói (bundle) cả hai vào một dictionary hoặc `Pipeline`:
+Để tránh lỗi không khớp feature space (5.015 chiều) hoặc thiếu vectorizer/scaler khi tích hợp Demo UI (`demo/app.py`), **tuyệt đối không lưu model, vectorizer và scaler riêng lẻ**. Luôn đóng gói (bundle) vào một dictionary chuẩn:
 
 ```python
 import joblib
 
-# 1. Lưu Bundle (Áp dụng khi train xong trong Notebooks 03-05)
+# 1. Lưu Bundle (Áp dụng khi train xong mô hình chính thức)
 bundle = {
     'model': model,                 # scikit-learn / xgboost classifier
-    'vectorizer': tfidf_vectorizer, # TfidfVectorizer đã fit trên train data
-    'model_name': 'Naive Bayes',     # Tên hiển thị
+    'vectorizer': tfidf_vectorizer, # TfidfVectorizer đã fit trên train data (5.000 n-grams)
+    'aux_scaler': aux_scaler,       # StandardScaler đã fit trên 15 đặc trưng phụ
+    'feature_names': feature_names, # Danh sách 5.015 tên đặc trưng
+    'model_name': 'XGBoost',        # Tên hiển thị trên UI
     'threshold': 0.5,                # Ngưỡng phân loại (mặc định 0.5)
 }
-joblib.dump(bundle, 'models/naive_bayes_bundle.pkl')
+joblib.dump(bundle, 'models/best_model_bundle.pkl')
 
 # 2. Load Bundle (Áp dụng trong Demo UI / Evaluation)
-bundle = joblib.load('models/naive_bayes_bundle.pkl')
+bundle = joblib.load('models/best_model_bundle.pkl')
 clf = bundle['model']
 tfidf = bundle['vectorizer']
+scaler = bundle.get('aux_scaler')
 
-# Inference chuẩn:
-# (văn bản sau khi qua clean_text và tokenize_text / segment_vietnamese)
-X_vec = tfidf.transform([preprocessed_text])
-prediction = clf.predict(X_vec)[0]
-proba = clf.predict_proba(X_vec)[0][1] if hasattr(clf, 'predict_proba') else None
+# Inference chuẩn 5.015 chiều (xem chi tiết tại draft/scam-detection/demo/README.md)
 ```
 
 ## Evaluation Checklist

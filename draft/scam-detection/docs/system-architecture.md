@@ -75,10 +75,12 @@
 | `data/processed/y_train.pkl` | Nhãn nhị phân tập Train (1.418 normal / 336 scam) |
 | `data/processed/y_test.pkl` | Nhãn nhị phân tập Test (355 normal / 84 scam) |
 | `data/processed/feature_names.json` | 5.015 tên đặc trưng hoàn chỉnh (5.000 TF-IDF + 15 aux) |
-| `models/naive_bayes.pkl` | Trained Naive Bayes |
-| `models/random_forest.pkl` | Trained Random Forest |
-| `models/xgboost.pkl` | Trained XGBoost |
-| `models/svm_linear.pkl` | Trained SVM Linear |
+| `models/naive_bayes.pkl` | Trained MultinomialNB baseline (Phase 04 — F1=0.8864, Recall=92.86%) |
+| `models/naive_bayes_metrics.json` | Bộ tham số tối ưu (alpha=0.01) & metrics thực nghiệm Naive Bayes |
+| `models/xgboost.pkl` | Trained XGBoost classifier (Phase 05 — F1=0.9535, Recall=97.62%) |
+| `models/xgboost_metrics.json` | Bộ tham số tối ưu (best_params) & metrics thực nghiệm XGBoost |
+| `models/random_forest.pkl` | Trained Random Forest (Phase 05 — đang thực hiện) |
+| `models/svm_linear.pkl` | Trained SVM Linear (Phase 06 — kế hoạch Sprint 3) |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
 
@@ -129,6 +131,7 @@
 | `learning_curve_plot.py` | Learning curve (Train vs Val) |
 | `model_comparator.py` | Bảng so sánh tổng hợp CSV |
 | `xai_keywords.py` | Top-20 scam keywords extraction |
+| `src/model_plots.py` | Helper trực quan hóa đánh giá mô hình: Confusion Matrix, Learning Curve, ROC Curve, Feature Importance (300 DPI) |
 
 ---
 

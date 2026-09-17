@@ -118,22 +118,33 @@ joblib.dump(svm_model, "models/svm_linear.pkl")
 | Field | Spec bắt buộc |
 |---|---|
 | **Format lưu model** | `joblib` — `joblib.dump(bundle, 'models/best_model_bundle.pkl')` |
-| **Bundle structure** | `{'model': calibrated_svc, 'vectorizer': tfidf_vectorizer, 'threshold': 0.5, 'label_names': ['Bình thường', 'Lừa đảo']}` |
+| **Bundle structure** | `{'model': calibrated_svc, 'vectorizer': tfidf_vectorizer, 'aux_scaler': auxiliary_scaler, 'feature_names': feature_names, 'model_name': 'SVM Linear', 'threshold': 0.5}` |
 | **Path chuẩn** | `models/best_model_bundle.pkl` (relative to repo root) |
 | **sklearn version** | Phải khớp với `requirements.txt` — kiểm tra bằng `sklearn.__version__` trước khi lưu |
-| **Tên vectorizer** | TF-IDF vectorizer được `fit` trên X_train — **tích hợp trong bundle**, không lưu tách rời |
-| **Input format** | Raw text string → vectorizer.transform → model.predict_proba |
-| **Output format** | `{'label': int, 'proba': [p_normal, p_scam], 'scam_keywords': list}` |
+| **Không gian đặc trưng** | 5.015 chiều kết hợp: 5.000 TF-IDF N-grams + 15 đặc trưng phụ đã chuẩn hóa (`aux_scaler`) |
+| **Input format** | Raw text string → clean & tokenize → TF-IDF & aux features → hstack → model.predict_proba |
+| **Output format** | `{'label': int, 'risk_score': float, 'highlight_keywords': list}` |
 
 ```python
-# Mẫu sử dụng chuẩn trong Streamlit (Phase 08)
+# Mẫu sử dụng chuẩn trong Streamlit (Phase 08 — hỗ trợ 5.015 chiều)
 import joblib
+from scipy.sparse import hstack, csr_matrix
+from src.preprocessing.text_cleaner import clean_text
+from src.preprocessing.tokenizer import segment_vietnamese
+from src.preprocessing.pipeline import extract_auxiliary_features
+import pandas as pd
+
 bundle = joblib.load('models/best_model_bundle.pkl')
-model = bundle['model']
-vectorizer = bundle['vectorizer']
-X = vectorizer.transform([user_input])
-proba = model.predict_proba(X)[0]
-label = 1 if proba[1] >= bundle['threshold'] else 0
+# 1. Trích xuất đặc trưng phụ & scale
+aux_df = pd.DataFrame([extract_auxiliary_features(user_input)])
+aux_scaled = bundle['aux_scaler'].transform(aux_df)
+# 2. TF-IDF
+cleaned = clean_text(user_input)
+tfidf_vec = bundle['vectorizer'].transform([segment_vietnamese(cleaned)])
+# 3. Hợp nhất 5.015 chiều & dự đoán
+full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
+proba = float(bundle['model'].predict_proba(full_vec)[0][1])
+label = 1 if proba >= bundle.get('threshold', 0.5) else 0
 ```
 
 ## Checklist

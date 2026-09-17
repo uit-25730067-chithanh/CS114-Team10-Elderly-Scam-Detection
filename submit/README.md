@@ -32,7 +32,7 @@ Thư mục này chứa cấu trúc tệp và bản nộp bài chính thức củ
 │   ├── demo/                  # Web App Streamlit demo
 │   ├── app.py                 # Entry point khởi chạy nhanh demo
 │   ├── requirements.txt       # Danh mục thư viện phụ thuộc
-│   └── reports/               # Bảng so sánh chỉ số & 7 biểu đồ 300 DPI
+│   └── reports/               # Bảng so sánh chỉ số & 14 biểu đồ 300 DPI (7 EDA + 7 Model Evaluation)
 └── README.md                  # Hướng dẫn chạy mã nguồn và tái lập thực nghiệm
 ```
 
