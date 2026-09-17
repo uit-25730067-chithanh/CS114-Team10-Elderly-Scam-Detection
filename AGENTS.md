@@ -53,7 +53,7 @@
 
 ---
 
-## Current State (2026-09-16 — Sprint 2 Active Modeling Mode)
+## Current State (2026-09-17 — Sprint 2 Modeling Complete & Pre-Sprint 3 Transition)
 
 | Component | Status |
 |-----------|--------|
@@ -71,13 +71,13 @@
 | Phase 03 (EDA & Feature Engineering) | ✅ Passed (15/09/2026) — Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures @ 300 DPI; 34 tests PASS |
 | Phase 04 (Naive Bayes Baseline) | ✅ Passed (16/09/2026) — Cẩm hoàn thành MultinomialNB (alpha=0.01) tuned, F1=0.8864, Recall=92.86%, ROC-AUC=0.9911, Ablation Study hoàn thành |
 | `notebooks/03_model_naive_bayes.ipynb` | ✅ Passed (Phase 04) — Chạy end-to-end, GridSearch alpha=0.01, F1=0.8864, 3 figures 300 DPI |
-| Phase 05 (Random Forest & XGBoost) | 🚀 Sprint 2 Active (15/09 – 16/09) — Cẩm hoàn thành XGBoost (F1=0.9535) ✅; Sơn đang thực hiện Random Forest ⏳ |
+| Phase 05 (Random Forest & XGBoost) | ✅ Passed (17/09/2026) — Cẩm hoàn thành XGBoost (F1=0.9535) ✅; Sơn hoàn thành Random Forest (F1=0.9425, Recall=97.62%, PR #16 verified) ✅ |
 | `notebooks/04_model_xgboost.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9535, Recall=97.62%, 4 figures 300 DPI |
-| `notebooks/04_model_random_forest.ipynb` | 🚀 Sprint 2 Active — Sơn đang huấn luyện & tinh chỉnh tham số Random Forest |
-| `src/models/` | 🚀 Sprint 2 Active (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
+| `notebooks/04_model_random_forest.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9425, Recall=97.62%, 4 figures 300 DPI |
+| `src/models/` | ✅ Active — random_forest_model.py hoàn thiện kèm 9 unit tests; naive_bayes & xgboost chạy qua notebooks |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (03-06) | 🚀 Sprint 2-3 Fast-Track (15/09 – 19/09) — 03 & 04 (XGB) done; 04 (RF) in progress; 05-06 next |
-| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components |
+| Notebooks (03-06) | 🚀 Sprint 2-3 Fast-Track (15/09 – 19/09) — 03 & 04 (XGB, RF) done; 05 (SVM) next |
+| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components (Sơn lead) |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
@@ -85,7 +85,9 @@
 
 > **Verdict (15/09): Phase 03 (EDA & Zero-Leakage Feature Engineering) đã HOÀN THÀNH 100% XUẤT SẮC. Đã phát hiện và sửa triệt để lỗi rò rỉ dữ liệu (data leakage) trong bản nháp cũ. Pipeline mới: Stratified Split 80/20 ĐẦU TIÊN → TF-IDF & Scaler fit CHỈ trên train → transform test. X_train (1754×5015) và X_test (439×5015) đã xuất. 34/34 tests PASSED. 7 EDA figures @ 300 DPI. Cẩm (Phase 04/NB, Phase 06/SVM) và Sơn (Phase 05/RF) có thể bắt đầu train model ngay bây giờ.**
 
-> **Verdict (16/09): Phase 04 (Naive Bayes Baseline) đã HOÀN THÀNH XUẤT SẮC bởi Cẩm. Model đạt F1=0.8864, Recall=92.86% trên test set (439 mẫu), vượt baseline và tiệm cận target dự án. Đã thực hiện Ablation Study thực nghiệm chứng minh TF-IDF-only là tối ưu. Đồng thời phần XGBoost của Phase 05 cũng đã hoàn thành (F1=0.9535, Recall=97.62%); Phase 05 tiếp tục giữ in-progress để chờ phần Random Forest của Sơn.**
+> **Verdict (16/09): Phase 04 (Naive Bayes Baseline) đã HOÀN THÀNH XUẤT SẮC bởi Cẩm. Model đạt F1=0.8864, Recall=92.86% trên test set (439 mẫu), vượt baseline và tiệm cận target dự án. Đã thực hiện Ablation Study thực nghiệm chứng minh TF-IDF-only là tối ưu. Đồng thời phần XGBoost của Phase 05 cũng đã hoàn thành (F1=0.9535, Recall=97.62%).**
+
+> **Verdict (17/09): Phase 05 (Modeling — Random Forest & XGBoost) đã HOÀN THÀNH 100% XUẤT SẮC. Cả 2 mô hình Ensemble đều vượt xa chỉ tiêu đề tài (F1 ≥ 88%, Recall ≥ 92%): XGBoost (Cẩm) đạt F1=0.9535, Recall=97.62%; Random Forest (Sơn) đạt F1=0.9425, Recall=97.62%, ROC-AUC=0.9976 trên tập Test 439 mẫu. Bộ mã nguồn `src/models/random_forest_model.py` và 9 unit tests được kiểm định chuyên sâu đạt 100% pass rate. Sẵn sàng kích hoạt Phase 06 (SVM) và Phase 08 (Demo UI).**
 
 ---
 
