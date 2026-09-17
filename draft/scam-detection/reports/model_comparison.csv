@@ -1,0 +1,5 @@
+Model,Features,Hyperparameters,Accuracy,Precision,Recall,F1-Score,ROC-AUC,Status
+MultinomialNB,5000 (TF-IDF non-negative),alpha=0.01 (GridSearchCV 5-fold),0.9544,0.8478,0.9286,0.8864,0.9911,Passed (Phase 04 — Cam)
+XGBoost,5015 (TF-IDF + 15 aux),"n_estimators=300, max_depth=5, lr=0.05, subsample=0.7, colsample_bytree=0.8, scale_pos_weight=4.22",0.9818,0.9318,0.9762,0.9535,0.9984,Passed (Phase 05 — Cam)
+Random Forest,5015 (TF-IDF + 15 aux),Tuning (Son),,,,,In Progress (Phase 05 — Son)
+SVM Linear,5015 (TF-IDF + 15 aux),LinearSVC Calibrated / RBF,,,,,Pending (Phase 06 — Cam)

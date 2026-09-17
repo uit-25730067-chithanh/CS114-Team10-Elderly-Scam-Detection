@@ -118,22 +118,36 @@ joblib.dump(svm_model, "models/svm_linear.pkl")
 | Field | Spec bắt buộc |
 |---|---|
 | **Format lưu model** | `joblib` — `joblib.dump(bundle, 'models/best_model_bundle.pkl')` |
-| **Bundle structure** | `{'model': calibrated_svc, 'vectorizer': tfidf_vectorizer, 'threshold': 0.5, 'label_names': ['Bình thường', 'Lừa đảo']}` |
+| **Bundle structure** | `{'model': calibrated_svc, 'vectorizer': tfidf_vectorizer, 'aux_scaler': auxiliary_scaler, 'feature_names': feature_names, 'model_name': 'SVM Linear', 'threshold': 0.5}` |
 | **Path chuẩn** | `models/best_model_bundle.pkl` (relative to repo root) |
 | **sklearn version** | Phải khớp với `requirements.txt` — kiểm tra bằng `sklearn.__version__` trước khi lưu |
-| **Tên vectorizer** | TF-IDF vectorizer được `fit` trên X_train — **tích hợp trong bundle**, không lưu tách rời |
-| **Input format** | Raw text string → vectorizer.transform → model.predict_proba |
-| **Output format** | `{'label': int, 'proba': [p_normal, p_scam], 'scam_keywords': list}` |
+| **Không gian đặc trưng** | 5.015 chiều kết hợp: 5.000 TF-IDF N-grams + 15 đặc trưng phụ đã chuẩn hóa (`aux_scaler`) |
+| **Input format** | Raw text string → clean & tokenize → TF-IDF & aux features → hstack → model.predict_proba |
+| **Output format** | `{'label': int, 'risk_score': float, 'highlight_keywords': list}` |
 
 ```python
-# Mẫu sử dụng chuẩn trong Streamlit (Phase 08)
+# Mẫu sử dụng chuẩn trong Streamlit (Phase 08 — hỗ trợ 5.015 chiều)
 import joblib
+import pandas as pd
+from scipy.sparse import csr_matrix, hstack
+from src.feature_engineering_config import AUX_FEATURE_COLS
+from src.preprocessing.pipeline import preprocess_pipeline
+
 bundle = joblib.load('models/best_model_bundle.pkl')
-model = bundle['model']
-vectorizer = bundle['vectorizer']
-X = vectorizer.transform([user_input])
-proba = model.predict_proba(X)[0]
-label = 1 if proba[1] >= bundle['threshold'] else 0
+# 1. Tiền xử lý văn bản & trích xuất đặc trưng phụ (chuẩn train: clean, segment, remove_stopwords)
+cleaned_text, aux_dict = preprocess_pipeline(user_input)
+
+# 2. Chuẩn hóa 15 đặc trưng phụ theo đúng thứ tự cột AUX_FEATURE_COLS
+aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]
+aux_scaled = bundle['aux_scaler'].transform(aux_df)
+
+# 3. Biến đổi TF-IDF 5.000 chiều
+tfidf_vec = bundle['vectorizer'].transform([cleaned_text])
+
+# 4. Hợp nhất 5.015 chiều & dự đoán
+full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
+proba = float(bundle['model'].predict_proba(full_vec)[0][1])
+label = 1 if proba >= bundle.get('threshold', 0.5) else 0
 ```
 
 ## Checklist

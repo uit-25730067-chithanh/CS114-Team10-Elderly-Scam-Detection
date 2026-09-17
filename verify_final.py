@@ -69,7 +69,6 @@ def main() -> int:
         final_dir / "AGENTS.md",
         final_dir / "BRAINSTORM.md",
         final_dir / ".gitignore",
-        draft_dir / "README.md",
         draft_dir / "requirements.txt",
         draft_dir / "data" / "raw" / "dataset_template.csv",
         draft_dir / "src" / "utils" / "helpers.py",
@@ -187,9 +186,8 @@ def main() -> int:
         ("Model Registry", [draft_dir / "models" / "README.md"]),
         ("Notebook Registry", [draft_dir / "notebooks" / "README.md"]),
         ("Figure Catalog Registry", [draft_dir / "reports" / "figures" / "README.md"]),
-        ("Cổng thông tin nhóm (README files)", [final_dir / "README.md", draft_dir / "README.md"]),
+        ("Cổng thông tin nhóm (README)", [final_dir / "README.md"]),
         ("Đề cương báo cáo (phase-09-report-ppt.md)", [plans_dir / "phase-09-report-ppt.md"]),
-        ("Đóng gói nộp bài (submit/README.md)", [final_dir / "submit" / "README.md"]),
     ]
 
     for label, files in matrix_files:

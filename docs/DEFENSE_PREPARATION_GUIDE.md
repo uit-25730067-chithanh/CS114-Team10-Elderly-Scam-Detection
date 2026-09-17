@@ -57,23 +57,25 @@
   - Thống kê tội phạm công nghệ cao nhắm vào người cao tuổi tại VN năm 2026.
   - 4 thủ đoạn thao túng tâm lý: Dọa nạt quyền lực (`fear_authority`), Cấp cứu con cháu (`family_emergency`), Thuốc tiên / Quà tặng (`health_gift`), Cập nhật dịch vụ công giả mạo (`public_service`).
 - **Slide 3: Thiết kế & Thu thập Dataset (Dataset Architecture)**
-  - Tổng số mẫu: ≥1.500 mẫu tiếng Việt (Thanh: 1.773 mẫu bình thường có permalink; Sơn & Cẩm: 1.000 mẫu lừa đảo từ Bộ Công an, Cục ATTT, báo Dân Trí/VnExpress).
-  - Quy trình khử định danh thông tin cá nhân (PII Masking) 100%.
-  - Phân chia Stratified Train/Test 80/20 + Tập Holdout Test độc lập 42 mẫu.
+  - Tổng số mẫu: **2.193 mẫu thực tế** (1.773 mẫu bình thường có permalink 1-1 do Thanh thu thập; 420 mẫu lừa đảo do Sơn [215 mẫu] và Cẩm [205 mẫu] thu thập từ báo chính thống và vụ án thực tế).
+  - Quy trình khử định danh thông tin cá nhân (PII Masking) 100%, chính sách 100% Zero Synthetic Text.
+  - Phân chia Stratified Train/Test 80/20 (1.754 Train / 439 Test) + Tập Holdout Test độc lập 50 mẫu.
 - **Slide 4: Pipeline Tiền xử lý Văn bản Tiếng Việt (NLP Preprocessing Pipeline)**
   - Chuẩn hóa Unicode tiếng Việt dựng sẵn (NFC).
   - Xử lý teencode, viết tắt, làm sạch ký tự rác.
   - Tách từ tiếng Việt (`pyvi` / `underthesea`).
 - **Slide 5: Trích xuất Đặc trưng (Feature Engineering)**
-  - TF-IDF N-grams (1-2) bắt cặp ngữ nghĩa.
-  - Trích xuất đặc trưng phụ thủ công (Auxiliary features): đếm số điện thoại lạ, URL, từ khóa đe dọa/cấp bách.
+  - TF-IDF N-grams (1-2) bắt cặp ngữ nghĩa (5.000 chiều).
+  - Trích xuất 15 đặc trưng phụ thủ công (Auxiliary features): đếm số điện thoại lạ, URL, từ khóa đe dọa/cấp bách.
 - **Slide 6: Kiến trúc Huấn luyện 3+ Mô hình Machine Learning**
-  - Mô hình 1: Multinomial Naive Bayes (Baseline).
-  - Mô hình 2: Ensemble Learning — Random Forest & XGBoost.
+  - Mô hình 1: Multinomial Naive Bayes (Baseline — 5.000 đặc trưng TF-IDF).
+  - Mô hình 2: Ensemble Learning — Random Forest & XGBoost (5.015 đặc trưng kết hợp).
   - Mô hình 3: Support Vector Machine (LinearSVC Calibrated & RBF Kernel).
 - **Slide 7: Bảng Tổng hợp Kết quả Thực nghiệm (Benchmark Table)**
-  - So sánh chi tiết: Accuracy, Precision, Recall, F1-Score trên Test Set.
-  - Nhấn mạnh chỉ số **Recall lớp Lừa đảo** (đạt mục tiêu $\ge 92\%$).
+  - So sánh chi tiết trên Test Set (439 mẫu):
+    - **MultinomialNB (Baseline):** Accuracy 95.44%, Precision 84.78%, Recall **92.86%**, F1 **0.8864**, ROC-AUC 0.9911.
+    - **XGBoost (Tuned):** Accuracy **98.18%**, Precision **93.18%**, Recall **97.62%**, F1 **0.9535**, ROC-AUC **0.9984** (chỉ 2 mẫu bỏ lọt FN=2).
+  - Nhấn mạnh chỉ số **Recall lớp Lừa đảo** (vượt xa mục tiêu đề tài ≥ 92%).
 - **Slide 8: Phân tích Nguy cơ Overfitting qua Learning Curves**
   - Đồ thị đường cong học tập Train vs Validation (5-Fold Cross Validation).
   - Minh chứng mô hình không bị học vẹt, khoảng cách giữa Train và Val tiệm cận hẹp.
@@ -123,7 +125,7 @@
   > *"Thưa Thầy, nhóm đã kiểm soát và đánh giá Overfitting qua 3 tầng bảo vệ:*
   > 1. *Tầng 1 (K-Fold Cross Validation): Sử dụng 5-Fold Stratified CV trong suốt quá trình tinh chỉnh siêu tham số (GridSearchCV/RandomizedSearchCV), đảm bảo tỷ lệ lớp cân đối.*
   > 2. *Tầng 2 (Learning Curves): Nhóm đã vẽ đường cong học tập giữa Train Score và Validation Score theo số lượng mẫu tăng dần. Đồ thị cho thấy khi số lượng mẫu tăng, Validation Score tiệm cận gần sát Train Score và khoảng cách không vượt quá 3-5%, chứng minh mô hình có khả năng tổng quát hóa tốt.*
-  > 3. *Tầng 3 (Independent Holdout Test Set): Nhóm giữ lại một tập 42 mẫu Holdout hoàn toàn tách biệt, chưa từng xuất hiện trong quá trình train hay validation để kiểm tra lần cuối."*
+  > 3. *Tầng 3 (Independent Holdout Test Set): Nhóm giữ lại một tập 50 mẫu Holdout hoàn toàn tách biệt, chưa từng xuất hiện trong quá trình train hay validation để kiểm tra lần cuối."*
 
 ---
 
@@ -134,7 +136,7 @@
   > 1. *Nhóm thực hiện phân chia Stratified Train/Test (80/20) **ngay sau bước làm sạch cơ bản**, trước khi thực hiện trích xuất TF-IDF.*
   > 2. *`TfidfVectorizer` chỉ được `fit` trên tập Train (`fit_transform(X_train)`), sau đó chỉ dùng `transform(X_test)` trên tập Test. Tuyệt đối không fit trên toàn bộ dữ liệu.*
   > 3. *Đối với các mẫu tăng cường dữ liệu (Data Augmentation), việc sinh mẫu mới chỉ được thực hiện bên trong tập Train, tuyệt đối không tăng cường tập Test.*
-  > 4. *Mọi thông tin PII (tên riêng, số điện thoại người thật) đều được mask chuẩn hóa thành token `<PHONE>`, `<NAME>` để tránh mô hình học thuộc lòng danh tính cục bộ."*
+  > 4. *Mọi thông tin PII (tên riêng, số điện thoại người thật) đều được mask chuẩn hóa thành token `[số_điện_thoại]`, `[họ_và_tên]` để tránh mô hình học thuộc lòng danh tính cục bộ."*
 
 ---
 
