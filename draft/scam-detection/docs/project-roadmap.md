@@ -104,10 +104,10 @@ gantt
 ### Sơn (Modeling & UI Lead — Random Forest & Demo UI)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/04_model_random_forest.ipynb`: Nạp ma trận Phase 03, RandomizedSearch n_estimators, max_depth | 🚀 Đang làm (15/09 – 16/09) |
-| `models/random_forest.pkl`: Lưu trọng số Random Forest | ⏳ (16/09 – 17/09) |
-| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ⏳ (16/09 – 17/09) |
-| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ⏳ (17/09 – 18/09) |
+| `notebooks/04_model_random_forest.ipynb`: Nạp ma trận Phase 03, RandomizedSearch n_estimators, max_depth | ✅ Hoàn thành (Phase 05 PASSED — F1=0.9425, PR #16) |
+| `models/random_forest.pkl` & `random_forest_metrics.json`: Lưu trọng số Random Forest & metrics | ✅ Hoàn thành (Phase 05 — PR #16) |
+| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ⏳ Kích hoạt ngay (Phase 08) |
+| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ⏳ Kích hoạt ngay (Phase 08) |
 
 ### Cả nhóm (Academic Documentation)
 | Task | Trạng thái |

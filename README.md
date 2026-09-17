@@ -86,14 +86,32 @@
 | | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09 – 16/09) | ✅ Done (Phase 04 PASSED — F1=0.8864, PR #15) |
 | | **Sơn** | Random Forest training + hypertuning (15/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9425, Recall=97.62%, PR #16) |
 | | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng triển khai Sprint 3 (Phase 08) |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai Sprint 3 (Phase 09) |
-| **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | Đánh giá tổng hợp: So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 |
-| | **Sơn** | Tích hợp Best Model vào Streamlit Demo UI, kiểm thử giao diện người cao tuổi | 🔲 |
-| | **Cả nhóm** | Báo cáo Word: Chương 4 (Thực nghiệm) + Chương 5 (Kết luận) + Tài liệu tham khảo | 🔲 |
-| | **Cả nhóm** | Slide PPT 15 phút (14–16 slides) + Diễn tập bấm giờ (≤15 phút) | 🔲 |
-| | **Thanh** | Pre-flight verification + Đóng gói `25730067-25730013-25730061.zip` (22/09) | 🔲 |
+| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng triển khai (Phase 08) |
+| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai (Phase 09) |
+| **Sprint 3** (18/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (Optional: PhoBERT) | ⏳ Kích hoạt ngay (Phase 06) |
+| | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 Sẵn sàng triển khai (Phase 07) |
+| | **Sơn** | Tích hợp Best Model vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi | 🔲 Sẵn sàng triển khai (Phase 08) |
+| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Chương 4–5 + Slide 15 phút (14–16 slides) + Diễn tập bấm giờ | 🔲 Sẵn sàng triển khai (Phase 09) |
+| | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067-25730013-25730061.zip` (22/09) | 🔲 Sẵn sàng triển khai (Phase 10) |
 | **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
+
+---
+
+## 📑 Danh mục 11 Phase thực thi chi tiết (`plans/scam-detection-full-submit/`)
+
+| Phase | Tên Phase | Phụ trách | Trạng thái |
+|:---:|---|:---:|:---:|
+| 00 | [Phase 00 — Environment & Data Setup](./plans/scam-detection-full-submit/phase-00-env-data-setup.md) | **Thanh** | `passed` ✅ |
+| 01 | [Phase 01 — Data Collection & Labeling](./plans/scam-detection-full-submit/phase-01-data-collection-labeling.md) | **Sơn** (lead) + Cả nhóm | `passed` ✅ |
+| 02 | [Phase 02 — Vietnamese Text Preprocessing](./plans/scam-detection-full-submit/phase-02-vietnamese-text-preprocessing.md) | **Thanh** | `passed` ✅ |
+| 03 | [Phase 03 — EDA & Feature Engineering](./plans/scam-detection-full-submit/phase-03-eda-feature-engineering.md) | **Thanh** | `passed` ✅ |
+| 04 | [Phase 04 — Modeling — Naive Bayes Baseline](./plans/scam-detection-full-submit/phase-04-model-naive-bayes.md) | **Cẩm** | `passed` ✅ |
+| 05 | [Phase 05 — Modeling — Random Forest & XGBoost](./plans/scam-detection-full-submit/phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | `passed` ✅ |
+| 06 | [Phase 06 — Modeling — SVM (Optional: PhoBERT)](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) | **Cẩm** | `not-started` ⏳ |
+| 07 | [Phase 07 — Evaluation & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md) | **Thanh** | `not-started` 🔲 |
+| 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `not-started` 🔲 |
+| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cả nhóm** | `not-started` 🔲 |
+| 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `not-started` 🔲 |
 
 ---
 
