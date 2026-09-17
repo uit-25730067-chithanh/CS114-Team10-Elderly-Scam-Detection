@@ -74,3 +74,24 @@ Thư mục này chứa 7 biểu đồ phân tích khám phá dữ liệu (Explor
 ### 14. `xgb_feature_importance.png` (300 DPI)
 - **Nội dung:** Biểu đồ ngang xếp hạng Top-20 đặc trưng có trọng số quan trọng nhất trích xuất từ cây quyết định của XGBoost.
 - **Ý nghĩa học thuật:** Nổi bật các đặc trưng quyết định: `liên_hệ 198` (0.139), `money` (0.079), `198` (0.065), `number` (0.037), `tran` (0.036), xác nhận mối tương quan chặt chẽ với các thủ đoạn giả mạo đầu số nhà mạng và thao túng tâm lý chuyển khoản khẩn cấp.
+
+---
+
+## 🌲 Danh Mục Biểu Đồ Đánh Giá Random Forest (Hoàng Cao Sơn — Phase 05)
+
+### 15. `rf_confusion_matrix.png` (300 DPI)
+- **Nội dung:** Ma trận nhầm lẫn 2×2 của Random Forest trên tập kiểm thử độc lập (439 mẫu).
+- **Kết quả:** TN=347, FP=8, FN=2, TP=82.
+- **Ý nghĩa học thuật:** Tỷ lệ bỏ sót tin lừa đảo cực thấp (chỉ 2/84 mẫu lừa đảo bị bỏ sót, Recall đạt 97.62%), bảo vệ an toàn tối đa cho đối tượng người cao tuổi.
+
+### 16. `rf_roc_curve.png` (300 DPI)
+- **Nội dung:** Đường cong ROC và chỉ số AUC của mô hình Random Forest trên tập Test.
+- **Kết quả:** ROC-AUC đạt **0.9976**, phản ánh khả năng phân tách nhãn gần như hoàn hảo giữa tin thường và tin lừa đảo.
+
+### 17. `rf_learning_curve.png` (300 DPI)
+- **Nội dung:** Đường cong học tập (Train F1 vs Validation F1 qua 5-Fold Cross-Validation) theo quy mô kích thước tập huấn luyện.
+- **Ý nghĩa học thuật:** Điểm Train F1 duy trì ổn định, Validation F1 tăng đều từ 0.85 lên ~0.95 khi tăng kích thước mẫu, khoảng cách thu hẹp chứng minh mô hình hội tụ tốt và không bị Overfitting nghiêm trọng.
+
+### 18. `rf_feature_importance.png` (300 DPI)
+- **Nội dung:** Biểu đồ ngang xếp hạng Top-20 đặc trưng có độ giảm độ tinh khiết Gini cao nhất (Gini Importance).
+- **Ý nghĩa học thuật:** Làm nổi bật các từ khóa và đặc trưng phụ chỉ báo lừa đảo mạnh nhất trong các kịch bản đe dọa quyền lực và cấp cứu gia đình: `liên_hệ 198`, `number`, `money`, `tran`, `hotline` và các đặc trưng đếm URL/từ khẩn cấp.
