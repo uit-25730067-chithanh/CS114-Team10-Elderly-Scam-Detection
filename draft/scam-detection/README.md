@@ -117,13 +117,13 @@ Nhằm tránh xung đột mã nguồn (merge conflicts), mỗi thành viên ch�
 
 ---
 
-## 📊 Trạng thái Pipeline (2026-09-15)
+## 📊 Trạng thái Pipeline (2026-09-16)
 
 | Phase | Trạng thái | Artifact đầu ra |
 |-------|-------------|------------------|
 | Phase 02 (Preprocessing) | ✅ PASSED | `dataset_preprocessed.csv` (2193×24) |
 | Phase 03 (EDA + Features) | ✅ PASSED | `X_train.pkl` (1754×5015), `X_test.pkl` (439×5015), 7 EDA figures @ 300 DPI |
-| Phase 04 (Naive Bayes) | 🚀 Đang thực hiện | Cần: `X_train.pkl`, `y_train.pkl` |
-| Phase 05 (RF & XGBoost) | 🚀 Đang thực hiện | Cần: `X_train.pkl`, `y_train.pkl` |
+| Phase 04 (Naive Bayes) | ✅ PASSED | `models/naive_bayes.pkl` (F1=0.8864), `models/naive_bayes_metrics.json`, 3 figures @ 300 DPI |
+| Phase 05 (RF & XGBoost) | 🚀 Đang thực hiện | XGBoost done (F1=0.9535, 4 figures); Random Forest pending (Sơn) |
 | Phase 06 (SVM) | ⏳ Sẵn sàng | Cần: `X_train.pkl`, `y_train.pkl` |
 

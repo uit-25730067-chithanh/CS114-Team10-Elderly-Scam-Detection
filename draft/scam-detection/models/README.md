@@ -16,6 +16,17 @@ Thư mục này dùng để lưu trữ các trọng số mô hình đã huấn l
 
 ---
 
+## 📊 Bảng Đăng Ký Mô Hình & Kết Quả Thực Nghiệm (Test Set: 439 mẫu)
+
+| Tên File Model & Metrics | Thuật toán | Không gian đặc trưng | Hyperparameters tối ưu | Accuracy | Precision | Recall (Lừa đảo) | F1-Score | ROC-AUC | Trạng thái |
+|---|---|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| `naive_bayes.pkl`<br>`naive_bayes_metrics.json` | MultinomialNB | 5.000 dims (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | **0.8864** | 0.9911 | ✅ Passed (Phase 04 — Cẩm) |
+| `xgboost.pkl`<br>`xgboost_metrics.json` | XGBoost Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=300, max_depth=5, lr=0.05, subsample=0.7, colsample_bytree=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | **0.9984** | ✅ Hoàn thành (Phase 05 — Cẩm) |
+| `random_forest.pkl` | Random Forest | 5.015 dims | *(đang tinh chỉnh hyperparameters)* | — | — | — | — | — | ⏳ Đang làm (Phase 05 — Sơn) |
+| `svm_linear.pkl` | LinearSVC Calibrated / RBF | 5.015 dims | *(chưa huấn luyện)* | — | — | — | — | — | ⏳ Kế tiếp (Phase 06 — Cẩm) |
+
+---
+
 ## 🔒 Quy chuẩn Đóng gói Suy luận (Model Bundle Contract)
 
 Nhằm đảm bảo Web App Demo (`demo/app.py`) suy luận tin nhắn mới một cách độc lập và không gặp lỗi lệch chiều không gian đặc trưng (feature space mismatch), **tuyệt đối không lưu mô hình và bộ trích xuất vectorizer tách rời**.

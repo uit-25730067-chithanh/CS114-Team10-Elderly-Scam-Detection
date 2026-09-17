@@ -69,8 +69,8 @@
 | `notebooks/01_preprocessing.ipynb` | ✅ Passed (Phase 02) — Chạy end-to-end với đầy đủ bảng biểu & biểu đồ phân tách Scam vs Normal |
 | `notebooks/02_eda.ipynb` | ✅ Passed (Phase 03) — Chạy end-to-end với 7 biểu đồ phân tích sâu & bảng số liệu chi tiết |
 | Phase 03 (EDA & Feature Engineering) | ✅ Passed (15/09/2026) — Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures @ 300 DPI; 34 tests PASS |
-| Phase 04 (Naive Bayes Baseline) | 🚀 Sprint 2 Active (15/09 – 16/09) — Cẩm nạp ma trận Phase 03 để huấn luyện & phân tích Overfitting |
-| Phase 05 (Random Forest & XGBoost) | 🚀 Sprint 2 Active (15/09 – 16/09) — Sơn (RF) và Cẩm (XGBoost) huấn luyện & hypertuning |
+| Phase 04 (Naive Bayes Baseline) | ✅ Passed (16/09/2026) — Cẩm hoàn thành MultinomialNB (alpha=0.01) tuned, F1=0.8864, Recall=92.86%, ROC-AUC=0.9911, Ablation Study hoàn thành |
+| Phase 05 (Random Forest & XGBoost) | 🚀 Sprint 2 Active (15/09 – 16/09) — Cẩm hoàn thành XGBoost (F1=0.9535) ✅; Sơn đang thực hiện Random Forest ⏳ |
 | `src/models/` | 🚀 Sprint 2 Active (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
 | Notebooks (03-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
@@ -81,6 +81,8 @@
 > **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (21/21 tests passed; 2.193 mẫu được làm sạch và trích xuất 15 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất nhẹ nhàng 39.5 KB; dataset_preprocessed.csv 24 cột sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
 
 > **Verdict (15/09): Phase 03 (EDA & Zero-Leakage Feature Engineering) đã HOÀN THÀNH 100% XUẤT SẮC. Đã phát hiện và sửa triệt để lỗi rò rỉ dữ liệu (data leakage) trong bản nháp cũ. Pipeline mới: Stratified Split 80/20 ĐẦU TIÊN → TF-IDF & Scaler fit CHỈ trên train → transform test. X_train (1754×5015) và X_test (439×5015) đã xuất. 34/34 tests PASSED. 7 EDA figures @ 300 DPI. Cẩm (Phase 04/NB, Phase 06/SVM) và Sơn (Phase 05/RF) có thể bắt đầu train model ngay bây giờ.**
+
+> **Verdict (16/09): Phase 04 (Naive Bayes Baseline) đã HOÀN THÀNH XUẤT SẮC bởi Cẩm. Model đạt F1=0.8864, Recall=92.86% trên test set (439 mẫu), vượt baseline và tiệm cận target dự án. Đã thực hiện Ablation Study thực nghiệm chứng minh TF-IDF-only là tối ưu. Đồng thời phần XGBoost của Phase 05 cũng đã hoàn thành (F1=0.9535, Recall=97.62%); Phase 05 tiếp tục giữ in-progress để chờ phần Random Forest của Sơn.**
 
 ---
 

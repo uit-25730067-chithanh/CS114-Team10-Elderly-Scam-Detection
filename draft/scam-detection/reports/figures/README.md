@@ -42,3 +42,35 @@ Thư mục này chứa 7 biểu đồ phân tích khám phá dữ liệu (Explor
 ### 7. `source_distribution.png` (300 DPI)
 - **Nội dung:** Biểu đồ phân bố các nguồn thu thập dữ liệu đời thực.
 - **Ý nghĩa học thuật:** Chứng thực tính minh bạch và độ tin cậy của tập dữ liệu từ IEEE Access 2026, báo chí chính thống (Dân Trí, VnExpress, Tuổi Trẻ) và CS114 Evidence Vault.
+
+---
+
+## 📈 Danh Mục Biểu Đồ Đánh Giá Mô Hình (Phases 04 & 05)
+
+### 8. `nb_confusion_matrix.png` (300 DPI)
+- **Nội dung:** Ma trận nhầm lẫn của MultinomialNB trên Test Set (439 mẫu: 355 Normal / 84 Scam).
+- **Ý nghĩa học thuật:** Phản ánh tỷ lệ phân loại của mô hình baseline: dự đoán đúng 78/84 mẫu lừa đảo (Recall = 92.86%), 6 mẫu FN (bỏ sót) và 14 mẫu FP (báo động giả).
+
+### 9. `nb_roc_curve.png` (300 DPI)
+- **Nội dung:** Đường cong ROC và chỉ số diện tích dưới đường cong ROC-AUC của MultinomialNB.
+- **Ý nghĩa học thuật:** Đạt ROC-AUC = **0.9911**, chứng minh khả năng xếp hạng phân tách xác suất giữa tin nhắn lừa đảo và tin thường vượt trội so với đường chuẩn ngẫu nhiên (Random Baseline AUC = 0.5).
+
+### 10. `nb_learning_curve.png` (300 DPI)
+- **Nội dung:** Đường cong học tập (Learning Curve) đối chiếu Train F1 vs Validation F1 (5-fold CV) theo số lượng mẫu huấn luyện.
+- **Ý nghĩa học thuật:** Điểm Train F1 giảm từ 1.00 về 0.96 và Val F1 tăng từ 0.73 lên 0.91, hai đường tiệm cận nhau khi tăng kích thước dữ liệu, chứng thực mô hình Naive Bayes không bị overfitting nghiêm trọng.
+
+### 11. `xgb_confusion_matrix.png` (300 DPI)
+- **Nội dung:** Ma trận nhầm lẫn của XGBoost tuned trên Test Set (439 mẫu).
+- **Ý nghĩa học thuật:** Đạt độ chính xác cao: dự đoán đúng 82/84 mẫu lừa đảo (Recall = **97.62%**), chỉ bỏ sót 2 mẫu lừa đảo (FN = 2) và báo động giả 6 mẫu (FP = 6), vượt trội toàn diện so với Naive Bayes baseline.
+
+### 12. `xgb_roc_curve.png` (300 DPI)
+- **Nội dung:** Đường cong ROC và AUC của XGBoost classifier.
+- **Ý nghĩa học thuật:** Đạt ROC-AUC = **0.9984**, biểu thị đường cong tiệm cận góc trên bên trái, thể hiện năng lực phân định gần như tuyệt đối của gradient boosting trên không gian 5.015 chiều.
+
+### 13. `xgb_learning_curve.png` (300 DPI)
+- **Nội dung:** Đường cong học tập Train F1 vs Validation F1 (5-fold CV) của mô hình XGBoost tinh chỉnh.
+- **Ý nghĩa học thuật:** Train F1 duy trì ~0.98–1.00, Validation F1 tăng tiến đều đặn từ 0.83 lên 0.96, khoảng cách giữa 2 tập thu hẹp dần, khẳng định việc áp dụng `subsample=0.7` và `colsample_bytree=0.8` đã kiểm soát tốt hiện tượng quá khớp (overfitting) trên dữ liệu thưa chiều cao.
+
+### 14. `xgb_feature_importance.png` (300 DPI)
+- **Nội dung:** Biểu đồ ngang xếp hạng Top-20 đặc trưng có trọng số quan trọng nhất trích xuất từ cây quyết định của XGBoost.
+- **Ý nghĩa học thuật:** Nổi bật các đặc trưng quyết định: `liên_hệ 198` (0.139), `money` (0.079), `198` (0.065), `number` (0.037), `tran` (0.036), xác nhận mối tương quan chặt chẽ với các thủ đoạn giả mạo đầu số nhà mạng và thao túng tâm lý chuyển khoản khẩn cấp.
