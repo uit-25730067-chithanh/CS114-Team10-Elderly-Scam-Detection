@@ -41,7 +41,7 @@ scam-detection/
 │   ├── project-overview-pdr.md      ← Tổng quan đề tài & chỉ số nghiệm thu
 │   ├── project-roadmap.md           ← Lộ trình Sprint & biểu đồ Gantt
 │   └── system-architecture.md       ← Kiến trúc hệ thống & pipeline NLP
-├── models/                          ← Trọng số mô hình đã huấn luyện (.pkl)
+├── models/                          ← Trọng số mô hình (.pkl, gitignored) & metrics JSON (naive_bayes, xgboost)
 ├── notebooks/                       ← Jupyter Notebooks thực nghiệm
 │   ├── 01_preprocessing.ipynb       ← [Thanh] Tiền xử lý văn bản
 │   ├── 02_eda.ipynb                 ← [Thanh] Khám phá dữ liệu & Đặc trưng
@@ -49,9 +49,12 @@ scam-detection/
 │   ├── 04_model_random_forest.ipynb ← [Sơn] Huấn luyện Random Forest
 │   ├── 04_model_xgboost.ipynb       ← [Cẩm] Huấn luyện XGBoost
 │   ├── 05_model_svm.ipynb           ← [Cẩm] Huấn luyện Support Vector Machine
-│   └── 06_evaluation_xai.ipynb      ← [Thanh] So sánh mô hình & XAI
+│   ├── 06_evaluation_xai.ipynb      ← [Thanh] So sánh mô hình & XAI
+│   ├── generate_eda_notebook.py     ← Script sinh tự động notebook 02
+│   ├── generate_nb_notebook.py      ← Script sinh tự động notebook 03 (Phase 04)
+│   └── generate_xgb_notebook.py     ← Script sinh tự động notebook 04 (Phase 05)
 ├── reports/
-│   ├── figures/                     ← Biểu đồ ROC, Confusion Matrix, Learning Curves
+│   ├── figures/                     ← 14 biểu đồ 300 DPI (7 EDA + 7 Model Evaluation)
 │   └── model_comparison.csv         ← Bảng so sánh chỉ số tất cả mô hình
 ├── src/
 │   ├── evaluation/                  ← Tính metrics, vẽ đồ thị, trích xuất XAI
@@ -62,7 +65,8 @@ scam-detection/
 │   ├── feature_engineering_config.py ← [Phase 03] Hằng số TF-IDF, tên cột, EXPECTED_N_FEATURES=5015
 │   ├── eda_plots_part1.py           ← [Phase 03] EDA plots: label, category, text length, wordcloud
 │   ├── eda_plots_part2.py           ← [Phase 03] EDA plots: n-grams, correlation heatmap, source
-│   └── eda_visualizations.py        ← [Phase 03] EDA orchestrator (7 figures @ 300 DPI)
+│   ├── eda_visualizations.py        ← [Phase 03] EDA orchestrator (7 figures @ 300 DPI)
+│   └── model_plots.py               ← [Phase 04–05] Trực quan hóa đánh giá mô hình (Confusion Matrix, ROC, Learning Curve, FI)
 ├── requirements.txt                 ← Danh mục thư viện phụ thuộc
 └── README.md                        ← Tài liệu hướng dẫn này
 ```

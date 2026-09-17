@@ -42,9 +42,9 @@
 │       ├── data/
 │       │   ├── raw/        ← dataset.csv gốc (2.193 mẫu thực tế, 100% Zero Synthetic Text)
 │       │   └── processed/  ← dataset_preprocessed.csv, X_train.pkl (1754×5015), X_test.pkl (439×5015), y_train.pkl, y_test.pkl, tfidf_vectorizer.pkl, aux_scaler.pkl, feature_names.json
-│       ├── models/         ← Trained model files (.pkl, .json)
+│       ├── models/         ← Trained model files (.pkl, .json — naive_bayes_metrics.json, xgboost_metrics.json)
 │       ├── docs/           ← Tài liệu kỹ thuật nội bộ (roadmap, architecture, pdr, code-standards)
-│       ├── reports/        ← Kết quả, biểu đồ 7 figures @ 300 DPI
+│       ├── reports/        ← Kết quả, 14 biểu đồ @ 300 DPI (7 EDA + 7 Model Evaluation)
 │       ├── demo/           ← Streamlit/Gradio web app
 │       └── requirements.txt
 ├── plans/             ← Implementation plans (phase-based 00..10)
@@ -53,7 +53,7 @@
 
 ---
 
-## Current State (2026-09-15 — Sprint 2 Active Modeling Mode)
+## Current State (2026-09-16 — Sprint 2 Active Modeling Mode)
 
 | Component | Status |
 |-----------|--------|
@@ -70,10 +70,13 @@
 | `notebooks/02_eda.ipynb` | ✅ Passed (Phase 03) — Chạy end-to-end với 7 biểu đồ phân tích sâu & bảng số liệu chi tiết |
 | Phase 03 (EDA & Feature Engineering) | ✅ Passed (15/09/2026) — Zero-leakage TF-IDF+aux pipeline; X_train (1754×5015), X_test (439×5015); 7 EDA figures @ 300 DPI; 34 tests PASS |
 | Phase 04 (Naive Bayes Baseline) | ✅ Passed (16/09/2026) — Cẩm hoàn thành MultinomialNB (alpha=0.01) tuned, F1=0.8864, Recall=92.86%, ROC-AUC=0.9911, Ablation Study hoàn thành |
+| `notebooks/03_model_naive_bayes.ipynb` | ✅ Passed (Phase 04) — Chạy end-to-end, GridSearch alpha=0.01, F1=0.8864, 3 figures 300 DPI |
 | Phase 05 (Random Forest & XGBoost) | 🚀 Sprint 2 Active (15/09 – 16/09) — Cẩm hoàn thành XGBoost (F1=0.9535) ✅; Sơn đang thực hiện Random Forest ⏳ |
+| `notebooks/04_model_xgboost.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9535, Recall=97.62%, 4 figures 300 DPI |
+| `notebooks/04_model_random_forest.ipynb` | 🚀 Sprint 2 Active — Sơn đang huấn luyện & tinh chỉnh tham số Random Forest |
 | `src/models/` | 🚀 Sprint 2 Active (15/09 – 17/09) — naive_bayes, random_forest, xgboost, svm |
 | `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (03-06) | ⏳ Sprint 2-3 Fast-Track (15/09 – 19/09) — phân công rõ ràng cho 3 thành viên |
+| Notebooks (03-06) | 🚀 Sprint 2-3 Fast-Track (15/09 – 19/09) — 03 & 04 (XGB) done; 04 (RF) in progress; 05-06 next |
 | Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
@@ -160,29 +163,54 @@ dataset.csv (1,500+ mẫu tin nhắn tiếng Việt)
 *   **Cấp 2 — Phase-Level Sync (Vĩ mô — Khi hoàn thành trọn vẹn 1 Phase):**
     *   Bắt buộc thực thi đồng bộ theo **Ma trận 10 Tài liệu Nội bộ (Internal Documentation Matrix)** bên dưới trước khi mở PR.
 
-### 2. Ma trận 10 Tài liệu Bắt buộc Đồng bộ Nội bộ Repo (Internal Documentation Matrix)
+### 2. Ma trận 7 Tầng Kiểm toán & Đồng bộ Toàn diện (/uit:project-audit Protocol)
 
-| STT | Nhóm tài liệu | File đích | Điều kiện & Nội dung cập nhật bắt buộc |
+Khi một Phase hoặc một Milestone hoàn thành, hoặc khi kích hoạt skill `/uit:project-audit`, AI Agent và thành viên **BẮT BUỘC** phải rà soát và đồng bộ đầy đủ toàn bộ 7 tầng tài liệu dưới đây, tuyệt đối không được bỏ sót bất kỳ tầng nào:
+
+| Tầng | Nhóm tài liệu | File đích | Điều kiện & Nội dung đồng bộ bắt buộc |
 |:---:|---|---|---|
-| 1 | Kế hoạch chi tiết | `plans/scam-detection-full-submit/phase-XX-*.md` | Điền số liệu output thực tế vào mục `## Evidence`, viết `## Summary` sau triển khai, tick 100% checklist. |
-| 2 | Kế hoạch tổng thể | `plans/scam-detection-full-submit/plan.md` | Đổi status Phase từ `in-progress` sang `passed` ✅, cập nhật ngày hoàn thành `updated: YYYY-MM-DD`. |
-| 3 | Lộ trình & Phân công | `draft/scam-detection/docs/project-roadmap.md` | Cập nhật tiến độ biểu đồ Mermaid Gantt, đánh dấu hoàn thành trong bảng Sprint task của 3 thành viên. |
-| 4 | Bối cảnh điều phối AI | `AGENTS.md` (file này) | Cập nhật bảng `Current State`, bổ sung khối `Verdict` kết quả thực nghiệm, cập nhật `Next Actions`. |
-| 5 | Kiến trúc hệ thống | `draft/scam-detection/docs/system-architecture.md` | Cập nhật sơ đồ luồng dữ liệu, bảng không gian đặc trưng hoặc bảng artifacts nếu có thay đổi kỹ thuật. |
-| 6 | Technical Registries | `draft/scam-detection/{data,models,notebooks,reports}/README.md` | Đăng ký artifacts mới:<br>• `models/README.md`: Đăng ký tên model, hyperparams, 5 metrics (Acc, Prec, Rec, F1, ROC-AUC), file path.<br>• `data/processed/README.md`: Đăng ký schema 24 cột hoặc ma trận `.pkl` mới.<br>• `notebooks/README.md`: Xác nhận notebook 01–06 chạy hoàn tất, đã dọn sạch output cells (stripped outputs < 50MB).<br>• `reports/figures/README.md`: Đăng ký biểu đồ mới (300 DPI) kèm chú giải học thuật. |
-| 7 | Cổng thông tin nhóm | `README.md` & `draft/scam-detection/README.md` | Cập nhật trạng thái pipeline và bảng tiến độ Sprint tổng thể. |
-| 8 | Đề cương báo cáo | `plans/scam-detection-full-submit/phase-09-report-ppt.md` | Nạp ngay số liệu định lượng mới (metrics, bảng so sánh) vào outline Chương 4 để chuẩn bị xuất Word/Slide. |
-| 9 | Đóng gói nộp bài | `submit/README.md` | Rà soát danh mục artifacts cần đóng gói vào ZIP `25730067-25730013-25730061.zip`. |
-| 10 | Pull Request chuẩn UIT | GitHub Pull Request | Mở PR theo đúng quy chuẩn: Tiêu đề Title Case không prefix, Body Tiếng Việt danh sách gạch đầu dòng lồng nhau, kết thúc bằng `- Xác minh kiểm định thực nghiệm:`. |
+| **Tầng 1** | **Tiến độ & Kế hoạch** | • `plans/.../plan.md`<br>• `plans/.../phase-XX-*.md`<br>• `draft/scam-detection/docs/project-roadmap.md` | • Đổi status Phase từ `in-progress` sang `passed` ✅, cập nhật ngày `updated`.<br>• Điền số liệu thực nghiệm vào `## Evidence`, viết `## Summary`, tick 100% checklist.<br>• Đồng bộ tiến độ biểu đồ Mermaid Gantt và bảng phân công Sprint 3 thành viên. |
+| **Tầng 2** | **Bối cảnh Điều phối AI** | • `AGENTS.md` (file này) | • Cập nhật bảng `Current State` (status, số lượng mẫu, metrics, artifact count).<br>• Bổ sung khối `Verdict` tổng kết thực nghiệm và cập nhật nhiệm vụ `Next Actions`. |
+| **Tầng 3** | **Cổng thông tin & Cây Thư mục** | • `assignments/Final/README.md`<br>• `draft/scam-detection/README.md` | • Cập nhật bảng tiến độ Sprint tổng thể và trạng thái từng thành viên.<br>• Cập nhật cây thư mục (`tree`), khai báo đầy đủ các module mới, script sinh notebook, metrics JSONs và số lượng figures. |
+| **Tầng 4** | **Sổ bộ Đăng ký Kỹ thuật (Technical Registries)** | • `draft/scam-detection/models/README.md`<br>• `draft/scam-detection/reports/figures/README.md`<br>• `draft/scam-detection/notebooks/README.md`<br>• `draft/scam-detection/data/processed/README.md` | • `models/README.md`: Đăng ký tên model, hyperparams, 5 metrics (Acc, Prec, Rec, F1, ROC-AUC), file path.<br>• `reports/figures/README.md`: Đăng ký toàn bộ biểu đồ 300 DPI mới kèm chú giải học thuật sâu.<br>• `notebooks/README.md`: Xác nhận notebook chạy hoàn tất, dọn sạch output cells (stripped outputs < 50MB), seed 42.<br>• `data/processed/README.md`: Đăng ký schema 24 cột hoặc ma trận `.pkl` mới. |
+| **Tầng 5** | **Báo cáo Nghiên cứu & Bảng Đối chứng** | • `draft/scam-detection/reports/research-*.md`<br>• `draft/scam-detection/reports/model_comparison.csv`<br>• `docs/journals/YYYY-MM-DD-*.md` (repo gốc) | • `reports/research-*.md`: Lập báo cáo kiểm toán học thuật cho từng Phase hoàn thành (Zero-Leakage, Ablation Study, hyperparameter tuning).<br>• `reports/model_comparison.csv`: Bảng tổng hợp so sánh chỉ số định lượng các mô hình.<br>• `docs/journals/`: Khởi tạo nhật ký kỹ thuật ghi nhận mốc hoàn thành tại repo gốc. |
+| **Tầng 6** | **Kiến trúc, Chuẩn mực & Cẩm nang Bảo vệ** | • `draft/scam-detection/docs/system-architecture.md`<br>• `draft/scam-detection/docs/code-standards.md`<br>• `draft/scam-detection/docs/project-overview-pdr.md`<br>• `docs/DEFENSE_PREPARATION_GUIDE.md`<br>• `draft/scam-detection/docs/brainstorm-*.md` | • `system-architecture.md`: Cập nhật luồng dữ liệu, bảng artifacts data/models/evaluation.<br>• `code-standards.md`: Cập nhật convention đóng gói model bundle (5.015 chiều kết hợp `aux_scaler`).<br>• `project-overview-pdr.md`: Cập nhật các chỉ số mục tiêu đã đạt/vượt ngưỡng.<br>• `DEFENSE_PREPARATION_GUIDE.md`: Cập nhật số liệu dataset thực tế, metrics cụ thể vào Slide 7; **tuyệt đối không dùng raw LaTeX** (`$` hoặc `$$`), dùng Unicode toán học.<br>• `brainstorm-*.md`: Khử raw LaTeX, cập nhật các cam kết kỹ thuật. |
+| **Tầng 7** | **Đề cương, Đóng gói & Kiểm định** | • `plans/.../phase-09-report-ppt.md`<br>• `submit/README.md`<br>• `verify_final.py` & `pytest` | • `phase-09-report-ppt.md`: Nạp số liệu định lượng mới vào outline Chương 4 Báo cáo đồ án.<br>• `submit/README.md`: Rà soát danh mục artifacts đóng gói ZIP `25730067-25730013-25730061.zip`.<br>• Chạy kiểm định tự động: `python3 verify_final.py` (100% Semantic Parity) và `pytest` (100% PASS). |
 
-### 3. Quy tắc về .pkl và artifacts
+### 3. Quy trình Thực thi Chuẩn khi kích hoạt skill /uit:project-audit
+
+> ⚠️ **NGUYÊN TẮC BẤT DI BẤT DỊCH (INVARIANT):**  
+> Khi người dùng gọi `/uit:project-audit` để review PR hoặc kiểm toán tiến độ, Agent đóng vai trò là **Project Manager (PM)** của dự án.  
+> **TUYỆT ĐỐI KHÔNG** chỉ xem xét code bề nổi hay chỉ sửa vài dòng checklist trong phase plan. Agent phải thực thi quét trọn vẹn cả **7 Tầng Ma trận** trên và tuân thủ chu trình 4 bước:
+
+1. **Bước 1 — Quét Radar Toàn Diện (Deep Scout First):**  
+   Dùng `/skill:scout` quét toàn bộ working directory, commit history, các notebooks, models, figures và tài liệu. Đối chiếu chéo từng tầng trong Ma trận 7 Tầng xem tệp nào chưa được cập nhật, tệp nào có số liệu lệch pha, hoặc tệp nào còn thiếu.
+2. **Bước 2 — Lập Bảng Khoảng Trống & Cổng Quyết Định (Gap Table & Decision Gate):**  
+   Tổng hợp danh sách các tệp cần xử lý theo 3 mức độ nghiêm trọng:
+   - **Critical:** Lệch pha Semantic Parity (`plan.md` ↔ `AGENTS.md` ↔ `project-roadmap.md`), rò rỉ dữ liệu (data leakage), tệp > 50MB chưa gitignore.
+   - **Medium:** Chưa cập nhật Technical Registries, chưa có báo cáo nghiên cứu `reports/research-*.md`, chưa đồng bộ cây thư mục `README.md` hoặc đề cương báo cáo `phase-09-report-ppt.md`.
+   - **Low:** Lỗi format raw LaTeX, chưa cập nhật cẩm nang bảo vệ hoặc nhật ký kỹ thuật.  
+   Trình bày bảng phát hiện và chờ chỉ thị của PM/User.
+3. **Bước 3 — Đồng Bộ Có Tính Toán & Trọn Gói (Calculated Remediation):**  
+   Khi được duyệt thực thi, Agent phải tiến hành cập nhật **đồng bộ toàn bộ các tệp trong cả 7 tầng**, không để dở việc.  
+   *Lưu ý bảo vệ Git:* Nếu người dùng chỉ thị *"không commit để anh kiểm tra đã"*, Agent giữ toàn bộ thay đổi ở trạng thái working tree/unstaged, tuyệt đối không tự ý chạy `git commit`.
+4. **Bước 4 — Kiểm Định Cổng Đóng (Semantic Parity Gate Sign-off):**  
+   Trước khi báo cáo hoàn thành, bắt buộc chạy:
+   ```bash
+   python3 assignments/Final/verify_final.py
+   python3 scripts/validate_assignment.py --id Final
+   python3 -m pytest assignments/Final/draft/scam-detection/tests/
+   ```
+   Chỉ khi tất cả các kiểm định đạt 100% PASS thì mới nghiệm thu bàn giao cho người dùng.
+
+### 4. Quy tắc về .pkl và artifacts
 
 *   `data/raw/dataset.csv` → **Commit nếu < 50MB** (dataset 2.193 mẫu thực tế, 100% Zero Synthetic Text)
 *   `data/processed/*.pkl` (TF-IDF matrices, splits) → **Commit luôn** nếu < 50MB
 *   `models/vectorizer.pkl`, `models/best_model_bundle.pkl` → **Commit luôn** nếu < 50MB (phục vụ Demo UI và kiểm định)
 *   `models/*.pkl` lớn (> 50MB) → **Gitignore** → ghi hướng dẫn reproduce rõ ràng trong `models/README.md`
 
-### 4. Quy chuẩn tạo Pull Request (PR Standards) — BẮT BUỘC
+### 5. Quy chuẩn tạo Pull Request (PR Standards) — BẮT BUỘC
 
 > 📌 **Mọi Agent AI và thành viên khi tạo PR bắt buộc phải tuân theo quy chuẩn:**
 > 1. **PR Title**: Viết bằng Tiếng Anh chuẩn **Title Case**, bắt đầu bằng Imperative Verb, **TUYỆT ĐỐI KHÔNG** dùng tiền tố (`feat:`, `chore:`, `fix:`, `docs:`...).
@@ -230,14 +258,15 @@ Place in `Final/submit/` before zipping.
    - Đã hợp nhất 2.193 mẫu đời thực độc bản (`staging_thanh_normal.csv`: 1.773, `staging_cam_scam.csv`: 205, `staging_son_scam.csv`: 215).
    - Đạt 100% provenance URLs, 0% PII leak, 0 duplicate, pass `data_validation.py` 100%.
    - Đóng băng `dataset.csv` và chuyển giao sang tiền xử lý.
-2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):** ✅ **HOÀN THÀNH PHASE 02 (15/09/2026)**
+2. **Luồng B (Tiền xử lý & Feature Engineering — Thanh):** ✅ **HOÀN THÀNH PHASE 02 & 03 (15/09/2026)**
    - Triển khai thành công `src/preprocessing/` (`text_cleaner.py`, `tokenizer.py`, `stopwords.py`, `pipeline.py`).
-   - Xây dựng thành công `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv` (2.193 dòng, 19 cột).
-   - Chuyển tiếp sang Phase 03: EDA và trích xuất TF-IDF matrix (N-gram 1-2) + Stratified Train/Test 80/20.
-3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):** ⏳ **KHỞI ĐỘNG (15/09 – 17/09)**
-   - Cẩm: Naive Bayes baseline (`notebooks/03_model_naive_bayes.ipynb`) → XGBoost & SVM Linear/RBF (`notebooks/04_model_xgboost.ipynb`, `notebooks/05_model_svm.ipynb`).
-   - Sơn: Random Forest (`notebooks/04_model_random_forest.ipynb`).
-   - Thanh & Cẩm: Đánh giá XAI, vẽ Learning Curves và trích xuất Top-20 từ khóa SHAP (18/09 – 19/09).
+   - Xây dựng thành công `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv` (2.193 dòng, 24 cột).
+   - Hoàn thành Phase 03: EDA (7 biểu đồ 300 DPI), pipeline zero-leakage, xuất ma trận `X_train.pkl` (1.754 × 5.015) và `X_test.pkl` (439 × 5.015).
+3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):** 🚀 **TIẾN ĐỘ VƯỢT BẬC (15/09 – 17/09)**
+   - Cẩm: Hoàn thành Naive Bayes baseline (`03_model_naive_bayes.ipynb`, F1=0.8864, Recall=92.86%) và XGBoost Classifier (`04_model_xgboost.ipynb`, F1=0.9535, Recall=97.62%, ROC-AUC=0.9984).
+   - Sơn: Đang hoàn thiện Random Forest (`04_model_random_forest.ipynb`) để khép lại trọn vẹn Phase 05.
+   - Cẩm: Chuẩn bị triển khai Phase 06 Support Vector Machine (`05_model_svm.ipynb`).
+   - Thanh: Chuẩn bị Phase 07 đánh giá XAI tổng hợp, đường cong ROC và trích xuất Top-20 từ khóa SHAP (18/09 – 19/09).
 4. **Luồng D (Demo UI — Sơn):** ⏳ **TRIỂN KHAI (16/09 – 18/09)**
    - Dựng khung giao diện Streamlit (`demo/app.py`), thiết kế UX thân thiện với người cao tuổi và tích hợp mô hình.
 5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** ⏳ **ĐỒNG THỜI (15/09 – 22/09)**
