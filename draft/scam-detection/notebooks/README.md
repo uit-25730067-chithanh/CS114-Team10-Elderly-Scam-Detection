@@ -13,7 +13,7 @@ Nhằm đảm bảo quy trình song song (`--parallels`) không xảy ra xung đ
 | `01_preprocessing.ipynb` | **Đặng Chí Thanh** | Tiền xử lý Unicode NFC, 160 teencode, Leet-speak, tách từ pyvi, 15 đặc trưng phụ | ✅ Done (Phase 02 PASSED) |
 | `02_eda.ipynb` | **Đặng Chí Thanh** | Phân tích khám phá dữ liệu (EDA), sinh 7 biểu đồ 300 DPI, Zero-Leakage Pipeline | ✅ Done (Phase 03 PASSED) |
 | `03_model_naive_bayes.ipynb` | **Bùi Thị Mỷ Cẩm** | Huấn luyện Multinomial Naive Bayes baseline, GridSearch alpha, Learning Curve | ✅ Done (Phase 04 — F1=0.8864) |
-| `04_model_random_forest.ipynb` | **Hoàng Cao Sơn** | Huấn luyện Random Forest, tinh chỉnh n_estimators/max_depth, Feature Importance | 🚀 In Progress (Phase 05) |
+| `04_model_random_forest.ipynb` | **Hoàng Cao Sơn** | Huấn luyện Random Forest, tinh chỉnh n_estimators/max_depth, Feature Importance | ✅ Done (Phase 05 — F1=0.9425, Recall=0.9762) |
 | `04_model_xgboost.ipynb` | **Bùi Thị Mỷ Cẩm** | Huấn luyện XGBoost Classifier, tinh chỉnh learning_rate/subsample | ✅ Done (Phase 05 — F1=0.9535) |
 | `05_model_svm.ipynb` | **Bùi Thị Mỷ Cẩm** | Support Vector Machine (LinearSVC Calibrated / RBF Kernel) | ⏳ Next (Phase 06) |
 | `06_evaluation_xai.ipynb` | **Đặng Chí Thanh** | So sánh tổng hợp 4 mô hình, ROC-AUC, Confusion Matrix, Top-20 SHAP XAI | ⏳ Sprint 3 (Phase 07) |

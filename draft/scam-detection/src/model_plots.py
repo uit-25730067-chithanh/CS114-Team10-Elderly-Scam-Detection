@@ -2,8 +2,8 @@
 CS114 Final Project — Scam Detection
 Model Evaluation Visualization: Confusion Matrix, Learning Curve, Feature Importance, ROC Curve.
 
-Author: Bùi Thị Mỷ Cẩm (MSSV: 25730013)
-Phase: 04 — Naive Bayes Baseline / Phase 05 — XGBoost
+Author: Nhóm 10 (Hoàng Cao Sơn & Bùi Thị Mỷ Cẩm)
+Phase: 04 / 05 / 06 / 07 — Modeling & Evaluation
 """
 
 from __future__ import annotations

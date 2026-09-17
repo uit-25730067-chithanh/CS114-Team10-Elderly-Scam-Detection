@@ -9,7 +9,7 @@ Thư mục này dùng để lưu trữ các trọng số mô hình đã huấn l
 | Tên File | Thuật toán | Thành viên phụ trách | Mô tả |
 |----------|-----------|---------------------|-------|
 | `naive_bayes.pkl` | Multinomial Naive Bayes | **Bùi Thị Mỷ Cẩm** | Baseline model (Phase 04) |
-| `random_forest.pkl` | Random Forest Classifier | **Hoàng Cao Sơn** | Ensemble bagging model (Phase 05) |
+| `random_forest.pkl` | Random Forest Classifier | **Hoàng Cao Sơn** | Ensemble bagging model (Phase 05) — F1: 0.9425, Recall: 0.9762 |
 | `xgboost.pkl` | XGBoost Classifier | **Bùi Thị Mỷ Cẩm** | Gradient boosting model (Phase 05) |
 | `svm_linear.pkl` | LinearSVC + CalibratedCV | **Bùi Thị Mỷ Cẩm** | Support Vector Machine (Phase 06) |
 | `best_model_bundle.pkl` | Model tốt nhất (F1 cao nhất) | **Cả nhóm** | Gói tích hợp nạp vào Streamlit Demo (`demo/app.py`) |
@@ -22,7 +22,7 @@ Thư mục này dùng để lưu trữ các trọng số mô hình đã huấn l
 |---|---|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
 | `naive_bayes.pkl`<br>`naive_bayes_metrics.json` | MultinomialNB | 5.000 dims (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | **0.8864** | 0.9911 | ✅ Passed (Phase 04 — Cẩm) |
 | `xgboost.pkl`<br>`xgboost_metrics.json` | XGBoost Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=300, max_depth=5, lr=0.05, subsample=0.7, colsample_bytree=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | **0.9984** | ✅ Hoàn thành (Phase 05 — Cẩm) |
-| `random_forest.pkl` | Random Forest | 5.015 dims | *(đang tinh chỉnh hyperparameters)* | — | — | — | — | — | ⏳ Đang làm (Phase 05 — Sơn) |
+| `random_forest.pkl`<br>`random_forest_metrics.json` | Random Forest Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2` | **97.72%** | **91.11%** | **97.62%** | **0.9425** | **0.9976** | ✅ Hoàn thành (Phase 05 — Sơn) |
 | `svm_linear.pkl` | LinearSVC Calibrated / RBF | 5.015 dims | *(chưa huấn luyện)* | — | — | — | — | — | ⏳ Kế tiếp (Phase 06 — Cẩm) |
 
 ---

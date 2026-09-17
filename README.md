@@ -84,10 +84,10 @@
 | **Sprint 2** (15/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode NFC, regex, pyvi, 160 teencode, 15 aux features) | ✅ Done (Phase 02 PASSED — PR #12 merged) |
 | | **Thanh** | EDA notebook + Zero-leakage Feature Pipeline (TF-IDF + Scaler, 7 figures 300 DPI) | ✅ Done (Phase 03 PASSED — PR #13 merged) |
 | | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09 – 16/09) | ✅ Done (Phase 04 PASSED — F1=0.8864, PR #15) |
-| | **Sơn** | Random Forest training + hypertuning (15/09 – 16/09) | 🚀 Đang thực hiện (Phase 05) |
-| | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 — F1=0.9535, PR #15) |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng (Phase 08) |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng (Phase 09) |
+| | **Sơn** | Random Forest training + hypertuning (15/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9425, Recall=97.62%, PR #16) |
+| | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
+| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Sẵn sàng triển khai Sprint 3 (Phase 08) |
+| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai Sprint 3 (Phase 09) |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | Đánh giá tổng hợp: So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | 🔲 |
 | | **Sơn** | Tích hợp Best Model vào Streamlit Demo UI, kiểm thử giao diện người cao tuổi | 🔲 |
 | | **Cả nhóm** | Báo cáo Word: Chương 4 (Thực nghiệm) + Chương 5 (Kết luận) + Tài liệu tham khảo | 🔲 |
