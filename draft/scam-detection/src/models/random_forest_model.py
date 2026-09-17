@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import joblib
 import numpy as np
+from sklearn.base import clone
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn.model_selection import RandomizedSearchCV
@@ -125,16 +126,18 @@ class RandomForestScamDetector:
                 "max_features": ["sqrt", "log2", 0.2],
             }
 
+        base_estimator = clone(self.model)
+        base_estimator.set_params(random_state=random_state, n_jobs=n_jobs)
+
         search = RandomizedSearchCV(
-            estimator=RandomForestClassifier(
-                class_weight="balanced", random_state=random_state, n_jobs=n_jobs
-            ),
+            estimator=base_estimator,
             param_distributions=param_distributions,
             n_iter=n_iter,
             cv=cv,
             scoring=scoring,
             random_state=random_state,
             n_jobs=n_jobs,
+            refit=True,
             verbose=0,
         )
         search.fit(X, y)

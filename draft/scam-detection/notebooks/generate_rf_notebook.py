@@ -188,9 +188,8 @@ def build_notebook_structure() -> dict:
         ),
         cell_md("## 4. Huấn luyện Model Tối ưu & Đánh giá trên Test Set Độc lập (439 mẫu)", "md_06_final"),
         cell_code(
-            "# Refit model tốt nhất trên toàn bộ X_train\n"
-            "best_rf_model = random_search.best_estimator_\n"
-            "best_rf_model.fit(X_train, y_train)\n\n"
+            "# Trích xuất model tốt nhất (đã được refit tự động trên toàn bộ X_train bởi RandomizedSearchCV)\n"
+            "best_rf_model = random_search.best_estimator_\n\n"
             "# Đánh giá trên tập kiểm thử chưa từng thấy X_test\n"
             "y_test_pred = best_rf_model.predict(X_test)\n"
             "y_test_proba = best_rf_model.predict_proba(X_test)[:, 1]\n"
@@ -357,10 +356,9 @@ def run_pipeline() -> None:
     print("  Best Parameters:", random_search.best_params_)
     print(f"  Best 5-Fold CV F1: {random_search.best_score_:.4f}")
 
-    # 5. Đánh giá trên Test Set
+    # 5. Đánh giá trên Test Set (best_estimator_ đã được refit tự động trên toàn bộ X_train)
     print("\n[4/6] Đánh giá trên tập kiểm thử độc lập X_test (439 mẫu)...")
     best_rf = random_search.best_estimator_
-    best_rf.fit(X_train, y_train)
 
     y_test_pred = best_rf.predict(X_test)
     y_test_proba = best_rf.predict_proba(X_test)[:, 1]
