@@ -95,13 +95,21 @@ def predict_sms(req: PredictionRequest):
         detected_indicators=matched_ind
     )
 
-# Static directory
+# Static directory & Direct docs/cover.png resolution
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+DOCS_COVER_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "..", "..", "docs", "cover.png"))
 
 @app.get("/")
 def serve_index():
     index_path = os.path.join(STATIC_DIR, "index.html")
     return FileResponse(index_path)
+
+@app.get("/static/cover.png")
+@app.get("/cover.png")
+def serve_cover():
+    if os.path.exists(DOCS_COVER_PATH):
+        return FileResponse(DOCS_COVER_PATH)
+    raise HTTPException(status_code=404, detail="Không tìm thấy tệp docs/cover.png")
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
