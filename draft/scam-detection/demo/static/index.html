@@ -11,23 +11,25 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563EB'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
 </head>
 <body>
-  <!-- Ambient background glow elements -->
+  <!-- Ambient background with cover.png atmospheric illumination -->
+  <div class="ambient-backdrop"></div>
+  <div class="ambient-vignette"></div>
   <div class="bg-glow glow-1"></div>
   <div class="bg-glow glow-2"></div>
-  <div class="bg-glow glow-3"></div>
 
   <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand">
         <div class="brand-shield">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="#2563EB" stroke="none"/>
+            <path d="M12 7c-1.5 0-2.5 1-2.5 2.5 0 1.2.8 2.2 2 2.4-2.5.4-4 2-4 4.1h9c0-2.1-1.5-3.7-4-4.1 1.2-.2 2-1.2 2-2.4C14.5 8 13.5 7 12 7z" fill="#FFFFFF"/>
           </svg>
         </div>
         <div class="brand-info">
           <span class="brand-name">CIVIC GUARD</span>
-          <span class="brand-sub">Hệ Thống Giám Định An Toàn Số • UIT</span>
+          <span class="brand-sub">Hệ Thống Giám Định An Toàn Số Cho Người Cao Tuổi • UIT</span>
         </div>
       </div>
 
@@ -118,16 +120,11 @@
       
       <!-- STATE 1: Standby / Idle -->
       <div id="stateStandby" class="verdict-card standby-card">
-        <div class="standby-visual">
-          <div class="radar-circle circle-3"></div>
-          <div class="radar-circle circle-2"></div>
-          <div class="radar-circle circle-1"></div>
-          <div class="standby-shield">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-              <path d="M12 8v4"/>
-              <circle cx="12" cy="16" r="1" fill="currentColor"/>
-            </svg>
+        <div class="standby-cover-preview">
+          <img src="/static/cover.png" alt="Bảo vệ người cao tuổi trước tin nhắn lừa đảo" class="standby-img">
+          <div class="cover-overlay-badge">
+            <span class="live-dot-cyan"></span>
+            <span>Lá Chắn An Toàn Số 24/7</span>
           </div>
         </div>
         <h3 class="standby-title">Hệ Thống Đang Trực Sẵn Sàng</h3>
@@ -137,15 +134,15 @@
         <div class="standby-features">
           <div class="feat-badge">
             <span class="feat-dot"></span>
-            <span>Mô hình 5.015 đặc trưng</span>
+            <span>Mô hình XGBoost 5.015 đặc trưng (F1=0.9535)</span>
           </div>
           <div class="feat-badge">
             <span class="feat-dot"></span>
-            <span>Nhận diện 5 bẫy tâm lý</span>
+            <span>Phát hiện 5 nhóm bẫy tâm lý đe dọa & cưỡng chế</span>
           </div>
           <div class="feat-badge">
             <span class="feat-dot"></span>
-            <span>Phản hồi dưới 50ms</span>
+            <span>Suy luận an toàn thông tin &lt; 20ms</span>
           </div>
         </div>
       </div>
@@ -257,14 +254,43 @@
 
   </main>
 
-  <!-- Clean Minimalist Academic Footer -->
+  <!-- Clean Minimalist Academic Footer with Trust Pillars from cover.png -->
   <footer class="app-footer">
+    <div class="trust-pillars">
+      <div class="pillar-item">
+        <span class="pillar-icon">🧠</span>
+        <div class="pillar-content">
+          <span class="pillar-title">Trí Tuệ Nhân Tạo</span>
+          <span class="pillar-sub">Phân tích thông minh</span>
+        </div>
+      </div>
+      <div class="pillar-item">
+        <span class="pillar-icon">🛡️</span>
+        <div class="pillar-content">
+          <span class="pillar-title">Bảo Mật Tuyệt Đối</span>
+          <span class="pillar-sub">Bảo vệ quyền riêng tư</span>
+        </div>
+      </div>
+      <div class="pillar-item">
+        <span class="pillar-icon">📈</span>
+        <div class="pillar-content">
+          <span class="pillar-title">Học Máy Cải Tiến</span>
+          <span class="pillar-sub">F1-Score đạt 0.9535</span>
+        </div>
+      </div>
+      <div class="pillar-item">
+        <span class="pillar-icon">👥</span>
+        <div class="pillar-content">
+          <span class="pillar-title">Vì Người Cao Tuổi</span>
+          <span class="pillar-sub">100% Zero Synthetic Data</span>
+        </div>
+      </div>
+    </div>
+
     <div class="footer-inner">
       <span>Đề tài Nghiên cứu Máy học Phục vụ Cộng đồng (CS114) — Trường Đại học Công nghệ Thông tin, ĐHQG-HCM</span>
       <span class="dot-sep">•</span>
       <span>Nhóm 10: Đặng Chí Thanh • Bùi Thị Mỷ Cẩm • Hoàng Cao Sơn</span>
-      <span class="dot-sep">•</span>
-      <span class="zero-badge">100% Zero Synthetic Data</span>
     </div>
   </footer>
 

@@ -54,23 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = samples[key];
         let badgeClass = 'badge-threat';
         let badgeText = 'Đe dọa bắt giữ';
+        let iconClass = 'icon-box-police';
+        let iconSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#BE123C" stroke-width="2.2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`;
 
         if (key === 'hospital') {
           badgeClass = 'badge-threat';
           badgeText = 'Tống tiền cấp cứu';
+          iconClass = 'icon-box-hospital';
+          iconSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`;
         } else if (key === 'gift') {
           badgeClass = 'badge-warning';
           badgeText = 'Bẫy trúng thưởng';
+          iconClass = 'icon-box-gift';
+          iconSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`;
         } else if (key === 'family') {
           badgeClass = 'badge-safe';
           badgeText = 'Gia đình an toàn';
+          iconClass = 'icon-box-family';
+          iconSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
         }
 
         const card = document.createElement('div');
         card.className = 'preset-card';
         card.innerHTML = `
           <div class="preset-top">
-            <span class="preset-name">${item.title}</span>
+            <div class="preset-title-group">
+              <div class="preset-icon-box ${iconClass}">${iconSvg}</div>
+              <span class="preset-name">${item.title}</span>
+            </div>
             <span class="preset-badge ${badgeClass}">${badgeText}</span>
           </div>
           <p class="preset-snippet">${item.content}</p>
