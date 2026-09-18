@@ -36,6 +36,7 @@ build/
 !**/models/tfidf_vectorizer.pkl
 !**/models/best_model_bundle.pkl
 models/*.h5
+
 models/*.joblib
 models/*.pt
 models/*.bin

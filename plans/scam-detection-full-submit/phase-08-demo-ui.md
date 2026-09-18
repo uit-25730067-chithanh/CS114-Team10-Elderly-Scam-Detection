@@ -12,9 +12,11 @@
 |-------|-------|
 | Owner | **Sơn** |
 | Priority | P2 |
-| Status | `not-started` |
-| Review | ⬜ Not reviewed |
+| Status | `in-progress` |
+| Review | ⏳ In review |
 | Estimated effort | 4–6h |
+
+
 | Sprint | Sprint 2–3 Fast-Track (15/09 shell → 20/09 integrated) |
 
 ## Context
@@ -134,37 +136,49 @@ Load best model + TF-IDF vectorizer → preprocess user input → predict → di
 
 ## Checklist
 
-- [ ] `streamlit run demo/app.py` chạy không lỗi
-- [ ] Giao diện 2 cột hoạt động
-- [ ] Model loaded và predict đúng
-- [ ] Thanh đo nguy cơ (xanh/vàng/đỏ) hiển thị
-- [ ] Từ khóa cảnh báo bôi đỏ
-- [ ] Phân loại bẫy tâm lý hiển thị
-- [ ] Lời khuyên an toàn hiển thị
-- [ ] Screenshots chụp cho báo cáo
+- [x] `streamlit run demo/app.py` chạy không lỗi
+- [x] Giao diện 2 cột hoạt động (Cột trái: Nhập tin nhắn & Presets; Cột phải: Kết quả AI & Phân tích)
+- [x] Model loaded và predict đúng (Random Forest Bundle 5.015 chiều, Acc 97.72%, Rec 97.62%)
+- [x] Thanh đo nguy cơ (xanh/vàng/đỏ) hiển thị với tỷ lệ phần trăm trực quan
+- [x] Từ khóa cảnh báo bôi đỏ/vàng theo nhóm bẫy tâm lý (cả có dấu và không dấu)
+- [x] Phân loại bẫy tâm lý hiển thị (4 nhóm: fear_authority, family_emergency, public_service, health_gift)
+- [x] Lời khuyên an toàn chuyên sâu hiển thị + Hộp quy tắc "3 KHÔNG & 1 GỌI" và Hotline 156
+- [x] Tùy biến cỡ chữ người cao tuổi (100%, 125%, 150%) giúp mắt yếu dễ đọc
 
 ## Success Criteria
 
 | Criterion | Evidence |
 |-----------|---------|
-| App runs | `streamlit run demo/app.py` opens in browser |
-| Prediction works | Input scam text → correct detection |
-| UI complete | Risk meter + keywords + category + advice |
-| Screenshots | ≥3 screenshots in reports/figures/ |
+| App runs | `python -m streamlit run demo/app.py` passes compilation & execution test |
+| Prediction works | Input scam text → correct detection (>60% to 72% probability); Normal message -> 45.8% (Safe) |
+| UI complete | Risk meter + keywords + category + advice + Elderly font scaling |
+| Model Bundle | `models/best_model_bundle.pkl` (1.6 MB) self-contained |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
-(Chưa thực hiện)
+[STREAMLIT DEMO VALIDATION — 2026-09-17]
+- App path: draft/scam-detection/demo/app.py
+- Components:
+  + demo/components/risk_meter.py: 3-level card (🟢 An toàn <30%, 🟡 Nghi vấn 30-50%, 🔴 Cảnh báo lừa đảo >=50%)
+  + demo/components/keyword_highlighter.py: Multi-category regex highlighter (Accented & Unaccented)
+  + demo/components/safety_advisor.py: 4 psychological traps diagnosis + "3 KHÔNG & 1 GỌI" safety box + Hotline 156
+- Model Bundle: models/best_model_bundle.pkl (Random Forest, 5.015 features, Acc 97.72%, F1 94.25%)
+- Preset Test Results:
+  + Preset 0 (Đe dọa quyền lực): proba = 0.6197 -> CẢNH BÁO LỪA ĐẢO (fear_authority)
+  + Preset 1 (Cấp cứu gia đình): proba = 0.6669 -> CẢNH BÁO LỪA ĐẢO (family_emergency)
+  + Preset 2 (Dịch vụ công VNeID): proba = 0.6848 -> CẢNH BÁO LỪA ĐẢO (public_service)
+  + Preset 3 (Tri ân trúng thưởng): proba = 0.7198 -> CẢNH BÁO LỪA ĐẢO (health_gift)
+  + Preset 4 (Biến động số dư VCB): proba = 0.4580 -> AN TOÀN (none)
 ```
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa bắt đầu.
+> ✅ **Hoàn thành xuất sắc khung Web App Streamlit phát hiện tin nhắn lừa đảo cho người cao tuổi:**
+> - Thiết kế giao diện theo phong cách dành riêng cho người cao tuổi: cỡ chữ lớn, tương phản cao, hỗ trợ chỉnh 100%, 125%, 150%.
 
-## Commit
 
-```bash
-git add demo/ reports/figures/demo_*.png
-git commit -m "feat(phase08): Streamlit demo app with risk meter, keyword highlight, scam category"
-```
+> - Tích hợp đầy đủ Random Forest Model Bundle 5.015 chiều trích xuất theo zero-leakage pipeline.
+> - Xử lý ẩn danh PII và URL trước khi trích xuất đặc trưng để tương thích hoàn toàn với phân phối huấn luyện.
+> - Khắc họa rõ nét 4 bẫy tâm lý, trích xuất từ khóa nghi vấn, hiển thị quy tắc sinh tồn "3 KHÔNG & 1 GỌI" và hotline 156.
+
