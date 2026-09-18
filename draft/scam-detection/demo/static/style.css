@@ -265,6 +265,9 @@ body {
     grid-template-columns: 1fr;
     gap: 28px;
   }
+  .right-panel {
+    position: static;
+  }
 }
 
 /* Left Panel */
@@ -595,6 +598,7 @@ body {
 }
 
 .verdict-card {
+  scroll-margin-top: 85px;
   background: var(--panel-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);

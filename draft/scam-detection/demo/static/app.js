@@ -175,6 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
     switchState('scanning');
     btnAnalyze.disabled = true;
 
+    // Smooth scroll down to scanning box on mobile
+    if (window.innerWidth <= 1024) {
+      setTimeout(() => {
+        stateScanning.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+
     try {
       const response = await fetch('/api/predict', {
         method: 'POST',
@@ -190,6 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAnalyze.disabled = false;
         displayVerdict(data);
         switchState('result');
+
+        // Smooth scroll down to verdict card on mobile
+        if (window.innerWidth <= 1024) {
+          setTimeout(() => {
+            stateResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        }
       }, 500);
 
     } catch (err) {
