@@ -139,7 +139,7 @@ cleaned_text, aux_dict = preprocess_pipeline(user_input)
 
 # 2. Chuẩn hóa 15 đặc trưng phụ theo đúng thứ tự cột AUX_FEATURE_COLS
 aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]
-aux_scaled = bundle['aux_scaler'].transform(aux_df)
+aux_scaled = bundle['aux_scaler'].transform(aux_df.values)  # .values: tránh UserWarning "fitted without feature names"
 
 # 3. Biến đổi TF-IDF 5.000 chiều
 tfidf_vec = bundle['vectorizer'].transform([cleaned_text])
@@ -207,38 +207,81 @@ Artifacts:
   mẫu SCAM ("...công an điều tra...chuyển khoản ngay 50 triệu...") → label=1, risk_score=0.9815
   mẫu NORMAL ("Ngân hàng thông báo số dư tài khoản...") → label=0, risk_score=0.1710
 
-⚠️ PHÁT HIỆN CẦN LƯU Ý CHO PHASE 07 (XAI):
-Khi thử nghiệm thủ công với câu bình thường dạng "Con chào bố mẹ, con đến trường an toàn rồi, chiều con
-về sớm phụ bố mẹ đón em" (có dấu đầy đủ), CẢ 2 mô hình đều lệch về phía "Lừa đảo":
-  - SVM Linear:  scam-proba = 0.6447 (label=1, SAI — false positive, vượt ngưỡng 0.5)
-  - XGBoost:     scam-proba = 0.9852 (label=1, SAI — false positive rất tự tin)
-Nghi vấn: mẫu câu "con ... bố mẹ" trùng lặp bề mặt với các đặc trưng của category `family_emergency`
-(kịch bản lừa đảo "con bị tai nạn cần tiền gấp") trong tập train (chỉ 336 mẫu lừa đảo — dễ overfit theo
-n-gram bề mặt thay vì ngữ cảnh khẩn cấp/tiền bạc thực sự). Vì đây chỉ là 1 mẫu thử thủ công (không nằm
-trong 439 mẫu test chính thức) nên KHÔNG dùng để đảo ngược kết luận F1 ở trên, nhưng đáng để Phase 07
-(Thanh) đào sâu bằng SHAP — nếu xác nhận là lỗi hệ thống, có thể cần bổ sung dữ liệu train đối chứng
-(câu bình thường có chữ "con", "bố mẹ") hoặc hiệu chỉnh lại 15 đặc trưng phụ liên quan `family_emergency`.
+🛠️ ĐÍNH CHÍNH SAU CODE REVIEW (anh Thanh, 19/09) — đã tự kiểm chứng lại toàn bộ bằng code trước khi sửa:
 
-🔎 BẰNG CHỨNG BỔ SUNG — Top-20 |hệ số| SVM Linear (trích từ models/svm_linear.pkl, đã re-audit sau khi train):
-  1. thương_hiệu   2.18   6. đang    1.45   11. sử_dụng  0.97   16. trẻ_em      0.85
-  2. number        1.97   7. sẽ      1.32   12. thuế     0.95   17. bạn_number  0.84
-  3. đường_dẫn     1.93   8. mã      1.18   13. shop     0.91   18. anh         0.84
-  4. số_tiền       1.61   9. money   1.02   14. tao      0.88   19. dieu tra    0.84
-  5. số_định_danh  1.48  10. mày     0.98   15. họ_và_tên 0.87   20. hoặc        0.83
-Phần lớn hợp lý (số_tiền, mã, họ_và_tên, thuế, đường_dẫn — đúng vocab lừa đảo). Nhưng 4/20 từ là TỪ CHỨC
-NĂNG PHỔ THÔNG không mang nghĩa lừa đảo: "đang", "sẽ", "hoặc", "anh" — nằm trong top-7 với trọng số khá
-cao (1.3–1.45). Đây là bằng chứng cụ thể CỦNG CỐ nghi vấn false positive "con...bố mẹ" ở trên: model có
-thể đang học một phần theo văn phong/cách xưng hô thay vì thuần nội dung lừa đảo, do tập scam chỉ có 336
-mẫu. → Ưu tiên đưa danh sách này cho Phase 07 làm input đối chiếu SHAP thay vì suy đoán lại từ đầu.
+1. **Lỗi phương pháp luận đã xác nhận:** bản gốc tính "độ quan trọng" bằng `np.abs(fold_coefs).mean(axis=0)`
+   (lấy trị tuyệt đối TRƯỚC khi trung bình) → xóa mất dấu, nên không biết từ nào kéo về Lừa đảo, từ nào kéo
+   về Bình thường. Đã sửa dùng `fold_coefs.mean(axis=0)` (trung bình CÓ DẤU) và tách 2 nhóm rõ ràng, vẽ lại
+   `svm_feature_importance.png` dạng 2 cụm màu (đỏ=dương/Lừa đảo, xanh=âm/Bình thường):
 
-⚠️ RỦI RO HẠ TẦNG — sklearn version không khớp giữa các artifact:
+   Top-10 kéo về LỪA ĐẢO (dương):        Top-10 kéo về BÌNH THƯỜNG (âm):
+     thương_hiệu    +2.18                  number         −1.97
+     đường_dẫn      +1.93                  mã             −1.18
+     số_định_danh   +1.48                  money          −1.02
+     số_tiền        +1.61                  sử_dụng        −0.97
+     đang           +1.45                  shop           −0.91
+     sẽ             +1.32                  trẻ_em         −0.85
+     mày            +0.98                  hoặc           −0.83
+     dieu tra       +0.84                  đón            −0.05 (nhỏ)
+     họ_và_tên      +0.87                  đến            −0.45
+     anh            +0.84                  sớm            −0.44
+
+2. **2 nhận định trong bản gốc BỊ SAI (đã xác minh bằng code, không phải "chuyển từ tuyệt đối sang có dấu"
+   đơn thuần):**
+   - "mã" **KHÔNG** phải "vocab lừa đảo đúng" — hệ số thực là **−1.18 (kéo về Bình thường)**. Đây chính là
+     nguyên nhân False Negative nguy hiểm: mẫu test thật `"Đơn hàng cần xác minh người nhận. Shipper sẽ
+     gọi, bạn đọc giúp mã OTP vừa nhận để bên kho hoàn tất giao hàng."` (label=1, X_test vị trí 108) bị
+     model dự đoán SAI thành Bình thường với risk_score chỉ **0.0688** — vì từ "mã" (xuất hiện 2 lần sau
+     khi tách token "mã OTP"→"mã"+"xác_thực") kéo mạnh về phía Bình thường, lấn át các tín hiệu lừa đảo
+     khác. Đây là lỗi thật, đã verify lại bằng cách chạy model trên đúng 439 mẫu test, không phải suy đoán.
+   - "hoặc" **không nên** nằm trong nhóm "từ chức năng gây false positive" — hệ số là **−0.83 (kéo về Bình
+     thường)**, tức nó không thể là nguyên nhân khiến 1 câu bị đẩy nhầm về Lừa đảo.
+
+3. **Nghi vấn "con...bố mẹ" ở bản gốc cũng SAI Ở TẦNG SÂU HƠN cả vấn đề dấu:** không có từ nào trong
+   "đang/sẽ/hoặc/anh" xuất hiện trong câu ví dụ "Con chào bố mẹ, con đến trường an toàn rồi, chiều con về
+   sớm phụ bố mẹ đón em" — nên toàn bộ lý do nêu ra ở bản gốc không liên quan đến câu này. Đã tính lại
+   CONTRIBUTION THẬT của từng feature (giá trị vector × hệ số) cho đúng câu này (SVM, proba=0.5643):
+   ```
+   text_length          contrib=+0.9827   (câu NGẮN hơn trung bình → kéo về Lừa đảo, do coef âm × z-score âm)
+   is_unaccented        contrib=+0.4756   (câu CÓ dấu → kéo về Lừa đảo, cùng lý do dấu*dấu)
+   num_money_mentions   contrib=+0.2133
+   con                  contrib=+0.1949   (từ "con" xuất hiện 2 lần, coef=+0.468 — từ TF-IDF ảnh hưởng nhất)
+   chào                 contrib=+0.0734
+   ...                  (bố_mẹ chỉ contrib=+0.0194 — hầu như không ảnh hưởng, ngược với suy đoán ban đầu)
+   ```
+   → Nguyên nhân thật: (a) từ "con" đứng riêng lẻ (không phải cụm "bố_mẹ") có hệ số dương thật, hợp lý vì
+   scam "con bị tai nạn cần tiền gấp" cũng dùng từ "con"; (b) 2 đặc trưng phụ số (`text_length`,
+   `is_unaccented`) tạo hiệu ứng phụ do tương tác dấu âm×âm — đây là điểm cần Phase 07 (SHAP) làm rõ, KHÔNG
+   phải do "văn phong/từ chức năng" như suy đoán ban đầu.
+
+4. **ConvergenceWarning + UserWarning đã xác nhận và sửa:** `LinearSVC(max_iter=5000)` ở `C=10.0` thực sự
+   phát `ConvergenceWarning` (đã tự chạy lại kiểm chứng); tăng `max_iter=10000` hết cảnh báo — đã áp dụng
+   cho baseline, GridSearchCV và learning curve. Đã gỡ `warnings.filterwarnings("ignore")` toàn cục, chỉ ẩn
+   riêng `InconsistentVersionWarning` (vô hại). `aux_scaler.transform(aux_df)` (DataFrame) phát
+   `UserWarning: X has feature names, but StandardScaler was fitted without feature names` — đã xác nhận
+   và sửa thành `.transform(aux_df.values)` ở `generate_svm_notebook.py`, `build_best_model_bundle.py`, và
+   code mẫu Interface Contract phía trên.
+
+5. **`.gitignore` đã sửa:** thêm `!**/models/svm_linear.pkl` (đã verify file 204KB, dưới ngưỡng 50MB) —
+   giờ `svm_linear.pkl` được Git theo dõi, `build_best_model_bundle.py` sẽ không còn `[skip] SVM Linear`
+   khi clone mới mà chưa train lại.
+
+6. **Không áp dụng — đã phản biện có căn cứ:** đề xuất chạy `jupyter nbconvert --execute --inplace` để lưu
+   output vào `05_model_svm.ipynb`. Đã kiểm tra: cả 4/4 notebook hiện có (NB, RF, XGBoost, SVM) đều có
+   **0/10-13 cell mang output** (100% stripped), đúng theo quy ước ghi rõ tại `notebooks/README.md` mục
+   "Dọn sạch Output trước khi Commit" (tránh phình repo + xung đột merge nhị phân — kết quả chính thức lưu
+   ở `reports/figures/*.png` và `models/*_metrics.json`). `jupyter`/`nbconvert` cũng không có trong
+   `requirements.txt`. → Giữ nguyên stripped-outputs để nhất quán với NB/RF/XGBoost.
+
+⚠️ RỦI RO HẠ TẦNG — sklearn version không khớp giữa các artifact (đã fix 1 phần):
 `data/processed/tfidf_vectorizer.pkl` và `aux_scaler.pkl` được pickle từ Phase 03 bằng sklearn 1.8.0,
-trong khi môi trường Phase 04–06 hiện tại chạy sklearn 1.9.0 (`requirements.txt` chỉ ghi `>=1.5.0`, không
-pin cứng) → mỗi lần load đều phát `InconsistentVersionWarning`. `best_model_bundle.pkl` hiện mang cả
-object cũ (1.8.0) lẫn model mới train (1.9.0) trong cùng 1 file. Nếu máy của Sơn (Phase 08) cài sklearn
-version khác nữa, cảnh báo sẽ lặp lại hoặc tệ hơn có thể predict_proba lệch kết quả giữa các máy. Khuyến
-nghị: pin cứng `scikit-learn==1.9.0` (hoặc version cả nhóm thống nhất) trong `requirements.txt` trước khi
-Phase 08 build demo, và re-serialize `tfidf_vectorizer.pkl`/`aux_scaler.pkl` cùng version để dứt điểm.
+trong khi môi trường Phase 04–06 chạy sklearn 1.9.0 → mỗi lần load phát `InconsistentVersionWarning`
+(nay bị ẩn có chủ đích, xem mục 4). Đã **pin cứng `scikit-learn==1.9.0`** trong `requirements.txt` (trước
+đây là `>=1.5.0`) để cả nhóm dùng cùng version từ giờ. Riêng con số "trượt 8% xác suất giữa bản 1.8.0 và
+1.9.0 do `_SigmoidCalibration`" trong review gốc: **chưa verify được** (máy hiện tại không có sẵn sklearn
+1.8.0 để đối chứng song song) — không bác bỏ, chỉ ghi nhận là chưa có bằng chứng trực tiếp. Khuyến nghị
+còn lại (re-serialize `tfidf_vectorizer.pkl`/`aux_scaler.pkl` cùng version 1.9.0) nên để Thanh làm vì đây
+là artifact gốc của Phase 03, không thuộc phạm vi Phase 06.
 ```
 
 ## Phase Summary
@@ -247,17 +290,18 @@ Phase 08 build demo, và re-serialize `tfidf_vectorizer.pkl`/`aux_scaler.pkl` c�
 >
 > ⚠️ **Lưu ý cho Phase 07 (Thanh) — 3 điểm cần quyết định trước khi Phase 08 chốt bản demo:**
 > 1. **Chọn model cuối cùng:** F1 của SVM (0.9474) thấp hơn XGBoost (0.9535) nhưng cao hơn Random Forest (0.9425). `best_model_bundle.pkl` hiện đóng gói **SVM** theo đúng `model_name` mẫu trong Interface Contract gốc của Phase 06 — trong khi `models/README.md` định nghĩa file này là "Model tốt nhất (F1 cao nhất)" tức về lý thuyết nên là XGBoost. Đã chuẩn bị sẵn `notebooks/build_best_model_bundle.py` để re-bundle bằng model bất kỳ (tự động chọn F1 cao nhất trong số các `.pkl` có sẵn) — Phase 07 chỉ cần chạy lại script này sau khi quyết định, xem mục 2 trước khi chốt.
-> 2. **Điều tra false positive "con...bố mẹ":** xem cảnh báo trong Evidence Section — cả SVM và XGBoost đều gắn nhãn sai một câu nhắn tin gia đình bình thường thành lừa đảo. Bằng chứng bổ sung: top-20 hệ số SVM có 4 từ chức năng phổ thông ("đang", "sẽ", "hoặc", "anh") với trọng số cao bất thường — gợi ý model học theo văn phong thay vì nội dung. Nên xác minh bằng SHAP (Phase 07) trước khi chốt model cuối, vì đây là loại lỗi rủi ro cao khi demo trực tiếp trước thầy Thăng (báo động giả với tin nhắn con cháu hỏi thăm — đúng nhóm đối tượng người cao tuổi mà đề tài hướng tới).
-> 3. **Pin sklearn version:** `tfidf_vectorizer.pkl`/`aux_scaler.pkl` (Phase 03, sklearn 1.8.0) và các model Phase 04–06 (sklearn 1.9.0 trên máy Cẩm) không cùng version, `requirements.txt` chưa pin cứng — nên thống nhất 1 version cho cả nhóm trước khi Phase 08 deploy, tránh predict_proba lệch giữa các máy.
+> 2. **False Negative "mã OTP" đã xác nhận thật (rủi ro cao hơn case "con...bố mẹ" ban đầu):** mẫu test `"...Shipper sẽ gọi, bạn đọc giúp mã OTP..."` (label=1, X_test vị trí 108) bị SVM dự đoán SAI thành Bình thường, risk_score=0.0688 — vì từ "mã" có hệ số −1.18 (kéo về Bình thường). Đây là 1/3 false negative thật trên tập test chính thức (439 mẫu), không phải suy đoán thủ công. Case "con...bố mẹ" ban đầu có sai ở khâu phân tích (xem Evidence Section mục 3) — nguyên nhân thật là từ "con" + tương tác 2 đặc trưng phụ số, không phải "đang/sẽ/hoặc/anh". Cả 2 case nên đưa vào Phase 07 SHAP để phân tích đúng.
+> 3. **sklearn version đã pin `==1.9.0`** trong `requirements.txt` (fix một phần) — còn `tfidf_vectorizer.pkl`/`aux_scaler.pkl` (Phase 03) vẫn mang pickle-version 1.8.0, cần Thanh re-serialize lại cùng version vì đây là artifact gốc Phase 03.
 >
 > PhoBERT fine-tuning (optional) không thực hiện do giới hạn thời gian/GPU trước hạn bảo vệ 23/09/2026.
 
 ## Commit
 
 ```bash
-git add notebooks/05_model_svm.ipynb notebooks/generate_svm_notebook.py \
-        models/svm_metrics.json reports/figures/svm_*.png \
+git add notebooks/05_model_svm.ipynb notebooks/generate_svm_notebook.py notebooks/build_best_model_bundle.py \
+        models/svm_metrics.json models/svm_linear.pkl models/best_model_bundle.pkl reports/figures/svm_*.png \
+        .gitignore requirements.txt \
         plans/scam-detection-full-submit/phase-06-model-svm-phobert.md
-# models/svm_linear.pkl và models/best_model_bundle.pkl bị .gitignore (**/models/*.pkl) — quản lý ngoài Git theo quy ước dự án
-git commit -m "feat(phase06): SVM trained (F1=0.9474), best_model_bundle.pkl packaged for Phase 08"
+# svm_linear.pkl (204KB) và best_model_bundle.pkl (490KB) đều có exception trong .gitignore — commit trực tiếp
+git commit -m "feat(phase06): SVM trained (F1=0.9474), fix signed-coefficient bug, pin sklearn==1.9.0"
 ```

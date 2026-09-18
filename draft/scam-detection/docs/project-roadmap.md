@@ -30,7 +30,7 @@ gantt
     Naive Bayes Baseline (Cẩm)                     :done, s2_3, 2026-09-15, 2026-09-16
     Random Forest & Hypertuning (Sơn)              :active, s2_4, 2026-09-15, 2026-09-16
     XGBoost (Cẩm)                                  :done, s2_5_1, 2026-09-16, 2026-09-16
-    SVM Linear/RBF (Cẩm)                           :active, s2_5_2, 2026-09-16, 2026-09-17
+    SVM Linear/RBF (Cẩm)                           :done, s2_5_2, 2026-09-16, 2026-09-17
     Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-16, 2026-09-18
     Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-15, 2026-09-18
 
@@ -99,7 +99,7 @@ gantt
 | `models/naive_bayes.pkl` & `naive_bayes_metrics.json`: Lưu trọng số baseline & metrics | ✅ Hoàn thành (Phase 04) |
 | `notebooks/04_model_xgboost.ipynb`: Tinh chỉnh RandomizedSearchCV, scale_pos_weight | ✅ Hoàn thành (Phase 05 — F1=0.9535) |
 | `models/xgboost.pkl` & `xgboost_metrics.json`: Lưu trọng số XGBoost & metrics | ✅ Hoàn thành (Phase 05) |
-| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ⏳ Tiếp theo (Phase 06) |
+| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ✅ Hoàn thành (Phase 06 PASSED — F1=0.9474, PR #20) |
 
 ### Sơn (Modeling & UI Lead — Random Forest & Demo UI)
 | Task | Trạng thái |

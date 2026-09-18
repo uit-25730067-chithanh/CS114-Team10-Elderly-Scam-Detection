@@ -47,7 +47,7 @@ CANDIDATES = [
 def predict_raw_text(text: str, bundle: dict) -> dict:
     cleaned_text, aux_dict = preprocess_pipeline(text)
     aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]
-    aux_scaled = bundle["aux_scaler"].transform(aux_df)
+    aux_scaled = bundle["aux_scaler"].transform(aux_df.values)
     tfidf_vec = bundle["vectorizer"].transform([cleaned_text])
     full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
     proba = float(bundle["model"].predict_proba(full_vec)[0][1])

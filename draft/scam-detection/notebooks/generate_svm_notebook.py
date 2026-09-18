@@ -23,6 +23,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import joblib
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 import sklearn
 from sklearn.calibration import CalibratedClassifierCV
@@ -32,14 +35,49 @@ from sklearn.svm import SVC, LinearSVC
 
 from src.feature_engineering_config import AUX_FEATURE_COLS
 from src.model_plots import (
+    DPI,
+    NORMAL_COLOR,
+    SCAM_COLOR,
     compute_metrics,
     plot_confusion_matrix,
-    plot_feature_importance,
     plot_learning_curve_chart,
     plot_roc_curve,
 )
 from src.preprocessing.pipeline import preprocess_pipeline
 from src.utils.helpers import RANDOM_STATE
+
+MAX_ITER = 10000  # LinearSVC (Liblinear) needs >5000 to converge at C=10.0 — see phase-06 plan Evidence Section
+
+
+def plot_signed_coefficients(
+    mean_coefs: np.ndarray, feature_names: list[str], figures_dir: Path,
+    filename: str, title: str, top_n: int = 10,
+) -> None:
+    """Diverging bar chart: top-N từ kéo về Lừa đảo (dương, đỏ) vs Bình thường (âm, xanh).
+
+    Dùng trung bình CÓ DẤU của coef_ qua 5 fold calibration — lấy |giá trị| trước khi
+    trung bình (như bản cũ) sẽ xóa mất chiều tác động (kéo về scam hay normal).
+    """
+    pos_idx = np.argsort(mean_coefs)[::-1][:top_n]  # dương nhất -> kéo về Lừa đảo
+    neg_idx = np.argsort(mean_coefs)[:top_n]  # âm nhất -> kéo về Bình thường
+
+    labels = [feature_names[i] for i in neg_idx[::-1]] + [feature_names[i] for i in pos_idx[::-1]]
+    values = [mean_coefs[i] for i in neg_idx[::-1]] + [mean_coefs[i] for i in pos_idx[::-1]]
+    colors = [NORMAL_COLOR] * top_n + [SCAM_COLOR] * top_n
+
+    fig, ax = plt.subplots(figsize=(9, 9))
+    ax.barh(range(len(labels)), values, color=colors, edgecolor="white")
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(labels, fontsize=9)
+    ax.axvline(0, color="black", linewidth=0.8)
+    ax.set_title(title, fontsize=14, fontweight="bold", pad=15)
+    ax.set_xlabel("Hệ số hồi quy trung bình (signed coefficient)", fontsize=12)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+    fig.savefig(figures_dir / filename, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"✅ {filename} saved")
 
 NB_PATH = PROJECT_ROOT / "notebooks" / "05_model_svm.ipynb"
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
@@ -156,7 +194,7 @@ def build_notebook_structure() -> dict:
             "    C=1.0,\n"
             "    class_weight='balanced',\n"
             "    random_state=RANDOM_STATE,\n"
-            "    max_iter=5000,\n"
+            "    max_iter=10000,\n"
             ")\n"
             "svm_baseline = CalibratedClassifierCV(svm_base, cv=5)\n\n"
             "t0 = time.time()\n"
@@ -209,7 +247,7 @@ def build_notebook_structure() -> dict:
             "}\n\n"
             "grid_svm = GridSearchCV(\n"
             "    CalibratedClassifierCV(\n"
-            "        LinearSVC(class_weight='balanced', random_state=RANDOM_STATE, max_iter=5000),\n"
+            "        LinearSVC(class_weight='balanced', random_state=RANDOM_STATE, max_iter=10000),\n"
             "    ),\n"
             "    param_grid, cv=5, scoring='f1', n_jobs=-1,\n"
             ")\n\n"
@@ -255,7 +293,7 @@ def build_notebook_structure() -> dict:
             "best_C = grid_svm.best_params_['estimator__C']\n"
             "plot_learning_curve_chart(\n"
             "    CalibratedClassifierCV(\n"
-            "        LinearSVC(C=best_C, class_weight='balanced', random_state=RANDOM_STATE, max_iter=5000),\n"
+            "        LinearSVC(C=best_C, class_weight='balanced', random_state=RANDOM_STATE, max_iter=10000),\n"
             "    ),\n"
             "    X_train, y_train, FIGURES_DIR, 'svm_learning_curve.png',\n"
             "    'Learning Curve — SVM Linear (tuned)', cv=5, scoring='f1', random_state=RANDOM_STATE,\n"
@@ -264,25 +302,32 @@ def build_notebook_structure() -> dict:
             "co_09_save_lc",
         ),
         cell_md(
-            "## 8. Trích xuất & Phân tích Top-20 Đặc trưng Có Trọng số Lớn Nhất (|Coefficient|)",
+            "## 8. Trích xuất & Phân tích Top-10/Top-10 Đặc trưng Có Hệ số (CÓ DẤU) Lớn Nhất",
             "md_10_fi",
         ),
         cell_code(
-            "# LinearSVC là mô hình tuyến tính — |hệ số| lớn nghĩa là đặc trưng đóng góp mạnh vào quyết định.\n"
-            "# Lấy trung bình |coef_| trên 5 folds calibration để ổn định hơn 1 fold đơn lẻ.\n"
+            "# LinearSVC là mô hình tuyến tính: dấu của hệ số cho biết CHIỀU tác động —\n"
+            "# dương = kéo về Lừa đảo (class 1), âm = kéo về Bình thường (class 0).\n"
+            "# QUAN TRỌNG: phải lấy trung bình CÓ DẤU (fold_coefs.mean), KHÔNG lấy abs() trước khi\n"
+            "# trung bình — làm vậy sẽ xóa mất chiều tác động và có thể diễn giải sai (vd: coi 1 từ\n"
+            "# kéo về Bình thường là 'từ khóa lừa đảo' chỉ vì |hệ số| lớn).\n"
             "fold_coefs = np.array([\n"
             "    cc.estimator.coef_.ravel() for cc in svm_model.calibrated_classifiers_\n"
             "])\n"
-            "mean_abs_coefs = np.abs(fold_coefs).mean(axis=0)\n\n"
-            "plot_feature_importance(\n"
-            "    mean_abs_coefs, feature_names, FIGURES_DIR, 'svm_feature_importance.png',\n"
-            "    'Top-20 Đặc trưng |Trọng số| Lớn Nhất — SVM Linear',\n"
-            "    top_n=20,\n"
+            "mean_coefs = fold_coefs.mean(axis=0)\n\n"
+            "plot_signed_coefficients(\n"
+            "    mean_coefs, feature_names, FIGURES_DIR, 'svm_feature_importance.png',\n"
+            "    'Top-10 Kéo Về Lừa Đảo (đỏ) vs Top-10 Kéo Về Bình Thường (xanh) — SVM Linear',\n"
+            "    top_n=10,\n"
             ")\n\n"
-            "top_idx = np.argsort(mean_abs_coefs)[::-1][:20]\n"
-            "print('Top-20 đặc trưng có |hệ số| lớn nhất của SVM Linear:')\n"
-            "for rank, idx in enumerate(top_idx, 1):\n"
-            "    print(f'  {rank:2d}. {feature_names[idx]:32s} |coef|: {mean_abs_coefs[idx]:.4f}')",
+            "top_pos = np.argsort(mean_coefs)[::-1][:10]\n"
+            "top_neg = np.argsort(mean_coefs)[:10]\n"
+            "print('Top-10 kéo về LỪA ĐẢO (hệ số dương lớn nhất):')\n"
+            "for rank, idx in enumerate(top_pos, 1):\n"
+            "    print(f'  {rank:2d}. {feature_names[idx]:32s} coef={mean_coefs[idx]:+.4f}')\n"
+            "print('\\nTop-10 kéo về BÌNH THƯỜNG (hệ số âm lớn nhất):')\n"
+            "for rank, idx in enumerate(top_neg, 1):\n"
+            "    print(f'  {rank:2d}. {feature_names[idx]:32s} coef={mean_coefs[idx]:+.4f}')",
             "co_10_save_fi",
         ),
         cell_md("## 9. Đóng gói & Lưu trữ Model (.pkl) và Hồ sơ Chỉ số (.json)", "md_11_save"),
@@ -361,7 +406,7 @@ def build_notebook_structure() -> dict:
             "def predict_raw_text(text: str, bundle: dict) -> dict:\n"
             "    cleaned_text, aux_dict = preprocess_pipeline(text)\n"
             "    aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]\n"
-            "    aux_scaled = bundle['aux_scaler'].transform(aux_df)\n"
+            "    aux_scaled = bundle['aux_scaler'].transform(aux_df.values)\n"
             "    tfidf_vec = bundle['vectorizer'].transform([cleaned_text])\n"
             "    full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])\n"
             "    proba = float(bundle['model'].predict_proba(full_vec)[0][1])\n"
@@ -397,7 +442,10 @@ def build_notebook_structure() -> dict:
 
 
 def run_pipeline() -> None:
-    warnings.filterwarnings("ignore")
+    # Chỉ ẩn cảnh báo pickle version (đã biết, vô hại — xem Evidence Section) — KHÔNG ẩn
+    # ConvergenceWarning hay cảnh báo khác, để không bỏ lọt vấn đề hội tụ thật của Liblinear.
+    from sklearn.exceptions import InconsistentVersionWarning
+    warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
 
     print("=" * 70)
     print("  CS114 NHÓM 10 — HUẤN LUYỆN SVM MODEL (BÙI THỊ MỶ CẨM)")
@@ -425,7 +473,7 @@ def run_pipeline() -> None:
 
     # 3. Baseline SVM Linear
     print("\n[2/7] Huấn luyện Baseline SVM Linear (LinearSVC + CalibratedClassifierCV)...")
-    svm_base = LinearSVC(C=1.0, class_weight="balanced", random_state=RANDOM_STATE, max_iter=5000)
+    svm_base = LinearSVC(C=1.0, class_weight="balanced", random_state=RANDOM_STATE, max_iter=MAX_ITER)
     svm_baseline = CalibratedClassifierCV(svm_base, cv=5)
     t0 = time.time()
     svm_baseline.fit(X_tr, y_tr)
@@ -458,7 +506,7 @@ def run_pipeline() -> None:
     param_grid = {"estimator__C": [0.01, 0.1, 1.0, 10.0]}
     grid_svm = GridSearchCV(
         CalibratedClassifierCV(
-            LinearSVC(class_weight="balanced", random_state=RANDOM_STATE, max_iter=5000)
+            LinearSVC(class_weight="balanced", random_state=RANDOM_STATE, max_iter=MAX_ITER)
         ),
         param_grid, cv=5, scoring="f1", n_jobs=-1,
     )
@@ -500,18 +548,22 @@ def run_pipeline() -> None:
     best_C = grid_svm.best_params_["estimator__C"]
     plot_learning_curve_chart(
         CalibratedClassifierCV(
-            LinearSVC(C=best_C, class_weight="balanced", random_state=RANDOM_STATE, max_iter=5000)
+            LinearSVC(C=best_C, class_weight="balanced", random_state=RANDOM_STATE, max_iter=MAX_ITER)
         ),
         X_train, y_train, FIGURES_DIR, "svm_learning_curve.png",
         "Learning Curve — SVM Linear (tuned)", cv=5, scoring="f1", random_state=RANDOM_STATE,
     )
 
     fold_coefs = np.array([cc.estimator.coef_.ravel() for cc in svm_model.calibrated_classifiers_])
-    mean_abs_coefs = np.abs(fold_coefs).mean(axis=0)
-    plot_feature_importance(
-        mean_abs_coefs, feature_names, FIGURES_DIR, "svm_feature_importance.png",
-        "Top-20 Đặc trưng |Trọng số| Lớn Nhất — SVM Linear", top_n=20,
+    mean_coefs = fold_coefs.mean(axis=0)  # signed mean — KHÔNG abs() trước khi trung bình
+    plot_signed_coefficients(
+        mean_coefs, feature_names, FIGURES_DIR, "svm_feature_importance.png",
+        "Top-10 Kéo Về Lừa Đảo (đỏ) vs Top-10 Kéo Về Bình Thường (xanh) — SVM Linear", top_n=10,
     )
+    top_pos = np.argsort(mean_coefs)[::-1][:10]
+    top_neg = np.argsort(mean_coefs)[:10]
+    print("  Top-10 kéo về LỪA ĐẢO:", [f"{feature_names[i]}({mean_coefs[i]:+.2f})" for i in top_pos])
+    print("  Top-10 kéo về BÌNH THƯỜNG:", [f"{feature_names[i]}({mean_coefs[i]:+.2f})" for i in top_neg])
 
     # 8. Lưu artifacts
     print("\n[7/7] Lưu trữ model, metrics, bundle và notebook...")
@@ -565,7 +617,7 @@ def run_pipeline() -> None:
     def predict_raw_text(text: str, bundle: dict) -> dict:
         cleaned_text, aux_dict = preprocess_pipeline(text)
         aux_df = pd.DataFrame([aux_dict])[AUX_FEATURE_COLS]
-        aux_scaled = bundle["aux_scaler"].transform(aux_df)
+        aux_scaled = bundle["aux_scaler"].transform(aux_df.values)
         tfidf_vec = bundle["vectorizer"].transform([cleaned_text])
         full_vec = hstack([tfidf_vec, csr_matrix(aux_scaled)])
         proba = float(bundle["model"].predict_proba(full_vec)[0][1])
