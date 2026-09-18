@@ -19,7 +19,38 @@ SCAM_KEYWORDS = [
     
     # Cô lập nạn nhân
     "giữ bí mật", "tuyệt đối không", "không được nói", "không báo cho",
-    "người nhà", "con cái"
+    "người nhà", "con cái",
+
+    # Bẫy trúng thưởng & Quà tặng tri ân
+    "may mắn", "trúng thưởng", "miễn phí", "tặng", "phí bảo hiểm",
+    "vận chuyển", "thanh toán", "bấm vào link", "xác nhận địa chỉ"
+]
+
+PSYCHOLOGICAL_INDICATORS = [
+    {
+        "label": "Mạo danh cơ quan công quyền & Đe dọa pháp lý",
+        "keywords": ["bộ công an", "công an", "cảnh sát", "viện kiểm sát", "tòa án", "lệnh bắt", "lệnh tạm giam", "khởi tố", "truy nã", "thanh tra"]
+    },
+    {
+        "label": "Áp lực tâm lý sợ hãi & Tội danh nguy hiểm",
+        "keywords": ["rửa tiền", "buôn ma túy", "án hình sự", "bất tuân lệnh", "cưỡng chế", "bắt tạm giam"]
+    },
+    {
+        "label": "Tạo tình huống cấp bách & Hối thúc thời gian",
+        "keywords": ["khẩn cấp", "ngay lập tức", "trong vòng", "hôn mê sâu", "cấp cứu", "tai nạn", "phẫu thuật gấp", "tính mạng"]
+    },
+    {
+        "label": "Yêu cầu chuyển tiền & Chiếm đoạt tài sản",
+        "keywords": ["chuyển tiền", "chuyển ngay", "tài khoản", "số tài khoản", "nộp tiền", "tạm ứng", "kho bạc", "phí vận chuyển", "ngân hàng", "mã otp", "mật khẩu", "thanh toán"]
+    },
+    {
+        "label": "Hành vi cô lập nạn nhân khỏi người thân",
+        "keywords": ["giữ bí mật", "tuyệt đối không", "không được nói", "không báo cho", "người nhà", "con cái"]
+    },
+    {
+        "label": "Bẫy quà tặng tri ân / Trúng thưởng & Dụ nộp phí",
+        "keywords": ["may mắn", "trúng thưởng", "miễn phí", "tặng", "phí bảo hiểm", "vận chuyển", "link", "xác nhận"]
+    }
 ]
 
 

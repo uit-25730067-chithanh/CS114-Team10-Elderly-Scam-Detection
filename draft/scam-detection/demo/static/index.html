@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Civic Guard — Trung Tâm Giám Định Tin Nhắn Lừa Đảo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563EB'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/></svg>">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+  <div class="bg-glow glow-3"></div>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-shield">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <span class="brand-name">CIVIC GUARD</span>
+          <span class="brand-sub">Hệ Thống Giám Định An Toàn Số • UIT</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div class="live-status">
+          <span class="pulse-dot"></span>
+          <span class="status-label">Trực Tuyến 24/7</span>
+        </div>
+        <button id="btnElderlyToggle" class="btn-toggle-mode" type="button" title="Bật cỡ chữ lớn cho người cao tuổi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V5h4a4 4 0 0 1 4 4 4 4 0 0 1-4 4H4"/>
+            <path d="M15 19V9h3a3 3 0 0 1 3 3 3 3 0 0 1-3 3h-3"/>
+          </svg>
+          <span>Chế độ Chữ Lớn</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main 2-Column Console Layout -->
+  <main class="console-layout">
+    
+    <!-- LEFT PANEL: Input & Presets -->
+    <section class="console-panel left-panel">
+      
+      <!-- Introduction Heading -->
+      <div class="panel-header">
+        <h1 class="headline">Kiểm Tra Tin Nhắn Nghi Vấn</h1>
+        <p class="subheadline">
+          Bảo vệ người cao tuổi và gia đình trước cạm bẫy tống tiền viện phí, dọa bắt tạm giam từ Công an giả mạo hoặc lừa chuyển tiền.
+        </p>
+      </div>
+
+      <!-- SMS Input Card -->
+      <div class="card card-input">
+        <div class="input-toolbar">
+          <label for="smsInput" class="input-label">Nội Dung Tin Nhắn Cần Soát:</label>
+          <div class="toolbar-actions">
+            <button id="btnPaste" class="btn-tool" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              </svg>
+              <span>Dán tin nhắn</span>
+            </button>
+            <button id="btnClear" class="btn-tool btn-tool-clear" type="button" style="display: none;">
+              <span>✕ Xóa</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="textarea-box">
+          <textarea 
+            id="smsInput" 
+            placeholder="Dán hoặc gõ nội dung tin nhắn nhận được (từ tin nhắn SMS, Zalo, Messenger, cuộc gọi...) vào đây..."
+            rows="5"
+          ></textarea>
+        </div>
+
+        <button id="btnAnalyze" class="btn-primary-action" type="button">
+          <div class="btn-content">
+            <svg class="scan-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>GIÁM ĐỊNH AN TOÀN NGAY</span>
+          </div>
+          <div class="btn-shimmer"></div>
+        </button>
+      </div>
+
+      <!-- Presets / Quick Test Scenarios -->
+      <div class="presets-container">
+        <div class="presets-title-bar">
+          <span class="presets-title">Hoặc chọn nhanh kịch bản lừa đảo thực tế:</span>
+          <span class="presets-hint">Bấm 1 chạm để thử</span>
+        </div>
+
+        <div id="presetsGrid" class="presets-grid">
+          <!-- Dynamically populated from /api/samples -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT PANEL: Live Security Verdict Console -->
+    <section class="console-panel right-panel">
+      
+      <!-- STATE 1: Standby / Idle -->
+      <div id="stateStandby" class="verdict-card standby-card">
+        <div class="standby-visual">
+          <div class="radar-circle circle-3"></div>
+          <div class="radar-circle circle-2"></div>
+          <div class="radar-circle circle-1"></div>
+          <div class="standby-shield">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+              <path d="M12 8v4"/>
+              <circle cx="12" cy="16" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="standby-title">Hệ Thống Đang Trực Sẵn Sàng</h3>
+        <p class="standby-desc">
+          Nhập nội dung tin nhắn hoặc bấm vào một trong các kịch bản mẫu bên trái để kích hoạt mô hình máy học đối soát thông tin.
+        </p>
+        <div class="standby-features">
+          <div class="feat-badge">
+            <span class="feat-dot"></span>
+            <span>Mô hình 5.015 đặc trưng</span>
+          </div>
+          <div class="feat-badge">
+            <span class="feat-dot"></span>
+            <span>Nhận diện 5 bẫy tâm lý</span>
+          </div>
+          <div class="feat-badge">
+            <span class="feat-dot"></span>
+            <span>Phản hồi dưới 50ms</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE 2: Analyzing / Scanning -->
+      <div id="stateScanning" class="verdict-card scanning-card" style="display: none;">
+        <div class="scanning-spinner">
+          <div class="scanner-sweep"></div>
+          <div class="scanner-core">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="scanning-title">Đang Phân Tích Dấu Hiệu Lừa Đảo...</h3>
+        <p class="scanning-desc">
+          Mô hình đang đối chiếu từ khóa đe dọa, số tài khoản nhận tiền và phân tích cấu trúc bẫy tâm lý ép buộc nạn nhân.
+        </p>
+      </div>
+
+      <!-- STATE 3: Inspection Result (Visible after analysis) -->
+      <div id="stateResult" class="verdict-card result-card" style="display: none;">
+        
+        <!-- Score & Status Header -->
+        <div class="result-header">
+          <div class="score-dial-box">
+            <svg class="score-svg" viewBox="0 0 120 120">
+              <circle class="score-track" cx="60" cy="60" r="50"/>
+              <circle id="scoreProgress" class="score-bar" cx="60" cy="60" r="50"/>
+            </svg>
+            <div class="score-overlay">
+              <span id="scoreVal" class="score-number">0%</span>
+              <span class="score-caption">MỨC RỦI RO</span>
+            </div>
+          </div>
+
+          <div class="result-summary">
+            <div id="verdictBadge" class="verdict-badge">ĐÁNH GIÁ</div>
+            <h2 id="verdictTitle" class="verdict-headline">Kết Quả Phân Tích</h2>
+            <p id="verdictDesc" class="verdict-explanation">Đang cập nhật chi tiết từ hệ thống...</p>
+          </div>
+        </div>
+
+        <!-- Emergency Directive & 3 NOs (Visible immediately for threat) -->
+        <div id="emergencyPanel" class="emergency-panel">
+          <div class="emergency-header">
+            <span class="emergency-badge">KHẨN CẤP</span>
+            <span class="emergency-heading">3 VIỆC BÁC CẦN LÀM NGAY:</span>
+          </div>
+
+          <div class="rules-list">
+            <div class="rule-item">
+              <div class="rule-icon red">1</div>
+              <div class="rule-body">
+                <strong>TUYỆT ĐỐI KHÔNG CHUYỂN TIỀN:</strong>
+                <span>Công an, Viện kiểm sát và Bệnh viện không bao giờ gửi tin nhắn đòi chuyển tiền vào số tài khoản cá nhân.</span>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <div class="rule-icon blue">2</div>
+              <div class="rule-body">
+                <strong>GỌI ĐIỆN CHO CON CHÁU:</strong>
+                <span>Hãy bấm gọi ngay cho người nhà hoặc người thân tin cậy để cùng xem tin nhắn này.</span>
+              </div>
+            </div>
+
+            <div class="rule-item">
+              <div class="rule-icon amber">3</div>
+              <div class="rule-body">
+                <strong>KHÔNG ĐỌC MÃ OTP:</strong>
+                <span>Tuyệt đối không đọc bất kỳ 6 chữ số mã OTP ngân hàng nào cho người lạ.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hotline Call Buttons -->
+          <div class="hotline-bar">
+            <a href="tel:113" class="btn-hotline btn-113">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <span>Gọi Cảnh sát: 113</span>
+            </a>
+            <a href="tel:0692348560" class="btn-hotline btn-a05">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+              </svg>
+              <span>Cục An ninh mạng: 069.234.8560</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Psychological Attack Traps -->
+        <div id="trapsContainer" class="section-block">
+          <div class="block-title">Dấu Hiệu Chiêu Trò Tâm Lý Nhận Diện:</div>
+          <div id="trapsGrid" class="traps-grid"></div>
+        </div>
+
+        <!-- Highlighted Text -->
+        <div class="section-block">
+          <div class="block-title">Bằng Chứng Nội Dung Tin Nhắn:</div>
+          <div id="highlightedContent" class="highlight-paper"></div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Clean Minimalist Academic Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>Đề tài Nghiên cứu Máy học Phục vụ Cộng đồng (CS114) — Trường Đại học Công nghệ Thông tin, ĐHQG-HCM</span>
+      <span class="dot-sep">•</span>
+      <span>Nhóm 10: Đặng Chí Thanh • Bùi Thị Mỷ Cẩm • Hoàng Cao Sơn</span>
+      <span class="dot-sep">•</span>
+      <span class="zero-badge">100% Zero Synthetic Data</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
