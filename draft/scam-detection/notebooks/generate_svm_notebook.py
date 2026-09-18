@@ -23,9 +23,6 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import joblib
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import sklearn
 from sklearn.calibration import CalibratedClassifierCV
@@ -35,49 +32,16 @@ from sklearn.svm import SVC, LinearSVC
 
 from src.feature_engineering_config import AUX_FEATURE_COLS
 from src.model_plots import (
-    DPI,
-    NORMAL_COLOR,
-    SCAM_COLOR,
     compute_metrics,
     plot_confusion_matrix,
     plot_learning_curve_chart,
     plot_roc_curve,
+    plot_signed_coefficients,
 )
 from src.preprocessing.pipeline import preprocess_pipeline
 from src.utils.helpers import RANDOM_STATE
 
 MAX_ITER = 10000  # LinearSVC (Liblinear) needs >5000 to converge at C=10.0 — see phase-06 plan Evidence Section
-
-
-def plot_signed_coefficients(
-    mean_coefs: np.ndarray, feature_names: list[str], figures_dir: Path,
-    filename: str, title: str, top_n: int = 10,
-) -> None:
-    """Diverging bar chart: top-N từ kéo về Lừa đảo (dương, đỏ) vs Bình thường (âm, xanh).
-
-    Dùng trung bình CÓ DẤU của coef_ qua 5 fold calibration — lấy |giá trị| trước khi
-    trung bình (như bản cũ) sẽ xóa mất chiều tác động (kéo về scam hay normal).
-    """
-    pos_idx = np.argsort(mean_coefs)[::-1][:top_n]  # dương nhất -> kéo về Lừa đảo
-    neg_idx = np.argsort(mean_coefs)[:top_n]  # âm nhất -> kéo về Bình thường
-
-    labels = [feature_names[i] for i in neg_idx[::-1]] + [feature_names[i] for i in pos_idx[::-1]]
-    values = [mean_coefs[i] for i in neg_idx[::-1]] + [mean_coefs[i] for i in pos_idx[::-1]]
-    colors = [NORMAL_COLOR] * top_n + [SCAM_COLOR] * top_n
-
-    fig, ax = plt.subplots(figsize=(9, 9))
-    ax.barh(range(len(labels)), values, color=colors, edgecolor="white")
-    ax.set_yticks(range(len(labels)))
-    ax.set_yticklabels(labels, fontsize=9)
-    ax.axvline(0, color="black", linewidth=0.8)
-    ax.set_title(title, fontsize=14, fontweight="bold", pad=15)
-    ax.set_xlabel("Hệ số hồi quy trung bình (signed coefficient)", fontsize=12)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    plt.tight_layout()
-    fig.savefig(figures_dir / filename, dpi=DPI, bbox_inches="tight")
-    plt.close(fig)
-    print(f"✅ {filename} saved")
 
 NB_PATH = PROJECT_ROOT / "notebooks" / "05_model_svm.ipynb"
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
@@ -143,9 +107,9 @@ def build_notebook_structure() -> dict:
             "from src.model_plots import (\n"
             "    compute_metrics,\n"
             "    plot_confusion_matrix,\n"
-            "    plot_feature_importance,\n"
             "    plot_learning_curve_chart,\n"
             "    plot_roc_curve,\n"
+            "    plot_signed_coefficients,\n"
             ")\n"
             "from src.preprocessing.pipeline import preprocess_pipeline\n"
             "from src.utils.helpers import RANDOM_STATE\n\n"
@@ -441,6 +405,27 @@ def build_notebook_structure() -> dict:
     }
 
 
+def verify_notebook_executes(nb_dict: dict) -> None:
+    """Chạy thử toàn bộ code cell theo đúng thứ tự trong 1 namespace sạch, mô phỏng
+    'Run All Cells' trên Jupyter thật. Bắt lỗi kiểu NameError/ImportError do cell text
+    lệch khỏi code thật (2 nguồn song song dễ lệch nhau — xem phase-06 plan Evidence
+    Section) TRƯỚC KHI ghi notebook ra đĩa, để không lưu một notebook bị hỏng.
+    """
+    namespace: dict = {"__name__": "__main__"}
+    for cell in nb_dict["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        src = "".join(cell["source"]) if isinstance(cell["source"], list) else cell["source"]
+        try:
+            exec(compile(src, f"<cell:{cell['id']}>", "exec"), namespace)
+        except Exception as exc:
+            raise RuntimeError(
+                f"Notebook self-check THẤT BẠI tại cell '{cell['id']}': {type(exc).__name__}: {exc}\n"
+                f"Cell source:\n{src}"
+            ) from exc
+    print("✅ Notebook self-check: toàn bộ cell chạy thành công theo đúng thứ tự (mô phỏng Run All Cells).")
+
+
 def run_pipeline() -> None:
     # Chỉ ẩn cảnh báo pickle version (đã biết, vô hại — xem Evidence Section) — KHÔNG ẩn
     # ConvergenceWarning hay cảnh báo khác, để không bỏ lọt vấn đề hội tụ thật của Liblinear.
@@ -638,8 +623,10 @@ def run_pipeline() -> None:
         result = predict_raw_text(txt, loaded_bundle)
         print(f"  [{label_txt}] label={result['label']}, risk_score={result['risk_score']:.4f}")
 
-    # Sinh notebook chuẩn
+    # Sinh notebook chuẩn + tự kiểm tra chạy được TRƯỚC khi ghi ra đĩa
     nb_dict = build_notebook_structure()
+    print("\nĐang chạy self-check notebook (mô phỏng Run All Cells)...")
+    verify_notebook_executes(nb_dict)
     with open(NB_PATH, "w", encoding="utf-8") as f:
         json.dump(nb_dict, f, ensure_ascii=False, indent=1)
 
