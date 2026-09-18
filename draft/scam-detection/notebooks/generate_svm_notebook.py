@@ -179,13 +179,17 @@ def build_notebook_structure() -> dict:
         cell_code(
             "# ⚠️ RBF chậm hơn Linear trên ma trận thưa lớn — chỉ chạy đối chứng nhanh trên X_tr/X_val,\n"
             "# KHÔNG dùng để chọn model cuối cùng (Linear vẫn là lựa chọn mặc định theo Phase 06 plan).\n"
-            "svm_rbf = SVC(\n"
-            "    kernel='rbf',\n"
-            "    C=1.0,\n"
-            "    gamma='scale',\n"
-            "    class_weight='balanced',\n"
-            "    random_state=RANDOM_STATE,\n"
-            "    probability=True,\n"
+            "# CalibratedClassifierCV(..., ensemble=False) thay cho SVC(probability=True) — tham số này\n"
+            "# đã bị deprecate ở sklearn 1.9 và sẽ bị xóa ở 1.11.\n"
+            "svm_rbf = CalibratedClassifierCV(\n"
+            "    SVC(\n"
+            "        kernel='rbf',\n"
+            "        C=1.0,\n"
+            "        gamma='scale',\n"
+            "        class_weight='balanced',\n"
+            "        random_state=RANDOM_STATE,\n"
+            "    ),\n"
+            "    ensemble=False, cv=5,\n"
             ")\n\n"
             "t0 = time.time()\n"
             "svm_rbf.fit(X_tr, y_tr)\n"
@@ -470,9 +474,9 @@ def run_pipeline() -> None:
 
     # 4. SVM RBF comparison
     print("\n[3/7] Huấn luyện SVM RBF đối chứng (X_tr/X_val)...")
-    svm_rbf = SVC(
-        kernel="rbf", C=1.0, gamma="scale", class_weight="balanced",
-        random_state=RANDOM_STATE, probability=True,
+    svm_rbf = CalibratedClassifierCV(
+        SVC(kernel="rbf", C=1.0, gamma="scale", class_weight="balanced", random_state=RANDOM_STATE),
+        ensemble=False, cv=5,
     )
     t0 = time.time()
     svm_rbf.fit(X_tr, y_tr)

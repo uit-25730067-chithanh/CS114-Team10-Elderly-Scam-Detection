@@ -159,7 +159,7 @@ label = 1 if proba >= bundle.get('threshold', 0.5) else 0
 - [x] Model saved `models/svm_linear.pkl`
 - [ ] (Optional) PhoBERT fine-tuned — bỏ qua (giới hạn thời gian/GPU trước hạn bảo vệ 23/09)
 - [x] Notebook `05_model_svm.ipynb` chạy end-to-end
-- [x] SVM RBF Kernel đối chứng (Step 2) — F1=0.8276 (val), kém hơn Linear → giữ Linear
+- [x] SVM RBF Kernel đối chứng (Step 2) — F1=0.8598 (val, `CalibratedClassifierCV(SVC(), ensemble=False)`), kém hơn Linear → giữ Linear
 - [x] `models/best_model_bundle.pkl` đóng gói theo Interface Contract, kiểm thử end-to-end raw text → prediction thành công
 
 ## Success Criteria
@@ -188,7 +188,8 @@ Bình thường (0)     0.9915    0.9831    0.9873       355
 GridSearchCV (5-fold CV trên X_train, 4 giá trị C): best_params = {'estimator__C': 10.0}, CV-F1 = 0.9567
 
 --- SVM RBF Kernel (đối chứng, chưa tune, X_tr/X_val) ---
-F1 = 0.8276, Recall = 0.9412, Precision = 0.7385, ROC-AUC = 0.9768
+F1 = 0.8598, Recall = 0.9020, Precision = 0.8214, ROC-AUC = 0.9768 (đã sửa dùng `CalibratedClassifierCV(SVC(),
+ensemble=False)` thay `SVC(probability=True)` — tham số này bị deprecate ở sklearn 1.9, sẽ xóa ở 1.11)
 → Kém hơn Linear rõ rệt trên không gian TF-IDF thưa 5.015 chiều — giữ Linear làm lựa chọn chính thức.
 
 --- So sánh 4 mô hình (Test Set 439 mẫu) ---
@@ -286,7 +287,7 @@ là artifact gốc của Phase 03, không thuộc phạm vi Phase 06.
 
 ## Phase Summary
 
-> ✅ **PASSED.** SVM Linear (LinearSVC + CalibratedClassifierCV, `C=10.0` từ GridSearchCV 5-fold) đạt **F1=0.9474, Recall=96.43%, ROC-AUC=0.9986** trên test set 439 mẫu — vượt Success Criteria (F1 cạnh tranh RF/XGB, Recall ≥ 90%) và target chung của đề tài (F1 ≥ 0.88). Đối chứng SVM RBF (F1=0.8276) xác nhận Linear là lựa chọn đúng cho không gian TF-IDF thưa. Đã đóng gói `models/best_model_bundle.pkl` đúng Interface Contract (bổ sung `metrics` + `metadata` theo `models/README.md`) và kiểm thử thành công luồng suy luận end-to-end raw text → prediction — sẵn sàng bàn giao cho Phase 08 (Sơn).
+> ✅ **PASSED.** SVM Linear (LinearSVC + CalibratedClassifierCV, `C=10.0` từ GridSearchCV 5-fold) đạt **F1=0.9474, Recall=96.43%, ROC-AUC=0.9986** trên test set 439 mẫu — vượt Success Criteria (F1 cạnh tranh RF/XGB, Recall ≥ 90%) và target chung của đề tài (F1 ≥ 0.88). Đối chứng SVM RBF (F1=0.8598) xác nhận Linear là lựa chọn đúng cho không gian TF-IDF thưa. Đã đóng gói `models/best_model_bundle.pkl` đúng Interface Contract (bổ sung `metrics` + `metadata` theo `models/README.md`) và kiểm thử thành công luồng suy luận end-to-end raw text → prediction — sẵn sàng bàn giao cho Phase 08 (Sơn).
 >
 > ⚠️ **Lưu ý cho Phase 07 (Thanh) — 3 điểm cần quyết định trước khi Phase 08 chốt bản demo:**
 > 1. **Chọn model cuối cùng:** F1 của SVM (0.9474) thấp hơn XGBoost (0.9535) nhưng cao hơn Random Forest (0.9425). `best_model_bundle.pkl` hiện đóng gói **SVM** theo đúng `model_name` mẫu trong Interface Contract gốc của Phase 06 — trong khi `models/README.md` định nghĩa file này là "Model tốt nhất (F1 cao nhất)" tức về lý thuyết nên là XGBoost. Đã chuẩn bị sẵn `notebooks/build_best_model_bundle.py` để re-bundle bằng model bất kỳ (tự động chọn F1 cao nhất trong số các `.pkl` có sẵn) — Phase 07 chỉ cần chạy lại script này sau khi quyết định, xem mục 2 trước khi chốt.
