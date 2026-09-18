@@ -144,8 +144,7 @@ cells = [
     ),
     cell_md("## 4. Huấn luyện Model Cuối Cùng (best alpha, full X_train_nb) & Đánh giá trên X_test_nb", "md_05_final"),
     cell_code(
-        "nb_model = grid_search.best_estimator_\n"
-        "nb_model.fit(X_train_nb, y_train)  # refit trên toàn bộ X_train_nb với best alpha\n\n"
+        "nb_model = grid_search.best_estimator_  # đã tự refit trên toàn bộ X_train_nb (refit=True mặc định)\n\n"
         "y_test_pred = nb_model.predict(X_test_nb)\n"
         "y_test_proba = nb_model.predict_proba(X_test_nb)[:, 1]\n"
         "test_metrics = compute_metrics(y_test, y_test_pred, y_test_proba)\n\n"
