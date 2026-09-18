@@ -57,3 +57,6 @@ models/*.bin
 # 
 credentials.json
 token.json
+
+# Temporary AI scratch and audit artifacts
+tmp/
