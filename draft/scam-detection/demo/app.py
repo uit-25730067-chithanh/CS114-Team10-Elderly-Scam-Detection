@@ -132,8 +132,8 @@ st.divider()
 
 
 # ─── Session State Initialization ─────────────────────────────────────────────
-if "current_message" not in st.session_state:
-    st.session_state["current_message"] = ""
+if "text_input_area" not in st.session_state:
+    st.session_state["text_input_area"] = ""
 
 
 # ─── Main Columns Layout ──────────────────────────────────────────────────────
@@ -146,7 +146,6 @@ with col_input:
 
     user_input = st.text_area(
         label="Nội dung tin nhắn nhận được (SMS, Zalo, Telegram):",
-        value=st.session_state["current_message"],
         height=180,
         placeholder="Dán nội dung tin nhắn đáng ngờ vào đây...",
         key="text_input_area"
@@ -163,7 +162,7 @@ with col_input:
             st.markdown(f"*{sample['content']}*")
             st.caption(f"💡 {sample['explanation']}")
             if st.button(f"👉 Nạp kịch bản này vào kiểm tra", key=f"btn_{key}"):
-                st.session_state["current_message"] = sample["content"]
+                st.session_state["text_input_area"] = sample["content"]
                 st.rerun()
 
 
