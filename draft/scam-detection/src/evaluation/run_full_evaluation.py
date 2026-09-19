@@ -21,7 +21,11 @@ if str(PROJECT_ROOT) not in sys.path:
 import joblib
 import pandas as pd
 
-from src.evaluation.metrics_calculator import evaluate_all_models, format_markdown_table
+from src.evaluation.metrics_calculator import (
+    MODEL_METADATA,
+    evaluate_all_models,
+    format_markdown_table,
+)
 from src.evaluation.plot_comparator import (
     plot_confusion_matrices_grid,
     plot_learning_curves_summary,
@@ -68,25 +72,19 @@ def run_evaluation(project_root: Path) -> dict:
     # 2. Update model_comparison.csv
     csv_path = reports_dir / "model_comparison.csv"
     records = []
-    meta = {
-        "XGBoost": ("5015 (TF-IDF + 15 aux)", "n_estimators=300, max_depth=5, lr=0.05, subsample=0.7, scale_pos_weight=4.22", "Passed (Phase 05 — Cam)"),
-        "SVM Linear": ("5015 (TF-IDF + 15 aux)", "C=10.0 (CalibratedClassifierCV 5-fold)", "Passed (Phase 06 — Cam)"),
-        "Random Forest": ("5015 (TF-IDF + 15 aux)", "n_estimators=200, max_depth=50, split=2, leaf=2, max_feat=0.2", "Passed (Phase 05 — Son)"),
-        "Naive Bayes": ("5000 (TF-IDF non-negative)", "alpha=0.01 (GridSearchCV 5-fold)", "Passed (Phase 04 — Cam)"),
-    }
     for _, row in metrics_df.iterrows():
         m_name = row["model"]
-        feat, hyper, st = meta.get(m_name, ("5015", "Tuned", "Passed"))
+        m_info = MODEL_METADATA.get(m_name, {})
         records.append({
             "Model": m_name,
-            "Features": feat,
-            "Hyperparameters": hyper,
+            "Features": m_info.get("features", "5,015"),
+            "Hyperparameters": m_info.get("hyperparameters", "Tuned"),
             "Accuracy": round(row["accuracy"], 4),
             "Precision": round(row["precision"], 4),
             "Recall": round(row["recall"], 4),
             "F1-Score": round(row["f1"], 4),
             "ROC-AUC": round(row["roc_auc"], 4),
-            "Status": st,
+            "Status": m_info.get("notes", "Passed"),
         })
     pd.DataFrame(records).to_csv(csv_path, index=False)
     print(f"[✓] Saved updated comparison: {csv_path}")
