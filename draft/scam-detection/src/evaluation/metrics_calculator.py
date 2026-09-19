@@ -23,7 +23,7 @@ from sklearn.metrics import (
 )
 
 
-def _resolve_eval_features(model, model_name: str, X_test):
+def resolve_eval_features(model, model_name: str, X_test):
     """Dynamically resolve feature slice if model expects fewer features than X_test."""
     n_expected = getattr(model, "n_features_in_", None)
     if n_expected is None and hasattr(model, "feature_log_prob_"):
@@ -36,22 +36,24 @@ def _resolve_eval_features(model, model_name: str, X_test):
     return X_test
 
 
-def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
-    """Evaluate one model on test set. Dynamically adapts feature dimension."""
-    X_eval = _resolve_eval_features(model, model_name, X_test)
-    y_pred = model.predict(X_eval)
-
-    # Predict proba
-    y_proba = None
+def get_predicted_probabilities(model, X) -> np.ndarray | None:
+    """Safely extract positive class probability estimates from any classifier."""
     if hasattr(model, "predict_proba"):
-        y_proba = model.predict_proba(X_eval)[:, 1]
-    elif hasattr(model, "decision_function"):
-        df = model.decision_function(X_eval)
+        return model.predict_proba(X)[:, 1]
+    if hasattr(model, "decision_function"):
+        df = model.decision_function(X)
         df_range = df.max() - df.min()
         if df_range < 1e-5:
-            y_proba = np.zeros_like(df, dtype=float)
-        else:
-            y_proba = (df - df.min()) / df_range
+            return np.zeros_like(df, dtype=float)
+        return (df - df.min()) / df_range
+    return None
+
+
+def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
+    """Evaluate one model on test set. Dynamically adapts feature dimension."""
+    X_eval = resolve_eval_features(model, model_name, X_test)
+    y_pred = model.predict(X_eval)
+    y_proba = get_predicted_probabilities(model, X_eval)
 
     cm = confusion_matrix(y_test, y_pred)
     tn, fp, fn, tp = cm.ravel()
@@ -86,13 +88,19 @@ def evaluate_all_models(models_dict: dict, X_test, y_test) -> pd.DataFrame:
 
 
 def format_markdown_table(df: pd.DataFrame) -> str:
-    """Format DataFrame as a clean Markdown table with percentage formatting."""
+    """Format DataFrame as clean Markdown table with tabulate-independent fallback."""
     formatted = df.copy()
-    formatted["accuracy"] = formatted["accuracy"].map("{:.2%}".format)
-    formatted["precision"] = formatted["precision"].map("{:.2%}".format)
-    formatted["recall"] = formatted["recall"].map("{:.2%}".format)
-    formatted["f1"] = formatted["f1"].map("{:.4f}".format)
-    formatted["roc_auc"] = formatted["roc_auc"].map("{:.4f}".format)
+    for col in ["accuracy", "precision", "recall"]:
+        if col in formatted:
+            formatted[col] = formatted[col].map("{:.2%}".format)
+    for col in ["f1", "roc_auc"]:
+        if col in formatted:
+            formatted[col] = formatted[col].map("{:.4f}".format)
 
     cols = ["model", "accuracy", "precision", "recall", "f1", "roc_auc", "false_negatives", "false_positives"]
-    return formatted[cols].to_markdown(index=False)
+    available_cols = [c for c in cols if c in formatted.columns]
+
+    try:
+        return formatted[available_cols].to_markdown(index=False)
+    except (ImportError, ModuleNotFoundError, AttributeError):
+        return formatted[available_cols].to_string(index=False)

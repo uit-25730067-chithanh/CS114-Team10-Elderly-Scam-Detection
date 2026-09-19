@@ -33,6 +33,7 @@ from src.evaluation.plot_comparator import (
     plot_top20_keywords_comparison,
 )
 from src.evaluation.xai_explainer import (
+    compute_and_save_shap_plot,
     extract_consensus_keywords,
     extract_keywords_from_model,
 )
@@ -122,3 +123,17 @@ def test_plot_comparator_renders_files(dummy_eval_data, tmp_path):
     p_kw = plot_top20_keywords_comparison(kws, tmp_path)
     assert p_kw.is_file()
     assert p_kw.stat().st_size > 0
+
+
+def test_compute_and_save_shap_plot(dummy_eval_data, tmp_path):
+    models, X, _, feature_names = dummy_eval_data
+    p_shap = compute_and_save_shap_plot(
+        models["Tree"],
+        X[:10],
+        feature_names,
+        tmp_path,
+        max_display=5,
+    )
+    assert p_shap.is_file()
+    assert p_shap.stat().st_size > 0
+

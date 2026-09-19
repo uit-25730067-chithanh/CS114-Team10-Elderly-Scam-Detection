@@ -27,6 +27,11 @@ from sklearn.metrics import (
     roc_curve,
 )
 
+from src.evaluation.metrics_calculator import (
+    get_predicted_probabilities,
+    resolve_eval_features,
+)
+
 DPI = 300
 PALETTE = {
     "XGBoost": "#e74c3c",       # Red
@@ -36,18 +41,6 @@ PALETTE = {
 }
 
 
-def _get_eval_x(model, model_name: str, X):
-    """Dynamically adapt feature dimension for models with reduced feature spaces."""
-    n_expected = getattr(model, "n_features_in_", None)
-    if n_expected is None and hasattr(model, "feature_log_prob_"):
-        n_expected = model.feature_log_prob_.shape[1]
-    if n_expected is not None and hasattr(X, "shape") and X.shape[1] > n_expected:
-        return X[:, :n_expected]
-    if ("naive" in model_name.lower() or "nb" in model_name.lower()) and hasattr(X, "shape") and X.shape[1] > 5000:
-        return X[:, :5000]
-    return X
-
-
 def plot_confusion_matrices_grid(models_dict: dict, X_test, y_test, figures_dir: Path) -> Path:
     """Render 2x2 grid of confusion matrices for all 4 models."""
     fig, axes = plt.subplots(2, 2, figsize=(11, 9))
@@ -55,7 +48,7 @@ def plot_confusion_matrices_grid(models_dict: dict, X_test, y_test, figures_dir:
         axes_flat = axes.flatten()
         for idx, (name, model) in enumerate(models_dict.items()):
             ax = axes_flat[idx]
-            X_eval = _get_eval_x(model, name, X_test)
+            X_eval = resolve_eval_features(model, name, X_test)
             y_pred = model.predict(X_eval)
             cm = confusion_matrix(y_test, y_pred)
             sns.heatmap(
@@ -82,8 +75,10 @@ def plot_roc_comparison(models_dict: dict, X_test, y_test, figures_dir: Path) ->
     fig, ax = plt.subplots(figsize=(8, 6.5))
     try:
         for name, model in models_dict.items():
-            X_eval = _get_eval_x(model, name, X_test)
-            y_proba = model.predict_proba(X_eval)[:, 1]
+            X_eval = resolve_eval_features(model, name, X_test)
+            y_proba = get_predicted_probabilities(model, X_eval)
+            if y_proba is None:
+                continue
             fpr, tpr, _ = roc_curve(y_test, y_proba)
             auc = roc_auc_score(y_test, y_proba)
             color = PALETTE.get(name, "#34495e")
@@ -111,8 +106,10 @@ def plot_precision_recall_comparison(models_dict: dict, X_test, y_test, figures_
     fig, ax = plt.subplots(figsize=(8, 6.5))
     try:
         for name, model in models_dict.items():
-            X_eval = _get_eval_x(model, name, X_test)
-            y_proba = model.predict_proba(X_eval)[:, 1]
+            X_eval = resolve_eval_features(model, name, X_test)
+            y_proba = get_predicted_probabilities(model, X_eval)
+            if y_proba is None:
+                continue
             prec, rec, _ = precision_recall_curve(y_test, y_proba)
             ap = average_precision_score(y_test, y_proba)
             color = PALETTE.get(name, "#34495e")
