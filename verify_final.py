@@ -202,10 +202,11 @@ def main() -> int:
     agents_file = final_dir / "AGENTS.md"
     roadmap_file = draft_dir / "docs" / "project-roadmap.md"
 
-    if plan_file.is_file() and agents_file.is_file() and roadmap_file.is_file():
+    if plan_file.is_file() and agents_file.is_file() and roadmap_file.is_file() and readme_md.is_file():
         plan_content = plan_file.read_text(encoding="utf-8")
         agents_content = agents_file.read_text(encoding="utf-8")
         roadmap_content = roadmap_file.read_text(encoding="utf-8")
+        readme_content = readme_md.read_text(encoding="utf-8")
 
         phase_matches = re.findall(r"\|\s*(\d{2})\s*\|.*?\|\s*`?([a-z-]+)`?\s*[✅🚀]*\s*\|", plan_content)
         for phase_id_str, status in phase_matches:
@@ -236,6 +237,12 @@ def main() -> int:
                     log_success(f"[Parity] {phase_tag} status synchronized in project-roadmap.md")
                 else:
                     log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in project-roadmap.md")
+                    all_passed = False
+
+                if re.search(sync_pattern, readme_content, re.IGNORECASE):
+                    log_success(f"[Parity] {phase_tag} status synchronized in README.md")
+                else:
+                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in README.md")
                     all_passed = False
 
     # Final Summary
