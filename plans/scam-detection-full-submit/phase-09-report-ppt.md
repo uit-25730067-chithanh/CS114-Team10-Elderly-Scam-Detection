@@ -70,15 +70,21 @@ Theo yêu cầu trong [README.md](../../README.md):
 
 | Mô hình | Đặc trưng | Hyperparameters | Accuracy | Precision | Recall (Lừa đảo) | F1-Score | ROC-AUC | Ghi chú |
 |---|---|---|:---:|:---:|:---:|:---:|:---:|---|
-| **MultinomialNB** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | **0.8864** | 0.9911 | Baseline vượt ngưỡng F1≥0.88, FN=6, FP=14 (Phase 04 — Cẩm) |
-| **XGBoost** | 5.015 (TF-IDF + 15 aux) | `n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | **0.9984** | Vượt trội toàn diện, FN=2, FP=6 (Phase 05 — Cẩm) |
-| *Random Forest* | 5.015 | *(đang tinh chỉnh)* | — | — | — | — | — | Đang thực hiện (Phase 05 — Sơn) |
-| *SVM Linear* | 5.015 | *(chưa huấn luyện)* | — | — | — | — | — | Kế hoạch Sprint 3 (Phase 06 — Cẩm) |
+| **XGBoost** | 5.015 (TF-IDF + 15 aux) | `n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | 0.9984 | Best Overall Model, FN=2, FP=6 (Phase 05 — Cẩm) |
+| **SVM Linear** | 5.015 (TF-IDF + 15 aux) | `C=10.0` (CalibratedClassifierCV 5-fold) | 97.95% | **93.10%** | 96.43% | **0.9474** | **0.9986** | Best Linear Model, FN=3, FP=6 (Phase 06 — Cẩm) |
+| **Random Forest** | 5.015 (TF-IDF + 15 aux) | `n_est=200, depth=50, split=2, leaf=2, max_feat=0.2` | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn) |
+| **MultinomialNB** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline vượt F1≥0.88, FN=6, FP=14 (Phase 04 — Cẩm) |
 
-- **Hệ thống 7 biểu đồ đánh giá mô hình chuẩn 300 DPI (`reports/figures/`):**
-  - `nb_confusion_matrix.png`, `nb_roc_curve.png`, `nb_learning_curve.png` (MultinomialNB: Train F1 giảm 1.00→0.96, Val F1 tăng 0.73→0.91, hội tụ tốt).
-  - `xgb_confusion_matrix.png`, `xgb_roc_curve.png`, `xgb_learning_curve.png` (XGBoost: Train F1 ~0.98–1.00, Val F1 0.83→0.96, kiểm soát quá khớp tối ưu).
-  - `xgb_feature_importance.png`: Top-5 đặc trưng quyền lực/viễn thông: `liên_hệ 198` (0.139), `money` (0.079), `198` (0.065), `number` (0.037), `tran` (0.036).
+- **Hệ thống 28 biểu đồ trực quan hóa chuẩn 300 DPI (`reports/figures/`):**
+  - **7 Biểu đồ EDA (Phase 03):** `label_distribution.png`, `scam_category_distribution.png`, `text_length_comparison.png`, `wordcloud_scam_vs_normal.png`, `top_ngrams_scam_vs_normal.png`, `auxiliary_correlation_heatmap.png`, `source_distribution.png`.
+  - **15 Biểu đồ đơn mô hình (Phase 04–06):** Confusion Matrix, ROC curve, Learning curve, Feature Importance của từng mô hình (NB, RF, XGB, Linear SVM).
+  - **6 Biểu đồ so sánh tổng hợp & XAI (Phase 07 — Thanh):**
+    - `confusion_matrices_all.png`: Lưới 2×2 ma trận nhầm lẫn so sánh trực tiếp FN/FP của cả 4 mô hình.
+    - `roc_curves_comparison.png`: 4 đường cong ROC lồng ghép (AUC: 0.9911 → 0.9986).
+    - `precision_recall_curves.png`: 4 đường Precision-Recall chứng minh duy trì Precision > 90% ở Recall > 95%.
+    - `learning_curves_summary.png`: Lưới 2×2 đường cong học tập 5-fold CV chứng minh kiểm soát quá khớp tối ưu.
+    - `top20_keywords_barplot.png`: Biểu đồ ngang 20 từ khóa kích hoạt bẫy tâm lý có trọng số đồng thuận cao nhất (`money`, `số_tiền`, `viện_phí`, `gấp`, `số_định_danh`).
+    - `shap_summary.png`: Biểu đồ SHAP Beeswarm của XGBoost giải thích đóng góp vi mô từng giá trị đặc trưng.
 
 ### Chương 5 — Kết luận và Hướng phát triển
 
