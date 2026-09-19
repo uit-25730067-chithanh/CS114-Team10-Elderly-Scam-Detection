@@ -202,11 +202,24 @@ def main() -> int:
     agents_file = final_dir / "AGENTS.md"
     roadmap_file = draft_dir / "docs" / "project-roadmap.md"
 
-    if plan_file.is_file() and agents_file.is_file() and roadmap_file.is_file() and readme_md.is_file():
+    target_docs = {
+        "AGENTS.md": agents_file,
+        "project-roadmap.md": roadmap_file,
+        "README.md": readme_md,
+    }
+
+    if not plan_file.is_file():
+        log_error(f"[Parity] Plan file not found: {plan_file}")
+        all_passed = False
+    else:
         plan_content = plan_file.read_text(encoding="utf-8")
-        agents_content = agents_file.read_text(encoding="utf-8")
-        roadmap_content = roadmap_file.read_text(encoding="utf-8")
-        readme_content = readme_md.read_text(encoding="utf-8")
+        doc_contents = {}
+        for doc_name, doc_path in target_docs.items():
+            if doc_path.is_file():
+                doc_contents[doc_name] = doc_path.read_text(encoding="utf-8")
+            else:
+                log_error(f"[Parity] Missing required documentation file: {doc_name}")
+                all_passed = False
 
         phase_matches = re.findall(r"\|\s*(\d{2})\s*\|.*?\|\s*`?([a-z-]+)`?\s*[✅🚀]*\s*\|", plan_content)
         for phase_id_str, status in phase_matches:
@@ -227,23 +240,12 @@ def main() -> int:
 
                 sync_pattern = rf"(?:done|passed|hoàn thành).*?phase\s*{phase_id_str}|phase\s*{phase_id_str}.*?(?:done|passed|hoàn thành)"
 
-                if re.search(sync_pattern, agents_content, re.IGNORECASE):
-                    log_success(f"[Parity] {phase_tag} status synchronized in AGENTS.md")
-                else:
-                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in AGENTS.md")
-                    all_passed = False
-
-                if re.search(sync_pattern, roadmap_content, re.IGNORECASE):
-                    log_success(f"[Parity] {phase_tag} status synchronized in project-roadmap.md")
-                else:
-                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in project-roadmap.md")
-                    all_passed = False
-
-                if re.search(sync_pattern, readme_content, re.IGNORECASE):
-                    log_success(f"[Parity] {phase_tag} status synchronized in README.md")
-                else:
-                    log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in README.md")
-                    all_passed = False
+                for doc_name, content in doc_contents.items():
+                    if re.search(sync_pattern, content, re.IGNORECASE):
+                        log_success(f"[Parity] {phase_tag} status synchronized in {doc_name}")
+                    else:
+                        log_error(f"[Parity] {phase_tag} marked passed in plan.md but NOT synchronized in {doc_name}")
+                        all_passed = False
 
     # Final Summary
     print("-" * 50)
