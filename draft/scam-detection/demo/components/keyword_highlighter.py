@@ -114,6 +114,13 @@ RISK_PATTERNS = [
     ("https", "#c0392b"),
 ]
 
+# Sắp xếp từ khóa theo độ dài giảm dần và biên dịch sẵn Regex ở cấp module
+_SORTED_PATTERNS = sorted(RISK_PATTERNS, key=lambda x: len(x[0]), reverse=True)
+COMPILED_PATTERNS: List[Tuple[re.Pattern, str, str]] = [
+    (re.compile(re.escape(kw), re.IGNORECASE), color, kw)
+    for kw, color in _SORTED_PATTERNS
+]
+
 
 def extract_found_keywords(text: str) -> List[str]:
     """Tìm tất cả các từ khóa cảnh báo xuất hiện trong tin nhắn."""
@@ -126,14 +133,10 @@ def extract_found_keywords(text: str) -> List[str]:
 
 
 def highlight_text_html(text: str, font_multiplier: float = 1.0) -> str:
-    """Tạo chuỗi HTML bôi đỏ nổi bật các từ khóa nguy hiểm cho người già dễ đọc."""
+    """Tạo chuỗi HTML bôi đỏ nổi bật các từ khóa nguy hiểm cho người già dễ đọc (đã tối ưu hóa Regex)."""
     highlighted = text
-    # Sắp xếp từ khóa theo độ dài giảm dần để tránh replace trùng lặp
-    sorted_patterns = sorted(RISK_PATTERNS, key=lambda x: len(x[0]), reverse=True)
 
-    for kw, color in sorted_patterns:
-        # Regex case-insensitive
-        pattern = re.compile(re.escape(kw), re.IGNORECASE)
+    for pattern, color, kw in COMPILED_PATTERNS:
         replacement = (
             f'<mark style="background-color: {color}; color: #ffffff; '
             f'font-weight: 800; padding: 2px 8px; border-radius: 6px; '
@@ -145,20 +148,22 @@ def highlight_text_html(text: str, font_multiplier: float = 1.0) -> str:
     highlighted = highlighted.replace("\n", "<br>")
 
     font_size = int(20 * font_multiplier)
-    line_height = 1.8
 
     return f"""
     <div style="
         background: #ffffff;
         border: 2px solid #cbd5e1;
         border-radius: 12px;
-        padding: 20px;
-        font-size: {font_size}px;
-        line-height: {line_height};
+        padding: clamp(12px, 3.5vw, 20px);
+        font-size: clamp(15px, 3.8vw, {font_size}px);
+        line-height: 1.75;
         color: #1e293b;
         font-family: 'Segoe UI', Roboto, sans-serif;
         box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        word-break: break-word;
     ">
         {highlighted}
     </div>
     """
+
+

@@ -101,10 +101,13 @@ def diagnose_scam_category(text: str) -> str:
 
 
 def render_safety_advisor(category: str, is_scam: bool, font_multiplier: float = 1.0) -> None:
-    """Hiển thị bảng khuyến cáo an toàn thiết kế dành riêng cho người cao tuổi."""
+    """Hiển thị bảng khuyến cáo an toàn thiết kế dành riêng cho người cao tuổi (kèm nút gọi khẩn cấp)."""
     info = TRAP_DEFINITIONS.get(category, TRAP_DEFINITIONS["none"])
     base_font = int(18 * font_multiplier)
     title_font = int(22 * font_multiplier)
+
+    # Thẻ neo phục vụ Mobile Auto-scroll
+    st.markdown('<div id="verdict-anchor" style="scroll-margin-top: 80px;"></div>', unsafe_allow_html=True)
 
     if is_scam:
         st.markdown(f"""
@@ -112,51 +115,82 @@ def render_safety_advisor(category: str, is_scam: bool, font_multiplier: float =
             background-color: #fff9f9;
             border-left: 6px solid {info['color']};
             border-radius: 12px;
-            padding: 20px;
+            padding: clamp(14px, 3.5vw, 20px);
             margin: 16px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         ">
-            <div style="font-size: {title_font}px; font-weight: 800; color: {info['color']}; margin-bottom: 10px;">
+            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: {info['color']}; margin-bottom: 10px; line-height: 1.35;">
                 {info['title']}
             </div>
-            <p style="font-size: {base_font}px; line-height: 1.6; color: #333333; margin-bottom: 16px;">
+            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #333333; margin-bottom: 16px;">
                 <b>Dấu hiệu nhận biết:</b> {info['description']}
             </p>
-            <div style="font-size: {base_font}px; font-weight: 700; color: #c0392b; margin-bottom: 8px;">
+            <div style="font-size: clamp(15px, 3.8vw, {base_font}px); font-weight: 700; color: #c0392b; margin-bottom: 8px;">
                 ⚠️ Lời khuyên quan trọng dành cho Ông/Bà:
             </div>
-            <ul style="font-size: {base_font}px; line-height: 1.7; color: #2c3e50; margin: 0; padding-left: 24px;">
+            <ul style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.7; color: #2c3e50; margin: 0; padding-left: 20px;">
                 {"".join(f'<li style="margin-bottom: 8px;">{tip}</li>' for tip in info['warning_tips'])}
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
-        # Hộp nguyên tắc "3 KHÔNG & 1 GỌI"
+        # Hộp nguyên tắc "3 KHÔNG & 1 GỌI" kèm Nút gọi khẩn cấp 1-chạm (Life-Safety Action Anchor)
         st.markdown(f"""
         <div style="
             background: linear-gradient(135deg, #fce4ec 0%, #fff3e0 100%);
             border: 3px solid #ff7043;
             border-radius: 16px;
-            padding: 22px;
+            padding: clamp(14px, 3.5vw, 22px);
             margin-top: 18px;
         ">
-            <div style="font-size: {title_font}px; font-weight: 900; color: #d84315; text-align: center; margin-bottom: 14px;">
+            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 900; color: #d84315; text-align: center; margin-bottom: 14px; line-height: 1.35;">
                 🛡️ QUY TẮC AN TOÀN "3 KHÔNG & 1 GỌI" CHO NGƯỜI CAO TUỔI
             </div>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; font-size: {base_font}px;">
-                <div style="background: #ffffff; padding: 12px 16px; border-radius: 10px; border-left: 4px solid #e53935;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; font-size: clamp(14px, 3.5vw, {base_font}px);">
+                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
                     ❌ <b>1. KHÔNG bấm vào đường link lạ:</b> Kẻ xấu có thể cài mã độc để trộm sạch tiền ngân hàng.
                 </div>
-                <div style="background: #ffffff; padding: 12px 16px; border-radius: 10px; border-left: 4px solid #e53935;">
+                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
                     ❌ <b>2. KHÔNG cung cấp mật khẩu, mã OTP:</b> Nhân viên ngân hàng và Công an không bao giờ hỏi mật khẩu.
                 </div>
-                <div style="background: #ffffff; padding: 12px 16px; border-radius: 10px; border-left: 4px solid #e53935;">
+                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
                     ❌ <b>3. KHÔNG chuyển tiền trong lúc hoảng sợ:</b> Càng bị hối thúc dọa dẫm thì càng phải bình tĩnh dừng lại.
                 </div>
-                <div style="background: #e8f5e9; padding: 14px 18px; border-radius: 10px; border-left: 6px solid #2e7d32; font-weight: 700; color: #1b5e20;">
-                    📞 <b>BƯỚC DUY NHẤT CẦN LÀM:</b> GỌI NGAY CHO CON CHÁU hoặc gọi đường dây nóng miễn phí:
-                    <div style="font-size: {int(26*font_multiplier)}px; color: #c62828; margin-top: 6px; font-weight: 900;">
-                        ☎️ TỔNG ĐÀI CỤC AN TOÀN THÔNG TIN: 156 (Miễn phí)
+                <div style="background: #e8f5e9; padding: 14px 18px; border-radius: 12px; border-left: 6px solid #2e7d32; font-weight: 700; color: #1b5e20;">
+                    📞 <b>BƯỚC DUY NHẤT CẦN LÀM:</b> GỌI NGAY CHO CON CHÁU HOẶC BẤM NÚT ĐỂ GỌI TRỢ GIÚP KHẨN CẤP:
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+                        <a href="tel:156" style="
+                            width: 100%;
+                            box-sizing: border-box;
+                            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+                            color: #ffffff !important;
+                            text-decoration: none;
+                            padding: 13px 16px;
+                            border-radius: 12px;
+                            font-size: clamp(16px, 4vw, 20px);
+                            font-weight: 900;
+                            text-align: center;
+                            box-shadow: 0 4px 10px rgba(183, 28, 28, 0.4);
+                            display: block;
+                        ">
+                            ☎️ BẤM GỌI TỔNG ĐÀI 156 (Miễn phí)
+                        </a>
+                        <a href="tel:113" style="
+                            width: 100%;
+                            box-sizing: border-box;
+                            background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+                            color: #ffffff !important;
+                            text-decoration: none;
+                            padding: 13px 16px;
+                            border-radius: 12px;
+                            font-size: clamp(16px, 4vw, 20px);
+                            font-weight: 900;
+                            text-align: center;
+                            box-shadow: 0 4px 10px rgba(191, 54, 12, 0.4);
+                            display: block;
+                        ">
+                            🚨 BẤM GỌI CÔNG AN 113
+                        </a>
                     </div>
                 </div>
             </div>
@@ -169,14 +203,15 @@ def render_safety_advisor(category: str, is_scam: bool, font_multiplier: float =
             background-color: #f1f8e9;
             border-left: 6px solid #558b2f;
             border-radius: 12px;
-            padding: 20px;
+            padding: clamp(14px, 3.5vw, 20px);
             margin: 16px 0;
         ">
-            <div style="font-size: {title_font}px; font-weight: 800; color: #33691e; margin-bottom: 10px;">
+            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: #33691e; margin-bottom: 10px; line-height: 1.35;">
                 {info['title']}
             </div>
-            <p style="font-size: {base_font}px; line-height: 1.6; color: #2e7d32;">
+            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #2e7d32;">
                 Hệ thống xác nhận đây là tin nhắn bình thường. Tuy vậy, Ông/Bà vẫn luôn nhớ <b>không bao giờ gửi mã OTP ngân hàng</b> cho bất kỳ ai nhé!
             </p>
         </div>
         """, unsafe_allow_html=True)
+

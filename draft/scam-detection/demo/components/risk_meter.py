@@ -44,43 +44,48 @@ def render_risk_meter(probability: float, font_multiplier: float = 1.0) -> None:
         background-color: {bg_color};
         border: 3px solid {border_color};
         border-radius: 16px;
-        padding: 24px;
+        padding: clamp(14px, 3.5vw, 24px);
         margin-bottom: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     ">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <div style="font-size: {base_title_size}px; font-weight: 800; color: {text_color}; line-height: 1.3;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
+            <div style="font-size: clamp(19px, 4.5vw, {base_title_size}px); font-weight: 800; color: {text_color}; line-height: 1.35; flex: 1 1 220px; min-width: 0;">
                 {status_icon} {status_title}
             </div>
             <div style="
                 background-color: {border_color};
                 color: #ffffff;
                 font-weight: 700;
-                font-size: 14px;
+                font-size: 13px;
                 padding: 6px 14px;
                 border-radius: 20px;
                 white-space: nowrap;
+                margin-top: 2px;
             ">
                 {badge_label}
             </div>
         </div>
-        <p style="font-size: {base_sub_size}px; color: #2c3e50; margin: 8px 0 18px 0; font-weight: 500; line-height: 1.5;">
+        <p style="font-size: clamp(15px, 3.5vw, {base_sub_size}px); color: #2c3e50; margin: 8px 0 16px 0; font-weight: 500; line-height: 1.55;">
             {sub_title}
         </p>
         <div style="
             display: flex;
-            align-items: baseline;
-            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px 14px;
             background: #ffffff;
             border-radius: 12px;
-            padding: 12px 20px;
+            padding: 12px 18px;
             border: 1px solid #e2e8f0;
         ">
-            <span style="font-size: 18px; color: #555555; font-weight: 600;">Độ nguy hiểm ước tính:</span>
-            <span style="font-size: {base_score_size}px; font-weight: 900; color: {text_color}; font-family: monospace;">
+            <span style="font-size: 16px; color: #555555; font-weight: 600;">Độ nguy hiểm ước tính:</span>
+            <span style="font-size: clamp(28px, 6vw, {base_score_size}px); font-weight: 900; color: {text_color}; font-family: monospace;">
                 {pct:.1f}%
             </span>
-            <span style="font-size: 15px; color: #7f8c8d;">(Đánh giá bởi Trí tuệ Nhân tạo AI)</span>
+            <div style="width: 100%; font-size: 13px; color: #7f8c8d; margin-top: -2px;">
+                (Đánh giá bởi Trí tuệ Nhân tạo AI)
+            </div>
         </div>
     </div>
     """
