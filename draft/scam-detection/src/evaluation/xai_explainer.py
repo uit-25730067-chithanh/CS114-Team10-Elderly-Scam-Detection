@@ -89,7 +89,6 @@ def compute_and_save_shap_plot(model, X_sample, feature_names: list[str], figure
         )
         plt.title("XGBoost SHAP Summary Plot — Đóng Góp Giá Trị Đặc Trưng Vào Xác Suất Lừa Đảo",
                   fontsize=12, fontweight="bold", pad=12)
-        plt.tight_layout()
         out_path = figures_dir / "shap_summary.png"
         plt.savefig(out_path, dpi=DPI, bbox_inches="tight")
         return out_path

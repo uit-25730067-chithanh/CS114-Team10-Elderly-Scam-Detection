@@ -60,6 +60,10 @@ def plot_confusion_matrices_grid(models_dict: dict, X_test, y_test, figures_dir:
             ax.set_xlabel("Dự đoán", fontsize=10)
             ax.set_ylabel("Thực tế", fontsize=10)
 
+        # Hide unused subplots if models_dict has fewer than 4 models
+        for idx in range(len(models_dict), len(axes_flat)):
+            axes_flat[idx].set_visible(False)
+
         plt.suptitle("Ma Trận Nhầm Lẫn So Sánh 4 Mô Hình (Holdout Test Set = 439 mẫu)",
                      fontsize=14, fontweight="bold", y=0.98)
         plt.tight_layout()

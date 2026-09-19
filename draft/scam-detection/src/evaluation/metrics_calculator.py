@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from scipy.special import expit
 from sklearn.metrics import (
     accuracy_score,
     brier_score_loss,
@@ -21,6 +22,29 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
 )
+
+MODEL_METADATA = {
+    "XGBoost": {
+        "features": "5,015 (TF-IDF + 15 aux)",
+        "hyperparameters": "n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22",
+        "notes": "Best Overall Model, FN=2, FP=6 (Phase 05 — Cẩm)",
+    },
+    "SVM Linear": {
+        "features": "5,015 (TF-IDF + 15 aux)",
+        "hyperparameters": "C=10.0 (CalibratedClassifierCV 5-fold)",
+        "notes": "Best Linear Model, FN=3, FP=6 (Phase 06 — Cẩm)",
+    },
+    "Random Forest": {
+        "features": "5,015 (TF-IDF + 15 aux)",
+        "hyperparameters": "n_est=200, depth=50, split=2, leaf=2, max_feat=0.2",
+        "notes": "Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn)",
+    },
+    "Naive Bayes": {
+        "features": "5,000 (TF-IDF)",
+        "hyperparameters": "alpha=0.5 (MultinomialNB)",
+        "notes": "Baseline Model, FN=6, FP=14 (Phase 04 — Thanh)",
+    },
+}
 
 
 def resolve_eval_features(model, model_name: str, X_test):
@@ -42,10 +66,7 @@ def get_predicted_probabilities(model, X) -> np.ndarray | None:
         return model.predict_proba(X)[:, 1]
     if hasattr(model, "decision_function"):
         df = model.decision_function(X)
-        df_range = df.max() - df.min()
-        if df_range < 1e-5:
-            return np.zeros_like(df, dtype=float)
-        return (df - df.min()) / df_range
+        return expit(df)
     return None
 
 
