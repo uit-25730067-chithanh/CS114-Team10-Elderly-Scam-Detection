@@ -79,17 +79,19 @@ def compute_and_save_shap_plot(model, X_sample, feature_names: list[str], figure
         vals = shap_values
 
     fig, ax = plt.subplots(figsize=(10, 7.5))
-    shap.summary_plot(
-        vals,
-        X_dense,
-        feature_names=feature_names,
-        max_display=max_display,
-        show=False,
-    )
-    plt.title("XGBoost SHAP Summary Plot — Đóng Góp Giá Trị Đặc Trưng Vào Xác Suất Lừa Đảo",
-              fontsize=12, fontweight="bold", pad=12)
-    plt.tight_layout()
-    out_path = figures_dir / "shap_summary.png"
-    plt.savefig(out_path, dpi=DPI, bbox_inches="tight")
-    plt.close("all")
-    return out_path
+    try:
+        shap.summary_plot(
+            vals,
+            X_dense,
+            feature_names=feature_names,
+            max_display=max_display,
+            show=False,
+        )
+        plt.title("XGBoost SHAP Summary Plot — Đóng Góp Giá Trị Đặc Trưng Vào Xác Suất Lừa Đảo",
+                  fontsize=12, fontweight="bold", pad=12)
+        plt.tight_layout()
+        out_path = figures_dir / "shap_summary.png"
+        plt.savefig(out_path, dpi=DPI, bbox_inches="tight")
+        return out_path
+    finally:
+        plt.close("all")

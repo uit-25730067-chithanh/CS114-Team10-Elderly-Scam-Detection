@@ -23,17 +23,22 @@ from sklearn.metrics import (
 )
 
 
-def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
-    """Evaluate one model on test set. Handles 5000 TF-IDF slice for Naive Bayes."""
-    # MultinomialNB only accepts 5000 non-negative TF-IDF features
-    if "naive" in model_name.lower() or "nb" in model_name.lower():
-        if hasattr(X_test, "shape") and X_test.shape[1] > 5000:
-            X_eval = X_test[:, :5000]
-        else:
-            X_eval = X_test
-    else:
-        X_eval = X_test
+def _resolve_eval_features(model, model_name: str, X_test):
+    """Dynamically resolve feature slice if model expects fewer features than X_test."""
+    n_expected = getattr(model, "n_features_in_", None)
+    if n_expected is None and hasattr(model, "feature_log_prob_"):
+        n_expected = model.feature_log_prob_.shape[1]
 
+    if n_expected is not None and hasattr(X_test, "shape") and X_test.shape[1] > n_expected:
+        return X_test[:, :n_expected]
+    if ("naive" in model_name.lower() or "nb" in model_name.lower()) and hasattr(X_test, "shape") and X_test.shape[1] > 5000:
+        return X_test[:, :5000]
+    return X_test
+
+
+def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
+    """Evaluate one model on test set. Dynamically adapts feature dimension."""
+    X_eval = _resolve_eval_features(model, model_name, X_test)
     y_pred = model.predict(X_eval)
 
     # Predict proba
@@ -42,7 +47,11 @@ def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
         y_proba = model.predict_proba(X_eval)[:, 1]
     elif hasattr(model, "decision_function"):
         df = model.decision_function(X_eval)
-        y_proba = (df - df.min()) / (df.max() - df.min() + 1e-9)
+        df_range = df.max() - df.min()
+        if df_range < 1e-5:
+            y_proba = np.zeros_like(df, dtype=float)
+        else:
+            y_proba = (df - df.min()) / df_range
 
     cm = confusion_matrix(y_test, y_pred)
     tn, fp, fn, tp = cm.ravel()
