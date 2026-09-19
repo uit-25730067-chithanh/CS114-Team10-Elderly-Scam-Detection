@@ -73,12 +73,12 @@ def compute_and_save_shap_plot(model, X_sample, feature_names: list[str], figure
     # In case shap_values is 2D or 3D
     if isinstance(shap_values, list):
         vals = shap_values[1] if len(shap_values) > 1 else shap_values[0]
-    elif len(shap_values.shape) == 3:
+    elif getattr(shap_values, "ndim", 0) == 3:
         vals = shap_values[:, :, 1]
     else:
         vals = shap_values
 
-    fig, ax = plt.subplots(figsize=(10, 7.5))
+    plt.figure(figsize=(10, 7.5))
     try:
         shap.summary_plot(
             vals,

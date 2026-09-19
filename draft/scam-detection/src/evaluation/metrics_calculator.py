@@ -55,7 +55,15 @@ def resolve_eval_features(model, model_name: str, X_test):
 
     if n_expected is not None and hasattr(X_test, "shape") and X_test.shape[1] > n_expected:
         return X_test[:, :n_expected]
-    if ("naive" in model_name.lower() or "nb" in model_name.lower()) and hasattr(X_test, "shape") and X_test.shape[1] > 5000:
+
+    # Check for Naive Bayes via attribute or type or name
+    is_nb = (
+        hasattr(model, "feature_log_prob_")
+        or "nb" in model_name.lower()
+        or "naive" in model_name.lower()
+        or "bayes" in type(model).__name__.lower()
+    )
+    if is_nb and hasattr(X_test, "shape") and X_test.shape[1] > 5000:
         return X_test[:, :5000]
     return X_test
 
@@ -68,6 +76,16 @@ def get_predicted_probabilities(model, X) -> np.ndarray | None:
         df = model.decision_function(X)
         return expit(df)
     return None
+
+
+def safe_roc_auc_score(y_true, y_proba) -> float:
+    """Safely compute ROC-AUC handling single-class edge cases and exceptions."""
+    if y_proba is None or len(np.unique(y_true)) < 2:
+        return float("nan")
+    try:
+        return float(roc_auc_score(y_true, y_proba))
+    except ValueError:
+        return float("nan")
 
 
 def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
@@ -85,7 +103,7 @@ def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
         "precision": float(precision_score(y_test, y_pred, zero_division=0)),
         "recall": float(recall_score(y_test, y_pred, zero_division=0)),
         "f1": float(f1_score(y_test, y_pred, zero_division=0)),
-        "roc_auc": float(roc_auc_score(y_test, y_proba)) if y_proba is not None else np.nan,
+        "roc_auc": safe_roc_auc_score(y_test, y_proba),
         "brier_score": float(brier_score_loss(y_test, y_proba)) if y_proba is not None else np.nan,
         "true_negatives": int(tn),
         "false_positives": int(fp),
