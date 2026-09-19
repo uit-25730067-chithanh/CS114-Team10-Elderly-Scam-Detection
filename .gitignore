@@ -35,6 +35,7 @@ build/
 !**/models/vectorizer.pkl
 !**/models/tfidf_vectorizer.pkl
 !**/models/best_model_bundle.pkl
+!**/models/svm_linear.pkl
 models/*.h5
 models/*.joblib
 models/*.pt
