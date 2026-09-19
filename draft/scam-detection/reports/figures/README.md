@@ -95,3 +95,48 @@ Thư mục này chứa 7 biểu đồ phân tích khám phá dữ liệu (Explor
 ### 18. `rf_feature_importance.png` (300 DPI)
 - **Nội dung:** Biểu đồ ngang xếp hạng Top-20 đặc trưng có độ giảm độ tinh khiết Gini cao nhất (Gini Importance).
 - **Ý nghĩa học thuật:** Làm nổi bật các từ khóa và đặc trưng phụ chỉ báo lừa đảo mạnh nhất trong các kịch bản đe dọa quyền lực và cấp cứu gia đình: `liên_hệ 198`, `number`, `money`, `tran`, `hotline` và các đặc trưng đếm URL/từ khẩn cấp.
+
+---
+
+## ⚔️ Danh Mục Biểu Đồ Đánh Giá Support Vector Machine (Bùi Thị Mỷ Cẩm — Phase 06)
+
+### 19. `svm_confusion_matrix.png` (300 DPI)
+- **Nội dung:** Ma trận nhầm lẫn của LinearSVC Calibrated trên Test Set (439 mẫu). TN=349, FP=6, FN=3, TP=81.
+- **Ý nghĩa học thuật:** F1-Score đạt 0.9474, Recall 96.43%, Precision 93.10%.
+
+### 20. `svm_roc_curve.png` (300 DPI)
+- **Nội dung:** Đường cong ROC và AUC của Linear SVM đạt **0.9986** (cao nhất trong các mô hình đơn).
+
+### 21. `svm_learning_curve.png` (300 DPI)
+- **Nội dung:** Đường cong học tập 5-fold CV của Linear SVM.
+
+### 22. `svm_feature_importance.png` (300 DPI)
+- **Nội dung:** Biểu đồ hệ số hồi quy trung bình có dấu (signed coefficients) của Linear SVM.
+
+---
+
+## 🎯 Danh Mục Biểu Đồ Đánh Giá Tổng Hợp & XAI (Đặng Chí Thanh — Phase 07)
+
+### 23. `confusion_matrices_all.png` (300 DPI)
+- **Nội dung:** Lưới 2×2 ma trận nhầm lẫn của cả 4 mô hình (XGBoost, SVM Linear, Random Forest, Naive Bayes).
+- **Ý nghĩa học thuật:** Cho phép đối chiếu trực tiếp số ca báo nhầm (FP) và bỏ sót (FN) giữa các kiến trúc học máy.
+
+### 24. `roc_curves_comparison.png` (300 DPI)
+- **Nội dung:** Biểu đồ lồng ghép 4 đường cong ROC trên cùng hệ trục tọa độ với Random Baseline.
+- **Ý nghĩa học thuật:** So sánh trực quan năng lực phân tách xác suất: SVM Linear (0.9986) ≈ XGBoost (0.9984) > Random Forest (0.9977) > Naive Bayes (0.9911).
+
+### 25. `precision_recall_curves.png` (300 DPI)
+- **Nội dung:** Biểu đồ lồng ghép 4 đường Precision-Recall kèm điểm cân bằng tỷ lệ mẫu lừa đảo gốc (19.1%).
+- **Ý nghĩa học thuật:** Thước đo khoa học quan trọng nhất cho bài toán mất cân bằng nhãn (Imbalance 4.22:1). Cả 4 mô hình đều duy trì Precision > 90% ở mức Recall > 95%.
+
+### 26. `learning_curves_summary.png` (300 DPI)
+- **Nội dung:** Tổng hợp 4 biểu đồ học tập Train vs Validation (5-fold CV) dạng lưới 2×2.
+- **Ý nghĩa học thuật:** Bằng chứng thực nghiệm phản biện trước Giảng viên về việc kiểm soát hiện tượng quá khớp (Overfitting).
+
+### 27. `top20_keywords_barplot.png` (300 DPI)
+- **Nội dung:** Biểu đồ xếp hạng 20 từ khóa cảnh báo kích hoạt bẫy tâm lý lừa đảo có trọng số đồng thuận cao nhất qua 4 mô hình.
+- **Ý nghĩa học thuật:** Phản ánh chính xác các đặc trưng ngôn ngữ đe dọa quyền lực (`mày`, `số_định_danh`), thúc ép khẩn cấp (`viện_phí`, `gấp`), và giả mạo tổ chức (`money`, `liên_hệ 198`, `thuế`).
+
+### 28. `shap_summary.png` (300 DPI)
+- **Nội dung:** Biểu đồ SHAP Beeswarm trích xuất từ `shap.TreeExplainer` cho mô hình XGBoost.
+- **Ý nghĩa học thuật:** Giải thích chi tiết sự phân bố giá trị đóng góp (SHAP values) của từng đặc trưng vi mô vào xác suất phân loại lừa đảo.

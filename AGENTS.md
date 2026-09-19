@@ -75,9 +75,9 @@
 | `notebooks/04_model_xgboost.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9535, Recall=97.62%, 4 figures 300 DPI |
 | `notebooks/04_model_random_forest.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9425, Recall=97.62%, 4 figures 300 DPI |
 | `src/models/` | ✅ Active — random_forest_model.py hoàn thiện kèm 9 unit tests; naive_bayes & xgboost chạy qua notebooks |
-| `src/evaluation/` | ⏳ Sprint 3 Fast-Track (18/09 – 19/09) — metrics, plots, comparator, XAI SHAP |
-| Notebooks (03-06) | 🚀 Sprint 2-3 Fast-Track (15/09 – 19/09) — 03 & 04 (XGB, RF) done; 05 (SVM) next |
-| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components (Sơn lead) |
+| `src/evaluation/` | ✅ Passed (Phase 07) — metrics_calculator, plot_comparator (CM 2x2, ROC, PR, Learning Curves), xai_explainer (Top-20 consensus keywords & SHAP) |
+| Notebooks (03-06) | ✅ Passed — 03 (NB), 04 (XGB, RF), 05 (SVM), 06 (Evaluation & XAI) hoàn thành end-to-end |
+| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components (Sơn lead, PR #21) |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
@@ -88,6 +88,10 @@
 > **Verdict (16/09): Phase 04 (Naive Bayes Baseline) đã HOÀN THÀNH XUẤT SẮC bởi Cẩm. Model đạt F1=0.8864, Recall=92.86% trên test set (439 mẫu), vượt baseline và tiệm cận target dự án. Đã thực hiện Ablation Study thực nghiệm chứng minh TF-IDF-only là tối ưu. Đồng thời phần XGBoost của Phase 05 cũng đã hoàn thành (F1=0.9535, Recall=97.62%).**
 
 > **Verdict (17/09): Phase 05 (Modeling — Random Forest & XGBoost) đã HOÀN THÀNH 100% XUẤT SẮC. Cả 2 mô hình Ensemble đều vượt xa chỉ tiêu đề tài (F1 ≥ 88%, Recall ≥ 92%): XGBoost (Cẩm) đạt F1=0.9535, Recall=97.62%; Random Forest (Sơn) đạt F1=0.9425, Recall=97.62%, ROC-AUC=0.9976 trên tập Test 439 mẫu. Bộ mã nguồn `src/models/random_forest_model.py` và 9 unit tests được kiểm định chuyên sâu đạt 100% pass rate. Sẵn sàng kích hoạt Phase 06 (SVM) và Phase 08 (Demo UI).**
+
+> **Verdict (18/09): Phase 06 (Modeling — Support Vector Machine) đã HOÀN THÀNH 100% XUẤT SẮC bởi Cẩm (PR #20 & #22). LinearSVC Calibrated đạt F1=0.9474, Recall=96.43%, ROC-AUC=0.9986. Đóng gói thành công `best_model_bundle.pkl` (489 KB) sẵn sàng phục vụ suy luận.**
+
+> **Verdict (19/09): Phase 07 (Comprehensive Evaluation & Explainable AI) đã HOÀN THÀNH 100% XUẤT SẮC bởi Thanh. Đánh giá tổng hợp 4 mô hình: XGBoost đạt Best Overall (F1=0.9535, Recall=97.62%, FN=2), Linear SVM đạt Best Linear Separator (ROC-AUC=0.9986). Xuất đủ 6 biểu đồ so sánh 300 DPI (`confusion_matrices_all.png`, `roc_curves_comparison.png`, `precision_recall_curves.png`, `learning_curves_summary.png`, `top20_keywords_barplot.png`, `shap_summary.png`). Trích xuất 20 từ khóa cảnh báo bẫy tâm lý đồng thuận cao nhất (money, số_tiền, viện_phí, gấp, số_định_danh). Toàn bộ 69/69 unit tests PASS 100%.**
 
 ---
 

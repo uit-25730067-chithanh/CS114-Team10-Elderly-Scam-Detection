@@ -7,7 +7,7 @@ effort: ~40h (nhóm 10 — 3 người)
 branch: main
 tags: [cs114, scam-detection, academic, python, ml, nlp, submit]
 created: 2026-09-04
-updated: 2026-09-16 (Phase 04 passed, Phase 05 XGBoost done)
+updated: 2026-09-19 (Phase 07 passed, 4 models fully evaluated & XAI extracted)
 sprints: 3 fast-track sprints | Bắt đầu ~06/09 | Báo cáo sớm: 23/09/2026 (Hạn LMS gốc: 13/10/2026)
 ---
 
@@ -45,7 +45,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 04 | [Modeling — Naive Bayes Baseline](./phase-04-model-naive-bayes.md) | **Cẩm** | Sprint 2 (15–16/09) | `passed` ✅ | MultinomialNB (alpha=0.01) tuned, F1=0.8864, Recall=92.86%, ROC-AUC=0.9911, Ablation Study hoàn thành |
 | 05 | [Modeling — Random Forest & XGBoost](./phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | Sprint 2 (15–17/09) | `passed` ✅ | Cả 2 mô hình hoàn tất vượt chỉ tiêu: XGBoost (F1=0.9535, Recall=97.62% ✅); Random Forest (F1=0.9425, Recall=97.62%, PR #16 verified ✅) |
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 2 (17–18/09) | `passed` ✅ | LinearSVC Calibrated (C=10.0) F1=0.9474, Recall=96.43%, ROC-AUC=0.9986; RBF đối chứng kém hơn; `best_model_bundle.pkl` đóng gói cho Phase 08; bộ 4 mô hình hoàn tất |
-| 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `not-started` | Confusion Matrix, Learning Curves, SHAP top-20 keywords |
+| 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `passed` ✅ | Đánh giá 4 mô hình: XGBoost (F1=0.9535, Recall=97.62%), SVM Linear (ROC-AUC=0.9986), RF (F1=0.9425), NB (F1=0.8864); 6 biểu đồ 300 DPI, SHAP Beeswarm, 69 tests PASS |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (16–20/09) | `not-started` | Streamlit app chạy, model integrated, UX người cao tuổi |
 | 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (15–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
 | 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 18:30 23/09 qua MS Teams |
