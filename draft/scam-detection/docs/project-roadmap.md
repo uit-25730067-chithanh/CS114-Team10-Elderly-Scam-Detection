@@ -127,11 +127,11 @@ gantt
 ### Thanh (Evaluation & Packaging Lead)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/06_evaluation_xai.ipynb`: Bảng so sánh 4 models (Accuracy, Precision, Recall, F1, ROC-AUC) | 🔲 (18/09 – 19/09) |
-| Trực quan hóa: Confusion Matrix so sánh, ROC Curves, Precision-Recall Curves | 🔲 (19/09) |
-| Phân tích Overfitting: Learning Curves (Train vs Validation K-Fold) | 🔲 (19/09) |
-| XAI: Trích xuất Top-20 từ khóa cảnh báo kích hoạt bẫy tâm lý (SHAP / Feature Weights) | 🔲 (19/09) |
-| `reports/model_comparison.csv` và xuất toàn bộ figures | 🔲 (19/09) |
+| `notebooks/06_evaluation_xai.ipynb`: Bảng so sánh 4 models (Accuracy, Precision, Recall, F1, ROC-AUC) | ✅ Hoàn thành (Phase 07 PASSED — 19/09) |
+| Trực quan hóa: Confusion Matrix so sánh, ROC Curves, Precision-Recall Curves | ✅ Hoàn thành (Phase 07 — 6 figures 300 DPI) |
+| Phân tích Overfitting: Learning Curves (Train vs Validation K-Fold) | ✅ Hoàn thành (Phase 07 — `learning_curves_summary.png`) |
+| XAI: Trích xuất Top-20 từ khóa cảnh báo kích hoạt bẫy tâm lý (Consensus & SHAP) | ✅ Hoàn thành (Phase 07 — `top20_keywords_barplot.png`, `shap_summary.png`) |
+| `reports/model_comparison.csv` và xuất toàn bộ figures | ✅ Hoàn thành (Phase 07 — 19/09) |
 | Pre-flight check toàn diện bằng `verify_final.py` | 🔲 (22/09) |
 | Đóng gói ZIP `25730067-25730013-25730061.zip` theo chuẩn nộp bài UIT | 🔲 (22/09) |
 
