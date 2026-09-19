@@ -59,7 +59,7 @@ def extract_consensus_keywords(models_dict: dict, feature_names: list[str], top_
 
     sorted_kws = sorted(cumulative_rank.items(), key=lambda x: x[1], reverse=True)[:top_n]
     # Normalize score between 0 and 1
-    max_val = sorted_kws[0][1] if sorted_kws else 1.0
+    max_val = sorted_kws[0][1] if (sorted_kws and sorted_kws[0][1] > 0) else 1.0
     return [(word, round(score / max_val, 4)) for word, score in sorted_kws]
 
 

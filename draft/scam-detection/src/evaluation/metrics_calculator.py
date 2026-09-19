@@ -94,7 +94,7 @@ def evaluate_single_model(model, X_test, y_test, model_name: str = "") -> dict:
     y_pred = model.predict(X_eval)
     y_proba = get_predicted_probabilities(model, X_eval)
 
-    cm = confusion_matrix(y_test, y_pred)
+    cm = confusion_matrix(y_test, y_pred, labels=[0, 1])
     tn, fp, fn, tp = cm.ravel()
 
     metrics = {
