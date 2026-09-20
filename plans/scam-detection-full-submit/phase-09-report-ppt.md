@@ -164,8 +164,8 @@ Theo yêu cầu trong [README.md](../../README.md):
 - [ ] Tài liệu tham khảo (≥10 refs IEEE)
 - [ ] File Word đúng định dạng (.docx)
 - [ ] File PDF exported
-- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup)
-- [ ] PPT có biểu đồ, screenshots demo
+- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup) — *bản hiện tại 20 slide, cấu trúc khác bảng trên, xem [Ghi chú bàn giao](#ghi-chú-bàn-giao-cho-anh-thanh-ppt--cẩm-21092026)*
+- [x] PPT có biểu đồ, screenshots demo
 - [ ] Diễn tập thuyết trình ≤15 phút
 
 ## Success Criteria
@@ -176,6 +176,30 @@ Theo yêu cầu trong [README.md](../../README.md):
 | PPT | 19 slides (15 chính + 1 divider + 3 backup), ≤15 phút |
 | Figures embedded | Tất cả biểu đồ từ Phase 07 (`draft/scam-detection/reports/figures/`) |
 | References | ≥10 tài liệu tham khảo chuẩn IEEE |
+
+## Ghi chú bàn giao cho anh Thanh (PPT — Cẩm, 21/09/2026)
+
+> Gửi anh Thanh (@25730067, reviewer Phase 09): bộ slide đã dựng xong bản đầu, có **4 vấn đề còn treo** cần anh xem trước khi bảo vệ 18:30 23/09. Chưa sửa gì ở các file dùng chung (README, demo, evaluator) vì cần anh/nhóm đồng ý.
+
+**Trạng thái bộ slide:** `draft/scam-detection/reports/slides/generate_slides.js` → `phase09_presentation.pptx` (commit `1f6770e`, `07b4f2b`). Mọi chỉ số mô hình đọc trực tiếp từ `models/*_metrics.json`; mỗi slide có speaker notes; chưa có hiệu ứng chuyển slide; chưa mở PR.
+
+**Khác biệt so với bảng 19 slide ở trên (cần anh duyệt cấu trúc):** bản dựng có **20 slide** = 15 slide chính (có slide Tài liệu tham khảo) + Cảm ơn + divider phụ lục + 3 backup (Siêu tham số, Confusion Matrices, Learning Curves). Confusion Matrix chuyển sang backup; không có backup "Pipeline & 15 đặc trưng phụ" (pipeline nằm ở slide 7).
+
+| # | Vấn đề | Cần anh làm |
+|:-:|---|---|
+| 1 | **ROC-AUC của Random Forest có 2 giá trị:** log Phase 05 (`random_forest_metrics.json`, raw 0.997552) = **99.76%**; `model_comparison.csv` và ảnh `roc_curves_comparison.png` (Phase 07 tính lại) = **99.77%**. Slide 9 dùng 99.76%, slide 10 hiện ảnh ghi 0.9977. | Chọn 1 giá trị chuẩn cho cả nhóm (anh là owner Phase 07). Slide 9 đã có câu trả lời Q&A trong speaker notes. |
+| 2 | **`alpha` của Naive Bayes bị ghi sai `0.5`, giá trị đúng là `0.01`** (xem 4 chỗ bên dưới). | Đồng ý để sửa, sau đó sinh lại CSV bằng `run_full_evaluation.py`. |
+| 3 | **Tài liệu tham khảo [4]** "Vietnamese Quality-Assured SMS Dataset, IEEE Access 2026 (doi pending)" là nguồn 1.773 mẫu bình thường — chưa xác minh được bài có tồn tại/đã xuất bản. | Xác minh tên bài, tác giả, link (anh thu thập nhóm dữ liệu này). Nếu không xác minh được: ghi "bộ dữ liệu công khai trên GitHub" kèm link thay vì trích dẫn IEEE. |
+| 4 | **Hiệu ứng chuyển slide chưa áp dụng:** `inject_transitions.py` (morph/fracture) chưa kiểm chứng trên PowerPoint thật, có nguy cơ báo "file cần sửa chữa" lúc bảo vệ. | Tùy chọn: mở PowerPoint → chọn tất cả slide → tab Transitions → Fade → Apply To All. |
+
+**Vấn đề 2 — 4 chỗ ghi `alpha=0.5` cần sửa thành `alpha=0.01` (và "Phase 04 — Thanh" thành "Phase 04 — Cẩm"):**
+
+1. `draft/scam-detection/src/evaluation/metrics_calculator.py` dòng 44–45 — **gốc lỗi** (chuỗi gõ cứng trong `MODEL_METADATA`).
+2. `draft/scam-detection/reports/model_comparison.csv` dòng 5 — được sinh ra từ mục 1 nên phải sửa mục 1 trước, nếu không lần chạy đánh giá sau sẽ ghi đè.
+3. `README.md` (gốc repo) dòng 125 — bảng kết quả.
+4. `draft/scam-detection/demo/app.py` dòng 92 — mô tả mô hình hiển thị cho người dùng demo.
+
+Bằng chứng `0.01` đúng: `models/naive_bayes.pkl` lưu `alpha=0.01`; `naive_bayes_metrics.json` có `best_alpha: 0.01`; dựng lại mô hình trên X_train/X_test chỉ cho ra F1 0.8864 / FN=6 / FP=14 với `alpha=0.01` (với `alpha=0.5` F1 chỉ 0.8402, FN=13). Các tài liệu khác (AGENTS.md, plan Phase 04, `models/README.md`, hai báo cáo audit) đều đã ghi 0.01.
 
 ## Evidence Section *(điền sau khi làm)*
 
