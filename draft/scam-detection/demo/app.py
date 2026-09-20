@@ -379,12 +379,11 @@ def main():
     # CSS Tinh gọn Padding & Tối ưu Trợ Năng Người Cao Tuổi
     custom_css = f"""
     <style>
-        /* Ẩn hoàn toàn các nút rác của Streamlit (Deploy, Manage App, MainMenu 3 chấm) */
+        /* Ẩn triệt để các phần tử quản trị và footer nền tảng Streamlit */
         .stAppDeployButton, [data-testid="stAppDeployButton"],
-        [data-testid="manage-app-button"] {{
-            display: none !important;
-        }}
-        #MainMenu, [data-testid="stMainMenu"] {{
+        [data-testid="manage-app-button"],
+        #MainMenu, [data-testid="stMainMenu"],
+        footer, [data-testid="stFooter"] {{
             display: none !important;
         }}
 
