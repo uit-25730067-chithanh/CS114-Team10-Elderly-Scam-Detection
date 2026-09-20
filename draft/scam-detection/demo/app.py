@@ -379,38 +379,31 @@ def main():
     # CSS Tinh gọn Padding & Tối ưu Trợ Năng Người Cao Tuổi
     custom_css = f"""
     <style>
-        /* Ẩn hoàn toàn các nút rác, viewer badge và thông tin account của Streamlit Cloud */
+        /* Ẩn nút Deploy và Menu 3 chấm của Streamlit */
         .stAppDeployButton, [data-testid="stAppDeployButton"],
         #MainMenu, [data-testid="stMainMenu"],
-        footer, [data-testid="stFooter"],
-        [class*="viewerBadge"], [data-testid="stViewerBadge"], .stViewerBadge,
-        [data-testid="manage-app-button"], [class*="manageAppButton"],
-        [data-testid="stToolbar"], [data-testid="stDecoration"],
-        [data-testid="stStatusWidget"],
-        .viewerBadge_container__1QSob,
-        div[class*="ProfileBadge"],
-        div[class*="ViewerBadge"],
-        div[class*="ManageApp"] {{
+        footer, [data-testid="stFooter"] {{
             display: none !important;
-            visibility: hidden !important;
-            height: 0px !important;
-            width: 0px !important;
-            overflow: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
         }}
 
-        /* Thanh Header trong suốt, không che chắn hay cản trở click lên Banner */
+        /* Thanh Header trong suốt, cho phép tương tác nút bấm */
         header[data-testid="stHeader"] {{
             background: transparent !important;
             pointer-events: none !important;
         }}
-        header[data-testid="stHeader"] button {{
+        header[data-testid="stHeader"] button,
+        header[data-testid="stHeader"] [data-testid="stExpandSidebarButton"] {{
             pointer-events: auto !important;
         }}
 
-        /* Nút mở Sidebar (>>) thẩm mỹ, nền trắng có viền và đổ bóng rõ ràng */
-        button[data-testid="stExpandSidebarButton"] {{
+        /* Nút mở Sidebar (>>) thẩm mỹ, nền trắng có viền và đổ bóng rõ ràng - Luôn luôn hiển thị */
+        button[data-testid="stExpandSidebarButton"],
+        [data-testid="stExpandSidebarButton"],
+        button[aria-label*="sidebar" i],
+        button[aria-label*="Sidebar" i] {{
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
             background: #ffffff !important;
             border: 1.5px solid #cbd5e1 !important;
             border-radius: 8px !important;
@@ -418,6 +411,7 @@ def main():
             pointer-events: auto !important;
             margin-top: 6px !important;
             margin-left: 6px !important;
+            z-index: 999999 !important;
         }}
 
         /* Đảm bảo Sidebar ẩn triệt để khi Collapsed, không để lọt phần thừa sang trang chính */
