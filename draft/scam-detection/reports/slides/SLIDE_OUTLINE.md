@@ -13,7 +13,7 @@
 |---------|-------------|
 | **Thời lượng thuyết trình?** | 15 phút (luân phiên 3 thành viên) |
 | **Đối tượng nghe?** | ThS. Cáp Phạm Đình Thăng + lớp CS114.F31.CN2.TTNT |
-| **Theme?** | **Sandwich** — Dark Academic Navy Cover + White Content (Gold accent) |
+| **Theme?** | **Navy-Blue Gradient** — đồng bộ Streamlit Demo App (`#0B2545→#1E5FC2` header, White content, Red alert, Amber risk) |
 | **Speaker Notes?** | Có — 3-5 gạch đầu dòng/slide |
 | **Script file?** | `generate_slides.js` → `phase09_presentation.pptx` |
 | **Slides mục tiêu?** | 15 nội dung + 1 divider appendix + 3 backup = 19 tổng |

@@ -1,6 +1,7 @@
 /**
  * generate_slides.js — CS114 Final Phase 09 PPT Template
- * Skill: uit:powerpoint-slides (PptxGenJS + Sandwich Gold Theme)
+ * Skill: uit:powerpoint-slides (PptxGenJS + Navy-Blue Gradient Theme)
+ * Theme: Đồng bộ với Streamlit Demo App (Navy→Blue header, White content, Red alert, Amber warning)
  *
  * Branch: feat/phase-09-ppt-template
  * Owner: Bùi Thị Mỷ Cẩm (25730013) — Cẩm completes this template
@@ -30,26 +31,30 @@ const PptxGenJS = require("pptxgenjs");
 const path = require("path");
 const fs = require("fs");
 
-// ─── THEME: Sandwich Gold (Flagship UIT Academic Template) ───────────────────
+// ─── THEME: Navy-Blue Gradient (Đồng bộ Streamlit Demo App) ─────────────────
+// App colors: header gradient #0B2545→#1E5FC2, CTA blue #1e40af,
+//             alert red #dc2626, warning amber #F59E0B, bg #f1f5f9
 const T = {
-  // Sandwich: Dark cover/dividers + Light content slides
-  coverBg: "0B132B",       // Dark Academic Navy
-  contentBg: "FFFFFF",     // Pure White
-  sectionBg: "0B132B",     // Dark Navy for dividers
-  accent: "F59E0B",        // Gold accent
-  accentDark: "D97706",    // Darker gold
-  text: "1F2937",          // Near-black text
-  textLight: "FFFFFF",     // White text (for dark slides)
+  coverBg: "0B2545",       // Deep Navy — khớp header app (từ gradient)
+  coverBg2: "1E5FC2",      // Blue — điểm cuối gradient header app
+  contentBg: "FFFFFF",     // Pure White content slides
+  sectionBg: "0B2545",     // Navy divider slides
+  accent: "1E5FC2",        // Primary Blue — khớp CTA button app
+  accentDark: "1e40af",    // Deep Blue — khớp màu chữ link app
+  accentRed: "DC2626",     // Alert Red — khớp nút cảnh báo app (Gọi 156/113)
+  accentAmber: "F59E0B",   // Amber Warning — khớp risk meter app
+  text: "1F2937",          // Near-black body text
+  textLight: "FFFFFF",     // White text on dark slides
   textMuted: "6B7280",     // Muted gray
-  headerBg: "0B132B",      // Header bar color
-  positive: "059669",      // Green for positive metrics
+  contentSubBg: "F1F5F9",  // Xám nhạt — khớp background tổng thể app
+  positive: "15803D",      // Green metrics — khớp "Trực tuyến 24/7" badge
   neutral: "6B7280",
 };
 
 // ─── TYPOGRAPHY ──────────────────────────────────────────────────────────────
 const F = {
   cover: { size: 32, bold: true, color: T.textLight, font: "Georgia" },
-  coverSub: { size: 14, color: T.accent, font: "Calibri" },
+  coverSub: { size: 14, color: T.textLight, font: "Calibri" },   // Trắng trên Navy
   sectionTitle: { size: 28, bold: true, color: T.textLight, font: "Georgia" },
   titleBar: { size: 18, bold: true, color: T.text, font: "Georgia" },
   body: { size: 14, color: T.text, font: "Calibri" },
@@ -79,73 +84,91 @@ const FIG = path.join(__dirname, "../figures");
 
 // ─── HELPER: Header bar (add to every content slide) ─────────────────────────
 function addHeader(slide, title, section) {
-  // University label (left, bounded w <= 2.7")
-  slide.addText("UIT — CS114", {
-    x: M, y: 0.05, w: 2.5, h: 0.35,
-    fontSize: 10, color: T.textMuted, font: "Calibri",
-  });
-  // Navigation pill (right)
-  if (section) {
-    slide.addText(section, {
-      x: 4.11, y: 0.05, w: 5.39, h: 0.35,
-      fontSize: 10, color: T.textMuted, font: "Calibri", align: "right",
-    });
-  }
-  // Divider line
+  // Top accent bar (Navy-Blue gradient via solid Navy — PptxGenJS gradient workaround)
   slide.addShape(pptx.ShapeType.rect, {
-    x: M, y: 0.45, w: CW, h: 0.02,
+    x: 0, y: 0, w: SW, h: 0.55,
+    fill: { color: T.coverBg },
+  });
+  // Thin blue accent line at bottom of header bar
+  slide.addShape(pptx.ShapeType.rect, {
+    x: 0, y: 0.55, w: SW, h: 0.035,
     fill: { color: T.accent },
   });
-  // Slide title
+  // University label (left, white on Navy)
+  slide.addText("UIT — CS114", {
+    x: M, y: 0.08, w: 2.5, h: 0.38,
+    fontSize: 10, color: "BFDBFE", font: "Calibri",  // light blue tint
+  });
+  // Navigation pill (right, white on Navy)
+  if (section) {
+    slide.addText(section, {
+      x: 4.11, y: 0.08, w: 5.39, h: 0.38,
+      fontSize: 10, color: "BFDBFE", font: "Calibri", align: "right",
+    });
+  }
+  // Slide title (below header bar, dark text on white)
   slide.addText(title, {
-    x: M, y: 0.5, w: CW, h: 0.55,
+    x: M, y: 0.65, w: CW, h: 0.45,
     ...F.titleBar, shrinkText: true,
   });
 }
 
 // ─── HELPER: Accent card ──────────────────────────────────────────────────────
 function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
-  const fillColor = opts.fill || "F3F4F6";
-  slide.addShape(pptx.ShapeType.rect, { x, y, w, h, fill: { color: fillColor }, line: { color: T.accent, width: 0.5 } });
-  // Accent bar left
-  slide.addShape(pptx.ShapeType.rect, { x, y, w: 0.06, h, fill: { color: T.accent } });
+  const fillColor = opts.fill || T.contentSubBg;   // #F1F5F9 — khớp app bg
+  const borderColor = opts.border || T.accent;       // Blue border mặc định
+  slide.addShape(pptx.ShapeType.rect, { x, y, w, h, fill: { color: fillColor }, line: { color: borderColor, width: 0.5 } });
+  // Accent bar left (Blue — khớp app left-border style)
+  slide.addShape(pptx.ShapeType.rect, { x, y, w: 0.06, h, fill: { color: borderColor } });
   const px = x + 0.15, pw = w - 0.25;
   // Title
-  slide.addText(title, { x: px, y: y + 0.08, w: pw, h: 0.35, fontSize: F.cardTitle.size, bold: true, color: opts.titleColor || T.text, font: "Calibri", shrinkText: true });
+  slide.addText(title, { x: px, y: y + 0.08, w: pw, h: 0.35, fontSize: F.cardTitle.size, bold: true, color: opts.titleColor || T.accentDark, font: "Calibri", shrinkText: true });
   // Body
   const bodyText = bodyLines.map(l => ({ text: l, options: { breakLine: true } }));
   slide.addText(bodyText, { x: px, y: y + 0.45, w: pw, h: h - 0.55, fontSize: F.body.size, color: opts.bodyColor || T.text, font: "Calibri", shrinkText: true, margin: [2, 0, 4, 0] });
 }
 
-// ─── SLIDE 1: COVER ───────────────────────────────────────────────────────────
+// ─── SLIDE 1: COVER (Navy→Blue gradient — khớp app header) ──────────────────
 (function slide01_cover() {
   const slide = pptx.addSlide();
-  slide.background = { color: T.coverBg };
+  slide.background = { color: T.coverBg };  // Deep Navy #0B2545
 
-  // TODO Cẩm: Add UIT logo image if available
+  // Blue gradient strip (simulates app header gradient)
+  slide.addShape(pptx.ShapeType.rect, {
+    x: 0, y: 0, w: SW, h: SH,
+    fill: { type: "solid", color: T.coverBg },
+  });
+  // Subtle blue overlay bottom half (gradient effect)
+  slide.addShape(pptx.ShapeType.rect, {
+    x: 0, y: 2.8, w: SW, h: 2.825,
+    fill: { color: "102E5E" },   // Mid Navy — transition
+  });
+
+  // TODO Cẩm: Add UIT shield logo if available
   // slide.addImage({ path: path.join(__dirname, "../../../../docs/assets/logo_uit.png"), x: M, y: 0.15, w: 1.2, h: 0.6 });
 
+  // Shield emoji label (khớp 🛡️ trong app)
+  slide.addText("🛡️", { x: M, y: 0.9, w: CW, h: 0.6, fontSize: 36, align: "center" });
+
   slide.addText("PHÁT HIỆN TIN NHẮN LỪA ĐẢO\nNHẮM VÀO NGƯỜI CAO TUỔI", {
-    x: M, y: 1.3, w: CW, h: 1.5,
+    x: M, y: 1.5, w: CW, h: 1.4,
     fontSize: 28, bold: true, color: T.textLight, font: "Georgia",
     align: "center", shrinkText: true,
   });
   slide.addText("Vietnamese Elderly Scam Detection", {
-    x: M, y: 2.85, w: CW, h: 0.4,
-    fontSize: 14, color: T.accent, font: "Calibri", align: "center", italic: true,
+    x: M, y: 2.95, w: CW, h: 0.35,
+    fontSize: 13, color: "BFDBFE", font: "Calibri", align: "center", italic: true,
   });
-  // Divider
-  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 3.3, w: 5, h: 0.03, fill: { color: T.accent } });
-  // Course info
+  // Divider (Blue accent — khớp app CTA button color)
+  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 3.35, w: 5, h: 0.04, fill: { color: T.accent } });
   slide.addText("CS114 — Máy học  |  Nhóm 10  |  ThS. Cáp Phạm Đình Thăng", {
-    x: M, y: 3.4, w: CW, h: 0.35, fontSize: 12, color: T.accent, font: "Calibri", align: "center",
+    x: M, y: 3.45, w: CW, h: 0.35, fontSize: 12, color: "93C5FD", font: "Calibri", align: "center",
   });
-  // Team members
   slide.addText("Đặng Chí Thanh (25730067)  ·  Bùi Thị Mỷ Cẩm (25730013)  ·  Hoàng Cao Sơn (25730061)", {
-    x: M, y: 3.8, w: CW, h: 0.35, fontSize: 11, color: T.textLight, font: "Calibri", align: "center",
+    x: M, y: 3.85, w: CW, h: 0.35, fontSize: 11, color: T.textLight, font: "Calibri", align: "center",
   });
   slide.addText("23/09/2026  |  UIT — ĐHQG-HCM", {
-    x: M, y: 4.2, w: CW, h: 0.3, fontSize: 10, color: T.textMuted, font: "Calibri", align: "center",
+    x: M, y: 4.25, w: CW, h: 0.3, fontSize: 10, color: "6B7280", font: "Calibri", align: "center",
   });
 
   slide.addNotes("SLIDE 1 — COVER\n- Người trình bày đầu tiên: Đặng Chí Thanh (PM)\n- Giới thiệu tên đề tài và các thành viên\n- Nhấn mạnh: đề tài bảo vệ người cao tuổi khỏi lừa đảo tin nhắn tiếng Việt");
@@ -318,16 +341,16 @@ function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
 // ─── SLIDE 8: SECTION DIVIDER — Mô hình ─────────────────────────────────────
 (function slide08_divider_models() {
   const slide = pptx.addSlide();
-  slide.background = { color: T.sectionBg };
+  slide.background = { color: T.sectionBg };  // Navy
   slide.addText("Mô hình &\nKết quả", {
     x: M, y: 1.5, w: CW, h: 2.0,
     fontSize: 36, bold: true, color: T.textLight, font: "Georgia", align: "center", shrinkText: true,
   });
   slide.addText("Naive Bayes  ·  Random Forest  ·  XGBoost  ·  SVM Linear", {
     x: M, y: 3.65, w: CW, h: 0.4,
-    fontSize: 13, color: T.accent, font: "Calibri", align: "center",
+    fontSize: 13, color: "93C5FD", font: "Calibri", align: "center",  // Light Blue text
   });
-  slide.addShape(pptx.ShapeType.rect, { x: 2, y: 3.57, w: 6, h: 0.03, fill: { color: T.accent } });
+  slide.addShape(pptx.ShapeType.rect, { x: 2, y: 3.57, w: 6, h: 0.04, fill: { color: T.accent } });
 })();
 
 // ─── SLIDE 9: MODEL COMPARISON TABLE ─────────────────────────────────────────
@@ -367,12 +390,12 @@ function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
     rowH: 0.55,
   });
 
-  // Insight card
+  // Insight card (Amber warning — khớp risk meter app)
   addCard(slide, M, CY + 2.65, CW, 0.9,
     "Kết luận: XGBoost — Mô hình tốt nhất tổng thể",
     ["FN=2 (chỉ bỏ lọt 2 tin lừa đảo trên 42 mẫu test lừa đảo)",
      "Tất cả 4 mô hình vượt chỉ tiêu: F1 ≥ 88%, Recall ≥ 92%"],
-    { fill: "FEF3C7" }
+    { fill: "FEF3C7", border: T.accentAmber }
   );
 
   slide.addNotes("SLIDE 9 — MODEL TABLE\n- XGBoost best overall: F1=95.35%, Recall=97.62%\n- SVM có ROC-AUC cao nhất (99.86%) nhưng F1 thấp hơn XGBoost\n- Naive Bayes vẫn đạt F1=88.64% — solid baseline\n- Nhấn: tất cả đều vượt chỉ tiêu GV yêu cầu");
@@ -495,12 +518,15 @@ function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
     "🔭 Real-time monitoring dashboard",
   ];
 
+  // Kết quả: Blue card (khớp màu chính app)
   addCard(slide, M, CY + 0.1, 4.3, CH - 0.1,
-    "Kết quả đạt được", achieved.map(a => a)
+    "Kết quả đạt được", achieved.map(a => a),
+    { fill: "EFF6FF", border: T.accent }       // Light blue fill
   );
+  // Tương lai: Amber card (khớp risk meter warning color)
   addCard(slide, 5.2, CY + 0.1, 4.3, CH - 0.1,
     "Hướng phát triển", future.map(f => f),
-    { fill: "EFF6FF" }
+    { fill: "FFFBEB", border: T.accentAmber }  // Light amber fill
   );
 
   slide.addNotes("SLIDE 14 — KẾT LUẬN\n- Nhóm đã hoàn thành đầy đủ tất cả mục tiêu đề ra\n- XGBoost là best model với F1=95.35%\n- Điểm mạnh: dataset thực tế + XAI giải thích + demo live\n- Mở ra: tích hợp PhoBERT và mở rộng sang voice scam");
@@ -533,16 +559,17 @@ function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
 // ─── SLIDE 16: THANK YOU ─────────────────────────────────────────────────────
 (function slide16_thankyou() {
   const slide = pptx.addSlide();
-  slide.background = { color: T.coverBg };
+  slide.background = { color: T.coverBg };  // Navy — đồng bộ Cover
 
+  slide.addText("🛡️", { x: M, y: 0.8, w: CW, h: 0.55, fontSize: 32, align: "center" });
   slide.addText("Cảm ơn Thầy và các bạn\nđã lắng nghe!", {
-    x: M, y: 1.2, w: CW, h: 1.6,
+    x: M, y: 1.35, w: CW, h: 1.5,
     fontSize: 30, bold: true, color: T.textLight, font: "Georgia", align: "center", shrinkText: true,
   });
-  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 2.9, w: 5, h: 0.04, fill: { color: T.accent } });
+  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 2.95, w: 5, h: 0.04, fill: { color: T.accent } });
 
   slide.addText("Nhóm 10 — CS114.F31.CN2.TTNT  |  23/09/2026", {
-    x: M, y: 3.0, w: CW, h: 0.35, fontSize: 13, color: T.accent, font: "Calibri", align: "center",
+    x: M, y: 3.05, w: CW, h: 0.35, fontSize: 13, color: "93C5FD", font: "Calibri", align: "center",
   });
 
   const members = [
@@ -551,10 +578,10 @@ function addCard(slide, x, y, w, h, title, bodyLines, opts = {}) {
     "Hoàng Cao Sơn  25730061@ms.uit.edu.vn",
   ];
   slide.addText(members.map(m => ({ text: m, options: { breakLine: true } })), {
-    x: M, y: 3.45, w: CW, h: 0.9, fontSize: 12, color: T.textLight, font: "Calibri", align: "center",
+    x: M, y: 3.5, w: CW, h: 0.9, fontSize: 12, color: T.textLight, font: "Calibri", align: "center",
   });
   slide.addText("UIT — Trường Đại học Công nghệ Thông tin, ĐHQG-HCM", {
-    x: M, y: 4.45, w: CW, h: 0.3, fontSize: 10, color: T.textMuted, font: "Calibri", align: "center",
+    x: M, y: 4.5, w: CW, h: 0.3, fontSize: 10, color: "6B7280", font: "Calibri", align: "center",
   });
 
   slide.addNotes("SLIDE 16 — THANK YOU\n- Mời Thầy và hội đồng đặt câu hỏi\n- Backup slides có: hyperparameters, confusion matrices, learning curves");
