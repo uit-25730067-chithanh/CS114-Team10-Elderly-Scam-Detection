@@ -47,6 +47,7 @@ def render_risk_meter(probability: float, font_multiplier: float = 1.0) -> None:
         padding: clamp(14px, 3.5vw, 24px);
         margin-bottom: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        animation: smoothFadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     ">
         <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px;">
             <div style="font-size: clamp(19px, 4.5vw, {base_title_size}px); font-weight: 800; color: {text_color}; line-height: 1.35; flex: 1 1 220px; min-width: 0;">

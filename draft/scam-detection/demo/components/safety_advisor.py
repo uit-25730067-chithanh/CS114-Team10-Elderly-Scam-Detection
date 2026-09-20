@@ -100,104 +100,150 @@ def diagnose_scam_category(text: str) -> str:
 
 
 
-def render_safety_advisor(category: str, is_scam: bool, font_multiplier: float = 1.0) -> None:
-    """Hiển thị bảng khuyến cáo an toàn thiết kế dành riêng cho người cao tuổi (kèm nút gọi khẩn cấp)."""
+def render_safety_advisor(
+    category: str,
+    is_scam: bool,
+    font_multiplier: float = 1.0,
+    user_text: str = "",
+    aux_dict: dict = None,
+) -> None:
+    """Hiển thị bảng khuyến cáo an toàn thiết kế sát sao với từng nội dung tin nhắn của người cao tuổi."""
     info = TRAP_DEFINITIONS.get(category, TRAP_DEFINITIONS["none"])
+    if is_scam and category == "none":
+        info = {
+            "title": "⚠️ Bẫy Thao Túng Tâm Lý: THỦ ĐOẠN LỪA ĐẢO MỚI",
+            "description": "Mô hình AI phát hiện tin nhắn có các đặc trưng thao túng tâm lý, hối thúc hoặc câu dụ tương đồng với các thủ đoạn lừa đảo tinh vi.",
+            "color": "#c0392b"
+        }
     base_font = int(18 * font_multiplier)
     title_font = int(22 * font_multiplier)
+    user_lower = user_text.lower() if user_text else ""
+    aux = aux_dict or {}
 
     # Thẻ neo phục vụ Mobile Auto-scroll
     st.markdown('<div id="verdict-anchor" style="scroll-margin-top: 80px;"></div>', unsafe_allow_html=True)
 
     if is_scam:
+        # Bảng phân tích bản chất bẫy tâm lý
         st.markdown(f"""
         <div style="
             background-color: #fff9f9;
+            border: 1.5px solid {info['color']}55;
             border-left: 6px solid {info['color']};
             border-radius: 12px;
             padding: clamp(14px, 3.5vw, 20px);
-            margin: 16px 0;
+            margin: 16px 0 12px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         ">
-            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: {info['color']}; margin-bottom: 10px; line-height: 1.35;">
+            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: {info['color']}; margin-bottom: 8px; line-height: 1.35;">
                 {info['title']}
             </div>
-            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #333333; margin-bottom: 16px;">
+            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #333333; margin-bottom: 12px;">
                 <b>Dấu hiệu nhận biết:</b> {info['description']}
             </p>
-            <div style="font-size: clamp(15px, 3.8vw, {base_font}px); font-weight: 700; color: #c0392b; margin-bottom: 8px;">
-                ⚠️ Lời khuyên quan trọng dành cho Ông/Bà:
-            </div>
-            <ul style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.7; color: #2c3e50; margin: 0; padding-left: 20px;">
-                {"".join(f'<li style="margin-bottom: 8px;">{tip}</li>' for tip in info['warning_tips'])}
-            </ul>
         </div>
         """, unsafe_allow_html=True)
 
-        # Hộp nguyên tắc "3 KHÔNG & 1 GỌI" kèm Nút gọi khẩn cấp 1-chạm (Life-Safety Action Anchor)
-        st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, #fce4ec 0%, #fff3e0 100%);
-            border: 3px solid #ff7043;
-            border-radius: 16px;
-            padding: clamp(14px, 3.5vw, 22px);
-            margin-top: 18px;
-        ">
-            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 900; color: #d84315; text-align: center; margin-bottom: 14px; line-height: 1.35;">
-                🛡️ QUY TẮC AN TOÀN "3 KHÔNG & 1 GỌI" CHO NGƯỜI CAO TUỔI
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; font-size: clamp(14px, 3.5vw, {base_font}px);">
-                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
-                    ❌ <b>1. KHÔNG bấm vào đường link lạ:</b> Kẻ xấu có thể cài mã độc để trộm sạch tiền ngân hàng.
-                </div>
-                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
-                    ❌ <b>2. KHÔNG cung cấp mật khẩu, mã OTP:</b> Nhân viên ngân hàng và Công an không bao giờ hỏi mật khẩu.
-                </div>
-                <div style="background: #ffffff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #e53935; line-height: 1.5;">
-                    ❌ <b>3. KHÔNG chuyển tiền trong lúc hoảng sợ:</b> Càng bị hối thúc dọa dẫm thì càng phải bình tĩnh dừng lại.
-                </div>
-                <div style="background: #e8f5e9; padding: 14px 18px; border-radius: 12px; border-left: 6px solid #2e7d32; font-weight: 700; color: #1b5e20;">
-                    📞 <b>BƯỚC DUY NHẤT CẦN LÀM:</b> GỌI NGAY CHO CON CHÁU HOẶC BẤM NÚT ĐỂ GỌI TRỢ GIÚP KHẨN CẤP:
-                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
-                        <a href="tel:156" style="
-                            width: 100%;
-                            box-sizing: border-box;
-                            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
-                            color: #ffffff !important;
-                            text-decoration: none;
-                            padding: 13px 16px;
-                            border-radius: 12px;
-                            font-size: clamp(16px, 4vw, 20px);
-                            font-weight: 900;
-                            text-align: center;
-                            box-shadow: 0 4px 10px rgba(183, 28, 28, 0.4);
-                            display: block;
-                        ">
-                            ☎️ BẤM GỌI TỔNG ĐÀI 156 (Miễn phí)
-                        </a>
-                        <a href="tel:113" style="
-                            width: 100%;
-                            box-sizing: border-box;
-                            background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
-                            color: #ffffff !important;
-                            text-decoration: none;
-                            padding: 13px 16px;
-                            border-radius: 12px;
-                            font-size: clamp(16px, 4vw, 20px);
-                            font-weight: 900;
-                            text-align: center;
-                            box-shadow: 0 4px 10px rgba(191, 54, 12, 0.4);
-                            display: block;
-                        ">
-                            🚨 BẤM GỌI CÔNG AN 113
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        # Xây dựng danh sách khuyến nghị hành động THỰC TẾ, SÁT SAO với đúng nội dung tin nhắn
+        action_cards = []
+
+        # 1. Khuyến nghị theo nhóm bẫy cụ thể (Domain-specific Action)
+        if category == "fear_authority":
+            action_cards.append({
+                "icon": "🏛️",
+                "title": "Cơ quan Công quyền KHÔNG BAO GIỜ đòi tiền qua mạng:",
+                "detail": "Công an, Tòa án và CSGT không gửi thông báo phạt nguội hay dọa bắt qua SMS/Zalo. Giấy phạt nguội chỉ gửi bằng văn bản giấy qua bưu điện về tận nhà. Tra cứu chuẩn xác chỉ qua website chính thức: csgt.vn.",
+                "color": "#e53935"
+            })
+        elif category == "family_emergency":
+            action_cards.append({
+                "icon": "📱",
+                "title": "Bác hãy gọi điện thoại xác thực trực tiếp ngay:",
+                "detail": "Bác hãy lấy máy gọi ngay số điện thoại riêng của con/cháu (hoặc gọi qua Zalo/gọi video nhìn mặt). Bệnh viện luôn cấp cứu bảo toàn tính mạng bệnh nhân trước, KHÔNG BAO GIỜ bắt người nhà chuyển tiền qua SMS mới tiến hành mổ!",
+                "color": "#e53935"
+            })
+        elif category == "public_service":
+            action_cards.append({
+                "icon": "🏢",
+                "title": "Cập nhật VNeID / Dịch vụ công chỉ làm tại Công an xã/phường:",
+                "detail": "Cán bộ không gọi điện hay nhắn tin hướng dẫn kích hoạt định danh qua link ngoài. Bác tuyệt đối không tải tệp lạ đuôi .apk ngoài kho CH Play / App Store để tránh bị kẻ gian chiếm quyền điều khiển điện thoại.",
+                "color": "#e53935"
+            })
+        elif category == "health_gift":
+            action_cards.append({
+                "icon": "🎁",
+                "title": "Cảnh giác bẫy trúng thưởng xe máy & tặng thuốc miễn phí:",
+                "detail": "Không có chương trình tri ân thật nào bắt người nhận phải đóng trước tiền thuế hay phí giao hàng. Bác tuyệt đối không chuyển tiền và không mua các loại thuốc đông y không có nguồn gốc được quảng cáo qua tin nhắn.",
+                "color": "#e53935"
+            })
+
+        # 2. Khuyến nghị nếu phát hiện có đường link lạ (URL / Link detected)
+        has_url = aux.get("num_urls", 0) > 0 or any(k in user_lower for k in ["http", "bit.ly", ".apk", "www.", ".com", ".vn"])
+        if has_url:
+            action_cards.append({
+                "icon": "🔗",
+                "title": "Tin nhắn có chứa đường liên kết (link) nghi vấn:",
+                "detail": "Kẻ xấu thường dùng link lạ để dẫn dụ người cao tuổi cài mã độc đánh cắp tài khoản ngân hàng. Bác tuyệt đối KHÔNG ĐƯỢC BẤM vào bất kỳ đường link nào trong tin nhắn này!",
+                "color": "#d97706"
+            })
+
+        # 3. Khuyến nghị nếu phát hiện có yêu cầu tiền bạc / số tài khoản
+        has_money = aux.get("num_money_mentions", 0) > 0 or any(k in user_lower for k in ["chuyển", "stk", "tài khoản", "ngân hàng", "triệu", "vnd", "tiền"])
+        if has_money:
+            action_cards.append({
+                "icon": "🛑",
+                "title": "Phát hiện yêu cầu chuyển tiền / giao dịch tài chính:",
+                "detail": "Bác hãy bình tĩnh dừng lại ít nhất 15 phút, KHÔNG chuyển bất kỳ khoản tiền nào cho đến khi được con cháu hoặc người thân trong gia đình kiểm tra tận mắt.",
+                "color": "#b91c1c"
+            })
+
+        # Fallback an toàn nếu chưa match thẻ nào
+        if not action_cards:
+            action_cards.append({
+                "icon": "🛡️",
+                "title": "Cảnh giác trước yêu cầu lạ:",
+                "detail": "Bác tuyệt đối không cung cấp mật khẩu, mã OTP hoặc làm theo chỉ dẫn trong tin nhắn này. Hãy hỏi ý kiến người thân trước khi thực hiện.",
+                "color": "#e53935"
+            })
+
+        # Render khối hướng dẫn xử lý khẩn cấp sát sao (không dùng khoảng thụt đầu dòng 4+ spaces tránh lỗi Markdown code block)
+        cards_html = "".join([
+            f'<div style="background: #ffffff; padding: 12px 16px; border-radius: 10px; border-left: 5px solid {card["color"]}; line-height: 1.55; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">'
+            f'<div style="font-size: clamp(14px, 3.5vw, {base_font}px); font-weight: 800; color: #0f172a; margin-bottom: 4px;">'
+            f'{card["icon"]} {card["title"]}</div>'
+            f'<div style="font-size: clamp(13px, 3.2vw, {base_font - 1}px); color: #334155;">'
+            f'{card["detail"]}</div></div>'
+            for card in action_cards
+        ])
+
+        hotlines_html = (
+            f'<div style="background: #e8f5e9; padding: 14px 16px; border-radius: 12px; border-left: 5px solid #2e7d32; font-weight: 700; color: #1b5e20; margin-top: 6px;">'
+            f'📞 BÁC HÃY GỌI TRỢ GIÚP KHẨN CẤP HOẶC GỌI CHO CON CHÁU:'
+            f'<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">'
+            f'<a href="tel:156" class="action-hotline-btn" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); color: #ffffff !important; text-decoration: none !important; padding: 12px 16px; border-radius: 10px; font-size: clamp(15px, 3.8vw, 18px); font-weight: 900; text-align: center; box-shadow: 0 3px 8px rgba(183, 28, 28, 0.4); display: block;"><span style="color: #ffffff !important; font-weight: 900;">☎️ BẤM GỌI TỔNG ĐÀI 156</span></a>'
+            f'<a href="tel:113" class="action-hotline-btn" style="width: 100%; box-sizing: border-box; background: linear-gradient(135deg, #e65100 0%, #bf360c 100%); color: #ffffff !important; text-decoration: none !important; padding: 12px 16px; border-radius: 10px; font-size: clamp(15px, 3.8vw, 18px); font-weight: 900; text-align: center; box-shadow: 0 3px 8px rgba(191, 54, 12, 0.4); display: block;"><span style="color: #ffffff !important; font-weight: 900;">🚨 BẤM GỌI CÔNG AN 113</span></a>'
+            f'</div></div>'
+        )
+
+        full_action_box_html = (
+            f'<div style="background: linear-gradient(135deg, #fce4ec 0%, #fff3e0 100%); border: 2.5px solid #ff7043; border-radius: 16px; padding: clamp(14px, 3.5vw, 20px); margin-top: 14px; margin-bottom: 24px;">'
+            f'<div style="font-size: clamp(17px, 4vw, {title_font}px); font-weight: 900; color: #d84315; text-align: center; margin-bottom: 14px; line-height: 1.35;">🛡️ HÀNH ĐỘNG CẦN LÀM NGAY DÀNH CHO ÔNG/BÀ</div>'
+            f'<div style="display: flex; flex-direction: column; gap: 4px;">'
+            f'{cards_html}'
+            f'{hotlines_html}'
+            f'</div></div>'
+        )
+
+        st.markdown(full_action_box_html, unsafe_allow_html=True)
 
     else:
+        # Trường hợp tin nhắn an toàn (ngân hàng, sinh hoạt)
+        is_bank = any(k in user_lower for k in ["vcb", "vietcombank", "bidv", "techcombank", "mbbank", "agribank", "số dư", "so du", "giao dịch", "vnd", "tài khoản"])
+        if is_bank:
+            safe_desc = "Hệ thống nhận diện đây là thông báo biến động số dư hoặc giao dịch ngân hàng thông thường. Không chứa từ ngữ đe dọa, hối thúc hay đường link giả mạo."
+        else:
+            safe_desc = "Hệ thống xác nhận đây là tin nhắn bình thường hoặc trao đổi sinh hoạt gia đình, không phát hiện bẫy tâm lý nguy hiểm."
+
         st.markdown(f"""
         <div style="
             background-color: #f1f8e9;
@@ -205,13 +251,17 @@ def render_safety_advisor(category: str, is_scam: bool, font_multiplier: float =
             border-radius: 12px;
             padding: clamp(14px, 3.5vw, 20px);
             margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         ">
-            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: #33691e; margin-bottom: 10px; line-height: 1.35;">
-                {info['title']}
+            <div style="font-size: clamp(18px, 4.2vw, {title_font}px); font-weight: 800; color: #33691e; margin-bottom: 8px; line-height: 1.35;">
+                ✅ TIN NHẮN BÌNH THƯỜNG / AN TOÀN
             </div>
-            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #2e7d32;">
-                Hệ thống xác nhận đây là tin nhắn bình thường. Tuy vậy, Ông/Bà vẫn luôn nhớ <b>không bao giờ gửi mã OTP ngân hàng</b> cho bất kỳ ai nhé!
+            <p style="font-size: clamp(14px, 3.5vw, {base_font}px); line-height: 1.6; color: #2e7d32; margin-bottom: 10px;">
+                {safe_desc}
             </p>
+            <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #558b2f; font-size: clamp(13px, 3vw, {base_font - 2}px); color: #1e293b; line-height: 1.5;">
+                💡 <b>Lưu ý bảo mật thường nhật:</b> Ngân hàng không bao giờ yêu cầu khách hàng cung cấp mật khẩu đăng nhập hay mã xác thực OTP qua điện thoại hoặc tin nhắn.
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
