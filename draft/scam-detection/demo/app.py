@@ -379,31 +379,25 @@ def main():
     # CSS Tinh gọn Padding & Tối ưu Trợ Năng Người Cao Tuổi
     custom_css = f"""
     <style>
-        /* Ẩn nút Deploy và Menu 3 chấm của Streamlit */
-        .stAppDeployButton, [data-testid="stAppDeployButton"],
-        #MainMenu, [data-testid="stMainMenu"],
-        footer, [data-testid="stFooter"] {{
+        /* Ẩn hoàn toàn các nút rác của Streamlit (Deploy, Manage App, MainMenu 3 chấm) */
+        .stAppDeployButton, [data-testid="stAppDeployButton"] {{
+            display: none !important;
+        }}
+        #MainMenu, [data-testid="stMainMenu"] {{
             display: none !important;
         }}
 
-        /* Thanh Header trong suốt, cho phép tương tác nút bấm */
+        /* Thanh Header trong suốt, không che chắn hay cản trở click lên Banner */
         header[data-testid="stHeader"] {{
             background: transparent !important;
             pointer-events: none !important;
         }}
-        header[data-testid="stHeader"] button,
-        header[data-testid="stHeader"] [data-testid="stExpandSidebarButton"] {{
+        header[data-testid="stHeader"] button {{
             pointer-events: auto !important;
         }}
 
-        /* Nút mở Sidebar (>>) thẩm mỹ, nền trắng có viền và đổ bóng rõ ràng - Luôn luôn hiển thị */
-        button[data-testid="stExpandSidebarButton"],
-        [data-testid="stExpandSidebarButton"],
-        button[aria-label*="sidebar" i],
-        button[aria-label*="Sidebar" i] {{
-            display: inline-flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
+        /* Nút mở Sidebar (>>) thẩm mỹ, nền trắng có viền và đổ bóng rõ ràng */
+        button[data-testid="stExpandSidebarButton"] {{
             background: #ffffff !important;
             border: 1.5px solid #cbd5e1 !important;
             border-radius: 8px !important;
@@ -411,7 +405,6 @@ def main():
             pointer-events: auto !important;
             margin-top: 6px !important;
             margin-left: 6px !important;
-            z-index: 999999 !important;
         }}
 
         /* Đảm bảo Sidebar ẩn triệt để khi Collapsed, không để lọt phần thừa sang trang chính */
