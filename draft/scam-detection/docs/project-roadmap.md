@@ -30,7 +30,7 @@ gantt
     Naive Bayes Baseline (Cẩm)                     :done, s2_3, 2026-09-15, 2026-09-16
     Random Forest & Hypertuning (Sơn)              :active, s2_4, 2026-09-15, 2026-09-16
     XGBoost (Cẩm)                                  :done, s2_5_1, 2026-09-16, 2026-09-16
-    SVM Linear/RBF (Cẩm)                           :active, s2_5_2, 2026-09-16, 2026-09-17
+    SVM Linear/RBF (Cẩm)                           :done, s2_5_2, 2026-09-16, 2026-09-17
     Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-16, 2026-09-18
     Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-15, 2026-09-18
 
@@ -99,7 +99,7 @@ gantt
 | `models/naive_bayes.pkl` & `naive_bayes_metrics.json`: Lưu trọng số baseline & metrics | ✅ Hoàn thành (Phase 04) |
 | `notebooks/04_model_xgboost.ipynb`: Tinh chỉnh RandomizedSearchCV, scale_pos_weight | ✅ Hoàn thành (Phase 05 — F1=0.9535) |
 | `models/xgboost.pkl` & `xgboost_metrics.json`: Lưu trọng số XGBoost & metrics | ✅ Hoàn thành (Phase 05) |
-| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ⏳ Tiếp theo (Phase 06) |
+| `notebooks/05_model_svm.ipynb`: LinearSVC Calibrated / RBF kernel, so sánh đa tham số | ✅ Hoàn thành (Phase 06 PASSED — F1=0.9474, PR #20) |
 
 ### Sơn (Modeling & UI Lead — Random Forest & Demo UI)
 | Task | Trạng thái |
@@ -127,11 +127,11 @@ gantt
 ### Thanh (Evaluation & Packaging Lead)
 | Task | Trạng thái |
 |------|:---:|
-| `notebooks/06_evaluation_xai.ipynb`: Bảng so sánh 4 models (Accuracy, Precision, Recall, F1, ROC-AUC) | 🔲 (18/09 – 19/09) |
-| Trực quan hóa: Confusion Matrix so sánh, ROC Curves, Precision-Recall Curves | 🔲 (19/09) |
-| Phân tích Overfitting: Learning Curves (Train vs Validation K-Fold) | 🔲 (19/09) |
-| XAI: Trích xuất Top-20 từ khóa cảnh báo kích hoạt bẫy tâm lý (SHAP / Feature Weights) | 🔲 (19/09) |
-| `reports/model_comparison.csv` và xuất toàn bộ figures | 🔲 (19/09) |
+| `notebooks/06_evaluation_xai.ipynb`: Bảng so sánh 4 models (Accuracy, Precision, Recall, F1, ROC-AUC) | ✅ Hoàn thành (Phase 07 PASSED — 19/09) |
+| Trực quan hóa: Confusion Matrix so sánh, ROC Curves, Precision-Recall Curves | ✅ Hoàn thành (Phase 07 — 6 figures 300 DPI) |
+| Phân tích Overfitting: Learning Curves (Train vs Validation K-Fold) | ✅ Hoàn thành (Phase 07 — `learning_curves_summary.png`) |
+| XAI: Trích xuất Top-20 từ khóa cảnh báo kích hoạt bẫy tâm lý (Consensus & SHAP) | ✅ Hoàn thành (Phase 07 — `top20_keywords_barplot.png`, `shap_summary.png`) |
+| `reports/model_comparison.csv` và xuất toàn bộ figures | ✅ Hoàn thành (Phase 07 — 19/09) |
 | Pre-flight check toàn diện bằng `verify_final.py` | 🔲 (22/09) |
 | Đóng gói ZIP `25730067-25730013-25730061.zip` theo chuẩn nộp bài UIT | 🔲 (22/09) |
 

@@ -120,6 +120,38 @@ def plot_feature_importance(
     print(f"✅ {filename} saved")
 
 
+def plot_signed_coefficients(
+    mean_coefs: np.ndarray, feature_names: list[str], figures_dir: Path,
+    filename: str, title: str, top_n: int = 10,
+) -> None:
+    """Diverging bar chart cho mô hình tuyến tính (vd: SVM Linear): top-N từ kéo về
+    Lừa đảo (hệ số dương, đỏ) vs top-N từ kéo về Bình thường (hệ số âm, xanh).
+
+    Dùng trung bình CÓ DẤU của coef_ — lấy |giá trị| trước khi trung bình sẽ xóa mất
+    chiều tác động (kéo về scam hay normal), dễ diễn giải sai đặc trưng.
+    """
+    pos_idx = np.argsort(mean_coefs)[::-1][:top_n]  # dương nhất -> kéo về Lừa đảo
+    neg_idx = np.argsort(mean_coefs)[:top_n]  # âm nhất -> kéo về Bình thường
+
+    labels = [feature_names[i] for i in neg_idx[::-1]] + [feature_names[i] for i in pos_idx[::-1]]
+    values = [mean_coefs[i] for i in neg_idx[::-1]] + [mean_coefs[i] for i in pos_idx[::-1]]
+    colors = [NORMAL_COLOR] * top_n + [SCAM_COLOR] * top_n
+
+    fig, ax = plt.subplots(figsize=(9, 9))
+    ax.barh(range(len(labels)), values, color=colors, edgecolor="white")
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(labels, fontsize=9)
+    ax.axvline(0, color="black", linewidth=0.8)
+    ax.set_title(title, fontsize=14, fontweight="bold", pad=15)
+    ax.set_xlabel("Hệ số hồi quy trung bình (signed coefficient)", fontsize=12)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+    fig.savefig(figures_dir / filename, dpi=DPI, bbox_inches="tight")
+    plt.close(fig)
+    print(f"✅ {filename} saved")
+
+
 def plot_roc_curve(y_true, y_proba, figures_dir: Path, filename: str, title: str) -> float:
     """ROC curve với AUC hiển thị trên biểu đồ."""
     fpr, tpr, _ = roc_curve(y_true, y_proba)

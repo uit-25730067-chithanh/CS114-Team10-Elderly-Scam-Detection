@@ -138,8 +138,7 @@ cells = [
         "md_05_final",
     ),
     cell_code(
-        "xgb_model = random_search.best_estimator_\n"
-        "xgb_model.fit(X_train, y_train)  # refit trên toàn bộ X_train với best params\n\n"
+        "xgb_model = random_search.best_estimator_  # đã tự refit trên toàn bộ X_train (refit=True mặc định)\n\n"
         "y_test_pred = xgb_model.predict(X_test)\n"
         "y_test_proba = xgb_model.predict_proba(X_test)[:, 1]\n"
         "test_metrics = compute_metrics(y_test, y_test_pred, y_test_proba)\n\n"
