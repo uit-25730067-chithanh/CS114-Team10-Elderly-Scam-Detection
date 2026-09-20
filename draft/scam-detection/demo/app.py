@@ -380,7 +380,8 @@ def main():
     custom_css = f"""
     <style>
         /* Ẩn hoàn toàn các nút rác của Streamlit (Deploy, Manage App, MainMenu 3 chấm) */
-        .stAppDeployButton, [data-testid="stAppDeployButton"] {{
+        .stAppDeployButton, [data-testid="stAppDeployButton"],
+        [data-testid="manage-app-button"] {{
             display: none !important;
         }}
         #MainMenu, [data-testid="stMainMenu"] {{

@@ -11,4 +11,4 @@ textColor = "#0F172A"
 font = "sans serif"
 
 [client]
-toolbarMode = "developer"
+toolbarMode = "viewer"
