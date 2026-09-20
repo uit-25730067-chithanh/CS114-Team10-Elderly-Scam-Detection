@@ -440,7 +440,7 @@ def main():
             flex-direction: column !important;
             justify-content: space-between !important;
             padding-top: 3.2rem !important;
-            padding-bottom: 7.5rem !important;
+            padding-bottom: 8.5rem !important;
             padding-left: clamp(2.5rem, 5vw, 4.5rem) !important;
             padding-right: clamp(2.5rem, 5vw, 4.5rem) !important;
             max-width: 1400px !important;
@@ -459,7 +459,7 @@ def main():
             flex-direction: column !important;
             justify-content: space-between !important;
             padding-top: 3.2rem !important;
-            padding-bottom: 7.5rem !important;
+            padding-bottom: 8.5rem !important;
             padding-left: 1rem !important;
             padding-right: 1rem !important;
             max-width: 100% !important;
@@ -925,14 +925,102 @@ def main():
         # Kiểm tra trạng thái có dữ liệu nhập để hiển thị nút Nạp tin mẫu linh hoạt
         has_content = bool(st.session_state.get("sms_input", "").strip())
 
-        if not has_content:
-            col_lbl, col_act = st.columns([2.3, 1.7], gap="small")
-            with col_lbl:
-                st.markdown(f"<p style='font-size: clamp(13px, 1.6vw, {int(15 * font_mult)}px); color: #475569; margin-top: 4px; font-weight: 500; line-height: 1.3; overflow-wrap: break-word;'>Dán tin nhắn SMS, Zalo lạ vào ô dưới đây:</p>", unsafe_allow_html=True)
-            with col_act:
-                st.button("📋 Nạp tin mẫu", key="btn_sample_top", on_click=select_preset, args=("fear",), use_container_width=True, help="Tự động nạp kịch bản tin nhắn phạt nguội để thử nghiệm nhanh")
-        else:
-            st.markdown(f"<p style='font-size: clamp(13px, 2vw, {int(15 * font_mult)}px); color: #475569; margin-top: 4px; font-weight: 500; margin-bottom: 8px;'>Dán tin nhắn SMS, Zalo lạ vào ô dưới đây:</p>", unsafe_allow_html=True)
+        col_lbl, col_act = st.columns([2.2, 1.8], gap="small")
+        with col_lbl:
+            st.markdown(f"<p style='font-size: clamp(13px, 1.6vw, {int(15 * font_mult)}px); color: #475569; margin-top: 6px; font-weight: 500; line-height: 1.3; overflow-wrap: break-word;'>Dán tin nhắn SMS, Zalo lạ vào ô dưới đây:</p>", unsafe_allow_html=True)
+        with col_act:
+            st.components.v1.html(
+                f"""
+                <!DOCTYPE html>
+                <html>
+                <head>
+                <style>
+                  body {{
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                    background: transparent;
+                  }}
+                  .paste-btn {{
+                    width: 100%;
+                    height: 38px;
+                    background-color: #ffffff;
+                    color: #1e3a8a;
+                    border: 1.5px solid #93c5fd;
+                    border-radius: 8px;
+                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                    font-size: clamp(12px, 3.2vw, {int(14 * font_mult)}px);
+                    font-weight: 700;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    cursor: pointer;
+                    transition: all 0.15s ease;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+                  }}
+                  .paste-btn:hover {{
+                    background-color: #eff6ff;
+                    border-color: #2563eb;
+                    color: #1d4ed8;
+                  }}
+                  .paste-btn:active {{
+                    background-color: #dbeafe;
+                    transform: scale(0.98);
+                  }}
+                </style>
+                </head>
+                <body>
+                <button class="paste-btn" id="btn-paste" title="Dán nội dung từ bộ nhớ tạm vào ô nhập tin nhắn">
+                  📋 Dán tin nhắn
+                </button>
+                <script>
+                  const btn = document.getElementById('btn-paste');
+                  btn.addEventListener('click', async () => {{
+                    try {{
+                      let text = '';
+                      if (window.parent && window.parent.navigator && window.parent.navigator.clipboard) {{
+                        text = await window.parent.navigator.clipboard.readText();
+                      }} else if (navigator.clipboard) {{
+                        text = await navigator.clipboard.readText();
+                      }}
+                      if (!text || !text.trim()) {{
+                        btn.innerText = '⚠️ Bộ nhớ tạm trống!';
+                        setTimeout(() => {{ btn.innerText = '📋 Dán tin nhắn'; }}, 2200);
+                        return;
+                      }}
+                      const ta = window.parent.document.querySelector('textarea');
+                      if (ta) {{
+                        ta.focus();
+                        const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+                        setter.call(ta, text.trim());
+                        ta.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                        ta.dispatchEvent(new Event('change', {{ bubbles: true }}));
+                        ta.blur();
+                        btn.innerText = '⚡ Đang kiểm tra...';
+
+                        // Tự động kích hoạt kiểm tra ngay lập tức (1-chạm: Dán là phân tích luôn)
+                        setTimeout(() => {{
+                          const btnCheck = Array.from(window.parent.document.querySelectorAll('button')).find(b => b.innerText.includes('KIỂM TRA TIN NHẮN NGAY'));
+                          if (btnCheck) {{
+                            btnCheck.click();
+                          }}
+                          btn.innerText = '✅ Đã dán & kiểm tra!';
+                          setTimeout(() => {{ btn.innerText = '📋 Dán tin nhắn'; }}, 2500);
+                        }}, 150);
+                      }}
+                    }} catch (err) {{
+                      btn.innerText = '⚠️ Cần cấp quyền';
+                      setTimeout(() => {{ btn.innerText = '📋 Dán tin nhắn'; }}, 2500);
+                      alert('Trình duyệt chưa cho phép đọc bộ nhớ tạm tự động. Ông/Bà hãy nhấn giữ vào ô bên dưới rồi chọn \"Dán\" (hoặc bấm phím Ctrl+V / Cmd+V) nhé!');
+                    }}
+                  }});
+                </script>
+                </body>
+                </html>
+                """,
+                height=42,
+            )
 
         # Ô nhập tin nhắn to, rộng rãi nhưng tinh gọn padding
         user_input = st.text_area(
@@ -1067,9 +1155,6 @@ def main():
                 user_text=target_text,
                 aux_dict=aux_dict,
             )
-
-            # Phân cách rõ ràng với Khối hành động phía trên
-            st.markdown("<div style='margin-top: 18px;'></div>", unsafe_allow_html=True)
 
             # 4. Bảng Thanh tra Kỹ thuật dành cho Hội đồng Chấm thi CS114 (Academic Inspector Panel)
             with st.expander("🛠️ Xem chi tiết kỹ thuật mô hình", expanded=academic_mode):
