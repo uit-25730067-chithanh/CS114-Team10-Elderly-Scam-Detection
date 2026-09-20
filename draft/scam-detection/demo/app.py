@@ -379,25 +379,12 @@ def main():
     # CSS Tinh gọn Padding & Tối ưu Trợ Năng Người Cao Tuổi
     custom_css = f"""
     <style>
-        /* Ẩn hoàn toàn các nút rác, viewer badge và thông tin account của Streamlit Cloud */
+        /* Ẩn triệt để các phần tử quản trị và footer nền tảng Streamlit */
         .stAppDeployButton, [data-testid="stAppDeployButton"],
+        [data-testid="manage-app-button"],
         #MainMenu, [data-testid="stMainMenu"],
-        footer, [data-testid="stFooter"],
-        [class*="viewerBadge"], [data-testid="stViewerBadge"], .stViewerBadge,
-        [data-testid="manage-app-button"], [class*="manageAppButton"],
-        [data-testid="stToolbar"], [data-testid="stDecoration"],
-        [data-testid="stStatusWidget"],
-        .viewerBadge_container__1QSob,
-        div[class*="ProfileBadge"],
-        div[class*="ViewerBadge"],
-        div[class*="ManageApp"] {{
+        footer, [data-testid="stFooter"] {{
             display: none !important;
-            visibility: hidden !important;
-            height: 0px !important;
-            width: 0px !important;
-            overflow: hidden !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
         }}
 
         /* Thanh Header trong suốt, không che chắn hay cản trở click lên Banner */
