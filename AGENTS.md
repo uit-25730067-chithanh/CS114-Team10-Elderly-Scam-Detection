@@ -77,7 +77,7 @@
 | `src/models/` | ✅ Active — random_forest_model.py hoàn thiện kèm 9 unit tests; naive_bayes & xgboost chạy qua notebooks |
 | `src/evaluation/` | ✅ Passed (Phase 07) — metrics_calculator, plot_comparator (CM 2x2, ROC, PR, Learning Curves), xai_explainer (Top-20 consensus keywords & SHAP) |
 | Notebooks (03-06) | ✅ Passed — 03 (NB), 04 (XGB, RF), 05 (SVM), 06 (Evaluation & XAI) hoàn thành end-to-end |
-| Demo UI (Streamlit) | ⏳ Sprint 2-3 Fast-Track (16/09 shell → 20/09 integrated) — app.py + components (Sơn lead, PR #21) |
+| Demo UI (Streamlit) | ✅ Passed (Phase 08) — Web App Streamlit, Model Catalog 4 mô hình, trợ năng NCT, 16/16 Playwright E2E tests (Sơn lead, PR #21) |
 | Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
@@ -92,6 +92,8 @@
 > **Verdict (18/09): Phase 06 (Modeling — Support Vector Machine) đã HOÀN THÀNH 100% XUẤT SẮC bởi Cẩm (PR #20 & #22). LinearSVC Calibrated đạt F1=0.9474, Recall=96.43%, ROC-AUC=0.9986. Đóng gói thành công `best_model_bundle.pkl` (489 KB) sẵn sàng phục vụ suy luận.**
 
 > **Verdict (19/09): Phase 07 (Comprehensive Evaluation & Explainable AI) đã HOÀN THÀNH 100% XUẤT SẮC bởi Thanh. Đánh giá tổng hợp 4 mô hình: XGBoost đạt Best Overall (F1=0.9535, Recall=97.62%, FN=2), Linear SVM đạt Best Linear Separator (ROC-AUC=0.9986). Xuất đủ 6 biểu đồ so sánh 300 DPI (`confusion_matrices_all.png`, `roc_curves_comparison.png`, `precision_recall_curves.png`, `learning_curves_summary.png`, `top20_keywords_barplot.png`, `shap_summary.png`). Trích xuất 20 từ khóa cảnh báo bẫy tâm lý đồng thuận cao nhất (money, số_tiền, viện_phí, gấp, số_định_danh). Toàn bộ 69/69 unit tests PASS 100%.**
+
+> **Verdict (20/09): Phase 08 (Demo UI — Web App Streamlit) đã HOÀN THÀNH 100% XUẤT SẮC bởi Sơn (PR #21). Hoàn thiện Web App Streamlit tối ưu trợ năng cho người cao tuổi (Split-View, cỡ chữ 100%-125%-150%, Hotline khẩn cấp 1-chạm 156/113, tự động cuộn trang sau phân tích). Tích hợp thành công bộ điều phối 4 mô hình học máy (XGBoost F1=0.9535 mặc định, Linear SVM F1=0.9474, Random Forest F1=0.9425, Naive Bayes F1=0.8864), trích xuất 15 đặc trưng tâm lý thời gian thực, đồng bộ URL query params (?text=...), nút Dán tin nhắn tự động phân tích qua Web Clipboard API, và bộ kiểm thử tự động Playwright E2E (16/16 ca PASS). Kích hoạt Phase 09: Báo cáo Word & Slide PPT.**
 
 ---
 
@@ -250,14 +252,16 @@ Place in `Final/submit/` before zipping.
    - Triển khai thành công `src/preprocessing/` (`text_cleaner.py`, `tokenizer.py`, `stopwords.py`, `pipeline.py`).
    - Xây dựng thành công `notebooks/01_preprocessing.ipynb` và xuất `data/processed/dataset_preprocessed.csv` (2.193 dòng, 24 cột).
    - Hoàn thành Phase 03: EDA (7 biểu đồ 300 DPI), pipeline zero-leakage, xuất ma trận `X_train.pkl` (1.754 × 5.015) và `X_test.pkl` (439 × 5.015).
-3. **Luồng C (Mô hình hóa ML — Cẩm & Sơn):** 🚀 **TIẾN ĐỘ VƯỢT BẬC (15/09 – 17/09)**
-   - Cẩm: Hoàn thành Naive Bayes baseline (`03_model_naive_bayes.ipynb`, F1=0.8864, Recall=92.86%) và XGBoost Classifier (`04_model_xgboost.ipynb`, F1=0.9535, Recall=97.62%, ROC-AUC=0.9984).
-   - Sơn: Đang hoàn thiện Random Forest (`04_model_random_forest.ipynb`) để khép lại trọn vẹn Phase 05.
-   - Cẩm: Chuẩn bị triển khai Phase 06 Support Vector Machine (`05_model_svm.ipynb`).
-   - Thanh: Chuẩn bị Phase 07 đánh giá XAI tổng hợp, đường cong ROC và trích xuất Top-20 từ khóa SHAP (18/09 – 19/09).
-4. **Luồng D (Demo UI — Sơn):** ⏳ **TRIỂN KHAI (16/09 – 18/09)**
-   - Dựng khung giao diện Streamlit (`demo/app.py`), thiết kế UX thân thiện với người cao tuổi và tích hợp mô hình.
-5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** ⏳ **ĐỒNG THỜI (15/09 – 22/09)**
+3. **Luồng C (Mô hình hóa ML & Đánh giá — Cẩm, Sơn, Thanh):** ✅ **HOÀN THÀNH 100% (PHASE 04, 05, 06, 07)**
+   - Cẩm: Hoàn thành Naive Bayes baseline (F1=0.8864), XGBoost (F1=0.9535) và Linear SVM Calibrated (F1=0.9474, ROC-AUC=0.9986).
+   - Sơn: Hoàn thành Random Forest (F1=0.9425, Recall=97.62%, PR #16).
+   - Thanh: Hoàn thành Phase 07 đánh giá đa mô hình, đường cong ROC, PR, 28 biểu đồ 300 DPI và trích xuất Top-20 SHAP.
+4. **Luồng D (Demo UI — Sơn):** ✅ **HOÀN THÀNH 100% (PHASE 08 — 20/09/2026)**
+   - Hoàn thành Web App Streamlit tối ưu trợ năng cho người cao tuổi (`demo/app.py`, PR #21).
+   - Tích hợp Model Catalog 4 thuật toán với XGBoost mặc định, phân tích 15 đặc trưng tâm lý thời gian thực.
+   - Bổ sung dán tự động qua Web Clipboard API, đồng bộ URL query params (`?text=...`), hotline 1-chạm 156/113.
+   - Đạt 16/16 ca kiểm thử tự động Playwright E2E trên Google Chrome, xuất 4 ảnh nghiệm thu chuẩn 300 DPI (`reports/figures/demo_*.png`).
+5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** 🚀 **TRỌNG TÂM HIỆN TẠI (PHASE 09 — 20/09 – 22/09)**
    - Báo cáo Word Chương 1–3: Hoàn thành trước 18/09.
    - Báo cáo Word Chương 4–5: Hoàn thành trước 20/09 ngay khi có kết quả thực nghiệm.
    - Slide PPT 15 phút: Dựng ngày 20/09 – 21/09 theo cẩm nang bảo vệ.

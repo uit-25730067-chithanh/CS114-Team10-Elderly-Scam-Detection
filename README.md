@@ -87,10 +87,10 @@
 | | **Sơn** | Random Forest training + hypertuning (15/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9425, Recall=97.62%, PR #16) |
 | | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
 | | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (17/09 – 18/09) | ✅ Done (Phase 06 PASSED — F1=0.9474, ROC-AUC=0.9986, PR #20) |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ⏳ Đang xử lý (Phase 08 — PR #21) |
+| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ✅ Done (Phase 08 PASSED — PR #21) |
 | | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai (Phase 09) |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | ✅ Done (Phase 07 PASSED — Multi-model benchmark, SHAP beeswarm, PR #23) |
-| | **Sơn** | Tích hợp Best Model vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi | ⏳ Đang xử lý (Phase 08 — PR #21) |
+| | **Sơn** | Tích hợp Model Catalog vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi & E2E Playwright | ✅ Done (Phase 08 PASSED — PR #21) |
 | | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Chương 4–5 + Slide 15 phút (14–16 slides) + Diễn tập bấm giờ | 🔲 Sẵn sàng triển khai (Phase 09) |
 | | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067-25730013-25730061.zip` (22/09) | 🔲 Sẵn sàng triển khai (Phase 10) |
 | **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
@@ -109,7 +109,7 @@
 | 05 | [Phase 05 — Modeling — Random Forest & XGBoost](./plans/scam-detection-full-submit/phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | `passed` ✅ |
 | 06 | [Phase 06 — Modeling — SVM (Optional: PhoBERT)](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) | **Cẩm** | `passed` ✅ |
 | 07 | [Phase 07 — Evaluation & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md) | **Thanh** | `passed` ✅ |
-| 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `in-progress` ⏳ |
+| 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `passed` ✅ |
 | 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cả nhóm** | `not-started` 🔲 |
 | 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `not-started` 🔲 |
 
