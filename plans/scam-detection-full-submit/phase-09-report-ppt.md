@@ -10,12 +10,19 @@
 
 | Field | Value |
 |-------|-------|
-| Owner | **Cả nhóm** |
+| Owner | **PPT: Cẩm (25730013) · Report: Sơn (25730061) · Review/Merge: Thanh (25730067)** |
 | Priority | P1 |
-| Status | `not-started` |
-| Review | ⬜ Not reviewed |
+| Status | `in-progress` |
+| Review | 🟡 Template branches tạo xong — chờ thành viên tạo PR |
 | Estimated effort | 8–12h |
 | Sprint | Sprint 2–3 Fast-Track (15/09 – 22/09/2026) |
+
+## Branches (đã tạo — chưa tạo PR)
+
+| Branch | Owner | Mục đích | Trạng thái |
+|--------|-------|---------|-----------|
+| `feat/phase-09-ppt-template` | **Cẩm** tạo PR | PPT template + `generate_slides.js` | Template ready ✅ — chờ Cẩm hoàn thiện |
+| `feat/phase-09-report-template` | **Sơn** tạo PR | Report Markdown template → .docx | Template ready ✅ — chờ Sơn hoàn thiện |
 
 ## Context
 
