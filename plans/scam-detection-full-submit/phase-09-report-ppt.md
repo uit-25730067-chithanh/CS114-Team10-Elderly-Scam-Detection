@@ -86,6 +86,19 @@ Theo yêu cầu trong [README.md](../../README.md):
     - `top20_keywords_barplot.png`: Biểu đồ ngang 20 từ khóa kích hoạt bẫy tâm lý có trọng số đồng thuận cao nhất (`money`, `số_tiền`, `viện_phí`, `gấp`, `số_định_danh`).
     - `shap_summary.png`: Biểu đồ SHAP Beeswarm của XGBoost giải thích đóng góp vi mô từng giá trị đặc trưng.
 
+#### 4.4. Ứng dụng Thực tế & Giao diện Web Demo (Phase 08 — Sơn)
+- Ứng dụng Streamlit Split-View Workbench tối ưu trợ năng cho người cao tuổi:
+  - Phóng đại cỡ chữ linh hoạt 100% – 125% – 150% với tỷ lệ tương phản cao.
+  - Tự động phân tích và bôi đỏ từ khóa bẫy tâm lý với regex biên dịch trước (<10ms).
+  - Hộp quy tắc sinh tồn "3 KHÔNG & 1 GỌI", Hotline 1-chạm 156 (Cục ATTT) và 113 (Công an).
+  - Tích hợp bộ điều phối 4 mô hình học máy (XGBoost F1=0.9535 mặc định, Linear SVM, RF, NB).
+  - Tích hợp Web Clipboard API dán 1-chạm và bảo lưu kết quả qua URL query params (`?text=...`).
+- 4 Ảnh chụp màn hình nghiệm thu chuẩn 300 DPI (`reports/figures/`):
+  1. `demo_01_initial_layout.png` — Bố cục tổng thể Desktop Workbench hai cột.
+  2. `demo_02_font_scaling_elderly.png` — Chế độ phóng đại cỡ chữ 150% cho người cao tuổi.
+  3. `demo_03_scam_detection_verdict.png` — Cảnh báo bẫy lừa đảo đe dọa quyền lực và Hotline 156.
+  4. `demo_04_mobile_responsive.png` — Giao diện co dãn mượt mà trên điện thoại di động (390×844 px).
+
 ### Chương 5 — Kết luận và Hướng phát triển
 
 - Tóm tắt kết quả chính
@@ -99,16 +112,16 @@ Theo yêu cầu trong [README.md](../../README.md):
 
 ## Slide PPT (15 phút)
 
-| Slide # | Nội dung | Thời gian |
-|---------|---------|-----------|
-| 1 | Title slide | 30s |
-| 2 | Đặt vấn đề & Ý nghĩa | 1.5 phút |
-| 3-4 | Pipeline & Phương pháp | 3 phút |
-| 5-6 | Dataset & Feature Engineering | 2 phút |
-| 7-10 | Kết quả thực nghiệm (bảng, biểu đồ) | 4 phút |
-| 11-12 | Demo UI screenshots | 2 phút |
-| 13 | Kết luận & Hướng phát triển | 1 phút |
-| 14 | Q&A | 1 phút |
+| Slide # | Nội dung | Thời gian | Phụ trách chính |
+|---------|---------|-----------|-----------------|
+| 1 | Title slide | 30s | Đặng Chí Thanh |
+| 2 | Đặt vấn đề & Ý nghĩa | 1.5 phút | Đặng Chí Thanh |
+| 3-4 | Pipeline & Phương pháp | 3 phút | Đặng Chí Thanh |
+| 5-6 | Dataset & Feature Engineering | 2 phút | Đặng Chí Thanh |
+| 7-10 | Kết quả thực nghiệm (bảng, biểu đồ) | 4 phút | Bùi Thị Mỷ Cẩm |
+| 11-12 | Demo Web App Streamlit (Screenshots demo_01→04, Trợ năng NCT, Hotline, Đa mô hình) | 2 phút | Hoàng Cao Sơn |
+| 13 | Kết luận & Hướng phát triển | 1 phút | Hoàng Cao Sơn |
+| 14 | Q&A | 1 phút | Cả nhóm |
 
 ## Fast-Track Tasks (Báo cáo sớm 23/09/2026)
 

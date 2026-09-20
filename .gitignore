@@ -30,13 +30,17 @@ build/
 *.ipynb_checkpoints
 
 # Model artifacts (large trained models > 50MB)
-# PKL nhỏ (scaler, vectorizer ~1-5MB) → được commit để team sử dụng
+# PKL nhỏ (scaler, vectorizer, benchmark models < 5MB) → được commit để phục vụ demo live
 **/models/*.pkl
 !**/models/vectorizer.pkl
 !**/models/tfidf_vectorizer.pkl
 !**/models/best_model_bundle.pkl
 !**/models/svm_linear.pkl
+!**/models/naive_bayes.pkl
+!**/models/xgboost.pkl
+!**/models/random_forest.pkl
 models/*.h5
+
 models/*.joblib
 models/*.pt
 models/*.bin

@@ -28,15 +28,15 @@ gantt
     Tiền xử lý NLP tiếng Việt (Thanh)              :done, s2_1, 2026-09-15, 2026-09-15
     EDA & Zero-Leakage Features (Thanh)            :done, s2_2, 2026-09-15, 2026-09-15
     Naive Bayes Baseline (Cẩm)                     :done, s2_3, 2026-09-15, 2026-09-16
-    Random Forest & Hypertuning (Sơn)              :active, s2_4, 2026-09-15, 2026-09-16
+    Random Forest & Hypertuning (Sơn)              :done, s2_4, 2026-09-15, 2026-09-16
     XGBoost (Cẩm)                                  :done, s2_5_1, 2026-09-16, 2026-09-16
     SVM Linear/RBF (Cẩm)                           :done, s2_5_2, 2026-09-16, 2026-09-17
-    Demo UI Streamlit shell (Sơn)                  :s2_6, 2026-09-16, 2026-09-18
+    Demo UI Streamlit shell (Sơn)                  :done, s2_6, 2026-09-16, 2026-09-18
     Báo cáo Word Chương 1, 2, 3 (Cả nhóm)          :s2_7, 2026-09-15, 2026-09-18
 
     section Sprint 3: Đánh giá, PPT & Diễn tập (19/09 – 22/09)
-    Đánh giá tổng hợp & XAI SHAP (Thanh & Cẩm)     :s3_1, 2026-09-18, 2026-09-19
-    Tích hợp Best Model vào Demo UI (Sơn & Thanh)  :s3_2, 2026-09-19, 2026-09-20
+    Đánh giá tổng hợp & XAI SHAP (Thanh & Cẩm)     :done, s3_1, 2026-09-18, 2026-09-19
+    Tích hợp Best Model vào Demo UI (Sơn & Thanh)  :done, s3_2, 2026-09-19, 2026-09-20
     Báo cáo Word Chương 4–5 + Refs (Cả nhóm)       :s3_3, 2026-09-20, 2026-09-21
     Slide PPT 15 phút (14–16 slides) (Cả nhóm)     :s3_4, 2026-09-20, 2026-09-21
     Diễn tập thuyết trình bấm giờ ≤15p (Cả nhóm)   :crit, s3_5, 2026-09-21, 2026-09-22
@@ -106,8 +106,8 @@ gantt
 |------|:---:|
 | `notebooks/04_model_random_forest.ipynb`: Nạp ma trận Phase 03, RandomizedSearch n_estimators, max_depth | ✅ Hoàn thành (Phase 05 PASSED — F1=0.9425, PR #16) |
 | `models/random_forest.pkl` & `random_forest_metrics.json`: Lưu trọng số Random Forest & metrics | ✅ Hoàn thành (Phase 05 — PR #16) |
-| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ⏳ Kích hoạt ngay (Phase 08) |
-| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ⏳ Kích hoạt ngay (Phase 08) |
+| `demo/app.py`: Khung Streamlit 2 cột (Nhập liệu / Kết quả cảnh báo) | ✅ Hoàn thành (Phase 08 PASSED — PR #21) |
+| `demo/components/`: risk_meter.py, keyword_highlighter.py, safety_advisor.py | ✅ Hoàn thành (Phase 08 PASSED — PR #21) |
 
 ### Cả nhóm (Academic Documentation)
 | Task | Trạng thái |
@@ -138,9 +138,9 @@ gantt
 ### Sơn (Demo Integration & Screenshots)
 | Task | Trạng thái |
 |------|:---:|
-| Tích hợp Best Model (.pkl) và Vectorizer vào `demo/app.py` | 🔲 (19/09 – 20/09) |
-| Hoàn thiện tính năng bôi đỏ từ khóa bẫy tâm lý và khuyến cáo an toàn cho NCT | 🔲 (20/09) |
-| Chụp ≥3 ảnh màn hình Demo chất lượng cao chèn vào Báo cáo Word và Slide PPT | 🔲 (20/09) |
+| Tích hợp Best Model (.pkl) và Vectorizer vào `demo/app.py` | ✅ Hoàn thành (Phase 08 PASSED — PR #21) |
+| Hoàn thiện tính năng bôi đỏ từ khóa bẫy tâm lý và khuyến cáo an toàn cho NCT | ✅ Hoàn thành (Phase 08 PASSED — PR #21) |
+| Chụp ≥3 ảnh màn hình Demo chất lượng cao chèn vào Báo cáo Word và Slide PPT | ✅ Hoàn thành (Phase 08 PASSED — 4 figures 300 DPI) |
 
 ### Cả nhóm (Báo cáo, Slide PPT & Diễn tập Thuyết trình)
 | Task | Trạng thái |

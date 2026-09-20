@@ -149,13 +149,32 @@ mock_bundle = {
 
 ---
 
-## 4. Hướng dẫn chạy Demo
+## 4. Hướng dẫn chạy Demo & Khởi chạy Nhanh
 
+### 4.1. Khởi chạy trên Web Browser
 ```bash
-# Từ thư mục gốc draft/scam-detection/
-streamlit run demo/app.py
+# Từ thư mục gốc repo hoặc draft/scam-detection/
+streamlit run draft/scam-detection/demo/app.py
+```
+Hoặc trên Windows: Click đúp tệp `Chay_Demo.bat` tại thư mục gốc để mở ứng dụng ngay trên trình duyệt mặc định.
+
+### 4.2. Các tính năng nổi bật trong bản chính thức (PR #21)
+- **Model Catalog đa mô hình:** Cho phép chọn giữa 4 mô hình học máy:
+  1. `XGBoost (Mặc định)`: F1 = 0.9535, Recall = 97.62%, ROC-AUC = 0.9984
+  2. `Linear SVM (Calibrated)`: F1 = 0.9474, Recall = 96.43%, ROC-AUC = 0.9986
+  3. `Random Forest`: F1 = 0.9425, Recall = 97.62%, ROC-AUC = 0.9976
+  4. `Naive Bayes`: F1 = 0.8864, Recall = 92.86%, ROC-AUC = 0.9911
+- **Bộ phóng đại cỡ chữ (Elderly Accessibility):** Chuyển đổi 100% (Mặc định) → 125% (Rõ ràng) → 150% (Rất lớn) với cỡ chữ clamp co dãn tối ưu.
+- **Dán tin nhắn một-chạm:** Tự động đọc và dán nội dung từ clipboard qua Web Clipboard API và kích hoạt phân tích ngay lập tức.
+- **Bảo lưu trạng thái URL:** Tin nhắn và kết quả kiểm tra được tự động lưu vào query parameters (`?text=...`) tránh mất dữ liệu khi refresh.
+- **Hotline khẩn cấp 1-chạm:** Nút gọi khẩn cấp `tel:156` (Cục ATTT) và `tel:113` (Công an) tích hợp trực tiếp cho smartphone.
+
+### 4.3. Bộ kiểm thử tự động Playwright E2E
+```bash
+# Chạy bộ test tự động trên Google Chrome (16 ca kiểm thử giao diện & chức năng)
+python3 draft/scam-detection/tests/run_full_web_test_suite.py
+
+# Chạy demo tự động duyệt kịch bản thực tế
+python3 draft/scam-detection/tests/run_live_browser_demo.py
 ```
 
-- Yêu cầu UI: Cỡ chữ to, rõ ràng, màu sắc tương phản cao (phục vụ đối tượng nghiên cứu là người cao tuổi).
-- Có thanh trượt Risk Meter (Xanh lá < 30%, Vàng 30-70%, Đỏ > 70%).
-- Hiển thị khuyến cáo hành động tức thời ("Không chuyển tiền", "Gọi ngay cho người thân xác minh").
