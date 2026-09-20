@@ -441,8 +441,8 @@ def main():
             justify-content: space-between !important;
             padding-top: 3.2rem !important;
             padding-bottom: 8.5rem !important;
-            padding-left: clamp(2.5rem, 5vw, 4.5rem) !important;
-            padding-right: clamp(2.5rem, 5vw, 4.5rem) !important;
+            padding-left: clamp(16px, 4vw, 4.5rem) !important;
+            padding-right: clamp(16px, 4vw, 4.5rem) !important;
             max-width: 1400px !important;
             box-sizing: border-box !important;
             position: relative !important;
@@ -645,8 +645,14 @@ def main():
                 font-size: 15px !important;
                 font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
             }}
+            [data-testid="stAppViewContainer"] .block-container,
+            [data-testid="stAppViewContainer"]:has(section[data-testid="stSidebar"]) .block-container,
+            section[data-testid="stSidebar"] ~ div .block-container,
             .main .block-container {{
-                padding: 2.8rem 0.5rem 6.5rem 0.5rem !important;
+                padding-top: 2.8rem !important;
+                padding-bottom: 6.5rem !important;
+                padding-left: 16px !important;
+                padding-right: 16px !important;
                 position: relative !important;
             }}
             .project-portal-footer {{
