@@ -140,3 +140,24 @@ Thư mục này chứa 7 biểu đồ phân tích khám phá dữ liệu (Explor
 ### 28. `shap_summary.png` (300 DPI)
 - **Nội dung:** Biểu đồ SHAP Beeswarm trích xuất từ `shap.TreeExplainer` cho mô hình XGBoost.
 - **Ý nghĩa học thuật:** Giải thích chi tiết sự phân bố giá trị đóng góp (SHAP values) của từng đặc trưng vi mô vào xác suất phân loại lừa đảo.
+
+---
+
+## 🖥️ Danh Mục Ảnh Nghiệm Thu Giao Diện Web Demo Streamlit (Hoàng Cao Sơn — Phase 08)
+
+### 29. `demo_01_initial_layout.png` (300 DPI)
+- **Nội dung:** Bố cục tổng thể giao diện Split-View Workbench trên màn hình Desktop: khu vực nhập liệu bên trái và bảng kết quả phân tích AI bên phải.
+- **Ý nghĩa học thuật:** Minh chứng kiến trúc giao diện tương tác hai luồng trực quan, tối ưu cho quá trình thao tác kiểm tra tin nhắn nhanh chóng và thân thiện.
+
+### 30. `demo_02_font_scaling_elderly.png` (300 DPI)
+- **Nội dung:** Giao diện khi kích hoạt bộ phóng đại cỡ chữ 150% dành riêng cho người cao tuổi hoặc người có thị lực kém.
+- **Ý nghĩa học thuật:** Chứng thực việc hiện thực hóa các tiêu chuẩn trợ năng (Accessibility Standards), giúp đối tượng yếu thế dễ dàng tiếp cận và đọc rõ nội dung cảnh báo.
+
+### 31. `demo_03_scam_detection_verdict.png` (300 DPI)
+- **Nội dung:** Kết quả nhận diện bẫy lừa đảo đe dọa quyền lực: thanh đo nguy cơ màu đỏ (Risk Meter), từ khóa nhạy cảm bôi đỏ, chẩn đoán bẫy tâm lý, và hộp quy tắc an toàn "3 KHÔNG & 1 GỌI" kèm Hotline 156/113.
+- **Ý nghĩa học thuật:** Trực quan hóa năng lực suy luận thời gian thực kết hợp giữa mô hình học máy (XGBoost/SVM) và hệ luật diễn giải bẫy tâm lý học.
+
+### 32. `demo_04_mobile_responsive.png` (300 DPI)
+- **Nội dung:** Giao diện ứng dụng tự động co dãn trên màn hình điện thoại di động (Mobile Responsive View).
+- **Ý nghĩa học thuật:** Chứng minh tính tương thích đa nền tảng, cho phép người cao tuổi có thể gọi trực tiếp Hotline khẩn cấp bằng 1 chạm (`tel:156`, `tel:113`) trên smartphone.
+
