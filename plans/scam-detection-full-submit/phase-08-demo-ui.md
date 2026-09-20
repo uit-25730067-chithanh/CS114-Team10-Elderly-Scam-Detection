@@ -138,7 +138,7 @@ Load best model + TF-IDF vectorizer → preprocess user input → predict → di
 
 - [x] `streamlit run demo/app.py` chạy không lỗi
 - [x] Giao diện 2 cột hoạt động (Cột trái: Nhập tin nhắn & Presets; Cột phải: Kết quả AI & Phân tích)
-- [x] Model loaded và predict đúng (Random Forest Bundle 5.015 chiều, Acc 97.72%, Rec 97.62%)
+- [x] Model loaded và predict đúng (Đa mô hình: XGBoost Mặc định F1=0.9535 + Linear SVM + Random Forest + Naive Bayes)
 - [x] Thanh đo nguy cơ (xanh/vàng/đỏ) hiển thị với tỷ lệ phần trăm trực quan
 - [x] Từ khóa cảnh báo bôi đỏ/vàng theo nhóm bẫy tâm lý (cả có dấu và không dấu)
 - [x] Phân loại bẫy tâm lý hiển thị (4 nhóm: fear_authority, family_emergency, public_service, health_gift)

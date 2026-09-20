@@ -45,53 +45,57 @@ st.set_page_config(
 
 # Danh mục thông số 4 mô hình học máy (CS114 Model Benchmark Catalog)
 MODEL_CATALOG: Dict[str, Dict[str, Any]] = {
-    "random_forest": {
-        "name": "🌲 Random Forest (Mặc định)",
-        "file": "random_forest.pkl",
-        "dims": 5015,
-        "type": "ensemble",
-        "desc": "Ensemble Bagging 200 cây quyết định, tối ưu hóa chống Overfitting",
-        "accuracy": "97.72%",
-        "f1": "94.25%",
-        "recall": "97.62%",
-        "roc_auc": "0.9976",
-        "author": "Hoàng Cao Sơn (MSSV: 25730061)",
-    },
     "xgboost": {
-        "name": "⚡ XGBoost (F1 Tối ưu)",
+        "name": "⚡ XGBoost (Mặc định — F1 Tối ưu 0.9535)",
         "file": "xgboost.pkl",
         "dims": 5015,
         "type": "boosting",
-        "desc": "Gradient Boosting với scale_pos_weight=4.22 xử lý mất cân bằng nhãn",
+        "desc": "Gradient Boosting với scale_pos_weight=4.22 tối ưu F1 trên dữ liệu mất cân bằng",
         "accuracy": "98.18%",
-        "f1": "95.35%",
+        "precision": "93.18%",
         "recall": "97.62%",
+        "f1": "95.35%",
         "roc_auc": "0.9984",
         "author": "Bùi Thị Mỷ Cẩm (MSSV: 25730013)",
     },
     "svm_linear": {
-        "name": "🎯 Linear SVM (Calibrated CV)",
+        "name": "🎯 Linear SVM (Á quân — Calibrated CV)",
         "file": "svm_linear.pkl",
         "dims": 5015,
         "type": "svm",
-        "desc": "LinearSVC kết hợp hiệu chỉnh xác suất CalibratedClassifierCV (Sigmoid)",
-        "accuracy": "98.41%",
-        "f1": "95.81%",
+        "desc": "LinearSVC kết hợp hiệu chỉnh xác suất CalibratedClassifierCV (Sigmoid Platt Scaling)",
+        "accuracy": "97.95%",
+        "precision": "93.10%",
         "recall": "96.43%",
+        "f1": "94.74%",
         "roc_auc": "0.9986",
         "author": "Bùi Thị Mỷ Cẩm (MSSV: 25730013)",
     },
+    "random_forest": {
+        "name": "🌲 Random Forest (Ensemble Bagging 200 cây)",
+        "file": "random_forest.pkl",
+        "dims": 5015,
+        "type": "ensemble",
+        "desc": "Ensemble Bagging 200 cây quyết định, độ ổn định cao, chống Overfitting",
+        "accuracy": "97.72%",
+        "precision": "91.11%",
+        "recall": "97.62%",
+        "f1": "94.25%",
+        "roc_auc": "0.9976",
+        "author": "Hoàng Cao Sơn (MSSV: 25730061)",
+    },
     "naive_bayes": {
-        "name": "📊 Naive Bayes (Baseline)",
+        "name": "📊 Naive Bayes (Baseline Đối chứng)",
         "file": "naive_bayes.pkl",
         "dims": 5000,
         "type": "nb",
-        "desc": "Mô hình xác suất Bayes cơ sở (TF-IDF non-negative, alpha=0.01)",
+        "desc": "Mô hình xác suất Bayes cơ sở (TF-IDF 5.000 từ khóa, alpha=0.5)",
         "accuracy": "95.44%",
-        "f1": "88.64%",
+        "precision": "84.78%",
         "recall": "92.86%",
+        "f1": "88.64%",
         "roc_auc": "0.9911",
-        "author": "Bùi Thị Mỷ Cẩm (MSSV: 25730013)",
+        "author": "Đặng Chí Thanh (MSSV: 25730067)",
     },
 }
 
@@ -191,17 +195,23 @@ def load_all_detection_engines():
                 logging.error(f"Lỗi khi nạp mô hình {key} ({info['file']}): {e}")
 
     # Kiểm tra bundle tổng hợp nếu thiếu các file lẻ
-    if "random_forest" not in engines:
+    if not any(k in engines for k in ("xgboost", "svm_linear", "random_forest")):
         bundle_path = PROJECT_ROOT / "models" / "best_model_bundle.pkl"
         if bundle_path.exists():
             try:
                 bundle = joblib.load(bundle_path)
-                engines["random_forest"] = bundle["model"]
+                b_name = bundle.get("model_name", "")
+                if "SVM" in b_name:
+                    engines["svm_linear"] = bundle["model"]
+                elif "XGB" in b_name:
+                    engines["xgboost"] = bundle["model"]
+                else:
+                    engines["random_forest"] = bundle["model"]
             except Exception as e:
                 logging.error(f"Lỗi nạp bundle fallback: {e}")
 
     loaded_count = sum(1 for k in MODEL_CATALOG if k in engines)
-    status_msg = f"Đã sẵn sàng {loaded_count}/4 Mô hình Học Máy (Random Forest, XGBoost, SVM, Naive Bayes)"
+    status_msg = f"Đã sẵn sàng {loaded_count}/4 Mô hình Học Máy (XGBoost, SVM, Random Forest, Naive Bayes)"
     return engines, status_msg
 
 
@@ -214,7 +224,7 @@ def predict_text(
     Suy luận xác suất lừa đảo trên văn bản người dùng nhập với chuyển đổi linh hoạt mô hình.
     Trả về: (xác suất, là_lừa_đảo, từ_điển_15_đặc_trưng, thông_tin_mô_hình)
     """
-    model_info = MODEL_CATALOG.get(model_key, MODEL_CATALOG["random_forest"])
+    model_info = MODEL_CATALOG.get(model_key, MODEL_CATALOG["xgboost"])
 
     # 1. Tiền xử lý NLP tiếng Việt toàn diện bằng pipeline chuẩn hóa
     cleaned_text, aux_dict = preprocess_pipeline(raw_text)
@@ -348,8 +358,8 @@ def main():
             </div>
             """, unsafe_allow_html=True)
         else:
-            # Chế độ Người cao tuổi: Mặc định chọn mô hình tối ưu
-            selected_model_key = available_model_keys[0] if available_model_keys else "random_forest"
+            # Chế độ Người cao tuổi: Mặc định chọn mô hình tối ưu (XGBoost F1=0.9535)
+            selected_model_key = available_model_keys[0] if available_model_keys else "xgboost"
             current_model_meta = MODEL_CATALOG[selected_model_key]
             st.markdown("""
             <div style="
@@ -361,8 +371,8 @@ def main():
                 color: #166534;
                 line-height: 1.45;
             ">
-                🛡️ <b>Mô hình bảo vệ tối ưu:</b><br>
-                Đang chạy bộ lọc Trí tuệ Nhân tạo đa tầng (Độ chính xác 98%, phát hiện 97.6% tin lừa đảo).
+                🛡️ <b>Mô hình bảo vệ tối ưu (XGBoost):</b><br>
+                Đang chạy bộ lọc Trí tuệ Nhân tạo đa tầng (Độ chính xác 98.18%, phát hiện 97.62% tin lừa đảo).
             </div>
             """, unsafe_allow_html=True)
 
