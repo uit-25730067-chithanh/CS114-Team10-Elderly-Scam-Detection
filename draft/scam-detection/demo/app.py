@@ -89,13 +89,13 @@ MODEL_CATALOG: Dict[str, Dict[str, Any]] = {
         "file": "naive_bayes.pkl",
         "dims": 5000,
         "type": "nb",
-        "desc": "Mô hình xác suất Bayes cơ sở (TF-IDF 5.000 từ khóa, alpha=0.5)",
+        "desc": "Mô hình xác suất Bayes cơ sở (TF-IDF 5.000 từ khóa, alpha=0.01)",
         "accuracy": "95.44%",
         "precision": "84.78%",
         "recall": "92.86%",
         "f1": "88.64%",
         "roc_auc": "0.9911",
-        "author": "Đặng Chí Thanh (MSSV: 25730067)",
+        "author": "Bùi Thị Mỷ Cẩm (MSSV: 25730013)",
     },
 }
 

@@ -47,7 +47,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 2 (17–18/09) | `passed` ✅ | LinearSVC Calibrated (C=10.0) F1=0.9474, Recall=96.43%, ROC-AUC=0.9986; RBF đối chứng kém hơn; `best_model_bundle.pkl` đóng gói cho Phase 08; bộ 4 mô hình hoàn tất |
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `passed` ✅ | Đánh giá 4 mô hình: XGBoost (F1=0.9535, Recall=97.62%), SVM Linear (ROC-AUC=0.9986), RF (F1=0.9425), NB (F1=0.8864); 6 biểu đồ 300 DPI, SHAP Beeswarm, 69 tests PASS |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (16–20/09) | `passed` ✅ | Streamlit Web App hoàn thiện; Model Catalog 4 thuật toán (XGBoost F1=0.9535 mặc định); Trợ năng người cao tuổi; 16/16 Playwright E2E & 70/70 pytest PASS |
-| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cả nhóm** | Sprint 2–3 (15–22/09) | `not-started` | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
+| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) | Sprint 2–3 | `in-progress` 🟡 | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
 | 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 18:30 23/09 qua MS Teams |
 
 ## Git Convention

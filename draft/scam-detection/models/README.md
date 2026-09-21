@@ -22,7 +22,7 @@ Thư mục này dùng để lưu trữ các trọng số mô hình đã huấn l
 |---|---|---|---|:---:|:---:|:---:|:---:|:---:|:---:|
 | `naive_bayes.pkl`<br>`naive_bayes_metrics.json` | MultinomialNB | 5.000 dims (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | **0.8864** | 0.9911 | ✅ Passed (Phase 04 — Cẩm) |
 | `xgboost.pkl`<br>`xgboost_metrics.json` | XGBoost Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=300, max_depth=5, lr=0.05, subsample=0.7, colsample_bytree=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | **0.9984** | ✅ Hoàn thành (Phase 05 — Cẩm) |
-| `random_forest.pkl`<br>`random_forest_metrics.json` | Random Forest Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2` | **97.72%** | **91.11%** | **97.62%** | **0.9425** | **0.9976** | ✅ Hoàn thành (Phase 05 — Sơn) |
+| `random_forest.pkl`<br>`random_forest_metrics.json` | Random Forest Classifier | 5.015 dims (TF-IDF + 15 aux features) | `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2` | **97.72%** | **91.11%** | **97.62%** | **0.9425** | **0.9977** | ✅ Hoàn thành (Phase 05 — Sơn) |
 | `svm_linear.pkl`<br>`svm_metrics.json` | LinearSVC Calibrated | 5.015 dims (TF-IDF + 15 aux features) | `C=10.0` (GridSearchCV 5-fold) | 97.95% | 93.10% | 96.43% | **0.9474** | 0.9986 | ✅ Hoàn thành (Phase 06 — Cẩm) |
 
 ---

@@ -24,6 +24,8 @@ venv/
 *.egg-info/
 dist/
 build/
+node_modules/
+**/node_modules/
 
 # Jupyter
 .ipynb_checkpoints/
