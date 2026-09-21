@@ -181,7 +181,7 @@ Theo yêu cầu trong [README.md](../../README.md):
 
 > Gửi anh Thanh (@25730067, reviewer Phase 09): bộ slide đã dựng xong bản đầu, có **4 vấn đề còn treo** cần anh xem trước khi bảo vệ 18:30 23/09. Chưa sửa gì ở các file dùng chung (README, demo, evaluator) vì cần anh/nhóm đồng ý.
 
-**Trạng thái bộ slide:** `draft/scam-detection/reports/slides/generate_slides.js` → `phase09_presentation.pptx` (commit `1f6770e`, `07b4f2b`). Mọi chỉ số mô hình đọc trực tiếp từ `models/*_metrics.json`; mỗi slide có speaker notes; chưa có hiệu ứng chuyển slide; chưa mở PR.
+**Trạng thái bộ slide:** `draft/scam-detection/reports/slides/generate_slides.js` → `phase09_presentation.pptx` (commit `1f6770e`, `07b4f2b`). Mọi chỉ số mô hình đọc trực tiếp từ `models/*_metrics.json`; mỗi slide có speaker notes; chưa có hiệu ứng chuyển slide;.
 
 **Khác biệt so với bảng 19 slide ở trên (cần anh duyệt cấu trúc):** bản dựng có **20 slide** = 15 slide chính (có slide Tài liệu tham khảo) + Cảm ơn + divider phụ lục + 3 backup (Siêu tham số, Confusion Matrices, Learning Curves). Confusion Matrix chuyển sang backup; không có backup "Pipeline & 15 đặc trưng phụ" (pipeline nằm ở slide 7).
 
@@ -208,6 +208,13 @@ Bằng chứng `0.01` đúng: `models/naive_bayes.pkl` lưu `alpha=0.01`; `naive
 2. **Vấn đề 2 (Naive Bayes alpha=0.01 & Tác giả Phase 04 — Cẩm):** **ĐỒNG Ý**. Sửa triệt để cả 4 vị trí (`metrics_calculator.py`, `model_comparison.csv`, `README.md`, `demo/app.py`).
 3. **Vấn đề 3 (Trích dẫn [4] IEEE Access):** **XÓA BỎ TRÍCH DẪN GIẢ**. Thay bằng trích dẫn dataset thực tế / Báo cáo Cục ATTT trên Slide 15.
 4. **Vấn đề 4 (Transitions):** **GIỮ NGUYÊN BẢN (KHÔNG DÙNG SCRIPT HACK XML)** để tránh lỗi file lúc bảo vệ; khi chiếu chỉ cần bật hiệu ứng Fade nhẹ 0.3s trên PowerPoint native.
+
+### Trạng thái xử lý 4 quyết định (Cẩm, 21/09/2026):
+1. **ROC-AUC RF — ✅ Đã xử lý:** Slide 9 đọc trực tiếp `random_forest_metrics.json` nên hiển thị **99.77%**, khớp chú thích 0.9977 trong ảnh ROC ở Slide 10. Cẩm tự tính lại `random_forest.pkl` trên tập test cho cùng kết quả `0.9976525821596244`. Đã dựng lại `phase09_presentation.pptx`.
+2. **`alpha` Naive Bayes — ✅ Đã xác minh:** sau khi pull, cả 4 vị trí đã là `alpha=0.01`, tác giả Phase 04 là Cẩm; deck vốn đọc `0.01` từ `naive_bayes_metrics.json`.
+3. **Trích dẫn [4] — ✅ Đã thay, kèm một hiệu chỉnh cần anh biết:** bỏ chữ "doi pending"; [4] nay trích đúng theo yêu cầu của tác giả bộ dữ liệu, kèm repo GitHub `trannguyenthaituan251209/vietnamese_sms_dataset` (1.944 mẫu: 1.773 bình thường + 171 lừa đảo; CC BY 4.0 theo README). Thêm [6] cho các nguồn bổ sung (249/420 mẫu lừa đảo: `lachancuocgoi`, `SMS_Phishing_Detection`, `ViSmish_Detection`, báo chí/VTV24), và Slide 5 trích dẫn [4], [6]. Không thêm "Báo cáo Cục ATTT" vì chưa có tên báo cáo và đường dẫn để kiểm chứng.
+   - *Hiệu chỉnh so với báo cáo thẩm định:* README chính thức của repo bộ dữ liệu có mục Citation yêu cầu trích dẫn bài "Vietnamese SMS Dataset with Quality Assurance" (Tran, Le, Nguyen, Nguyen, Mai; IEEE Access, 2026, không ghi tập/DOI). Nên bài báo không phải placeholder do nhóm tự đặt; điều Cẩm không xác nhận được là bài đã xuất bản hay chưa, vì vậy [4] ghi "chưa có tập/DOI" và speaker notes Slide 15 dặn không khẳng định bài đã xuất bản.
+4. **Transitions — ✅ Giữ nguyên:** không dùng script XML; nhắc bật Fade 0.3s (Transitions → Fade → Apply To All) trong speaker notes Slide 1.
 
 ### 5 Chỉ đạo Bổ sung & Định hướng Nâng cấp Slide gửi em Cẩm tự hoàn thiện:
 1. **Header, Footer & Đánh số trang đồng bộ:** Toàn bộ slide nội dung cần Header (`TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM`), Footer (`CS114: Máy học — Nhóm 10 — Báo cáo Đồ án: Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam`) và số trang định dạng `01 / 22`, `02 / 22`...
