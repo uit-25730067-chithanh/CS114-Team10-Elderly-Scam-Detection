@@ -73,10 +73,7 @@ const BOTTOM = SH - M;    // 5.125" — nội dung phải có y + h ≤ BOTTOM; 
 // ─── NỘI DUNG CHUẨN THEO CHỈ ĐẠO CỦA ANH THANH (21/09/2026) ─────────────────
 const OFFICIAL_TITLE = "Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam";
 const HEADER_TEXT = "TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM";
-const FOOTER_LINES = [
-  "CS114: Máy học — Nhóm 10 — Báo cáo Đồ án:",
-  "Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam",
-];
+const FOOTER_TEXT = "CS114: Máy học — Nhóm 10 — Báo cáo Đồ án: Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam";
 const THANKS_TEXT = "CHÂN THÀNH CẢM ƠN THẦY VÀ CÁC BẠN\nĐÃ LẮNG NGHE BÁO CÁO!";
 const SEC = {
   1: "PHẦN 1 · Giới thiệu",
@@ -192,11 +189,11 @@ function addHeader(slide, title, section) {
 // Footer + số trang "NN / TỔNG" cho slide nội dung (nằm trong lề dưới, dưới vùng nội dung ≤ 5.125")
 function addFooter(slide, n, total) {
   const pad = (v) => String(v).padStart(2, "0");
-  slide.addText(FOOTER_LINES.map((l) => ({ text: l, options: { breakLine: true } })), {
-    x: M, y: 5.18, w: 7.7, h: 0.36, fontSize: 9.5, color: T.textMuted, fontFace: "Calibri", valign: "middle", margin: [0, 0, 0, 0],
+  slide.addText(FOOTER_TEXT, {
+    x: M, y: 5.22, w: 7.7, h: 0.25, fontSize: 7.2, color: T.textMuted, fontFace: "Calibri", valign: "middle", margin: [0, 0, 0, 0], wrap: false,
   });
   slide.addText(`${pad(n)} / ${pad(total)}`, {
-    x: 8.3, y: 5.18, w: 1.2, h: 0.36, fontSize: 10.5, bold: true, color: T.accentDark, fontFace: "Calibri", align: "right", valign: "middle", margin: [0, 0, 0, 0],
+    x: 8.3, y: 5.22, w: 1.2, h: 0.25, fontSize: 9.5, bold: true, color: T.accentDark, fontFace: "Calibri", align: "right", valign: "middle", margin: [0, 0, 0, 0],
   });
 }
 
@@ -240,13 +237,73 @@ function addCallout(slide, x, y, w, h, text, opts = {}) {
   });
 }
 
-// Slide phân đoạn (Navy) — bố cục thống nhất cho mọi divider; `part` là nhãn "PHẦN n" / "PHỤ LỤC"
-function addDivider(part, title, subtitle) {
+// Slide phân đoạn (Navy) — bố cục thống nhất theo phong cách Micro-Agenda
+function addDivider(part, title, subtitle, bullets = []) {
   const slide = newSlide("divider");
-  slide.addText(part, { x: M, y: 1.05, w: CW, h: 0.4, fontSize: 16, bold: true, color: T.onDarkSoft, fontFace: "Calibri", align: "center", charSpacing: 4 });
-  slide.addText(title, { x: M, y: 1.55, w: CW, h: 1.65, ...F.sectionTitle, align: "center", valign: "middle", shrinkText: true });
-  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 3.4, w: 5, h: 0.04, fill: { color: T.accent } });
-  slide.addText(subtitle, { x: M, y: 3.6, w: CW, h: 0.4, fontSize: 14, color: T.onDarkSoft, fontFace: "Calibri", align: "center" });
+
+  // University Header Banner
+  slide.addText("TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM  •  BÁO CÁO ĐỒ ÁN CS114", {
+    x: M, y: 0.35, w: CW, h: 0.25,
+    fontSize: 9.5, fontFace: "Calibri", color: T.onDarkSoft, align: "center", bold: true,
+  });
+
+  // Section Pill Badge
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: (SW - 2.4) / 2, y: 0.72, w: 2.4, h: 0.36,
+    fill: { color: T.accent },
+    line: { color: "60A5FA", width: 1 },
+    rectRadius: 0.08,
+  });
+  slide.addText(part, {
+    x: (SW - 2.4) / 2, y: 0.72, w: 2.4, h: 0.36,
+    fontSize: 13, fontFace: "Cambria", color: T.textLight, align: "center", bold: true,
+  });
+
+  // Section Title
+  slide.addText(title, {
+    x: M, y: 1.20, w: CW, h: 0.60,
+    fontSize: 24, fontFace: "Cambria", color: T.textLight, align: "center", bold: true, shrinkText: true,
+  });
+
+  // Accent Underline
+  slide.addShape(pptx.ShapeType.line, {
+    x: (SW - 2.8) / 2, y: 1.95, w: 2.8, h: 0,
+    line: { color: T.accentAmber, width: 2.5 },
+  });
+
+  // Micro-agenda Container Box
+  if (bullets && bullets.length > 0) {
+    slide.addShape(pptx.ShapeType.roundRect, {
+      x: M + 0.75, y: 2.18, w: CW - 1.5, h: 2.80,
+      fill: { color: "102E5E" },
+      line: { color: "3B82F6", width: 1 },
+      rectRadius: 0.12,
+    });
+
+    const textArr = bullets.map((b, idx) => ({
+      text: b,
+      options: {
+        bullet: true,
+        breakLine: idx < bullets.length - 1,
+        color: "E2E8F0",
+        fontSize: 12,
+        fontFace: "Calibri",
+        lineSpacingMultiple: 1.25,
+        paraSpaceAfter: 9,
+      },
+    }));
+
+    slide.addText(textArr, {
+      x: M + 1.05, y: 2.45, w: CW - 2.1, h: 2.35,
+      margin: [2, 4, 2, 4],
+      shrinkText: true,
+    });
+  } else if (subtitle) {
+    slide.addText(subtitle, {
+      x: M, y: 2.45, w: CW, h: 0.45, fontSize: 14, color: T.onDarkSoft, fontFace: "Calibri", align: "center",
+    });
+  }
+
   return slide;
 }
 
@@ -266,26 +323,45 @@ function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc) {
 // ─── SLIDE 1: BÌA (logo UIT + tên đề tài chuẩn) ──────────────────────────────
 (function slide01_cover() {
   const slide = newSlide("cover");
-  // Nửa dưới tối hơn một tông — bắt đầu sau khối tiêu đề để không chồng lên chữ
-  slide.addShape(pptx.ShapeType.rect, { x: 0, y: 2.8, w: SW, h: SH - 2.8, fill: { color: "102E5E" } });
 
-  addLogo(slide, 0.35, 5.4);
-  slide.addText(OFFICIAL_TITLE, {
-    x: M, y: 1.35, w: CW, h: 1.35, fontSize: 22, bold: true, color: T.textLight, fontFace: "Cambria",
+  // Logo UIT tinh chỉnh kích thước thanh lịch (w=3.0", h≈0.445")
+  addLogo(slide, 0.40, 3.0);
+
+  // Tên đề tài chính thức đầy đủ — ngắt dòng ngữ nghĩa chuẩn xác, không bẻ từ ghép
+  slide.addText("Nghiên cứu và Xây dựng Hệ thống\nPhát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo\nnhắm vào Người cao tuổi tại Việt Nam", {
+    x: M, y: 1.15, w: CW, h: 1.30, fontSize: 21, bold: true, color: T.textLight, fontFace: "Cambria",
     align: "center", valign: "middle", shrinkText: true,
   });
-  slide.addText("Vietnamese Elderly Scam Detection", {
-    x: M, y: 2.95, w: CW, h: 0.35, fontSize: 13, color: "BFDBFE", fontFace: "Calibri", align: "center", italic: true,
+
+  // Phụ đề tiếng Anh tương ứng
+  slide.addText("Vietnamese Elderly Scam Message & Psychological Manipulation Detection", {
+    x: M, y: 2.55, w: CW, h: 0.35, fontSize: 12.5, color: "93C5FD", fontFace: "Calibri", align: "center", italic: true,
   });
-  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 3.4, w: 5, h: 0.04, fill: { color: T.accent } });
-  slide.addText("CS114 — Máy học  |  Nhóm 10  |  ThS. Cáp Phạm Đình Thăng", {
-    x: M, y: 3.55, w: CW, h: 0.35, fontSize: 12, color: T.onDarkSoft, fontFace: "Calibri", align: "center",
+
+  // Đường kẻ nhấn trung tâm màu vàng Amber
+  slide.addShape(pptx.ShapeType.line, {
+    x: (SW - 2.8) / 2, y: 3.05, w: 2.8, h: 0,
+    line: { color: T.accentAmber, width: 2.0 },
   });
-  slide.addText("Đặng Chí Thanh (25730067)  ·  Bùi Thị Mỷ Cẩm (25730013)  ·  Hoàng Cao Sơn (25730061)", {
-    x: M, y: 3.95, w: CW, h: 0.35, fontSize: 12, color: T.textLight, fontFace: "Calibri", align: "center", shrinkText: true,
+
+  // Thông tin học phần & GVHD
+  slide.addText("Môn học: CS114 — Máy học  •  GVHD: ThS. Cáp Phạm Đình Thăng", {
+    x: M, y: 3.22, w: CW, h: 0.30, fontSize: 12.5, color: "E2E8F0", fontFace: "Calibri", align: "center",
   });
-  slide.addText("23/09/2026  |  UIT — ĐHQG-HCM", {
-    x: M, y: 4.4, w: CW, h: 0.3, fontSize: 11, color: T.onDarkMuted, fontFace: "Calibri", align: "center",
+
+  // Nhãn Nhóm sinh viên
+  slide.addText("NHÓM SINH VIÊN THỰC HIỆN: NHÓM 10", {
+    x: M, y: 3.60, w: CW, h: 0.22, fontSize: 11, bold: true, color: T.accentAmber, fontFace: "Calibri", align: "center",
+  });
+
+  // Danh sách thành viên nhóm
+  slide.addText("Đặng Chí Thanh (25730067)   •   Bùi Thị Mỷ Cẩm (25730013)   •   Hoàng Cao Sơn (25730061)", {
+    x: M, y: 3.88, w: CW, h: 0.30, fontSize: 12.5, bold: true, color: T.textLight, fontFace: "Calibri", align: "center", shrinkText: true,
+  });
+
+  // Thời gian & Trường
+  slide.addText("KHOA KHOA HỌC MÁY TÍNH  •  TP. HỒ CHÍ MINH, THÁNG 09/2026", {
+    x: M, y: 4.40, w: CW, h: 0.30, fontSize: 10.5, color: "94A3B8", fontFace: "Calibri", align: "center",
   });
 
   note(slide, "BÌA", [
@@ -375,7 +451,12 @@ function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc) {
 })();
 
 // ─── SLIDE 5: DIVIDER PHẦN 2 ─────────────────────────────────────────────────
-addDivider("PHẦN 2", "Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền xử lý  ·  Feature Engineering");
+addDivider("PHẦN 2", "Dữ liệu & Phương pháp", "Thu thập  ·  Tiền xử lý  ·  Feature Engineering", [
+  "Đặc điểm tập dữ liệu: 2.193 mẫu thực tế có nguồn gốc kiểm chứng (Zero Synthetic Text)",
+  "Phân loại 4 nhóm bẫy tâm lý phổ biến nhắm vào người cao tuổi tại Việt Nam",
+  "Pipeline xử lý ngôn ngữ tự nhiên: Tiền xử lý tiếng Việt, TF-IDF 5.000 từ và 15 đặc trưng miền tâm lý",
+  "Quy chuẩn Zero-Leakage: Phân lập tuyệt đối dữ liệu Train/Test trước mọi bước huấn luyện",
+]);
 
 // ─── SLIDE 6: DATASET ─────────────────────────────────────────────────────────
 (function slide06_dataset() {
@@ -464,9 +545,13 @@ addDivider("PHẦN 2", "Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền 
     }
   });
 
-  slide.addShape(pptx.ShapeType.rect, { x: M, y: 2.95, w: CW, h: 0.5, fill: { color: T.coverBg } });
-  slide.addText("→ Vector đầu vào mô hình: 5.015 chiều (5.000 TF-IDF + 15 đặc trưng phụ) · Naive Bayes chỉ dùng 5.000 TF-IDF", {
-    x: M + 0.15, y: 2.95, w: CW - 0.3, h: 0.5, fontSize: 13, bold: true, color: T.textLight, fontFace: "Calibri", valign: "middle", shrinkText: true,
+  slide.addShape(pptx.ShapeType.rect, { x: M, y: 2.90, w: CW, h: 0.58, fill: { color: T.coverBg } });
+  slide.addText([
+    { text: "Không gian đặc trưng vector đầu vào:  ", options: { bold: true, fontSize: 11, color: "93C5FD" } },
+    { text: "x = [ TF-IDF(w₁, d), ..., TF-IDF(w₅₀₀₀, d) | f_meta₁, ..., f_meta₁₅ ]ᵀ ∈ ℝ⁵⁰¹⁵\n", options: { bold: true, fontSize: 10, fontFace: "Cambria", color: "FFFFFF" } },
+    { text: "• 5.000 đặc trưng từ vựng n-gram + 15 đặc trưng miền tâm lý (URL, OTP, Hotline...)  •  Naive Bayes chỉ dùng 5.000 TF-IDF", options: { fontSize: 9.5, color: "CBD5E1" } }
+  ], {
+    x: M + 0.15, y: 2.90, w: CW - 0.3, h: 0.58, fontFace: "Calibri", valign: "middle", shrinkText: true,
   });
 
   addCard(slide, M, 3.65, CW, 1.4, "Zero-Leakage Protocol",
@@ -486,7 +571,12 @@ addDivider("PHẦN 2", "Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền 
 })();
 
 // ─── SLIDE 9: DIVIDER PHẦN 3 ─────────────────────────────────────────────────
-addDivider("PHẦN 3", "Mô hình &\nKết quả", "Naive Bayes  ·  Random Forest  ·  XGBoost  ·  SVM Linear");
+addDivider("PHẦN 3", "Mô hình & Kết quả", "Naive Bayes  ·  Random Forest  ·  XGBoost  ·  SVM Linear", [
+  "Đánh giá và so sánh định lượng 4 mô hình: XGBoost, Random Forest, SVM Linear và Naive Bayes",
+  "Phân tích hiệu năng phân lớp: Đường cong ROC Curves & Precision-Recall Curves (AUC ≥ 99%)",
+  "Giải thích quyết định mô hình XAI bằng SHAP TreeExplainer: Top-20 đặc trưng phân định lừa đảo",
+  "Thử nghiệm loại bỏ thẻ ẩn danh (Ablation Study): Chứng minh tính độc lập, không học vẹt nguồn",
+]);
 
 // ─── SLIDE 10: MODEL COMPARISON TABLE ────────────────────────────────────────
 (function slide10_model_comparison() {
@@ -580,11 +670,14 @@ addDivider("PHẦN 3", "Mô hình &\nKết quả", "Naive Bayes  ·  Random Fore
     { t: "Lưu ý: money, number, time, đường_dẫn… là thẻ ẩn danh có sẵn trong bộ dữ liệu gốc", lvl: 0 },
     { t: `Bỏ ${ABL.features_removed} đặc trưng chứa thẻ này: F1 XGBoost ${pct(ABL.baseline.xgboost.f1)} → ${pct(ABL.without_tags.xgboost.f1)}, Recall giữ ${pct(ABL.without_tags.xgboost.recall)}`, lvl: 0 },
   ];
-  slide.addText(items.map((it) => ({ text: it.t, options: { bullet: { indent: 14 }, indentLevel: it.lvl, breakLine: true, paraSpaceAfter: 6 } })), {
-    x: M, y: CY + 0.15, w: 4.6, h: 3.7, fontSize: 14, color: T.text, fontFace: "Calibri", valign: "top", shrinkText: true, margin: [2, 0, 4, 0],
+  slide.addText(items.map((it) => ({ text: it.t, options: { bullet: { indent: 14 }, indentLevel: it.lvl, breakLine: true, paraSpaceAfter: 5 } })), {
+    x: M, y: CY + 0.15, w: 4.45, h: 3.8, fontSize: 13, color: T.text, fontFace: "Calibri", valign: "top", shrinkText: true, margin: [2, 0, 4, 0],
   });
 
-  addFigure(slide, "shap_summary.png", 5.2, CY + 0.1, 4.3, 3.9);
+  addFigure(slide, "shap_summary.png", 5.2, CY + 0.1, 4.3, 3.45);
+  slide.addText("(c) Phân bố tác động SHAP (TreeExplainer) trên mô hình XGBoost", {
+    x: 5.2, y: 4.80, w: 4.3, h: 0.22, ...F.caption, align: "center",
+  });
 
   note(slide, "SHAP XAI", [
     "- Điểm học thuật quan trọng: giải thích được vì sao mô hình kết luận lừa đảo",
@@ -598,15 +691,37 @@ addDivider("PHẦN 3", "Mô hình &\nKết quả", "Naive Bayes  ·  Random Fore
 })();
 
 // ─── SLIDE 13: DIVIDER PHẦN 4 ────────────────────────────────────────────────
-addDivider("PHẦN 4", "Demo\nỨng dụng", "Streamlit Web App  ·  Trợ năng cho người cao tuổi");
+addDivider("PHẦN 4", "Demo Ứng dụng", "Streamlit Web App  ·  Trợ năng cho người cao tuổi", [
+  "Kiến trúc ứng dụng Streamlit hỗ trợ suy luận thời gian thực với mô hình tối ưu XGBoost",
+  "Thiết kế giao diện trợ năng chuyên biệt cho người cao tuổi: Phóng to chữ 150%, tương phản cao WCAG AA",
+  "Tích hợp hotline khẩn cấp 156 / 113 gọi một chạm và kiểm thử toàn diện 16/16 kịch bản Playwright",
+]);
 
 // ─── SLIDE 14: DEMO UI ────────────────────────────────────────────────────────
 (function slide14_demo() {
   const slide = newSlide("content");
   addHeader(slide, "Demo: Streamlit Web Application", SEC[4]);
 
-  const fig = addFigure(slide, "demo_03_scam_detection_verdict.png", M, CY + 0.15, 5.4, 3.5);
-  if (fig) slide.addText("Kết quả phân tích một tin nhắn lừa đảo trên giao diện demo", { x: M, y: fig.y + fig.h + 0.08, w: 5.4, h: 0.25, ...F.caption, align: "center" });
+  const frameW = 5.4, frameH = 3.55;
+  const frameX = M, frameY = CY + 0.12;
+  // Khung viền công nghệ giả lập trình duyệt (Tech Window Container)
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: frameX, y: frameY, w: frameW, h: frameH,
+    fill: { color: "0F172A" },
+    line: { color: T.accent, width: 1.5 },
+    rectRadius: 0.1,
+  });
+  // Thanh tiêu đề cửa sổ trình duyệt (Browser Header Bar)
+  slide.addText("  ● ● ●   https://elderly-scam-guard.uit.edu.vn  •  Streamlit Live Demo", {
+    x: frameX, y: frameY, w: frameW, h: 0.28,
+    fill: { color: "1E293B" },
+    fontSize: 8.5, color: "94A3B8", fontFace: "Calibri", valign: "middle",
+  });
+
+  addFigure(slide, "demo_03_scam_detection_verdict.png", frameX + 0.06, frameY + 0.32, frameW - 0.12, frameH - 0.38);
+  slide.addText("Giao diện phân tích tin nhắn thời gian thực với trợ năng người cao tuổi", {
+    x: frameX, y: frameY + frameH + 0.06, w: frameW, h: 0.22, ...F.caption, align: "center",
+  });
 
   const features = [
     "4 mô hình trong 1 ứng dụng (mặc định XGBoost)",
@@ -617,8 +732,8 @@ addDivider("PHẦN 4", "Demo\nỨng dụng", "Streamlit Web App  ·  Trợ năng
     "Trích xuất 15 đặc trưng tâm lý theo thời gian thực",
     "Tối ưu điện thoại · 16/16 kiểm thử E2E Playwright",
   ];
-  slide.addText(features.map((f) => ({ text: f, options: { bullet: { indent: 14 }, breakLine: true, paraSpaceAfter: 8 } })), {
-    x: 6.2, y: CY + 0.15, w: 3.3, h: 3.8, fontSize: 14, color: T.text, fontFace: "Calibri", valign: "top", shrinkText: true, margin: [2, 0, 4, 0],
+  slide.addText(features.map((f) => ({ text: f, options: { bullet: { indent: 14 }, breakLine: true, paraSpaceAfter: 5 } })), {
+    x: 6.2, y: CY + 0.15, w: 3.3, h: 3.8, fontSize: 13.5, color: T.text, fontFace: "Calibri", valign: "top", shrinkText: true, margin: [2, 0, 4, 0],
   });
 
   note(slide, "DEMO", [
@@ -630,7 +745,11 @@ addDivider("PHẦN 4", "Demo\nỨng dụng", "Streamlit Web App  ·  Trợ năng
 })();
 
 // ─── SLIDE 15: DIVIDER PHẦN 5 ────────────────────────────────────────────────
-addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  ·  Hạn chế đã biết  ·  Hướng mở rộng");
+addDivider("PHẦN 5", "Kết luận & Hướng phát triển", "Kết quả  ·  Hạn chế đã biết  ·  Hướng mở rộng", [
+  "Tổng kết các đóng góp chính và đối chiếu mức độ hoàn thành so với mục tiêu đề ra",
+  "Nhìn nhận khách quan các hạn chế nghiên cứu về quy mô tập test và phân bố nhãn",
+  "Lộ trình mở rộng: Tích hợp mô hình ngôn ngữ lớn PhoBERT và phát hiện lừa đảo qua giọng nói",
+]);
 
 // ─── SLIDE 16: KẾT LUẬN ──────────────────────────────────────────────────────
 (function slide16_conclusion() {
@@ -740,14 +859,17 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
 // ─── SLIDE 18: THANK YOU ─────────────────────────────────────────────────────
 (function slide18_thankyou() {
   const slide = newSlide("thanks");
-  addLogo(slide, 0.4, 5.4);
+  addLogo(slide, 0.45, 2.8);
   slide.addText(THANKS_TEXT, {
-    x: M, y: 1.5, w: CW, h: 1.5, fontSize: 26, bold: true, color: T.textLight, fontFace: "Cambria",
+    x: M, y: 1.25, w: CW, h: 1.30, fontSize: 24, bold: true, color: T.textLight, fontFace: "Cambria",
     align: "center", valign: "middle", shrinkText: true,
   });
-  slide.addShape(pptx.ShapeType.rect, { x: 2.5, y: 3.15, w: 5, h: 0.04, fill: { color: T.accent } });
-  slide.addText("Nhóm 10 — CS114.F31.CN2.TTNT  |  23/09/2026", {
-    x: M, y: 3.3, w: CW, h: 0.35, fontSize: 13, color: T.onDarkSoft, fontFace: "Calibri", align: "center",
+  slide.addShape(pptx.ShapeType.line, {
+    x: (SW - 2.8) / 2, y: 2.80, w: 2.8, h: 0,
+    line: { color: T.accentAmber, width: 2.0 },
+  });
+  slide.addText("Nhóm 10 — CS114.F31.CN2.TTNT  |  Tháng 09/2026", {
+    x: M, y: 3.00, w: CW, h: 0.35, fontSize: 13, color: T.onDarkSoft, fontFace: "Calibri", align: "center",
   });
   const members = [
     "Đặng Chí Thanh  ·  25730067@ms.uit.edu.vn",
@@ -755,10 +877,10 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
     "Hoàng Cao Sơn  ·  25730061@ms.uit.edu.vn",
   ];
   slide.addText(members.map((m) => ({ text: m, options: { breakLine: true } })), {
-    x: M, y: 3.75, w: CW, h: 0.9, fontSize: 12, color: T.textLight, fontFace: "Calibri", align: "center",
+    x: M, y: 3.45, w: CW, h: 0.9, fontSize: 12.5, color: T.textLight, fontFace: "Calibri", align: "center",
   });
-  slide.addText("UIT — Trường Đại học Công nghệ Thông tin, ĐHQG-HCM", {
-    x: M, y: 4.75, w: CW, h: 0.3, fontSize: 11, color: T.onDarkMuted, fontFace: "Calibri", align: "center",
+  slide.addText("KHOA KHOA HỌC MÁY TÍNH  •  TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN, ĐHQG-HCM", {
+    x: M, y: 4.55, w: CW, h: 0.3, fontSize: 11, color: T.onDarkMuted, fontFace: "Calibri", align: "center",
   });
 
   note(slide, "CẢM ƠN", [
@@ -768,7 +890,11 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
 })();
 
 // ─── SLIDE 19: DIVIDER PHỤ LỤC ───────────────────────────────────────────────
-addDivider("PHỤ LỤC", "Backup\nQ&A", "Siêu tham số  ·  Confusion Matrices  ·  Learning Curves");
+addDivider("PHỤ LỤC", "Phụ lục & Backup Q&A", "Siêu tham số  ·  Confusion Matrices  ·  Learning Curves", [
+  "Bảng tổng hợp chi tiết siêu tham số tối ưu và chiến lược tinh chỉnh Hyperparameter Tuning",
+  "Phân tích chuyên sâu Ma trận Nhầm lẫn (Confusion Matrices) và đánh đổi sai số FN / FP",
+  "Đồ thị Learning Curves: Phân tích mức độ tổng quát hóa và khoảng cách Train vs Validation",
+]);
 
 // ─── SLIDE 20: HYPERPARAMETERS ───────────────────────────────────────────────
 (function slide20_hyperparams() {
