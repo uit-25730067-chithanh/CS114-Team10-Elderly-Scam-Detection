@@ -18,7 +18,7 @@ Bộ dữ liệu đồ án gồm **2.193 mẫu thực tế 100%**, tuân thủ t
 | Tên Tệp | Số lượng mẫu | Thành viên phụ trách | Nhóm bẫy / Tính chất |
 |---------|--------------|----------------------|----------------------|
 | `dataset.csv` | **2.193 dòng** | **Cả nhóm** | Bộ dữ liệu tích hợp chính thức sau khi vượt qua `data_validation.py` |
-| `staging_thanh_normal.csv` | 1.773 dòng | **Đặng Chí Thanh** | Tin nhắn thường đời thực (IEEE Access 2026 & CS114 Evidence Vault) |
+| `staging_thanh_normal.csv` | 1.773 dòng | **Đặng Chí Thanh** | Tin nhắn thường đời thực (Bộ dữ liệu Vietnamese SMS Dataset trên GitHub & CS114 Evidence Vault) |
 | `staging_son_scam.csv` | 215 dòng | **Hoàng Cao Sơn** | Tin lừa đảo: Đe dọa quyền lực (`fear_authority`) & Thúc ép gia đình (`family_emergency`) |
 | `staging_cam_scam.csv` | 205 dòng | **Bùi Thị Mỷ Cẩm** | Tin lừa đảo: Quà tặng sức khỏe (`health_gift`) & Giả mạo dịch vụ công (`public_service`) |
 | `dataset_template.csv` | 6 dòng | **Đặng Chí Thanh** | Tệp mẫu UTF-8-sig quy định header chuẩn |

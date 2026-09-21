@@ -16,7 +16,7 @@ Nhằm đảm bảo quy trình song song (`--parallels`) không xảy ra xung đ
 | `04_model_random_forest.ipynb` | **Hoàng Cao Sơn** | Huấn luyện Random Forest, tinh chỉnh n_estimators/max_depth, Feature Importance | ✅ Done (Phase 05 — F1=0.9425, Recall=0.9762) |
 | `04_model_xgboost.ipynb` | **Bùi Thị Mỷ Cẩm** | Huấn luyện XGBoost Classifier, tinh chỉnh learning_rate/subsample | ✅ Done (Phase 05 — F1=0.9535) |
 | `05_model_svm.ipynb` | **Bùi Thị Mỷ Cẩm** | Support Vector Machine (LinearSVC Calibrated / RBF Kernel), đóng gói `best_model_bundle.pkl` | ✅ Done (Phase 06 — F1=0.9474, Recall=0.9643) |
-| `06_evaluation_xai.ipynb` | **Đặng Chí Thanh** | So sánh tổng hợp 4 mô hình, ROC-AUC, Confusion Matrix, Top-20 SHAP XAI | ⏳ Sprint 3 (Phase 07) |
+| `06_evaluation_xai.ipynb` | **Đặng Chí Thanh** | So sánh tổng hợp 4 mô hình, ROC-AUC, Confusion Matrix, Top-20 SHAP XAI | ✅ Done (Phase 07 PASSED) |
 
 ---
 

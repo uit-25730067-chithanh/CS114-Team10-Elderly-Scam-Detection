@@ -13,7 +13,7 @@
 | Owner | **PPT: Cẩm (25730013) · Report: Sơn (25730061) · Review/Merge: Thanh (25730067)** |
 | Priority | P1 |
 | Status | `in-progress` |
-| Review | 🟡 Template branches tạo xong — chờ thành viên tạo PR |
+| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word đang hoàn thiện |
 | Estimated effort | 8–12h |
 | Sprint | Sprint 2–3 Fast-Track (15/09 – 22/09/2026) |
 
@@ -21,8 +21,9 @@
 
 | Branch | Owner | File template cốt lõi | Trạng thái |
 |--------|-------|----------------------|-----------|
-| `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Template ready ✅ — chờ Cẩm hoàn thiện |
-| `feat/phase-09-report-template` | **Sơn** tạo PR | [`REPORT_OUTLINE.md`](../../draft/scam-detection/reports/report/REPORT_OUTLINE.md) · [`report-source.md`](../../draft/scam-detection/reports/report/report-source.md) · [`report-meta.yaml`](../../draft/scam-detection/reports/report/report-meta.yaml) | Template ready ✅ — chờ Sơn hoàn thiện |
+| `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Hoàn tất ✅ — PR #26 đã merge vào main (22 slide, 3.4 MB PPTX/PDF) |
+| `feat/phase-09-presentation-script` | **Thanh** tạo PR | [`script.md`](../../draft/scam-detection/reports/slides/scripts/script.md) (51 KB) | Hoàn tất ✅ — PR #27 kịch bản 15p chuẩn WPM & 10 chủ đề Q&A |
+| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Đang triển khai 🟡 — Sơn biên soạn 5 chương trên branch |
 
 ## Context
 
@@ -80,7 +81,7 @@ Theo yêu cầu trong [README.md](../../README.md):
 | **Random Forest** | 5.015 (TF-IDF + 15 aux) | `n_est=200, depth=50, split=2, leaf=2, max_feat=0.2` | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn) |
 | **MultinomialNB** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline vượt F1≥0.88, FN=6, FP=14 (Phase 04 — Cẩm) |
 
-- **Hệ thống 28 biểu đồ trực quan hóa chuẩn 300 DPI (`draft/scam-detection/reports/figures/`):**
+- **Hệ thống 28 biểu đồ trực quan hóa mô hình chuẩn 300 DPI (kết hợp 4 ảnh demo ở Mục 4.4 tạo thành hệ thống 32 hình ảnh chuẩn của dự án tại `draft/scam-detection/reports/figures/`):**
   - **7 Biểu đồ EDA (Phase 03):** `label_distribution.png`, `scam_category_distribution.png`, `text_length_comparison.png`, `wordcloud_scam_vs_normal.png`, `top_ngrams_scam_vs_normal.png`, `auxiliary_correlation_heatmap.png`, `source_distribution.png`.
   - **15 Biểu đồ đơn mô hình (Phase 04–06):** Confusion Matrix, ROC curve, Learning curve, Feature Importance của từng mô hình (NB, RF, XGB, Linear SVM).
   - **6 Biểu đồ so sánh tổng hợp & XAI (Phase 07 — Thanh):**
@@ -121,35 +122,38 @@ Theo yêu cầu trong [README.md](../../README.md):
 9. Cục Cảnh sát hình sự — Bộ Công an, "Cẩm nang nhận diện và phòng ngừa các thủ đoạn lừa đảo chiếm đoạt tài sản trên không gian mạng," 2025–2026.
 10. A. K. Jain, "Data clustering: 50 years beyond K-means," *Pattern Recognit. Lett.*, vol. 31, no. 8, pp. 651–666, 2010.
 
-## Slide PPT (19 slides — 15 phút)
+## Slide PPT (22 slides — 15 phút)
 
 | Slide # | Loại slide | Nội dung chính | Thời lượng | Phụ trách |
 |:---:|---|---|:---:|---|
 | **1** | Title | Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào NCT | 30s | Đặng Chí Thanh |
-| **2** | Stat callout | Bối cảnh & Vấn đề (420 mẫu lừa đảo, 4 nhóm bẫy tâm lý, Zero Synthetic Text) | 1.5 phút | Đặng Chí Thanh |
-| **3** | Icon grid | Mục tiêu & Đóng góp (4 models, F1≥88%, SHAP XAI, Web Demo) | 1.5 phút | Đặng Chí Thanh |
-| **4** | Section divider | Divider: Dữ liệu & Phương pháp | 15s | Đặng Chí Thanh |
-| **5** | Text + Image | Dataset 2.193 mẫu thực tế (80/20 Stratified Split, 7 tầng kiểm toán) | 1.5 phút | Đặng Chí Thanh |
-| **6** | Two-column | 4 nhóm bẫy tâm lý (Quyền lực 127, Gia đình 88, Quà tặng 46, Dịch vụ công 159) | 1.5 phút | Đặng Chí Thanh |
-| **7** | Full diagram | Pipeline tiền xử lý tiếng Việt & Không gian vector 5.015 chiều | 1.5 phút | Đặng Chí Thanh |
-| **8** | Section divider | Divider: Mô hình & Kết quả thực nghiệm | 15s | Bùi Thị Mỷ Cẩm |
-| **9** | Table comparison | Bảng so sánh hiệu năng 4 mô hình (XGBoost F1=0.9535, Linear SVM F1=0.9474) | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **10** | Two-column image | ROC Curves & Precision-Recall Curves đa mô hình (AUC 0.9911 → 0.9986) | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **11** | Image + text | Confusion Matrix & Phân tích sai số (XGBoost FN=2, SVM FN=3) | 1 phút | Bùi Thị Mỷ Cẩm |
-| **12** | Two-column image | Explainable AI: SHAP Beeswarm & Top-20 từ khóa bẫy tâm lý đồng thuận | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **13** | Section divider | Divider: Ứng dụng & Trình diễn | 15s | Hoàng Cao Sơn |
-| **14** | Multi-image demo | Streamlit Web App Demo & Tính năng trợ năng người cao tuổi (Hotline 156/113) | 2 phút | Hoàng Cao Sơn |
-| **15** | Two-column | Kết luận & Hướng phát triển (PhoBERT, Mobile App) | 1 phút | Hoàng Cao Sơn |
-| **16** | Section divider | Divider: Phụ lục & Backup Slides | — | Cả nhóm |
-| **17** | Diagram/Card | Backup 1: Chi tiết kiến trúc Pipeline & 15 đặc trưng phụ | Q&A | Cả nhóm |
-| **18** | Table | Backup 2: Chi tiết siêu tham số và không gian Tuning | Q&A | Cả nhóm |
-| **19** | Closing | Backup 3: Lời cảm ơn, Q&A & Thông tin liên hệ | Q&A | Cả nhóm |
+| **2** | Agenda | Lộ trình báo cáo 5 phần & Phụ lục Q&A | 20s | Đặng Chí Thanh |
+| **3** | Stat callout | PHẦN 1: Bối cảnh lừa đảo NCT tại VN 2026 (420 mẫu lừa đảo, Zero Synthetic Text) | 1.5 phút | Đặng Chí Thanh |
+| **4** | Icon grid | PHẦN 1: Mục tiêu đề tài & 4 đóng góp chính (F1≥88%, Recall≥92%, XAI, Demo) | 1.5 phút | Đặng Chí Thanh |
+| **5** | Section divider | Divider PHẦN 2: Dữ liệu & Phương pháp tiếp cận | 15s | Đặng Chí Thanh |
+| **6** | Text + Image | PHẦN 2: Bộ dữ liệu 2.193 mẫu thực tế (Stratified 80/20, 7 tầng kiểm toán) | 1.5 phút | Đặng Chí Thanh |
+| **7** | Two-column | PHẦN 2: Cơ cấu 4 nhóm bẫy tâm lý (Dịch vụ công, Quyền lực, Gia đình, Quà tặng) | 1.5 phút | Đặng Chí Thanh |
+| **8** | Full diagram | PHẦN 2: Pipeline tiền xử lý tiếng Việt & Không gian vector 5.015 chiều | 1.5 phút | Đặng Chí Thanh |
+| **9** | Section divider | Divider PHẦN 3: Mô hình hóa & Kết quả thực nghiệm | 15s | Bùi Thị Mỷ Cẩm |
+| **10** | Table comparison | PHẦN 3: Bảng so sánh 4 mô hình (XGBoost F1=0.9535, Linear SVM F1=0.9474) | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **11** | Two-column image | PHẦN 3: Đường cong ROC & Precision-Recall lồng ghép (AUC 0.9911 → 0.9986) | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **12** | Two-column image | PHẦN 3: Giải thích mô hình XAI với SHAP Beeswarm & Top từ khóa quan trọng | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **13** | Section divider | Divider PHẦN 4: Ứng dụng thực tế & Giao diện Demo | 15s | Hoàng Cao Sơn |
+| **14** | Multi-image demo | PHẦN 4: Streamlit Web App Split-View Workbench & Trợ năng NCT (Hotline 156/113) | 2 phút | Hoàng Cao Sơn |
+| **15** | Section divider | Divider PHẦN 5: Kết luận & Hướng phát triển | 15s | Hoàng Cao Sơn |
+| **16** | Two-column | PHẦN 5: Kết luận, Đóng góp chính & Hạn chế đề tài | 1.5 phút | Hoàng Cao Sơn |
+| **17** | References (2-col)| PHẦN 5: 15 Tài liệu tham khảo theo chu trình vòng đời đề tài | 1 phút | Hoàng Cao Sơn |
+| **18** | Closing | PHẦN 5: Lời cảm ơn chuẩn UIT, Thông tin liên hệ & Q&A | 30s | Hoàng Cao Sơn |
+| **19** | Section divider | Divider PHỤ LỤC: Backup Slides & Phản biện kỹ thuật | Q&A | Cả nhóm |
+| **20** | Table | Backup 1: Chi tiết Siêu tham số và Không gian Tuning | Q&A | Cả nhóm |
+| **21** | Image + text | Backup 2: Ma trận nhầm lẫn 2×2 chi tiết 4 mô hình (XGB FN=2, SVM FN=3) | Q&A | Cả nhóm |
+| **22** | Image + text | Backup 3: Đường cong học tập 5-fold CV kiểm soát quá khớp | Q&A | Cả nhóm |
 
 ## Fast-Track Tasks (Báo cáo sớm 23/09/2026)
 
-- [ ] **Sprint 2 (15/09 – 18/09):** Viết sớm Báo cáo Word Chương 1 (Đặt vấn đề), Chương 2 (Khảo sát) + Chương 3 (Phương pháp) + Chuẩn bị khung Slide PPT 15 phút
-- [ ] **Sprint 3 (19/09 – 20/09):** Báo cáo Word Chương 4 (Thực nghiệm — tích hợp số liệu từ Phase 07) + Chương 5 (Kết luận) + Hoàn thiện Slide PPT (19 slides)
-- [ ] **Sprint 3 (21/09 – 22/09):** Diễn tập thuyết trình (≤15 phút) cả nhóm + Chuẩn bị câu hỏi Q&A phản biện của thầy Thăng
+- [x] **Sprint 2 (15/09 – 18/09):** Khung Slide PPT, hoàn tất huấn luyện 4 mô hình và trích xuất bảng metrics
+- [x] **Sprint 3 (19/09 – 21/09):** Hoàn thiện Slide PPT 22 trang (PR #26 merged) + Kịch bản thuyết trình 15p & 10 chủ đề Q&A (PR #27)
+- [ ] **Sprint 3 (21/09 – 22/09):** Báo cáo Word Chương 1–5 (Sơn lead) + Diễn tập thuyết trình (≤15 phút) cả nhóm
 - [ ] **D-Day (18:30 23/09/2026):** Thuyết trình trực tuyến MS Teams, luân phiên cả 3 thành viên trước ThS. Cáp Phạm Đình Thăng
 
 ## Checklist
@@ -164,7 +168,8 @@ Theo yêu cầu trong [README.md](../../README.md):
 - [ ] Tài liệu tham khảo (≥10 refs IEEE)
 - [ ] File Word đúng định dạng (.docx)
 - [ ] File PDF exported
-- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup) — *bản hiện tại 22 slide theo chỉ đạo của anh Thanh (Agenda + 5 PHẦN), khác bảng 19 slide ở trên, xem [Ghi chú bàn giao](#ghi-chú-bàn-giao-cho-anh-thanh-ppt--cẩm-21092026)*
+- [x] PPT 22 slides (15 chính + 1 Agenda + 5 dividers + 3 backup) — `phase09_presentation.pptx` (3.4 MB) & PDF, merged qua PR #26
+- [x] Kịch bản thuyết trình bảo vệ 15 phút (`script.md`, 51 KB) bám sát 22 slide, phân vai chuẩn WPM & 10 chủ đề Q&A (PR #27)
 - [x] PPT có biểu đồ, screenshots demo
 - [ ] Diễn tập thuyết trình ≤15 phút
 
@@ -173,93 +178,9 @@ Theo yêu cầu trong [README.md](../../README.md):
 | Criterion | Evidence |
 |-----------|---------|
 | Word report | ≥15 trang, đầy đủ 5 chương |
-| PPT | 19 slides (15 chính + 1 divider + 3 backup), ≤15 phút |
-| Figures embedded | Tất cả biểu đồ từ Phase 07 (`draft/scam-detection/reports/figures/`) |
-| References | ≥10 tài liệu tham khảo chuẩn IEEE |
-
-## Ghi chú bàn giao cho anh Thanh (PPT — Cẩm, 21/09/2026)
-
-> Gửi anh Thanh (@25730067, reviewer Phase 09): bộ slide đã dựng xong bản đầu, có **4 vấn đề còn treo** cần anh xem trước khi bảo vệ 18:30 23/09. Chưa sửa gì ở các file dùng chung (README, demo, evaluator) vì cần anh/nhóm đồng ý.
-
-**Trạng thái bộ slide:** `draft/scam-detection/reports/slides/generate_slides.js` → `phase09_presentation.pptx` (commit `1f6770e`, `07b4f2b`). Mọi chỉ số mô hình đọc trực tiếp từ `models/*_metrics.json`; mỗi slide có speaker notes; chưa có hiệu ứng chuyển slide;.
-
-**Khác biệt so với bảng 19 slide ở trên (cần anh duyệt cấu trúc):** bản dựng có **20 slide** = 15 slide chính (có slide Tài liệu tham khảo) + Cảm ơn + divider phụ lục + 3 backup (Siêu tham số, Confusion Matrices, Learning Curves). Confusion Matrix chuyển sang backup; không có backup "Pipeline & 15 đặc trưng phụ" (pipeline nằm ở slide 7).
-
-| # | Vấn đề | Cần anh làm |
-|:-:|---|---|
-| 1 | **ROC-AUC của Random Forest có 2 giá trị:** log Phase 05 (`random_forest_metrics.json`, raw 0.997552) = **99.76%**; `model_comparison.csv` và ảnh `roc_curves_comparison.png` (Phase 07 tính lại) = **99.77%**. Slide 9 dùng 99.76%, slide 10 hiện ảnh ghi 0.9977. | Chọn 1 giá trị chuẩn cho cả nhóm (anh là owner Phase 07). Slide 9 đã có câu trả lời Q&A trong speaker notes. |
-| 2 | **`alpha` của Naive Bayes bị ghi sai `0.5`, giá trị đúng là `0.01`** (xem 4 chỗ bên dưới). | Đồng ý để sửa, sau đó sinh lại CSV bằng `run_full_evaluation.py`. |
-| 3 | **Tài liệu tham khảo [4]** "Vietnamese Quality-Assured SMS Dataset, IEEE Access 2026 (doi pending)" là nguồn 1.773 mẫu bình thường — chưa xác minh được bài có tồn tại/đã xuất bản. | Xác minh tên bài, tác giả, link (anh thu thập nhóm dữ liệu này). Nếu không xác minh được: ghi "bộ dữ liệu công khai trên GitHub" kèm link thay vì trích dẫn IEEE. |
-| 4 | **Hiệu ứng chuyển slide chưa áp dụng:** `inject_transitions.py` (morph/fracture) chưa kiểm chứng trên PowerPoint thật, có nguy cơ báo "file cần sửa chữa" lúc bảo vệ. | Tùy chọn: mở PowerPoint → chọn tất cả slide → tab Transitions → Fade → Apply To All. |
-
-**Vấn đề 2 — 4 chỗ ghi `alpha=0.5` cần sửa thành `alpha=0.01` (và "Phase 04 — Thanh" thành "Phase 04 — Cẩm"):**
-
-1. `draft/scam-detection/src/evaluation/metrics_calculator.py` dòng 44–45 — **gốc lỗi** (chuỗi gõ cứng trong `MODEL_METADATA`).
-2. `draft/scam-detection/reports/model_comparison.csv` dòng 5 — được sinh ra từ mục 1 nên phải sửa mục 1 trước, nếu không lần chạy đánh giá sau sẽ ghi đè.
-3. `README.md` (gốc repo) dòng 125 — bảng kết quả.
-4. `draft/scam-detection/demo/app.py` dòng 92 — mô tả mô hình hiển thị cho người dùng demo.
-
-Bằng chứng `0.01` đúng: `models/naive_bayes.pkl` lưu `alpha=0.01`; `naive_bayes_metrics.json` có `best_alpha: 0.01`; dựng lại mô hình trên X_train/X_test chỉ cho ra F1 0.8864 / FN=6 / FP=14 với `alpha=0.01` (với `alpha=0.5` F1 chỉ 0.8402, FN=13). Các tài liệu khác (AGENTS.md, plan Phase 04, `models/README.md`, hai báo cáo audit) đều đã ghi 0.01.
-
-## Phản hồi thẩm định & Quyết định của anh Thanh (PM / Reviewer — 21/09/2026)
-
-### 4 Quyết định Kỹ thuật Dứt điểm:
-1. **Vấn đề 1 (ROC-AUC RF 99.76% vs 99.77%):** Đã đánh giá lại model artifact `random_forest.pkl` trên test set thực tế cho kết quả `0.99765258...` → **CHỐT 99.77%**. Cập nhật `random_forest_metrics.json` để Slide 9 và Slide 10 đồng nhất 100%.
-2. **Vấn đề 2 (Naive Bayes alpha=0.01 & Tác giả Phase 04 — Cẩm):** **ĐỒNG Ý**. Sửa triệt để cả 4 vị trí (`metrics_calculator.py`, `model_comparison.csv`, `README.md`, `demo/app.py`).
-3. **Vấn đề 3 (Trích dẫn [4] IEEE Access):** **XÓA BỎ TRÍCH DẪN GIẢ**. Thay bằng trích dẫn dataset thực tế / Báo cáo Cục ATTT trên Slide 15.
-4. **Vấn đề 4 (Transitions):** **GIỮ NGUYÊN BẢN (KHÔNG DÙNG SCRIPT HACK XML)** để tránh lỗi file lúc bảo vệ; khi chiếu chỉ cần bật hiệu ứng Fade nhẹ 0.3s trên PowerPoint native.
-
-### Trạng thái xử lý 4 quyết định (Cẩm, 21/09/2026):
-1. **ROC-AUC RF — ✅ Đã xử lý:** Slide 9 đọc trực tiếp `random_forest_metrics.json` nên hiển thị **99.77%**, khớp chú thích 0.9977 trong ảnh ROC ở Slide 10. Cẩm tự tính lại `random_forest.pkl` trên tập test cho cùng kết quả `0.9976525821596244`. Đã dựng lại `phase09_presentation.pptx`.
-2. **`alpha` Naive Bayes — ✅ Đã xác minh:** sau khi pull, cả 4 vị trí đã là `alpha=0.01`, tác giả Phase 04 là Cẩm; deck vốn đọc `0.01` từ `naive_bayes_metrics.json`.
-3. **Trích dẫn [4] — ✅ Đã thay, kèm một hiệu chỉnh cần anh biết:** bỏ chữ "doi pending"; [4] nay trích đúng theo yêu cầu của tác giả bộ dữ liệu, kèm repo GitHub `trannguyenthaituan251209/vietnamese_sms_dataset` (1.944 mẫu: 1.773 bình thường + 171 lừa đảo; CC BY 4.0 theo README). Thêm [6] cho các nguồn bổ sung (249/420 mẫu lừa đảo: `lachancuocgoi`, `SMS_Phishing_Detection`, `ViSmish_Detection`, báo chí/VTV24), và Slide 5 trích dẫn [4], [6]. Không thêm "Báo cáo Cục ATTT" vì chưa có tên báo cáo và đường dẫn để kiểm chứng.
-   - *Hiệu chỉnh so với báo cáo thẩm định:* README chính thức của repo bộ dữ liệu có mục Citation yêu cầu trích dẫn bài "Vietnamese SMS Dataset with Quality Assurance" (Tran, Le, Nguyen, Nguyen, Mai; IEEE Access, 2026, không ghi tập/DOI). Nên bài báo không phải placeholder do nhóm tự đặt; điều Cẩm không xác nhận được là bài đã xuất bản hay chưa, vì vậy [4] ghi "chưa có tập/DOI" và speaker notes Slide 15 dặn không khẳng định bài đã xuất bản.
-4. **Transitions — ✅ Giữ nguyên:** không dùng script XML; nhắc bật Fade 0.3s (Transitions → Fade → Apply To All) trong speaker notes Slide 1.
-
-### 5 Chỉ đạo Bổ sung & Định hướng Nâng cấp Slide gửi em Cẩm tự hoàn thiện:
-1. **Header, Footer & Đánh số trang đồng bộ:** Toàn bộ slide nội dung cần Header (`TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM`), Footer (`CS114: Máy học — Nhóm 10 — Báo cáo Đồ án: Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam`) và số trang định dạng `01 / 22`, `02 / 22`...
-2. **Thống nhất tên đề tài chuẩn:** "Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam" (loại bỏ hoàn toàn các biến thể như "Gian lận tài chính").
-3. **Bổ sung Slide Lộ trình báo cáo (Agenda) & Đánh số phân đoạn:** Thêm Slide 2 Agenda 2 cột (5 phần chính + Phụ lục Q&A) và đánh số rõ ràng `PHẦN 1..5`.
-4. **Sắp xếp Tài liệu tham khảo theo vòng đời dữ liệu / dự án:** Xếp 2 cột theo chu trình: Nguồn cào data → Tiền xử lý NLP → Thuật toán Học máy → XAI → Trợ năng Web → PhoBERT.
-5. **Chuẩn hóa Lời cảm ơn:** `"CHÂN THÀNH CẢM ƠN THẦY VÀ CÁC BẠN ĐÃ LẮNG NGHE BÁO CÁO!"`.
-- **Định hướng Slide vs Script:** Slide không cần cắt xén quá ngắn gọn. Slide đóng vai trò là "điểm tựa thị giác" (visual anchor) chứa đủ luận cứ khoa học để bổ trợ cho kịch bản nói (script) của speaker. Transition sẽ hoàn thiện đồng bộ sau cùng.
-
-Toàn văn báo cáo thẩm định chuyên môn và phản biện xem tại:
-- [`research-cam-phase09-ppt-slides-audit.md`](../../draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md)
-
-### Cập nhật bản 22 slide, trạng thái 5 chỉ đạo và hiệu chỉnh Q&A (Cẩm, 21/09/2026)
-
-**Trạng thái 5 chỉ đạo của anh Thanh (deck `phase09_presentation.pptx`, 22 slide, 3,4 MB):**
-1. **Header, footer, số trang — ✅:** header `TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM` + nhãn PHẦN bên phải; footer 2 dòng cỡ 10pt đúng nội dung anh yêu cầu; số trang `NN / 22` tự tính theo tổng slide (không gõ tay). Chỉ áp dụng cho 15 slide nội dung; bìa, slide phân đoạn và slide cảm ơn để nền navy toàn khung.
-2. **Tên đề tài chuẩn — ✅:** bìa dùng đúng "Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam" (trùng README, BRAINSTORM, cẩm nang bảo vệ); thuộc tính tệp `.pptx` cũng dùng tên này. Cụm "Gian lận tài chính" không xuất hiện ở đâu trong repo.
-3. **Agenda và `PHẦN 1..5` — ✅ (22 slide):** Agenda ở slide 2; PHẦN 1 mở đầu bằng Agenda (không cần slide phân đoạn), PHẦN 2–5 mỗi phần có 1 slide phân đoạn (tách "Demo" và "Kết luận" thành hai slide) + 1 slide phân đoạn Phụ lục.
-4. **Tài liệu tham khảo 2 cột theo vòng đời — ✅ (15/18 tài liệu lên slide 17):** thứ tự nguồn dữ liệu → tiền xử lý NLP → thuật toán học máy → XAI → trợ năng web → hướng phát triển; mỗi tài liệu đã kiểm chứng qua Crossref, trang gốc tạp chí/hội nghị, W3C, Unicode.org, PyPI và GitHub (bằng chứng: `draft/scam-detection/reports/research-cam-phase09-references-lifecycle.md`). 3 tài liệu để dành cho báo cáo Word: LIBLINEAR, McCallum & Nigam (Naive Bayes), Streamlit. Không thêm "Báo cáo Cục ATTT" vì chưa có tên báo cáo và đường dẫn để kiểm chứng.
-   - *Hiệu chỉnh:* trích dẫn Platt đổi sang bản đã xuất bản (chương "Probabilities for SV Machines", MIT Press, 2000, pp. 61–74, DOI 10.7551/mitpress/1113.003.0008; bản thảo 1999 mang tên dài khác); bổ sung số trang cho XGBoost, PhoBERT, scikit-learn.
-   - *Đánh số mới theo vòng đời (thay cho số cũ ở các mục phía trên):* [1] bộ dữ liệu SMS chính, [2] nguồn bổ sung, [3] Unicode UAX #15, [4] PyVi, [5] underthesea, [6] TF-IDF, [7] XGBoost, [8] Random Forest, [9] SVM, [10] Platt, [11] scikit-learn, [12] SHAP, [13] TreeExplainer, [14] WCAG 2.1, [15] PhoBERT. Số cũ [4] trong các đoạn trên nay là [1]; số cũ [6] nay là [2]. Các trích dẫn trong slide 6, 8, 10, 12, 14, 16 đã đánh số lại.
-5. **Lời cảm ơn — ✅:** `CHÂN THÀNH CẢM ƠN THẦY VÀ CÁC BẠN ĐÃ LẮNG NGHE BÁO CÁO!`.
-- **Logo UIT ở bìa và slide cảm ơn — ✅:** dùng bộ nhận diện chính thức của trường (`Logo UIT_DHQG_Trang_Transparent.png`, bản trắng có tên ĐHQG-HCM) theo Brand Guideline: logo trắng trên nền tối, đặt giữa phía trên, không kéo giãn, không đổi màu. File nằm ở `draft/scam-detection/reports/slides/assets/`.
-
-**Bản đồ 22 slide và phân vai (giữ phân bổ 14 phút của báo cáo thẩm định, dư ~1 phút):**
-
-| Slide | Nội dung | Trình bày |
-|:-:|---|---|
-| 1–8 | Bìa · Agenda (≤ 20 giây) · PHẦN 1 (2 slide) · divider PHẦN 2 · Dataset · 4 nhóm bẫy · Pipeline | Thanh — 4:30 |
-| 9–12 | divider PHẦN 3 · So sánh mô hình · ROC/PR · SHAP | Cẩm — 5:00 |
-| 13–18 | divider PHẦN 4 · Demo · divider PHẦN 5 · Kết luận · Tài liệu tham khảo · Cảm ơn | Sơn — 4:30 |
-| 19–22 | divider Phụ lục · Siêu tham số · Confusion Matrix · Learning Curves | Cả nhóm (Q&A) |
-
-Các slide phân đoạn (5, 9, 13, 15, 19) không nói. Số slide trong bảng phân vai của báo cáo thẩm định (Slide 1–7, 8–11, 12–16, 17–20) đã dịch sang bản đồ mới này. Dòng "Presentation Deck ... 20 slides, 2.5 MB" ở mục Evidence bên dưới là số liệu của bản trước; bản hiện tại là 22 slide, 3,4 MB.
-
-**Slide 12 (SHAP) đã sửa theo dữ liệu thật.** Đo trên `dataset_preprocessed.csv` (tỉ lệ tin lừa đảo chung là 19,2%): trong Top-20 từ khóa quan trọng có 9 từ không thiên về lừa đảo (`money` 1,2%, `number` 1,7%, `time` 1,0%, `liên_hệ 198` và `198` 0%, `soạn` 0,4%, `viettel` 0,5%, cùng `doi`, `sẽ` lẫn lộn); các từ `mày`, `gấp`, `viện_phí`, `thuế`, `số_định_danh` thì 100% là tin lừa đảo. Nhiều đặc trưng là **thẻ ẩn danh có sẵn trong bộ dữ liệu gốc**: tin bình thường dùng `[MONEY]`, `[NUMBER]`, `[TIME]`; tin lừa đảo dùng `[ĐƯỜNG_DẪN]`, `[THƯƠNG_HIỆU]`, `[SỐ_TIỀN]`. Thử nghiệm bỏ toàn bộ 453 đặc trưng chứa thẻ rồi huấn luyện lại đúng quy trình notebook (`src/evaluation/ablation_masking_tags.py`, kết quả `reports/ablation_masking_tags.json`; tái lập đúng F1 đã báo cáo): XGBoost F1 0.9535 → 0.9425 (Recall giữ 0.9762), Naive Bayes F1 0.8864 → 0.8503. Nên hiệu năng không chủ yếu do thẻ ẩn danh, nhưng cách gọi "từ khóa cảnh báo bẫy tâm lý" ở Phase 07 cần đổi thành "từ khóa quan trọng".
-
-**Hiệu chỉnh 4 câu Q&A trong báo cáo thẩm định (kiểm chứng với dữ liệu; câu trả lời đề xuất để cả nhóm thống nhất):**
-- **Câu 10 (đạo đức, PII):** báo cáo ghi "100% tin lừa đảo lấy từ báo chí" là chưa đúng. Chỉ 13/420 mẫu lừa đảo từ báo chí và video; 407/420 từ các bộ dữ liệu công khai trên GitHub; cả 2.193 dòng đều có `source_url`. *Trả lời:* "Nhóm khử PII 100%; dữ liệu lừa đảo lấy từ nguồn công khai (chủ yếu các bộ dữ liệu SMS trên GitHub, một phần báo chí và video điều tra), mọi mẫu đều có URL nguồn để truy vết."
-- **Câu 8 (từ "money"):** báo cáo ghi "regex thay mọi số tiền" là chưa đúng. `money` là thẻ ẩn danh `[MONEY]` có sẵn trong bộ dữ liệu gốc (1.236 dòng thô, 1.221 dòng là tin bình thường); dữ liệu thô không có số tiền thật nào để regex thay. *Trả lời:* "Đó là thẻ che số tiền của bộ dữ liệu gốc, không phải từ tiếng Anh; nó xuất hiện chủ yếu ở tin bình thường nên mô hình dùng như dấu hiệu tin thông báo bình thường. Nhóm đã kiểm tra bằng cách bỏ toàn bộ đặc trưng chứa thẻ ẩn danh, F1 XGBoost chỉ giảm từ 0.9535 xuống 0.9425."
-- **Câu 1 (PhoBERT):** con số "<15ms so với >300ms" chưa có phép đo nào trong repo. *Trả lời:* nói định tính (PhoBERT cần GPU, nhóm chưa thử nghiệm trong đồ án; mô hình cổ điển chạy được trên CPU); chỉ nêu số khi đã đo `predict` thật trên máy demo.
-- **Câu 7 (teencode):** "tinh lọc từ benchmark NLP chuẩn" không có căn cứ trong mã nguồn. *Trả lời:* "Từ điển do nhóm tự biên soạn (160 mục), cố ý loại các từ đơn mơ hồ để tránh biến đổi sai nghĩa (ghi trong `teencode_dictionary.py`); đặc trưng `has_leet_speak` để mô hình tự học phần còn lại."
-
-**Việc còn lại:** (1) diễn tập bấm giờ ≤ 15 phút theo bản đồ 22 slide; (2) bật Fade 0.3s thủ công trong PowerPoint sau cùng, vì dựng lại `.pptx` bằng script sẽ mất hiệu ứng.
-**Chỉnh tay đã đưa vào script:** slide 2 (Agenda) đã bỏ dòng "Trình bày: …" ở các thẻ theo chỉnh sửa trong PowerPoint của Cẩm; script hỗ trợ biến môi trường `PPTX_OUT` để dựng thử ra nơi khác mà không ghi đè file đang chỉnh tay.
+| PPT | 22 slides (15 chính + 1 Agenda + 5 dividers + 3 backup), ≤15 phút |
+| Figures embedded | Tất cả 32 biểu đồ từ Phase 03–08 (`draft/scam-detection/reports/figures/`) |
+| References | 15 tài liệu tham khảo theo vòng đời đề tài chuẩn IEEE/APA |
 
 ## Evidence Section
 
@@ -270,6 +191,7 @@ Các slide phân đoạn (5, 9, 13, 15, 19) không nói. Số slide trong bảng
 [✓] Overlap Checker: .agents/skills/powerpoint-slides/scripts/check_overlaps.py -> OK: no overlap or boundary issues found (0 critical, 0 major, 0 warnings)
 [✓] Typography & Bounds Audit: Cambria / Calibri, 0 overflow elements, max_bottom <= 5.56" (SH = 5.625", footer y=5.18, h=0.36)
 [✓] Research Audit Document: draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md (88/100 A-) & research-cam-phase09-references-lifecycle.md
+[✓] Work History Journal: plans/journals/2026-09-21-refinement-and-hard-review-of-presentation-slides.md
 [✓] 10 Q&A Defenses for ThS. Cáp Phạm Đình Thăng prepared & evidence-backed
 ```
 

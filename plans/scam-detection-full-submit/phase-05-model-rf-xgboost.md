@@ -144,7 +144,7 @@ joblib.dump(xgb_model, "models/xgboost.pkl")
 |-----------|:---:|:---:|:---:|:---:|
 | F1-Score | F1 > NB baseline (0.8864) | **0.9425 (94.25%)** | **0.9535 (95.35%)** | ✅ PASSED (Cả 2 vượt xa NB) |
 | Recall Scam class | ≥ 92.0% | **0.9762 (97.62%)** | **0.9762 (97.62%)** | ✅ PASSED (Bắt 82/84 mẫu lừa đảo) |
-| ROC-AUC | ≥ 0.9500 | **0.9976 (99.76%)** | **0.9984 (99.84%)** | ✅ PASSED (Phân tách gần tuyệt đối) |
+| ROC-AUC | ≥ 0.9500 | **0.9977 (99.77%)** | **0.9984 (99.84%)** | ✅ PASSED (Phân tách gần tuyệt đối) |
 | No severe overfitting | Train/Val converge | Learning curve hội tụ đều từ 0.85 → 0.95 | Val F1 tăng từ 0.83 → 0.96 | ✅ PASSED |
 
 ## Evidence Section *(điền sau khi làm)*
@@ -206,7 +206,7 @@ Final model (tuned, refit trên toàn bộ X_train) — TEST SET (439 mẫu unse
   Precision = 0.9111 (91.11%)
   Recall    = 0.9762 (97.62%)  <-- VƯỢT XA TARGET >= 92% (82/84 mẫu lừa đảo)
   F1        = 0.9425 (94.25%)  <-- VƯỢT XA TARGET >= 88% (+6.25%)
-  ROC-AUC   = 0.9976 (99.76%)
+  ROC-AUC   = 0.9977 (99.77%)
 
 Classification report (test):
                 precision    recall  f1-score   support

@@ -25,7 +25,8 @@
 │       ├── demo/                  ← Demo UI (Streamlit)
 │       ├── docs/                  ← Tài liệu kỹ thuật kiến trúc, tiêu chuẩn mã, roadmap
 │       ├── notebooks/             ← Jupyter notebooks (01-preprocessing, 02-eda, 03–06 models)
-│       ├── reports/               ← Kết quả, 20 biểu đồ @ 300 DPI (7 EDA + 7 Model Learning Curves + 6 Multi-Model Comparison/XAI)
+│       ├── reports/               ← Kết quả, 32 biểu đồ @ 300 DPI (7 EDA + 15 đơn mô hình + 6 Đa mô hình & XAI + 4 Demo UI)
+│       │   └── slides/            ← Slide thuyết trình 22 trang (phase09_presentation.pptx, PDF, generate_slides.js, scripts/script.md)
 │       ├── src/                   ← Source code Python (utils, preprocessing, feature engineering, models, eval)
 │       └── requirements.txt       ← Thư viện phụ thuộc
 │
@@ -72,7 +73,7 @@
 
 ## 📊 Tiến độ (3-Sprint Fast-Track — Báo cáo sớm 23/09/2026)
 
-> ⚡ **Chiến lược Báo cáo sớm (Fast-Track):** Nhóm xin báo cáo sớm vào ngày **23/09/2026** (Hạn LMS gốc: 13/10/2026). Đã hoàn tất Sprint 1 và khóa dữ liệu (2.193 mẫu thực tế, 100% Zero Synthetic Text), kích hoạt 4 luồng song song (`--parallels`) Sprint 2 từ 15/09, hoàn tất Báo cáo & Slide ngày 20/09, diễn tập ngày 21–22/09, thuyết trình chính thức ngày **23/09/2026**.
+> ⚡ **Chiến lược Báo cáo sớm (Fast-Track):** Nhóm xin báo cáo sớm vào ngày **23/09/2026** (Hạn LMS gốc: 13/10/2026). Đã hoàn tất Sprint 1 (khóa 2.193 mẫu thực tế, 100% Zero Synthetic Text), hoàn tất Sprint 2 (huấn luyện 4 mô hình vượt chỉ tiêu), hoàn tất Sprint 3 kỹ thuật (Đánh giá XAI Phase 07, Demo UI Phase 08, Slide PPT 22 trang Phase 09 PR #26 merged, Kịch bản thuyết trình 15p & Q&A PR #27). Hiện đang hoàn thiện Báo cáo Word (Sơn lead) và diễn tập bấm giờ 21–22/09 trước giờ G **18:30 ngày 23/09/2026**.
 
 | Sprint | Người | Task | Trạng thái |
 |--------|-------|------|-----------|
@@ -88,10 +89,10 @@
 | | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
 | | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (17/09 – 18/09) | ✅ Done (Phase 06 PASSED — F1=0.9474, ROC-AUC=0.9986, PR #20) |
 | | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ✅ Done (Phase 08 PASSED — PR #21) |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | ⏳ Sẵn sàng triển khai (Phase 09) |
+| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | 🟡 Đang hoàn thiện (Sơn lead) |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | ✅ Done (Phase 07 PASSED — Multi-model benchmark, SHAP beeswarm, PR #23) |
 | | **Sơn** | Tích hợp Model Catalog vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi & E2E Playwright | ✅ Done (Phase 08 PASSED — PR #21) |
-| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Chương 4–5 + Slide 15 phút (14–16 slides) + Diễn tập bấm giờ | 🔲 Sẵn sàng triển khai (Phase 09) |
+| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Slide PPT 22 trang (PR #26 merged) + Kịch bản thuyết trình 15p & Q&A (PR #27) + Báo cáo Word Chương 1–5 | 🟡 Đang hoàn thiện (Phase 09 — Cẩm PPT, Sơn Report, Thanh Script) |
 | | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067-25730013-25730061.zip` (22/09) | 🔲 Sẵn sàng triển khai (Phase 10) |
 | **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
 
@@ -110,7 +111,7 @@
 | 06 | [Phase 06 — Modeling — SVM (Optional: PhoBERT)](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) | **Cẩm** | `passed` ✅ |
 | 07 | [Phase 07 — Evaluation & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md) | **Thanh** | `passed` ✅ |
 | 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `passed` ✅ |
-| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cả nhóm** | `not-started` 🔲 |
+| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) + **Thanh** (Script) | `in-progress` 🟡 |
 | 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `not-started` 🔲 |
 
 ---
