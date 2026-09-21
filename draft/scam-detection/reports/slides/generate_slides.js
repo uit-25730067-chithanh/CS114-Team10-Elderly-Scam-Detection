@@ -246,7 +246,7 @@ function addDivider(part, title, subtitle) {
 }
 
 // Thẻ Agenda: ô số PHẦN bên trái + tiêu đề, mô tả, người trình bày
-function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc, presenter) {
+function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc) {
   slide.addShape(pptx.ShapeType.rect, { x, y, w, h, fill: { color: T.contentSubBg }, line: { color: T.accent, width: 0.5 } });
   slide.addShape(pptx.ShapeType.rect, { x, y, w: 0.85, h, fill: { color: T.accent } });
   slide.addText([
@@ -256,7 +256,6 @@ function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc, pres
   const px = x + 1.0, pw = w - 1.1;
   slide.addText(title, { x: px, y: y + 0.1, w: pw, h: 0.4, fontSize: 16, bold: true, color: T.accentDark, fontFace: "Calibri", valign: "middle", shrinkText: true });
   slide.addText(desc, { x: px, y: y + 0.5, w: pw, h: 0.36, fontSize: 12.5, color: T.text, fontFace: "Calibri", valign: "middle", shrinkText: true });
-  slide.addText(presenter, { x: px, y: y + 0.86, w: pw, h: 0.26, fontSize: 11, italic: true, color: T.textMuted, fontFace: "Calibri", valign: "middle", shrinkText: true });
 }
 
 // ─── SLIDE 1: BÌA (logo UIT + tên đề tài chuẩn) ──────────────────────────────
@@ -298,12 +297,12 @@ function addAgendaCard(slide, x, y, w, h, badgeTop, badgeMain, title, desc, pres
   addHeader(slide, "Lộ trình báo cáo", SEC.agenda);
 
   const items = [
-    ["PHẦN", "1", "Giới thiệu", "Bối cảnh, vấn đề và mục tiêu của nhóm", "Trình bày: Đặng Chí Thanh"],
-    ["PHẦN", "2", "Dữ liệu & Phương pháp", "2.193 mẫu, 4 nhóm bẫy tâm lý, pipeline tiền xử lý", "Trình bày: Đặng Chí Thanh"],
-    ["PHẦN", "3", "Mô hình & Kết quả", "So sánh 4 mô hình, ROC/PR, giải thích SHAP", "Trình bày: Bùi Thị Mỷ Cẩm"],
-    ["PHẦN", "4", "Demo ứng dụng", "Web Streamlit thân thiện với người cao tuổi", "Trình bày: Hoàng Cao Sơn"],
-    ["PHẦN", "5", "Kết luận & Hướng phát triển", "Kết quả, hạn chế đã biết, PhoBERT và voice scam", "Trình bày: Hoàng Cao Sơn"],
-    ["PHỤ LỤC", "Q&A", "Backup trả lời phản biện", "Siêu tham số, Confusion Matrix, Learning Curves", "Cả nhóm"],
+    ["PHẦN", "1", "Giới thiệu", "Bối cảnh, vấn đề và mục tiêu của nhóm"],
+    ["PHẦN", "2", "Dữ liệu & Phương pháp", "2.193 mẫu, 4 nhóm bẫy tâm lý, pipeline tiền xử lý"],
+    ["PHẦN", "3", "Mô hình & Kết quả", "So sánh 4 mô hình, ROC/PR, giải thích SHAP"],
+    ["PHẦN", "4", "Demo ứng dụng", "Web Streamlit thân thiện với người cao tuổi"],
+    ["PHẦN", "5", "Kết luận & Hướng phát triển", "Kết quả, hạn chế đã biết, PhoBERT và voice scam"],
+    ["PHỤ LỤC", "Q&A", "Backup trả lời phản biện", "Siêu tham số, Confusion Matrix, Learning Curves"],
   ];
   items.forEach((it, i) => {
     const col = Math.floor(i / 3), row = i % 3;
@@ -379,7 +378,7 @@ addDivider("PHẦN 2", "Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền 
   addHeader(slide, "Dataset: 2.193 Mẫu Thực Tế", SEC[2]);
 
   const bullets = [
-    "2.193 mẫu · Stratified Split 80/20 · nguồn [4], [6]",
+    "2.193 mẫu · Stratified Split 80/20 · nguồn [1], [2]",
     "Bình thường (label 0): 1.773 mẫu",
     "Lừa đảo (label 1): 420 mẫu — tỉ lệ 4.2:1",
     "Kiểm toán 7 tầng: 0% PII, 0% văn bản tổng hợp",
@@ -445,10 +444,10 @@ addDivider("PHẦN 2", "Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền 
   addHeader(slide, "Pipeline Tiền xử lý & Feature Engineering", SEC[2]);
 
   const steps = [
-    { title: "1. Unicode NFC", body: ["Chuẩn hóa ký tự", "tiếng Việt"] },
+    { title: "1. Unicode NFC", body: ["NFC [3]", "Dấu thanh [5]"] },
     { title: "2. Teencode", body: ["160 từ viết tắt", "+ 22 mẫu leet"] },
-    { title: "3. Tách từ (PyVi)", body: ["Ghép âm tiết", "thành từ"] },
-    { title: "4. TF-IDF", body: ["5.000 đặc trưng", "n-gram (1, 2)"] },
+    { title: "3. Tách từ (PyVi)", body: ["Ghép âm tiết", "thành từ [4]"] },
+    { title: "4. TF-IDF", body: ["5.000 đặc trưng", "n-gram (1, 2) [6]"] },
     { title: "5. Đặc trưng phụ", body: ["15 đặc trưng:", "URL, SĐT, OTP…"] },
   ];
   const cw = 1.66, gap = (CW - 5 * cw) / 4;
@@ -523,7 +522,7 @@ addDivider("PHẦN 3", "Mô hình &\nKết quả", "Naive Bayes  ·  Random Fore
      "Cả 4 mô hình đều vượt chỉ tiêu F1 ≥ 88% và Recall ≥ 92% · Số in đậm xanh = tốt nhất theo cột"],
     { fill: T.amberBg, border: T.accentAmber, titleSize: 15, bodySize: 13, spacing: 3 });
 
-  slide.addText("Nguồn: models/*_metrics.json · tập test 439 mẫu (355 bình thường, 84 lừa đảo) · XGBoost [1], SVM hiệu chỉnh xác suất [2], scikit-learn [5]", {
+  slide.addText("Nguồn: models/*_metrics.json · tập test 439 mẫu (355 bình thường, 84 lừa đảo) · XGBoost [7], Random Forest [8], SVM [9] hiệu chỉnh xác suất [10], scikit-learn [11]", {
     x: M, y: 4.78, w: CW, h: 0.28, ...F.caption, shrinkText: true,
   });
 
@@ -568,7 +567,7 @@ addDivider("PHẦN 3", "Mô hình &\nKết quả", "Naive Bayes  ·  Random Fore
   addHeader(slide, "Giải thích Mô hình — SHAP Analysis (XAI)", SEC[3]);
 
   const items = [
-    { t: "SHAP TreeExplainer trên XGBoost — không phải “hộp đen”", lvl: 0 },
+    { t: "SHAP TreeExplainer trên XGBoost [12], [13] — không phải “hộp đen”", lvl: 0 },
     { t: "Top-20 từ khóa quan trọng (đồng thuận 4 mô hình):", lvl: 0 },
     { t: `Thiên về lừa đảo: ${KW_SCAM.join(", ")} (100% tin chứa từ này là lừa đảo)`, lvl: 1 },
     // NBSP giữ "liên_hệ 198" trên cùng một dòng (khóa tra dữ liệu ở trên vẫn dùng dấu cách thường)
@@ -607,6 +606,7 @@ addDivider("PHẦN 4", "Demo\nỨng dụng", "Streamlit Web App  ·  Trợ năng
   const features = [
     "4 mô hình trong 1 ứng dụng (mặc định XGBoost)",
     "Chỉnh cỡ chữ 100% · 125% · 150%",
+    "Tương phản chữ 14.6:1, vượt mức WCAG 2.1 AA (4.5:1) [14]",
     "Hotline khẩn cấp 156 / 113 gọi 1 chạm",
     "Dán tin nhắn → tự động phân tích",
     "Trích xuất 15 đặc trưng tâm lý theo thời gian thực",
@@ -641,7 +641,7 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
     "Demo thân thiện người cao tuổi",
   ];
   const future = [
-    "Tích hợp PhoBERT (BERT tiếng Việt) [3]",
+    "Tích hợp PhoBERT (BERT tiếng Việt) [15]",
     "Mở rộng sang lừa đảo qua giọng nói",
     "API cho ứng dụng ngân hàng / nhà mạng",
     "Mở rộng dataset lên 10.000+ mẫu",
@@ -664,33 +664,70 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
   ]);
 })();
 
-// ─── SLIDE 17: REFERENCES ────────────────────────────────────────────────────
+// ─── SLIDE 17: TÀI LIỆU THAM KHẢO (2 cột theo vòng đời dự án — chỉ đạo của anh Thanh) ─────────────
 (function slide17_references() {
   const slide = newSlide("content");
   addHeader(slide, "Tài liệu tham khảo", SEC.ref);
 
-  const refs = [
-    "[1] T. Chen & C. Guestrin, “XGBoost: A Scalable Tree Boosting System,” KDD 2016.",
-    "[2] J. Platt, “Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods,” Advances in Large Margin Classifiers, 1999.",
-    "[3] D. Q. Nguyen & A. T. Nguyen, “PhoBERT: Pre-trained Language Models for Vietnamese,” Findings of EMNLP 2020.",
-    "[4] N. T. T. Tran, H. K. Le, M. T. Nguyen, V. T. Nguyen, and H. D. Mai, “Vietnamese SMS Dataset with Quality Assurance,” IEEE Access, 2026 " +
-      "(theo trích dẫn của tác giả trong README bộ dữ liệu; chưa có tập/DOI). GitHub: trannguyenthaituan251209/vietnamese_sms_dataset " +
-      "(1.944 mẫu: 1.773 bình thường + 171 lừa đảo; giấy phép CC BY 4.0 theo README; truy cập 21/09/2026).",
-    "[5] F. Pedregosa et al., “Scikit-learn: Machine Learning in Python,” JMLR vol. 12, 2011.",
-    "[6] Nguồn bổ sung của tập lừa đảo (249/420 mẫu, có URL truy vết trong dataset.csv): GitHub ghitatruongle/lachancuocgoi (162), " +
-      "duynguyenhoang22/SMS_Phishing_Detection — đồ án IE403 (73), duynguyenhoang22/ViSmish_Detection (1); báo chí và video: " +
-      "Thanh Niên, Dân trí, Tuổi Trẻ, VTV24 (13); truy cập 21/09/2026.",
+  // 15/18 tài liệu đã kiểm chứng (Crossref, trang gốc tạp chí/hội nghị, W3C, Unicode, PyPI, GitHub).
+  // Bằng chứng và 3 mục để dành cho báo cáo Word: reports/research-cam-phase09-references-lifecycle.md
+  const LEFT = [
+    { head: "NGUỒN DỮ LIỆU", items: [
+      [1, "N. T. T. Tran et al., “Vietnamese SMS Dataset with Quality Assurance,” IEEE Access, 2026 (theo trích dẫn của tác giả; chưa có tập/DOI). GitHub: trannguyenthaituan251209/vietnamese_sms_dataset."],
+      [2, "Nguồn bổ sung của tập lừa đảo (249/420 mẫu): GitHub ghitatruongle/lachancuocgoi, duynguyenhoang22/SMS_Phishing_Detection và ViSmish_Detection; báo chí, VTV24 (13 mẫu)."],
+    ] },
+    { head: "TIỀN XỬ LÝ NLP", items: [
+      [3, "Unicode Consortium, “UAX #15: Unicode Normalization Forms,” Unicode 18.0.0, 12 Aug. 2026."],
+      [4, "V.-T. Tran, “PyVi: Python Vietnamese Toolkit,” v0.1.1. GitHub: trungtv/pyvi."],
+      [5, "Underthesea NLP, “underthesea: Vietnamese NLP Toolkit,” v9.5.0. GitHub: undertheseanlp/underthesea."],
+      [6, "G. Salton and C. Buckley, “Term-weighting approaches in automatic text retrieval,” Inf. Process. Manage., 24(5):513–523, 1988."],
+    ] },
+    { head: "THUẬT TOÁN HỌC MÁY", items: [
+      [7, "T. Chen and C. Guestrin, “XGBoost: A scalable tree boosting system,” KDD 2016, pp. 785–794."],
+      [8, "L. Breiman, “Random forests,” Mach. Learn., 45(1):5–32, 2001."],
+    ] },
   ];
-  // Một khung văn bản duy nhất: vừa khít khi hiển thị trong PowerPoint, không phụ thuộc shrink-to-fit
-  slide.addText(refs.map((ref) => ({ text: ref, options: { breakLine: true, paraSpaceAfter: 9 } })), {
-    x: M, y: CY + 0.15, w: CW, h: BOTTOM - CY - 0.2, fontSize: 13, color: T.text, fontFace: "Calibri",
-    valign: "middle", margin: [2, 0, 2, 0],
+  const RIGHT = [
+    { head: "THUẬT TOÁN HỌC MÁY (TIẾP)", items: [
+      [9, "C. Cortes and V. Vapnik, “Support-vector networks,” Mach. Learn., 20(3):273–297, 1995."],
+      [10, "J. Platt, “Probabilities for SV machines,” in Advances in Large-Margin Classifiers, MIT Press, 2000, pp. 61–74."],
+      [11, "F. Pedregosa et al., “Scikit-learn: Machine learning in Python,” JMLR 12:2825–2830, 2011."],
+    ] },
+    { head: "GIẢI THÍCH MÔ HÌNH (XAI)", items: [
+      [12, "S. M. Lundberg and S.-I. Lee, “A unified approach to interpreting model predictions,” NeurIPS 30, 2017."],
+      [13, "S. M. Lundberg et al., “From local explanations to global understanding with explainable AI for trees,” Nat. Mach. Intell., 2(1):56–67, 2020."],
+    ] },
+    { head: "TRỢ NĂNG WEB", items: [
+      [14, "W3C, “Web Content Accessibility Guidelines (WCAG) 2.1,” Recommendation, 5 Jun. 2018 (updated 6 May 2025)."],
+    ] },
+    { head: "HƯỚNG PHÁT TRIỂN", items: [
+      [15, "D. Q. Nguyen and A. T. Nguyen, “PhoBERT: Pre-trained language models for Vietnamese,” Findings of EMNLP, 2020, pp. 1037–1042."],
+    ] },
+  ];
+  const runs = (groups) => {
+    const out = [];
+    groups.forEach((g, gi) => {
+      out.push({ text: g.head, options: { bold: true, color: T.accentDark, fontSize: 10.5, breakLine: true, paraSpaceBefore: gi ? 5 : 0, paraSpaceAfter: 2 } });
+      g.items.forEach(([n, t]) => {
+        out.push({ text: `[${n}] `, options: { bold: true, color: T.accentDark, fontSize: 10, paraSpaceAfter: 2.5 } });
+        out.push({ text: t, options: { fontSize: 10, breakLine: true, paraSpaceAfter: 2.5 } });
+      });
+    });
+    return out;
+  };
+  const box = { y: CY + 0.05, w: 4.4, h: 3.7, color: T.text, fontFace: "Calibri", valign: "top", margin: [0, 0, 0, 0], lineSpacingMultiple: 0.95 };
+  slide.addText(runs(LEFT), { x: M, ...box });
+  slide.addText(runs(RIGHT), { x: 5.1, ...box });
+  slide.addText("Nguồn trực tuyến truy cập 21/09/2026 · [1] giấy phép CC BY 4.0 theo README · Danh sách đầy đủ 18 tài liệu: báo cáo Word", {
+    x: M, y: 4.9, w: CW, h: 0.22, ...F.caption, shrinkText: true,
   });
 
   note(slide, "THAM KHẢO", [
-    "- [1] XGBoost, [2] hiệu chỉnh xác suất SVM (CalibratedClassifierCV), [3] PhoBERT (hướng phát triển), [4] bộ dữ liệu SMS chính, [5] scikit-learn, [6] các nguồn dữ liệu bổ sung",
-    "- Q&A về [4]: trích đúng theo yêu cầu của tác giả bộ dữ liệu trong README (bài IEEE Access 2026); nhóm không khẳng định bài đã xuất bản (chưa có tập/DOI). Điều nhóm dùng và kiểm chứng được là bộ dữ liệu công khai trên GitHub, mỗi mẫu có URL truy vết trong dataset.csv",
-    "- 1.944/2.193 mẫu (88.7%) đến từ repo [4]; 249 mẫu lừa đảo còn lại từ nguồn [6]",
+    "- Thứ tự theo vòng đời dự án: nguồn dữ liệu [1]–[2] → tiền xử lý NLP [3]–[6] → thuật toán học máy [7]–[11] → XAI [12]–[13] → trợ năng web [14] → hướng phát triển [15]",
+    "- Q&A về [1]: trích đúng theo yêu cầu của tác giả bộ dữ liệu trong README (bài IEEE Access 2026); nhóm không khẳng định bài đã xuất bản (chưa có tập/DOI). Điều nhóm dùng và kiểm chứng được là bộ dữ liệu công khai trên GitHub (CC BY 4.0), mỗi mẫu có URL truy vết trong dataset.csv",
+    "- 1.944/2.193 mẫu (88.7%) đến từ repo [1]; 249 mẫu lừa đảo còn lại từ nguồn [2]",
+    "- [10] Platt: trích theo bản đã xuất bản (MIT Press, 2000, pp. 61–74); bản thảo năm 1999 mang tên dài 'Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods'",
+    "- Chỉ 15/18 tài liệu lên slide; LIBLINEAR (LinearSVC), McCallum & Nigam (Naive Bayes) và Streamlit nằm trong báo cáo Word. Bằng chứng kiểm chứng: reports/research-cam-phase09-references-lifecycle.md",
     "- Q&A đạo đức/PII: khử PII 100%; dữ liệu lừa đảo lấy từ nguồn công khai (407/420 mẫu từ các bộ dữ liệu GitHub, 13/420 từ báo chí và video điều tra), mọi mẫu có source_url",
   ]);
 })();
@@ -824,7 +861,8 @@ registry.forEach(({ slide, kind }, i) => { if (kind === "content") addFooter(sli
 if (TOTAL !== 22) console.warn(`⚠️  Số slide = ${TOTAL} (kế hoạch: 22)`);
 
 // ─── EXPORT ──────────────────────────────────────────────────────────────────
-const outputFile = path.join(__dirname, "phase09_presentation.pptx");
+// PPTX_OUT (tùy chọn) cho phép dựng thử ra nơi khác mà không ghi đè file đang chỉnh tay trong PowerPoint
+const outputFile = process.env.PPTX_OUT || path.join(__dirname, "phase09_presentation.pptx");
 pptx.writeFile({ fileName: outputFile })
   .then(() => {
     console.log(`✅ Presentation generated (${TOTAL} slides): ${outputFile}`);
