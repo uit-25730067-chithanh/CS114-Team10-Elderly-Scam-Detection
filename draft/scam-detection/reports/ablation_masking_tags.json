@@ -1,0 +1,208 @@
+{
+  "tags_min_docs": 10,
+  "tags": [
+    "date",
+    "họ_và_tên",
+    "money",
+    "mã_otp",
+    "name",
+    "number",
+    "point",
+    "qc",
+    "số_lượng",
+    "số_tiền",
+    "số_điện_thoại",
+    "số_định_danh",
+    "tb",
+    "thiết_bị",
+    "thương_hiệu",
+    "thời_gian",
+    "time",
+    "đường_dẫn"
+  ],
+  "tag_class_split": {
+    "time": {
+      "normal": 493,
+      "scam": 5
+    },
+    "mã_otp": {
+      "normal": 53,
+      "scam": 0
+    },
+    "money": {
+      "normal": 1221,
+      "scam": 15
+    },
+    "tb": {
+      "normal": 341,
+      "scam": 0
+    },
+    "date": {
+      "normal": 357,
+      "scam": 2
+    },
+    "number": {
+      "normal": 1132,
+      "scam": 20
+    },
+    "name": {
+      "normal": 38,
+      "scam": 3
+    },
+    "qc": {
+      "normal": 179,
+      "scam": 0
+    },
+    "point": {
+      "normal": 75,
+      "scam": 0
+    },
+    "số_điện_thoại": {
+      "normal": 3,
+      "scam": 11
+    },
+    "họ_và_tên": {
+      "normal": 0,
+      "scam": 13
+    },
+    "đường_dẫn": {
+      "normal": 0,
+      "scam": 157
+    },
+    "thương_hiệu": {
+      "normal": 0,
+      "scam": 133
+    },
+    "số_định_danh": {
+      "normal": 0,
+      "scam": 37
+    },
+    "thời_gian": {
+      "normal": 0,
+      "scam": 41
+    },
+    "số_tiền": {
+      "normal": 0,
+      "scam": 62
+    },
+    "thiết_bị": {
+      "normal": 0,
+      "scam": 13
+    },
+    "số_lượng": {
+      "normal": 0,
+      "scam": 20
+    }
+  },
+  "features_removed": 453,
+  "features_total_tfidf": 5000,
+  "baseline": {
+    "naive_bayes": {
+      "f1": 0.8864,
+      "recall": 0.9286,
+      "precision": 0.8478
+    },
+    "xgboost": {
+      "f1": 0.9535,
+      "recall": 0.9762,
+      "precision": 0.9318
+    }
+  },
+  "without_tags": {
+    "naive_bayes": {
+      "f1": 0.8503,
+      "recall": 0.8452,
+      "precision": 0.8554
+    },
+    "xgboost": {
+      "f1": 0.9425,
+      "recall": 0.9762,
+      "precision": 0.9111
+    }
+  },
+  "baseline_matches_reported_xgb_f1": true,
+  "keyword_scam_share": {
+    "money": {
+      "docs": 1251,
+      "scam_share": 0.012
+    },
+    "số_tiền": {
+      "docs": 57,
+      "scam_share": 1.0
+    },
+    "thương_hiệu": {
+      "docs": 135,
+      "scam_share": 0.9778
+    },
+    "liên_hệ 198": {
+      "docs": 355,
+      "scam_share": 0.0
+    },
+    "đường_dẫn": {
+      "docs": 183,
+      "scam_share": 0.8907
+    },
+    "number": {
+      "docs": 1150,
+      "scam_share": 0.0174
+    },
+    "mày": {
+      "docs": 25,
+      "scam_share": 1.0
+    },
+    "số_định_danh": {
+      "docs": 37,
+      "scam_share": 1.0
+    },
+    "198": {
+      "docs": 371,
+      "scam_share": 0.0
+    },
+    "gấp": {
+      "docs": 35,
+      "scam_share": 1.0
+    },
+    "viện_phí": {
+      "docs": 21,
+      "scam_share": 1.0
+    },
+    "chị": {
+      "docs": 19,
+      "scam_share": 1.0
+    },
+    "doi": {
+      "docs": 115,
+      "scam_share": 0.1391
+    },
+    "soạn": {
+      "docs": 755,
+      "scam_share": 0.004
+    },
+    "thuế": {
+      "docs": 11,
+      "scam_share": 1.0
+    },
+    "đang": {
+      "docs": 92,
+      "scam_share": 0.8261
+    },
+    "số_lượng": {
+      "docs": 21,
+      "scam_share": 1.0
+    },
+    "viettel": {
+      "docs": 423,
+      "scam_share": 0.0047
+    },
+    "time": {
+      "docs": 498,
+      "scam_share": 0.01
+    },
+    "sẽ": {
+      "docs": 127,
+      "scam_share": 0.4252
+    }
+  },
+  "overall_scam_share": 0.1915,
+  "random_state": 42
+}
