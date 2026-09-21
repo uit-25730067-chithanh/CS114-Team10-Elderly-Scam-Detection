@@ -164,7 +164,7 @@ Theo yêu cầu trong [README.md](../../README.md):
 - [ ] Tài liệu tham khảo (≥10 refs IEEE)
 - [ ] File Word đúng định dạng (.docx)
 - [ ] File PDF exported
-- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup) — *bản hiện tại 20 slide, cấu trúc khác bảng trên, xem [Ghi chú bàn giao](#ghi-chú-bàn-giao-cho-anh-thanh-ppt--cẩm-21092026)*
+- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup) — *bản hiện tại 22 slide theo chỉ đạo của anh Thanh (Agenda + 5 PHẦN), khác bảng 19 slide ở trên, xem [Ghi chú bàn giao](#ghi-chú-bàn-giao-cho-anh-thanh-ppt--cẩm-21092026)*
 - [x] PPT có biểu đồ, screenshots demo
 - [ ] Diễn tập thuyết trình ≤15 phút
 
@@ -226,6 +226,37 @@ Bằng chứng `0.01` đúng: `models/naive_bayes.pkl` lưu `alpha=0.01`; `naive
 
 Toàn văn báo cáo thẩm định chuyên môn và phản biện xem tại:
 - [`research-cam-phase09-ppt-slides-audit.md`](../../draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md)
+
+### Cập nhật bản 22 slide, trạng thái 5 chỉ đạo và hiệu chỉnh Q&A (Cẩm, 21/09/2026)
+
+**Trạng thái 5 chỉ đạo của anh Thanh (deck `phase09_presentation.pptx`, 22 slide, 3,4 MB):**
+1. **Header, footer, số trang — ✅:** header `TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM` + nhãn PHẦN bên phải; footer 2 dòng cỡ 10pt đúng nội dung anh yêu cầu; số trang `NN / 22` tự tính theo tổng slide (không gõ tay). Chỉ áp dụng cho 15 slide nội dung; bìa, slide phân đoạn và slide cảm ơn để nền navy toàn khung.
+2. **Tên đề tài chuẩn — ✅:** bìa dùng đúng "Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam" (trùng README, BRAINSTORM, cẩm nang bảo vệ); thuộc tính tệp `.pptx` cũng dùng tên này. Cụm "Gian lận tài chính" không xuất hiện ở đâu trong repo.
+3. **Agenda và `PHẦN 1..5` — ✅ (22 slide):** Agenda ở slide 2; PHẦN 1 mở đầu bằng Agenda (không cần slide phân đoạn), PHẦN 2–5 mỗi phần có 1 slide phân đoạn (tách "Demo" và "Kết luận" thành hai slide) + 1 slide phân đoạn Phụ lục.
+4. **Tài liệu tham khảo 2 cột theo vòng đời — ⏳ chưa làm:** hiện vẫn 1 cột, 6 mục. Cần thêm nguồn thật cho tiền xử lý NLP (PyVi/underthesea), XAI (SHAP — Lundberg & Lee, NeurIPS 2017) và trợ năng (WCAG 2.1 của W3C); mỗi nguồn phải kiểm chứng trước khi đưa vào, không thêm "Báo cáo Cục ATTT" khi chưa có tên báo cáo và đường dẫn.
+5. **Lời cảm ơn — ✅:** `CHÂN THÀNH CẢM ƠN THẦY VÀ CÁC BẠN ĐÃ LẮNG NGHE BÁO CÁO!`.
+- **Logo UIT ở bìa và slide cảm ơn — ✅:** dùng bộ nhận diện chính thức của trường (`Logo UIT_DHQG_Trang_Transparent.png`, bản trắng có tên ĐHQG-HCM) theo Brand Guideline: logo trắng trên nền tối, đặt giữa phía trên, không kéo giãn, không đổi màu. File nằm ở `draft/scam-detection/reports/slides/assets/`.
+
+**Bản đồ 22 slide và phân vai (giữ phân bổ 14 phút của báo cáo thẩm định, dư ~1 phút):**
+
+| Slide | Nội dung | Trình bày |
+|:-:|---|---|
+| 1–8 | Bìa · Agenda (≤ 20 giây) · PHẦN 1 (2 slide) · divider PHẦN 2 · Dataset · 4 nhóm bẫy · Pipeline | Thanh — 4:30 |
+| 9–12 | divider PHẦN 3 · So sánh mô hình · ROC/PR · SHAP | Cẩm — 5:00 |
+| 13–18 | divider PHẦN 4 · Demo · divider PHẦN 5 · Kết luận · Tài liệu tham khảo · Cảm ơn | Sơn — 4:30 |
+| 19–22 | divider Phụ lục · Siêu tham số · Confusion Matrix · Learning Curves | Cả nhóm (Q&A) |
+
+Các slide phân đoạn (5, 9, 13, 15, 19) không nói. Số slide trong bảng phân vai của báo cáo thẩm định (Slide 1–7, 8–11, 12–16, 17–20) đã dịch sang bản đồ mới này. Dòng "Presentation Deck ... 20 slides, 2.5 MB" ở mục Evidence bên dưới là số liệu của bản trước; bản hiện tại là 22 slide, 3,4 MB.
+
+**Slide 12 (SHAP) đã sửa theo dữ liệu thật.** Đo trên `dataset_preprocessed.csv` (tỉ lệ tin lừa đảo chung là 19,2%): trong Top-20 từ khóa quan trọng có 9 từ không thiên về lừa đảo (`money` 1,2%, `number` 1,7%, `time` 1,0%, `liên_hệ 198` và `198` 0%, `soạn` 0,4%, `viettel` 0,5%, cùng `doi`, `sẽ` lẫn lộn); các từ `mày`, `gấp`, `viện_phí`, `thuế`, `số_định_danh` thì 100% là tin lừa đảo. Nhiều đặc trưng là **thẻ ẩn danh có sẵn trong bộ dữ liệu gốc**: tin bình thường dùng `[MONEY]`, `[NUMBER]`, `[TIME]`; tin lừa đảo dùng `[ĐƯỜNG_DẪN]`, `[THƯƠNG_HIỆU]`, `[SỐ_TIỀN]`. Thử nghiệm bỏ toàn bộ 453 đặc trưng chứa thẻ rồi huấn luyện lại đúng quy trình notebook (`src/evaluation/ablation_masking_tags.py`, kết quả `reports/ablation_masking_tags.json`; tái lập đúng F1 đã báo cáo): XGBoost F1 0.9535 → 0.9425 (Recall giữ 0.9762), Naive Bayes F1 0.8864 → 0.8503. Nên hiệu năng không chủ yếu do thẻ ẩn danh, nhưng cách gọi "từ khóa cảnh báo bẫy tâm lý" ở Phase 07 cần đổi thành "từ khóa quan trọng".
+
+**Hiệu chỉnh 4 câu Q&A trong báo cáo thẩm định (kiểm chứng với dữ liệu; câu trả lời đề xuất để cả nhóm thống nhất):**
+- **Câu 10 (đạo đức, PII):** báo cáo ghi "100% tin lừa đảo lấy từ báo chí" là chưa đúng. Chỉ 13/420 mẫu lừa đảo từ báo chí và video; 407/420 từ các bộ dữ liệu công khai trên GitHub; cả 2.193 dòng đều có `source_url`. *Trả lời:* "Nhóm khử PII 100%; dữ liệu lừa đảo lấy từ nguồn công khai (chủ yếu các bộ dữ liệu SMS trên GitHub, một phần báo chí và video điều tra), mọi mẫu đều có URL nguồn để truy vết."
+- **Câu 8 (từ "money"):** báo cáo ghi "regex thay mọi số tiền" là chưa đúng. `money` là thẻ ẩn danh `[MONEY]` có sẵn trong bộ dữ liệu gốc (1.236 dòng thô, 1.221 dòng là tin bình thường); dữ liệu thô không có số tiền thật nào để regex thay. *Trả lời:* "Đó là thẻ che số tiền của bộ dữ liệu gốc, không phải từ tiếng Anh; nó xuất hiện chủ yếu ở tin bình thường nên mô hình dùng như dấu hiệu tin thông báo bình thường. Nhóm đã kiểm tra bằng cách bỏ toàn bộ đặc trưng chứa thẻ ẩn danh, F1 XGBoost chỉ giảm từ 0.9535 xuống 0.9425."
+- **Câu 1 (PhoBERT):** con số "<15ms so với >300ms" chưa có phép đo nào trong repo. *Trả lời:* nói định tính (PhoBERT cần GPU, nhóm chưa thử nghiệm trong đồ án; mô hình cổ điển chạy được trên CPU); chỉ nêu số khi đã đo `predict` thật trên máy demo.
+- **Câu 7 (teencode):** "tinh lọc từ benchmark NLP chuẩn" không có căn cứ trong mã nguồn. *Trả lời:* "Từ điển do nhóm tự biên soạn (160 mục), cố ý loại các từ đơn mơ hồ để tránh biến đổi sai nghĩa (ghi trong `teencode_dictionary.py`); đặc trưng `has_leet_speak` để mô hình tự học phần còn lại."
+
+**Việc còn lại:** (1) chỉ đạo số 4 — tài liệu tham khảo 2 cột theo vòng đời (cần chốt danh sách nguồn thật); (2) diễn tập bấm giờ ≤ 15 phút theo bản đồ 22 slide; (3) bật Fade 0.3s thủ công trong PowerPoint sau cùng, vì dựng lại `.pptx` bằng script sẽ mất hiệu ứng.
 
 ## Evidence Section
 
