@@ -61,7 +61,7 @@
 
 | File | Mô tả |
 |------|-------|
-| `data/raw/staging_thanh_normal.csv` | 1.773 mẫu SMS bình thường (IEEE Access 2026, 100% PII masked) |
+| `data/raw/staging_thanh_normal.csv` | 1.773 mẫu SMS bình thường (Bộ dữ liệu Vietnamese SMS Dataset trên GitHub, 100% PII masked) |
 | `data/raw/staging_cam_scam.csv` | 205 mẫu lừa đảo dịch vụ công & sức khỏe (7 tầng kiểm toán) |
 | `data/raw/staging_son_scam.csv` | 215 mẫu lừa đảo quyền lực & cấp cứu (7 tầng kiểm toán) |
 | `data/raw/dataset.csv` | Dataset tích hợp chính thức 2.193 mẫu thực tế (100% Zero Synthetic Text) |
@@ -79,8 +79,10 @@
 | `models/naive_bayes_metrics.json` | Bộ tham số tối ưu (alpha=0.01) & metrics thực nghiệm Naive Bayes |
 | `models/xgboost.pkl` | Trained XGBoost classifier (Phase 05 — F1=0.9535, Recall=97.62%) |
 | `models/xgboost_metrics.json` | Bộ tham số tối ưu (best_params) & metrics thực nghiệm XGBoost |
-| `models/random_forest.pkl` | Trained Random Forest (Phase 05 — đang thực hiện) |
-| `models/svm_linear.pkl` | Trained SVM Linear (Phase 06 — kế hoạch Sprint 3) |
+| `models/random_forest.pkl` | Trained Random Forest (Phase 05 PASSED — F1=0.9425, Recall=97.62%) |
+| `models/random_forest_metrics.json` | Bộ tham số tối ưu & metrics thực nghiệm Random Forest (ROC-AUC=99.77%) |
+| `models/svm_linear.pkl` | Trained SVM Linear (Phase 06 PASSED — F1=0.9474, Recall=96.43%) |
+| `models/svm_metrics.json` | Bộ tham số tối ưu (C=10.0) & metrics thực nghiệm Linear SVM |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
 
@@ -142,8 +144,8 @@ data/raw/dataset.csv
     ↓ [pipeline.py] → clean + tokenize + stopwords removal
 data/processed/dataset_preprocessed.csv (text_cleaned + aux features)
     ↓ [feature_engineering.py] → TF-IDF fit on train set
-    ↓ Stratified split: 60% train | 20% val | 20% test
-Train set (60%)                 Test set (20%)
+    ↓ Stratified 80/20 split: 80% train (5-fold CV) | 20% test
+Train set (80% — 1.754 mẫu)     Test set (20% — 439 mẫu)
     ↓ [models] fit               ↓ [models] predict only
 NB / RF / XGB / SVM
     ↓ [evaluation]

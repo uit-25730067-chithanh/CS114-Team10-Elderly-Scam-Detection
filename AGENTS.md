@@ -193,7 +193,7 @@ Khi nhận PR từ thành viên, PM Agent đóng vai trò kiểm toán độc l�
 1. **Kiểm tra 4 Tầng Bàn giao:** Rà soát xem PR của thành viên đã hoàn tất đủ 4 tầng trên chưa.
 2. **Ký duyệt Kế hoạch (Plan Sign-off):** Đổi trạng thái Phase sang `passed` ✅ và cập nhật ngày `updated` trong [`plans/scam-detection-full-submit/plan.md`](plans/scam-detection-full-submit/plan.md).
 3. **Đồng bộ Bối cảnh Điều phối:** Cập nhật bảng `Current State` và khối `Verdict` trong `AGENTS.md`.
-4. **Cập nhật Cẩm nang Bảo vệ:** Đồng bộ số liệu thực nghiệm mới vào Slide 7 của [`docs/DEFENSE_PREPARATION_GUIDE.md`](docs/DEFENSE_PREPARATION_GUIDE.md).
+4. **Cập nhật Kịch bản Bảo vệ:** Đồng bộ số liệu thực nghiệm và kịch bản thuyết trình vào [`draft/scam-detection/reports/slides/scripts/script.md`](draft/scam-detection/reports/slides/scripts/script.md).
 5. **Kiểm định Cổng đóng:** Chạy `python3 verify_final.py` và `pytest` đạt 100% PASS trước khi merge PR vào `main`.
 
 ### 4. Quy tắc về .pkl và artifacts

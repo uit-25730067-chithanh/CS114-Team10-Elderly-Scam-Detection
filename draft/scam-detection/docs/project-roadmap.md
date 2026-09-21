@@ -116,7 +116,7 @@ gantt
 | Báo cáo Word: Chương 1 — Đặt vấn đề, bối cảnh lừa đảo NCT 2026, ý nghĩa xã hội | ⏳ (15/09 – 16/09) |
 | Báo cáo Word: Chương 2 — Khảo sát các công trình nghiên cứu & hướng tiếp cận | ⏳ (16/09 – 17/09) |
 | Báo cáo Word: Chương 3 — Phương pháp nhóm chọn: Tiền xử lý, TF-IDF, kiến trúc 3+ models | ⏳ (17/09 – 18/09) |
-| Lên khung cấu trúc Slide PowerPoint 15 phút (14–16 slides) | ⏳ (18/09) |
+| Lên khung cấu trúc Slide PowerPoint 15 phút (khung ban đầu) | ✅ Hoàn thành (18/09) |
 
 
 ---
