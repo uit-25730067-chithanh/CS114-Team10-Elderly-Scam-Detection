@@ -7,7 +7,7 @@ effort: ~40h (nhóm 10 — 3 người)
 branch: main
 tags: [cs114, scam-detection, academic, python, ml, nlp, submit]
 created: 2026-09-04
-updated: 2026-09-20 (Phase 08 passed, Streamlit Demo UI & E2E tests fully integrated)
+updated: 2026-09-22 (Phase 09 PPT 22 slides merged PR #26, defense script PR #27, report drafting in progress)
 sprints: 3 fast-track sprints | Bắt đầu ~06/09 | Báo cáo sớm: 23/09/2026 (Hạn LMS gốc: 13/10/2026)
 ---
 
@@ -16,7 +16,7 @@ sprints: 3 fast-track sprints | Bắt đầu ~06/09 | Báo cáo sớm: 23/09/202
 ## Mục tiêu
 
 Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghiêm ngặt theo chế độ **Fast-Track Báo cáo sớm (23/09/2026)**:
-`25730067-25730013-25730061.zip` với đủ: code, notebooks, báo cáo Word (≥15 trang), PPT (14–16 slides chuẩn 15 phút), demo Streamlit.
+`25730067-25730013-25730061.zip` với đủ: code, notebooks, báo cáo Word (≥15 trang), PPT (22 slides chuẩn 15 phút), demo Streamlit.
 
 ## Sprint Timeline (Fast-Track 13 ngày)
 
@@ -47,7 +47,7 @@ Từ skeleton ban đầu → hoàn thiện từng phase có kiểm định nghi�
 | 06 | [Modeling — SVM (Optional: PhoBERT)](./phase-06-model-svm-phobert.md) | **Cẩm** | Sprint 2 (17–18/09) | `passed` ✅ | LinearSVC Calibrated (C=10.0) F1=0.9474, Recall=96.43%, ROC-AUC=0.9986; RBF đối chứng kém hơn; `best_model_bundle.pkl` đóng gói cho Phase 08; bộ 4 mô hình hoàn tất |
 | 07 | [Evaluation & XAI](./phase-07-evaluation-xai.md) | **Thanh** | Sprint 3 (18–19/09) | `passed` ✅ | Đánh giá 4 mô hình: XGBoost (F1=0.9535, Recall=97.62%), SVM Linear (ROC-AUC=0.9986), RF (F1=0.9425), NB (F1=0.8864); 6 biểu đồ 300 DPI, SHAP Beeswarm, 69 tests PASS |
 | 08 | [Demo UI](./phase-08-demo-ui.md) | **Sơn** (lead) + **Cẩm** | Sprint 2–3 (16–20/09) | `passed` ✅ | Streamlit Web App hoàn thiện; Model Catalog 4 thuật toán (XGBoost F1=0.9535 mặc định); Trợ năng người cao tuổi; 16/16 Playwright E2E & 70/70 pytest PASS |
-| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) | Sprint 2–3 | `in-progress` 🟡 | Word (≥15 trang) + PPT (14–16 slides) + Diễn tập ≤15p |
+| 09 | [Report & PPT](./phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) + **Thanh** (Script) | Sprint 2–3 | `in-progress` 🟡 | PPT (22 slides, PR #26 merged) + Kịch bản 15p & Q&A (PR #27) + Word (≥15 trang) + Diễn tập ≤15p |
 | 10 | [Submit Package](./phase-10-submit-package.md) | **Thanh** | Sprint 3 (22/09) | `not-started` | 25730067-25730013-25730061.zip sẵn sàng báo cáo 18:30 23/09 qua MS Teams |
 
 ## Git Convention

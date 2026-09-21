@@ -30,8 +30,8 @@
 │   └── scam-detection/    ← Working project
 │       ├── src/            ← Python source code
 │       │   ├── preprocessing/   ✅ text_cleaner, tokenizer, feature_extractor (Phase 02 Passed)
-│       │   ├── models/          🚀 naive_bayes, random_forest, xgboost, svm (Phase 04-06 Active)
-│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator (Phase 07)
+│       │   ├── models/          ✅ naive_bayes, random_forest, xgboost, svm (Phase 04-06 Passed)
+│       │   ├── evaluation/      ✅ metrics_calculator, plot_roc_curve, model_comparator (Phase 07 Passed)
 │       │   ├── utils/           ✅ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
 │       │   ├── feature_engineering.py        ✅ Zero-leakage pipeline (Phase 03 Passed)
 │       │   ├── feature_engineering_config.py ✅ Hằng số TF-IDF & đặc trưng (Phase 03 Passed)
@@ -42,9 +42,10 @@
 │       ├── data/
 │       │   ├── raw/        ← dataset.csv gốc (2.193 mẫu thực tế, 100% Zero Synthetic Text)
 │       │   └── processed/  ← dataset_preprocessed.csv, X_train.pkl (1754×5015), X_test.pkl (439×5015), y_train.pkl, y_test.pkl, tfidf_vectorizer.pkl, aux_scaler.pkl, feature_names.json
-│       ├── models/         ← Trained model files (.pkl, .json — naive_bayes_metrics.json, xgboost_metrics.json)
+│       ├── models/         ← Trained model files (.pkl, .json — NB, RF, XGB, SVM, best_model_bundle.pkl)
 │       ├── docs/           ← Tài liệu kỹ thuật nội bộ (roadmap, architecture, code-standards)
-│       ├── reports/        ← Kết quả, 14 biểu đồ @ 300 DPI (7 EDA + 7 Model Evaluation)
+│       ├── reports/        ← Kết quả, 32 biểu đồ @ 300 DPI (7 EDA + 15 Đơn mô hình + 6 Đa mô hình & XAI + 4 Demo UI)
+│       │   └── slides/     ← Slide thuyết trình 22 trang (phase09_presentation.pptx), PDF, scripts/script.md
 │       ├── demo/           ← Streamlit/Gradio web app
 │       └── requirements.txt
 ├── plans/             ← Implementation plans (phase-based 00..10)
@@ -53,7 +54,7 @@
 
 ---
 
-## Current State (2026-09-17 — Sprint 2 Modeling Complete & Pre-Sprint 3 Transition)
+## Current State (2026-09-22 — Sprint 3 Final Stretch & Pre-Defense Preparation)
 
 | Component | Status |
 |-----------|--------|
@@ -74,11 +75,11 @@
 | Phase 05 (Random Forest & XGBoost) | ✅ Passed (17/09/2026) — Cẩm hoàn thành XGBoost (F1=0.9535) ✅; Sơn hoàn thành Random Forest (F1=0.9425, Recall=97.62%, PR #16 verified) ✅ |
 | `notebooks/04_model_xgboost.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9535, Recall=97.62%, 4 figures 300 DPI |
 | `notebooks/04_model_random_forest.ipynb` | ✅ Passed (Phase 05) — Chạy end-to-end, RandomizedSearchCV tuned, F1=0.9425, Recall=97.62%, 4 figures 300 DPI |
-| `src/models/` | ✅ Active — random_forest_model.py hoàn thiện kèm 9 unit tests; naive_bayes & xgboost chạy qua notebooks |
+| `src/models/` | ✅ Passed — random_forest_model.py, best_model_bundle.pkl, bộ 4 mô hình hoàn tất kèm đầy đủ unit tests |
 | `src/evaluation/` | ✅ Passed (Phase 07) — metrics_calculator, plot_comparator (CM 2x2, ROC, PR, Learning Curves), xai_explainer (Top-20 consensus keywords & SHAP) |
 | Notebooks (03-06) | ✅ Passed — 03 (NB), 04 (XGB, RF), 05 (SVM), 06 (Evaluation & XAI) hoàn thành end-to-end |
 | Demo UI (Streamlit) | ✅ Passed (Phase 08) — Web App Streamlit, Model Catalog 4 mô hình, trợ năng NCT, 16/16 Playwright E2E tests (Sơn lead, PR #21) |
-| Báo cáo Word & Slide PPT | ⏳ Sprint 2-3 Fast-Track (15/09 Ch 1-3 → 20/09 Ch 4-5 & PPT → 21-22/09 diễn tập) |
+| Phase 09 (Report, PPT & Script) | 🟡 In-Progress — Slide PPT 22 trang hoàn tất & merged (PR #26); Kịch bản 15p & 10 chủ đề Q&A hoàn tất (PR #27); Báo cáo Word đang hoàn thiện (Sơn lead) |
 | Đóng gói ZIP & Báo cáo | ⏳ Milestone 22/09 đóng gói → **18:30 ngày 23/09/2026 Thuyết trình luân phiên qua MS Teams** |
 
 > **Verdict (15/09): Phase 02 (Tiền xử lý văn bản tiếng Việt & Trích xuất đặc trưng phụ) đã HOÀN THÀNH 100% XUẤT SẮC (21/21 tests passed; 2.193 mẫu được làm sạch và trích xuất 15 đặc trưng phụ; notebook 01_preprocessing.ipynb hoàn tất nhẹ nhàng 39.5 KB; dataset_preprocessed.csv 24 cột sẵn sàng). Kích hoạt Phase 03: EDA & Feature Engineering.**
@@ -94,6 +95,8 @@
 > **Verdict (19/09): Phase 07 (Comprehensive Evaluation & Explainable AI) đã HOÀN THÀNH 100% XUẤT SẮC bởi Thanh. Đánh giá tổng hợp 4 mô hình: XGBoost đạt Best Overall (F1=0.9535, Recall=97.62%, FN=2), Linear SVM đạt Best Linear Separator (ROC-AUC=0.9986). Xuất đủ 6 biểu đồ so sánh 300 DPI (`confusion_matrices_all.png`, `roc_curves_comparison.png`, `precision_recall_curves.png`, `learning_curves_summary.png`, `top20_keywords_barplot.png`, `shap_summary.png`). Trích xuất 20 từ khóa cảnh báo bẫy tâm lý đồng thuận cao nhất (money, số_tiền, viện_phí, gấp, số_định_danh). Toàn bộ 69/69 unit tests PASS 100%.**
 
 > **Verdict (20/09): Phase 08 (Demo UI — Web App Streamlit) đã HOÀN THÀNH 100% XUẤT SẮC bởi Sơn (PR #21). Hoàn thiện Web App Streamlit tối ưu trợ năng cho người cao tuổi (Split-View, cỡ chữ 100%-125%-150%, Hotline khẩn cấp 1-chạm 156/113, tự động cuộn trang sau phân tích). Tích hợp thành công bộ điều phối 4 mô hình học máy (XGBoost F1=0.9535 mặc định, Linear SVM F1=0.9474, Random Forest F1=0.9425, Naive Bayes F1=0.8864), trích xuất 15 đặc trưng tâm lý thời gian thực, đồng bộ URL query params (?text=...), nút Dán tin nhắn tự động phân tích qua Web Clipboard API, và bộ kiểm thử tự động Playwright E2E (16/16 ca PASS). Kích hoạt Phase 09: Báo cáo Word & Slide PPT.**
+
+> **Verdict (21/09): Phase 09 (Presentation Deck & Defense Script) đã HOÀN THÀNH XUẤT SẮC KHỐI SLIDE & KỊCH BẢN bởi Cẩm và Thanh (PR #26 merged, PR #27 open). Bộ slide 22 trang chính thức (phase09_presentation.pptx 3.4 MB & PDF) được kiểm định không lỗi tràn lề (check_overlaps.py 0 lỗi), chốt 4 quyết định kỹ thuật (RF ROC-AUC=99.77%, NB alpha=0.01 & Cẩm là tác giả, thay citation giả, giữ transition native) và 5 chỉ đạo nâng cấp (Header/Footer/Số trang NN/22, Agenda 5 phần, 15 tài liệu tham khảo theo vòng đời 2 cột, Lời cảm ơn chuẩn UIT). Kịch bản thuyết trình bảo vệ 15 phút (script.md, 51 KB) phân bổ chuẩn WPM cho 3 thành viên và tích hợp 10 chủ đề giải trình phản biện Q&A cho ThS. Cáp Phạm Đình Thăng. Tiếp tục hoàn thiện Báo cáo Word (Sơn lead) và chuẩn bị Phase 10.**
 
 ---
 
@@ -239,9 +242,9 @@ Place in `Final/submit/` before zipping.
 
 ---
 
-## Next Actions (Sprint 2 Kickoff — Fast-Track 23/09 Mode)
+## Next Actions (Sprint 3 Final Stretch — Fast-Track 23/09 Mode)
  
-> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn 8 ngày).**
+> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn ~36 giờ).**
 
 ### 🎯 Phân công luồng thực thi song song (`--parallels`):
 1. **Luồng A (Dữ liệu & Khóa Dataset — Sơn Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
@@ -255,17 +258,17 @@ Place in `Final/submit/` before zipping.
 3. **Luồng C (Mô hình hóa ML & Đánh giá — Cẩm, Sơn, Thanh):** ✅ **HOÀN THÀNH 100% (PHASE 04, 05, 06, 07)**
    - Cẩm: Hoàn thành Naive Bayes baseline (F1=0.8864), XGBoost (F1=0.9535) và Linear SVM Calibrated (F1=0.9474, ROC-AUC=0.9986).
    - Sơn: Hoàn thành Random Forest (F1=0.9425, Recall=97.62%, PR #16).
-   - Thanh: Hoàn thành Phase 07 đánh giá đa mô hình, đường cong ROC, PR, 28 biểu đồ 300 DPI và trích xuất Top-20 SHAP.
+   - Thanh: Hoàn thành Phase 07 đánh giá đa mô hình, đường cong ROC, PR, 32 biểu đồ/visual artifacts 300 DPI và trích xuất Top-20 SHAP.
 4. **Luồng D (Demo UI — Sơn):** ✅ **HOÀN THÀNH 100% (PHASE 08 — 20/09/2026)**
    - Hoàn thành Web App Streamlit tối ưu trợ năng cho người cao tuổi (`demo/app.py`, PR #21).
    - Tích hợp Model Catalog 4 thuật toán với XGBoost mặc định, phân tích 15 đặc trưng tâm lý thời gian thực.
    - Bổ sung dán tự động qua Web Clipboard API, đồng bộ URL query params (`?text=...`), hotline 1-chạm 156/113.
    - Đạt 16/16 ca kiểm thử tự động Playwright E2E trên Google Chrome, xuất 4 ảnh nghiệm thu chuẩn 300 DPI (`reports/figures/demo_*.png`).
 5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** 🚀 **TRỌNG TÂM HIỆN TẠI (PHASE 09 — 20/09 – 22/09)**
-   - Báo cáo Word Chương 1–3: Hoàn thành trước 18/09.
-   - Báo cáo Word Chương 4–5: Hoàn thành trước 20/09 ngay khi có kết quả thực nghiệm.
-   - Slide PPT 15 phút: Dựng ngày 20/09 – 21/09 theo cẩm nang bảo vệ.
-   - Diễn tập bấm giờ (≤15 phút): 21/09 – 22/09.
-   - Đóng gói ZIP `25730067-25730013-25730061.zip` vào 22/09/2026.
+   - Slide PPT 22 trang: Hoàn tất 100% & merge vào main qua PR #26 (Cẩm lead).
+   - Kịch bản bảo vệ 15p & 10 chủ đề Q&A: Hoàn tất 100% trong `script.md` qua PR #27 (Thanh lead).
+   - Báo cáo Word Chương 1–5: Đang hoàn thiện các chương (Sơn lead, branch `feat/phase-09-report-template`).
+   - Diễn tập bấm giờ (≤15 phút): 21/09 – 22/09 theo kịch bản chuẩn WPM.
+   - Đóng gói ZIP `25730067-25730013-25730061.zip` vào 22/09/2026 (Phase 10 — Thanh).
    - **18:30 ngày 23/09/2026: Thuyết trình luân phiên chính thức với ThS. Cáp Phạm Đình Thăng qua MS Teams!**
 

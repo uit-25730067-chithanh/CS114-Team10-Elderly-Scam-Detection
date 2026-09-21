@@ -37,8 +37,9 @@ gantt
     section Sprint 3: Đánh giá, PPT & Diễn tập (19/09 – 22/09)
     Đánh giá tổng hợp & XAI SHAP (Thanh & Cẩm)     :done, s3_1, 2026-09-18, 2026-09-19
     Tích hợp Best Model vào Demo UI (Sơn & Thanh)  :done, s3_2, 2026-09-19, 2026-09-20
-    Báo cáo Word Chương 4–5 + Refs (Cả nhóm)       :s3_3, 2026-09-20, 2026-09-21
-    Slide PPT 15 phút (14–16 slides) (Cả nhóm)     :s3_4, 2026-09-20, 2026-09-21
+    Báo cáo Word Chương 4–5 + Refs (Sơn lead)      :active, s3_3, 2026-09-20, 2026-09-22
+    Slide PPT 22 trang (Cẩm — PR #26 merged)       :done, s3_4, 2026-09-20, 2026-09-21
+    Kịch bản 15p & 10 Q&A (Thanh — PR #27)         :done, s3_4_1, 2026-09-21, 2026-09-21
     Diễn tập thuyết trình bấm giờ ≤15p (Cả nhóm)   :crit, s3_5, 2026-09-21, 2026-09-22
     Đóng gói ZIP 25730067-... (Thanh)              :s3_6, 2026-09-22, 2026-09-22
 
@@ -145,25 +146,24 @@ gantt
 ### Cả nhóm (Báo cáo, Slide PPT & Diễn tập Thuyết trình)
 | Task | Trạng thái |
 |------|:---:|
-| Báo cáo Word: Chương 4 — Thực nghiệm (Dataset, Metrics, Bảng so sánh, Confusion Matrix, Overfitting) | 🔲 (20/09) |
-| Báo cáo Word: Chương 5 — Kết luận, Hạn chế và Định hướng phát triển (PhoBERT, Mobile) | 🔲 (20/09) |
-| Hoàn thiện Tài liệu tham khảo (≥10 trích dẫn chuẩn IEEE/APA) | 🔲 (20/09) |
-| Xuất bản file `DOCS/DoAnMonHoc.docx` và `DOCS/DoAnMonHoc.pdf` (≥15 trang) | 🔲 (21/09) |
-| Hoàn thiện file Slide `SLIDES/Presentation_CS114.pptx` (14–16 slides) | 🔲 (20/09 – 21/09) |
-| Diễn tập thuyết trình lần 1: Bấm giờ từng phần (Thanh 5p, Cẩm 4p, Sơn 3p) | 🔲 (21/09) |
-| Diễn tập thuyết trình lần 2: Giả lập phản biện Q&A từ ThS. Cáp Phạm Đình Thăng (3p) | 🔲 (22/09) |
+| Hoàn thiện file Slide 22 trang `phase09_presentation.pptx` (3.4 MB) & PDF | ✅ (21/09 — PR #26 merged) |
+| Soạn thảo kịch bản bảo vệ 15 phút WPM & 10 chủ đề Q&A (`script.md`) | ✅ (21/09 — PR #27 open) |
+| Báo cáo Word: Hoàn thiện Chương 1–5 & Refs (branch `feat/phase-09-report-template`) | 🟡 (21/09 – 22/09 — Sơn lead) |
+| Xuất bản file `DOCS/DoAnMonHoc.docx` và `DOCS/DoAnMonHoc.pdf` (≥15 trang) | 🔲 (22/09) |
+| Diễn tập thuyết trình bấm giờ ≤15 phút theo kịch bản chuẩn WPM | 🔲 (21/09 – 22/09) |
+| Diễn tập phản biện 10 câu hỏi Q&A từ ThS. Cáp Phạm Đình Thăng | 🔲 (22/09) |
 
 ---
 
 ## 🎯 D-Day — 18:30 Ngày 23/09/2026: Thuyết Trình Bảo Vệ Đồ Án (MS Teams)
 
-> 📌 **Hình thức:** Trực tuyến qua Microsoft Teams (khe giờ môn SS007 cũ, thầy Thăng tạo điều kiện báo cáo sớm).  
-> 📌 **Quy cách:** Bắt buộc thuyết trình luân phiên cả 3 thành viên; Trưởng nhóm Đặng Chí Thanh điều phối Master Share Screen.
+> 📌 **Hình thức:** Trực tuyến qua Microsoft Teams (thầy Thăng tạo điều kiện báo cáo sớm).  
+> 📌 **Quy cách:** Bắt buộc thuyết trình luân phiên cả 3 thành viên; Trưởng nhóm Đặng Chí Thanh điều phối Master Share Screen. Tổng thời lượng 15 phút (900s) phân bổ chuẩn nhịp WPM theo `script.md`.
 
-| Thời gian | Nội dung | Phụ trách & Thao tác kỹ thuật |
-|-----------|----------|------------------------------|
-| 00:00 – 01:30 | Chào thầy, giới thiệu Nhóm 10, bối cảnh lừa đảo NCT tại VN & ý nghĩa thực tiễn | **Đặng Chí Thanh** (Bật mic/cam, Share Screen Slide 1–2) |
-| 01:30 – 04:30 | Quy trình thu thập dataset (≥1.500 mẫu, PII Masking), Pipeline NLP tiếng Việt & TF-IDF | **Đặng Chí Thanh** (Slide 3–5, chuyển quyền nói cho Cẩm) |
-| 04:30 – 08:30 | Thực nghiệm 3+ mô hình (NB, RF/XGB, SVM), Đánh giá Overfitting (Learning Curves), Confusion Matrix | **Bùi Thị Mỷ Cẩm** (Bật mic/cam, Slide 6–9, chuyển quyền nói cho Sơn) |
-| 08:30 – 11:30 | Giải thích bẫy tâm lý XAI SHAP, Demo trực tiếp Web App Streamlit, Kết luận & Hướng mở rộng | **Hoàng Cao Sơn** (Bật mic/cam, thuyết minh trên tab Demo do Thanh share, Slide 10–13) |
-| 11:30 – 15:00 | Trả lời câu hỏi phản biện của ThS. Cáp Phạm Đình Thăng (Q&A) | **Cả nhóm** (Thanh điều phối mở đầu và cùng Cẩm, Sơn phản biện) |
+| Thời gian | Nội dung & Slide tương ứng | Phụ trách & Thao tác kỹ thuật |
+|-----------|----------------------------|------------------------------|
+| 00:00 – 05:50 | **Khối 1 & 2 (Slide 1–8):** Bìa, Agenda, Bối cảnh lừa đảo NCT, Mục tiêu đề tài, Dataset 2.193 mẫu thực tế, 4 nhóm bẫy tâm lý, Pipeline NLP tiếng Việt & TF-IDF | **Đặng Chí Thanh** (Bật mic/cam, Master Share Screen Slide 1–8, chuyển quyền nói cho Cẩm) |
+| 05:50 – 10:10 | **Khối 3 (Slide 9–12):** Mô hình hóa, Bảng so sánh 4 mô hình, Đường cong ROC/PR, XAI SHAP Beeswarm & Từ khóa quan trọng | **Bùi Thị Mỷ Cẩm** (Bật mic/cam, thuyết minh Slide 9–12, chuyển quyền nói cho Sơn) |
+| 10:10 – 14:25 | **Khối 4 & 5 (Slide 13–18):** Web Demo Streamlit Split-View & Trợ năng NCT, Kết luận, 15 Tài liệu tham khảo theo vòng đời, Lời cảm ơn | **Hoàng Cao Sơn** (Bật mic/cam, thuyết minh Slide 13–18 & Demo do Thanh share) |
+| 14:25 – 15:00 | **Buffer:** Dự phòng chuyển tiếp kỹ thuật trên MS Teams | **Cả nhóm** |
+| Q&A Phản biện | **Phụ lục (Slide 19–22):** Trả lời câu hỏi phản biện của ThS. Cáp Phạm Đình Thăng (Siêu tham số, Confusion Matrix, Learning Curves) | **Cả nhóm** (Thanh điều phối, cùng Cẩm và Sơn giải trình theo 10 kịch bản Q&A) |

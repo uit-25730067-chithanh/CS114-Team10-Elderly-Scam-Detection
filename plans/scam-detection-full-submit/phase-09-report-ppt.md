@@ -13,7 +13,7 @@
 | Owner | **PPT: Cẩm (25730013) · Report: Sơn (25730061) · Review/Merge: Thanh (25730067)** |
 | Priority | P1 |
 | Status | `in-progress` |
-| Review | 🟡 Template branches tạo xong — chờ thành viên tạo PR |
+| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word đang hoàn thiện |
 | Estimated effort | 8–12h |
 | Sprint | Sprint 2–3 Fast-Track (15/09 – 22/09/2026) |
 
@@ -21,8 +21,9 @@
 
 | Branch | Owner | File template cốt lõi | Trạng thái |
 |--------|-------|----------------------|-----------|
-| `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Template ready ✅ — chờ Cẩm hoàn thiện |
-| `feat/phase-09-report-template` | **Sơn** tạo PR | [`REPORT_OUTLINE.md`](../../draft/scam-detection/reports/report/REPORT_OUTLINE.md) · [`report-source.md`](../../draft/scam-detection/reports/report/report-source.md) · [`report-meta.yaml`](../../draft/scam-detection/reports/report/report-meta.yaml) | Template ready ✅ — chờ Sơn hoàn thiện |
+| `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Hoàn tất ✅ — PR #26 đã merge vào main (22 slide, 3.4 MB PPTX/PDF) |
+| `feat/phase-09-presentation-script` | **Thanh** tạo PR | [`script.md`](../../draft/scam-detection/reports/slides/scripts/script.md) (51 KB) | Hoàn tất ✅ — PR #27 kịch bản 15p chuẩn WPM & 10 chủ đề Q&A |
+| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Đang triển khai 🟡 — Sơn biên soạn 5 chương trên branch |
 
 ## Context
 
@@ -121,35 +122,38 @@ Theo yêu cầu trong [README.md](../../README.md):
 9. Cục Cảnh sát hình sự — Bộ Công an, "Cẩm nang nhận diện và phòng ngừa các thủ đoạn lừa đảo chiếm đoạt tài sản trên không gian mạng," 2025–2026.
 10. A. K. Jain, "Data clustering: 50 years beyond K-means," *Pattern Recognit. Lett.*, vol. 31, no. 8, pp. 651–666, 2010.
 
-## Slide PPT (19 slides — 15 phút)
+## Slide PPT (22 slides — 15 phút)
 
 | Slide # | Loại slide | Nội dung chính | Thời lượng | Phụ trách |
 |:---:|---|---|:---:|---|
 | **1** | Title | Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào NCT | 30s | Đặng Chí Thanh |
-| **2** | Stat callout | Bối cảnh & Vấn đề (420 mẫu lừa đảo, 4 nhóm bẫy tâm lý, Zero Synthetic Text) | 1.5 phút | Đặng Chí Thanh |
-| **3** | Icon grid | Mục tiêu & Đóng góp (4 models, F1≥88%, SHAP XAI, Web Demo) | 1.5 phút | Đặng Chí Thanh |
-| **4** | Section divider | Divider: Dữ liệu & Phương pháp | 15s | Đặng Chí Thanh |
-| **5** | Text + Image | Dataset 2.193 mẫu thực tế (80/20 Stratified Split, 7 tầng kiểm toán) | 1.5 phút | Đặng Chí Thanh |
-| **6** | Two-column | 4 nhóm bẫy tâm lý (Quyền lực 127, Gia đình 88, Quà tặng 46, Dịch vụ công 159) | 1.5 phút | Đặng Chí Thanh |
-| **7** | Full diagram | Pipeline tiền xử lý tiếng Việt & Không gian vector 5.015 chiều | 1.5 phút | Đặng Chí Thanh |
-| **8** | Section divider | Divider: Mô hình & Kết quả thực nghiệm | 15s | Bùi Thị Mỷ Cẩm |
-| **9** | Table comparison | Bảng so sánh hiệu năng 4 mô hình (XGBoost F1=0.9535, Linear SVM F1=0.9474) | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **10** | Two-column image | ROC Curves & Precision-Recall Curves đa mô hình (AUC 0.9911 → 0.9986) | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **11** | Image + text | Confusion Matrix & Phân tích sai số (XGBoost FN=2, SVM FN=3) | 1 phút | Bùi Thị Mỷ Cẩm |
-| **12** | Two-column image | Explainable AI: SHAP Beeswarm & Top-20 từ khóa bẫy tâm lý đồng thuận | 1.5 phút | Bùi Thị Mỷ Cẩm |
-| **13** | Section divider | Divider: Ứng dụng & Trình diễn | 15s | Hoàng Cao Sơn |
-| **14** | Multi-image demo | Streamlit Web App Demo & Tính năng trợ năng người cao tuổi (Hotline 156/113) | 2 phút | Hoàng Cao Sơn |
-| **15** | Two-column | Kết luận & Hướng phát triển (PhoBERT, Mobile App) | 1 phút | Hoàng Cao Sơn |
-| **16** | Section divider | Divider: Phụ lục & Backup Slides | — | Cả nhóm |
-| **17** | Diagram/Card | Backup 1: Chi tiết kiến trúc Pipeline & 15 đặc trưng phụ | Q&A | Cả nhóm |
-| **18** | Table | Backup 2: Chi tiết siêu tham số và không gian Tuning | Q&A | Cả nhóm |
-| **19** | Closing | Backup 3: Lời cảm ơn, Q&A & Thông tin liên hệ | Q&A | Cả nhóm |
+| **2** | Agenda | Lộ trình báo cáo 5 phần & Phụ lục Q&A | 20s | Đặng Chí Thanh |
+| **3** | Stat callout | PHẦN 1: Bối cảnh lừa đảo NCT tại VN 2026 (420 mẫu lừa đảo, Zero Synthetic Text) | 1.5 phút | Đặng Chí Thanh |
+| **4** | Icon grid | PHẦN 1: Mục tiêu đề tài & 4 đóng góp chính (F1≥88%, Recall≥92%, XAI, Demo) | 1.5 phút | Đặng Chí Thanh |
+| **5** | Section divider | Divider PHẦN 2: Dữ liệu & Phương pháp tiếp cận | 15s | Đặng Chí Thanh |
+| **6** | Text + Image | PHẦN 2: Bộ dữ liệu 2.193 mẫu thực tế (Stratified 80/20, 7 tầng kiểm toán) | 1.5 phút | Đặng Chí Thanh |
+| **7** | Two-column | PHẦN 2: Cơ cấu 4 nhóm bẫy tâm lý (Dịch vụ công, Quyền lực, Gia đình, Quà tặng) | 1.5 phút | Đặng Chí Thanh |
+| **8** | Full diagram | PHẦN 2: Pipeline tiền xử lý tiếng Việt & Không gian vector 5.015 chiều | 1.5 phút | Đặng Chí Thanh |
+| **9** | Section divider | Divider PHẦN 3: Mô hình hóa & Kết quả thực nghiệm | 15s | Bùi Thị Mỷ Cẩm |
+| **10** | Table comparison | PHẦN 3: Bảng so sánh 4 mô hình (XGBoost F1=0.9535, Linear SVM F1=0.9474) | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **11** | Two-column image | PHẦN 3: Đường cong ROC & Precision-Recall lồng ghép (AUC 0.9911 → 0.9986) | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **12** | Two-column image | PHẦN 3: Giải thích mô hình XAI với SHAP Beeswarm & Top từ khóa quan trọng | 1.5 phút | Bùi Thị Mỷ Cẩm |
+| **13** | Section divider | Divider PHẦN 4: Ứng dụng thực tế & Giao diện Demo | 15s | Hoàng Cao Sơn |
+| **14** | Multi-image demo | PHẦN 4: Streamlit Web App Split-View Workbench & Trợ năng NCT (Hotline 156/113) | 2 phút | Hoàng Cao Sơn |
+| **15** | Section divider | Divider PHẦN 5: Kết luận & Hướng phát triển | 15s | Hoàng Cao Sơn |
+| **16** | Two-column | PHẦN 5: Kết luận, Đóng góp chính & Hạn chế đề tài | 1.5 phút | Hoàng Cao Sơn |
+| **17** | References (2-col)| PHẦN 5: 15 Tài liệu tham khảo theo chu trình vòng đời đề tài | 1 phút | Hoàng Cao Sơn |
+| **18** | Closing | PHẦN 5: Lời cảm ơn chuẩn UIT, Thông tin liên hệ & Q&A | 30s | Hoàng Cao Sơn |
+| **19** | Section divider | Divider PHỤ LỤC: Backup Slides & Phản biện kỹ thuật | Q&A | Cả nhóm |
+| **20** | Table | Backup 1: Chi tiết Siêu tham số và Không gian Tuning | Q&A | Cả nhóm |
+| **21** | Image + text | Backup 2: Ma trận nhầm lẫn 2×2 chi tiết 4 mô hình (XGB FN=2, SVM FN=3) | Q&A | Cả nhóm |
+| **22** | Image + text | Backup 3: Đường cong học tập 5-fold CV kiểm soát quá khớp | Q&A | Cả nhóm |
 
 ## Fast-Track Tasks (Báo cáo sớm 23/09/2026)
 
-- [ ] **Sprint 2 (15/09 – 18/09):** Viết sớm Báo cáo Word Chương 1 (Đặt vấn đề), Chương 2 (Khảo sát) + Chương 3 (Phương pháp) + Chuẩn bị khung Slide PPT 15 phút
-- [ ] **Sprint 3 (19/09 – 20/09):** Báo cáo Word Chương 4 (Thực nghiệm — tích hợp số liệu từ Phase 07) + Chương 5 (Kết luận) + Hoàn thiện Slide PPT (19 slides)
-- [ ] **Sprint 3 (21/09 – 22/09):** Diễn tập thuyết trình (≤15 phút) cả nhóm + Chuẩn bị câu hỏi Q&A phản biện của thầy Thăng
+- [x] **Sprint 2 (15/09 – 18/09):** Khung Slide PPT, hoàn tất huấn luyện 4 mô hình và trích xuất bảng metrics
+- [x] **Sprint 3 (19/09 – 21/09):** Hoàn thiện Slide PPT 22 trang (PR #26 merged) + Kịch bản thuyết trình 15p & 10 chủ đề Q&A (PR #27)
+- [ ] **Sprint 3 (21/09 – 22/09):** Báo cáo Word Chương 1–5 (Sơn lead) + Diễn tập thuyết trình (≤15 phút) cả nhóm
 - [ ] **D-Day (18:30 23/09/2026):** Thuyết trình trực tuyến MS Teams, luân phiên cả 3 thành viên trước ThS. Cáp Phạm Đình Thăng
 
 ## Checklist
@@ -164,7 +168,8 @@ Theo yêu cầu trong [README.md](../../README.md):
 - [ ] Tài liệu tham khảo (≥10 refs IEEE)
 - [ ] File Word đúng định dạng (.docx)
 - [ ] File PDF exported
-- [ ] PPT 19 slides (15 chính + 1 divider phụ lục + 3 backup) — *bản hiện tại 22 slide theo chỉ đạo của anh Thanh (Agenda + 5 PHẦN), khác bảng 19 slide ở trên, xem [Ghi chú bàn giao](#ghi-chú-bàn-giao-cho-anh-thanh-ppt--cẩm-21092026)*
+- [x] PPT 22 slides (15 chính + 1 Agenda + 5 dividers + 3 backup) — `phase09_presentation.pptx` (3.4 MB) & PDF, merged qua PR #26
+- [x] Kịch bản thuyết trình bảo vệ 15 phút (`script.md`, 51 KB) bám sát 22 slide, phân vai chuẩn WPM & 10 chủ đề Q&A (PR #27)
 - [x] PPT có biểu đồ, screenshots demo
 - [ ] Diễn tập thuyết trình ≤15 phút
 
@@ -173,9 +178,9 @@ Theo yêu cầu trong [README.md](../../README.md):
 | Criterion | Evidence |
 |-----------|---------|
 | Word report | ≥15 trang, đầy đủ 5 chương |
-| PPT | 19 slides (15 chính + 1 divider + 3 backup), ≤15 phút |
-| Figures embedded | Tất cả biểu đồ từ Phase 07 (`draft/scam-detection/reports/figures/`) |
-| References | ≥10 tài liệu tham khảo chuẩn IEEE |
+| PPT | 22 slides (15 chính + 1 Agenda + 5 dividers + 3 backup), ≤15 phút |
+| Figures embedded | Tất cả 32 biểu đồ từ Phase 03–08 (`draft/scam-detection/reports/figures/`) |
+| References | 15 tài liệu tham khảo theo vòng đời đề tài chuẩn IEEE/APA |
 
 ## Ghi chú bàn giao cho anh Thanh (PPT — Cẩm, 21/09/2026)
 
