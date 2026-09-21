@@ -150,6 +150,11 @@ function note(slide, title, lines) {
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function pngSize(file) {
   const b = fs.readFileSync(file).subarray(0, 24);
+  const isPng = b.length >= 24 && b.readUInt32BE(0) === 0x89504E47;
+  if (!isPng) {
+    console.warn(`⚠️ File không đúng định dạng PNG hợp lệ: ${file}`);
+    return { w: 1920, h: 1080 };
+  }
   return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
 }
 
@@ -188,10 +193,10 @@ function addHeader(slide, title, section) {
 function addFooter(slide, n, total) {
   const pad = (v) => String(v).padStart(2, "0");
   slide.addText(FOOTER_LINES.map((l) => ({ text: l, options: { breakLine: true } })), {
-    x: M, y: 5.16, w: 7.7, h: 0.42, fontSize: 10, color: T.textMuted, fontFace: "Calibri", valign: "middle", margin: [0, 0, 0, 0],
+    x: M, y: 5.18, w: 7.7, h: 0.36, fontSize: 9.5, color: T.textMuted, fontFace: "Calibri", valign: "middle", margin: [0, 0, 0, 0],
   });
   slide.addText(`${pad(n)} / ${pad(total)}`, {
-    x: 8.3, y: 5.16, w: 1.2, h: 0.42, fontSize: 11, bold: true, color: T.accentDark, fontFace: "Calibri", align: "right", valign: "middle", margin: [0, 0, 0, 0],
+    x: 8.3, y: 5.18, w: 1.2, h: 0.36, fontSize: 10.5, bold: true, color: T.accentDark, fontFace: "Calibri", align: "right", valign: "middle", margin: [0, 0, 0, 0],
   });
 }
 
@@ -707,19 +712,19 @@ addDivider("PHẦN 5", "Kết luận &\nHướng phát triển", "Kết quả  �
   const runs = (groups) => {
     const out = [];
     groups.forEach((g, gi) => {
-      out.push({ text: g.head, options: { bold: true, color: T.accentDark, fontSize: 10.5, breakLine: true, paraSpaceBefore: gi ? 5 : 0, paraSpaceAfter: 2 } });
+      out.push({ text: g.head, options: { bold: true, color: T.accentDark, fontSize: 10, breakLine: true, paraSpaceBefore: gi ? 3 : 0, paraSpaceAfter: 1.5 } });
       g.items.forEach(([n, t]) => {
-        out.push({ text: `[${n}] `, options: { bold: true, color: T.accentDark, fontSize: 10, paraSpaceAfter: 2.5 } });
-        out.push({ text: t, options: { fontSize: 10, breakLine: true, paraSpaceAfter: 2.5 } });
+        out.push({ text: `[${n}] `, options: { bold: true, color: T.accentDark, fontSize: 9.5, paraSpaceAfter: 1.5 } });
+        out.push({ text: t, options: { fontSize: 9.5, breakLine: true, paraSpaceAfter: 1.5 } });
       });
     });
     return out;
   };
-  const box = { y: CY + 0.05, w: 4.4, h: 3.7, color: T.text, fontFace: "Calibri", valign: "top", margin: [0, 0, 0, 0], lineSpacingMultiple: 0.95 };
+  const box = { y: CY + 0.08, w: 4.4, h: 3.55, color: T.text, fontFace: "Calibri", valign: "top", margin: [0, 0, 0, 0], lineSpacingMultiple: 0.95 };
   slide.addText(runs(LEFT), { x: M, ...box });
   slide.addText(runs(RIGHT), { x: 5.1, ...box });
   slide.addText("Nguồn trực tuyến truy cập 21/09/2026 · [1] giấy phép CC BY 4.0 theo README · Danh sách đầy đủ 18 tài liệu: báo cáo Word", {
-    x: M, y: 4.9, w: CW, h: 0.22, ...F.caption, shrinkText: true,
+    x: M, y: 4.80, w: CW, h: 0.22, ...F.caption, shrinkText: true,
   });
 
   note(slide, "THAM KHẢO", [

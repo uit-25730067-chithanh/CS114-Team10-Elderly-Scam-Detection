@@ -264,18 +264,18 @@ Các slide phân đoạn (5, 9, 13, 15, 19) không nói. Số slide trong bảng
 ## Evidence Section
 
 ```
-[✓] Branch checked out & pulled: feat/phase-09-ppt-template (commit d54df44)
-[✓] Generator Script: draft/scam-detection/reports/slides/generate_slides.js (661 lines PptxGenJS)
-[✓] Presentation Deck: draft/scam-detection/reports/slides/phase09_presentation.pptx (2.5 MB, 20 slides)
-[✓] Overlap Checker: .agents/skills/powerpoint-slides/scripts/check_overlaps.py -> OK: no overlap or boundary issues found
-[✓] Typography & Bounds Audit: Cambria / Calibri, 0 overflow elements, max_bottom <= 5.100" (SH = 5.625")
-[✓] Research Audit Document: draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md (88/100 A-)
+[✓] Branch checked out & pulled: feat/phase-09-ppt-template (commit 597ce72)
+[✓] Generator Script: draft/scam-detection/reports/slides/generate_slides.js (883 lines PptxGenJS)
+[✓] Presentation Deck: draft/scam-detection/reports/slides/phase09_presentation.pptx (3.4 MB, 22 slides)
+[✓] Overlap Checker: .agents/skills/powerpoint-slides/scripts/check_overlaps.py -> OK: no overlap or boundary issues found (0 critical, 0 major, 0 warnings)
+[✓] Typography & Bounds Audit: Cambria / Calibri, 0 overflow elements, max_bottom <= 5.56" (SH = 5.625", footer y=5.18, h=0.36)
+[✓] Research Audit Document: draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md (88/100 A-) & research-cam-phase09-references-lifecycle.md
 [✓] 10 Q&A Defenses for ThS. Cáp Phạm Đình Thăng prepared & evidence-backed
 ```
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> 🟡 **PPT Template Review Complete:** Đã thực hiện kiểm toán chuyên sâu (Hard Review) đối với 20 slide của em Cẩm. Giải quyết dứt điểm 4 vấn đề bàn giao, chuẩn hóa thời lượng thuyết trình 15 phút luân phiên 3 thành viên, thiết lập kịch bản ứng phó 10 câu hỏi phản biện của GV. Chờ áp dụng các bản vá cục bộ và diễn tập thử.
+> 🟢 **PPT Template Finalized (22 Slides):** Đã hoàn tất kiểm toán chuyên sâu và tinh chỉnh hoàn thiện bộ 22 slide của em Cẩm. Đã xử lý triệt để 4 quyết định kỹ thuật (RF ROC-AUC 99.77%, NB alpha=0.01 & Cẩm là tác giả Phase 04, gỡ citation giả, giữ nguyên bản transition native), áp dụng trọn vẹn 5 chỉ đạo nâng cấp (Header/Footer/Số trang NN/22, Agenda 2 cột 5 phần, 15 tài liệu tham khảo theo vòng đời 2 cột, Lời cảm ơn chuẩn UIT). Bố cục đã được kiểm định qua `check_overlaps.py` đạt chuẩn sạch 100% không lỗi tràn lề. Đã xuất bản PDF phục vụ quan sát trực quan. Sẵn sàng nghiệm thu và bảo vệ.
 
 ## Commit
 
