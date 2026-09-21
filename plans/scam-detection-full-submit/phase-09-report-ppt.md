@@ -201,15 +201,40 @@ Theo yêu cầu trong [README.md](../../README.md):
 
 Bằng chứng `0.01` đúng: `models/naive_bayes.pkl` lưu `alpha=0.01`; `naive_bayes_metrics.json` có `best_alpha: 0.01`; dựng lại mô hình trên X_train/X_test chỉ cho ra F1 0.8864 / FN=6 / FP=14 với `alpha=0.01` (với `alpha=0.5` F1 chỉ 0.8402, FN=13). Các tài liệu khác (AGENTS.md, plan Phase 04, `models/README.md`, hai báo cáo audit) đều đã ghi 0.01.
 
-## Evidence Section *(điền sau khi làm)*
+## Phản hồi thẩm định & Quyết định của anh Thanh (PM / Reviewer — 21/09/2026)
+
+### 4 Quyết định Kỹ thuật Dứt điểm:
+1. **Vấn đề 1 (ROC-AUC RF 99.76% vs 99.77%):** Đã đánh giá lại model artifact `random_forest.pkl` trên test set thực tế cho kết quả `0.99765258...` → **CHỐT 99.77%**. Cập nhật `random_forest_metrics.json` để Slide 9 và Slide 10 đồng nhất 100%.
+2. **Vấn đề 2 (Naive Bayes alpha=0.01 & Tác giả Phase 04 — Cẩm):** **ĐỒNG Ý**. Sửa triệt để cả 4 vị trí (`metrics_calculator.py`, `model_comparison.csv`, `README.md`, `demo/app.py`).
+3. **Vấn đề 3 (Trích dẫn [4] IEEE Access):** **XÓA BỎ TRÍCH DẪN GIẢ**. Thay bằng trích dẫn dataset thực tế / Báo cáo Cục ATTT trên Slide 15.
+4. **Vấn đề 4 (Transitions):** **GIỮ NGUYÊN BẢN (KHÔNG DÙNG SCRIPT HACK XML)** để tránh lỗi file lúc bảo vệ; khi chiếu chỉ cần bật hiệu ứng Fade nhẹ 0.3s trên PowerPoint native.
+
+### 5 Chỉ đạo Bổ sung & Định hướng Nâng cấp Slide gửi em Cẩm tự hoàn thiện:
+1. **Header, Footer & Đánh số trang đồng bộ:** Toàn bộ slide nội dung cần Header (`TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN — ĐHQG-HCM`), Footer (`CS114: Máy học — Nhóm 10 — Báo cáo Đồ án: Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam`) và số trang định dạng `01 / 22`, `02 / 22`...
+2. **Thống nhất tên đề tài chuẩn:** "Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam" (loại bỏ hoàn toàn các biến thể như "Gian lận tài chính").
+3. **Bổ sung Slide Lộ trình báo cáo (Agenda) & Đánh số phân đoạn:** Thêm Slide 2 Agenda 2 cột (5 phần chính + Phụ lục Q&A) và đánh số rõ ràng `PHẦN 1..5`.
+4. **Sắp xếp Tài liệu tham khảo theo vòng đời dữ liệu / dự án:** Xếp 2 cột theo chu trình: Nguồn cào data → Tiền xử lý NLP → Thuật toán Học máy → XAI → Trợ năng Web → PhoBERT.
+5. **Chuẩn hóa Lời cảm ơn:** `"CHÂN THÀNH CẢM ƠN THẦY VÀ CÁC BẠN ĐÃ LẮNG NGHE BÁO CÁO!"`.
+- **Định hướng Slide vs Script:** Slide không cần cắt xén quá ngắn gọn. Slide đóng vai trò là "điểm tựa thị giác" (visual anchor) chứa đủ luận cứ khoa học để bổ trợ cho kịch bản nói (script) của speaker. Transition sẽ hoàn thiện đồng bộ sau cùng.
+
+Toàn văn báo cáo thẩm định chuyên môn và phản biện xem tại:
+- [`research-cam-phase09-ppt-slides-audit.md`](../../draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md)
+
+## Evidence Section
 
 ```
-(Chưa thực hiện)
+[✓] Branch checked out & pulled: feat/phase-09-ppt-template (commit d54df44)
+[✓] Generator Script: draft/scam-detection/reports/slides/generate_slides.js (661 lines PptxGenJS)
+[✓] Presentation Deck: draft/scam-detection/reports/slides/phase09_presentation.pptx (2.5 MB, 20 slides)
+[✓] Overlap Checker: .agents/skills/powerpoint-slides/scripts/check_overlaps.py -> OK: no overlap or boundary issues found
+[✓] Typography & Bounds Audit: Cambria / Calibri, 0 overflow elements, max_bottom <= 5.100" (SH = 5.625")
+[✓] Research Audit Document: draft/scam-detection/reports/research-cam-phase09-ppt-slides-audit.md (88/100 A-)
+[✓] 10 Q&A Defenses for ThS. Cáp Phạm Đình Thăng prepared & evidence-backed
 ```
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa bắt đầu.
+> 🟡 **PPT Template Review Complete:** Đã thực hiện kiểm toán chuyên sâu (Hard Review) đối với 20 slide của em Cẩm. Giải quyết dứt điểm 4 vấn đề bàn giao, chuẩn hóa thời lượng thuyết trình 15 phút luân phiên 3 thành viên, thiết lập kịch bản ứng phó 10 câu hỏi phản biện của GV. Chờ áp dụng các bản vá cục bộ và diễn tập thử.
 
 ## Commit
 

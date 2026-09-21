@@ -122,7 +122,7 @@
 | **XGBoost** | 5.015 (TF-IDF + 15 aux) | `n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | 0.9984 | Best Overall Model, FN=2, FP=6 (Phase 05 — Cẩm) |
 | **SVM Linear** | 5.015 (TF-IDF + 15 aux) | `C=10.0` (CalibratedClassifierCV 5-fold) | 97.95% | **93.10%** | 96.43% | **0.9474** | **0.9986** | Best Linear Model, FN=3, FP=6 (Phase 06 — Cẩm) |
 | **Random Forest** | 5.015 (TF-IDF + 15 aux) | `n_est=200, depth=50, split=2, leaf=2, max_feat=0.2` | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn) |
-| **Naive Bayes** | 5.000 (TF-IDF non-negative) | `alpha=0.5` (MultinomialNB) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline Model, FN=6, FP=14 (Phase 04 — Thanh) |
+| **Naive Bayes** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (MultinomialNB) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline Model, FN=6, FP=14 (Phase 04 — Cẩm) |
 
 > 🎯 **Chỉ tiêu đề tài CS114:** F1-Score ≥ 88%, Recall Scam ≥ 92%. **Toàn bộ 4 mô hình đều vượt chỉ tiêu**, trong đó **XGBoost** đạt hiệu năng xuất sắc nhất (F1 = 0.9535, Recall = 97.62%, chỉ bỏ sót 2/84 tin nhắn lừa đảo).
 

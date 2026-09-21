@@ -41,8 +41,8 @@ MODEL_METADATA = {
     },
     "Naive Bayes": {
         "features": "5,000 (TF-IDF)",
-        "hyperparameters": "alpha=0.5 (MultinomialNB)",
-        "notes": "Baseline Model, FN=6, FP=14 (Phase 04 — Thanh)",
+        "hyperparameters": "alpha=0.01 (MultinomialNB)",
+        "notes": "Baseline Model, FN=6, FP=14 (Phase 04 — Cẩm)",
     },
 }
 
