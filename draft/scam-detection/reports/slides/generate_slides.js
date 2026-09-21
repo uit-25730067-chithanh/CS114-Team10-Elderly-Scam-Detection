@@ -209,7 +209,7 @@ function addDivider(title, subtitle, notes) {
     x: M, y: 4.4, w: CW, h: 0.3, fontSize: 11, color: T.onDarkMuted, fontFace: "Calibri", align: "center",
   });
 
-  slide.addNotes("SLIDE 1 — COVER\n- Người trình bày đầu tiên: Đặng Chí Thanh (PM)\n- Giới thiệu tên đề tài và các thành viên\n- Nhấn mạnh: đề tài bảo vệ người cao tuổi khỏi lừa đảo tin nhắn tiếng Việt");
+  slide.addNotes("SLIDE 1 — COVER\n- Người trình bày đầu tiên: Đặng Chí Thanh (PM)\n- Giới thiệu tên đề tài và các thành viên\n- Nhấn mạnh: đề tài bảo vệ người cao tuổi khỏi lừa đảo tin nhắn tiếng Việt\n- Trước khi chiếu: PowerPoint → chọn tất cả slide → Transitions → Fade (0.3s) → Apply To All. Không dùng script chèn XML (tránh lỗi file)");
 })();
 
 // ─── SLIDE 2: BỐI CẢNH & VẤN ĐỀ ─────────────────────────────────────────────
@@ -269,7 +269,7 @@ addDivider("Dữ liệu &\nPhương pháp", "Thu thập  ·  Tiền xử lý  ·
   addHeader(slide, "Dataset: 2.193 Mẫu Thực Tế", "Dữ liệu & Phương pháp");
 
   const bullets = [
-    "2.193 mẫu · Stratified Split 80/20",
+    "2.193 mẫu · Stratified Split 80/20 · nguồn [4], [6]",
     "Bình thường (label 0): 1.773 mẫu",
     "Lừa đảo (label 1): 420 mẫu — tỉ lệ 4.2:1",
     "Kiểm toán 7 tầng: 0% PII, 0% văn bản tổng hợp",
@@ -403,7 +403,7 @@ addDivider("Mô hình &\nKết quả", "Naive Bayes  ·  Random Forest  ·  XGBo
     x: M, y: 4.78, w: CW, h: 0.28, ...F.caption, shrinkText: true,
   });
 
-  slide.addNotes(`SLIDE 9 — MODEL TABLE\n- XGBoost best overall: F1=${pct(MET.xgb.f1)}, Recall=${pct(MET.xgb.recall)}\n- SVM có ROC-AUC cao nhất (${pct(MET.svm.roc_auc)}) nhưng F1 thấp hơn XGBoost\n- Naive Bayes vẫn đạt F1=${pct(MET.nb.f1)} — baseline tốt, chỉ dùng TF-IDF\n- Nhấn: tất cả đều vượt chỉ tiêu GV yêu cầu\n- Q&A: ROC-AUC Random Forest = ${pct(MET.rf.roc_auc)} theo log huấn luyện Phase 05 (0.99755); ảnh ROC và model_comparison.csv (tính lại ở Phase 07) ghi 0.9977 — chênh do làm tròn/tính lại\n- Q&A: FN của từng mô hình — XGB ${MET.xgb.fn}, RF ${MET.rf.fn}, SVM ${MET.svm.fn}, NB ${MET.nb.fn}`);
+  slide.addNotes(`SLIDE 9 — MODEL TABLE\n- XGBoost best overall: F1=${pct(MET.xgb.f1)}, Recall=${pct(MET.xgb.recall)}\n- SVM có ROC-AUC cao nhất (${pct(MET.svm.roc_auc)}) nhưng F1 thấp hơn XGBoost\n- Naive Bayes vẫn đạt F1=${pct(MET.nb.f1)} — baseline tốt, chỉ dùng TF-IDF\n- Nhấn: tất cả đều vượt chỉ tiêu GV yêu cầu\n- Q&A: ROC-AUC Random Forest = ${pct(MET.rf.roc_auc)} — anh Thanh đánh giá lại random_forest.pkl trên tập test (0.99765), khớp với ảnh ROC ở slide 10\n- Q&A: FN của từng mô hình — XGB ${MET.xgb.fn}, RF ${MET.rf.fn}, SVM ${MET.svm.fn}, NB ${MET.nb.fn}`);
 })();
 
 // ─── SLIDE 10: ROC & PR CURVES ────────────────────────────────────────────────
@@ -519,18 +519,16 @@ addDivider("Demo Ứng dụng &\nKết luận", "Streamlit Web App  ·  Kết qu
     "[1] T. Chen & C. Guestrin, “XGBoost: A Scalable Tree Boosting System,” KDD 2016.",
     "[2] J. Platt, “Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods,” Advances in Large Margin Classifiers, 1999.",
     "[3] D. Q. Nguyen & A. T. Nguyen, “PhoBERT: Pre-trained Language Models for Vietnamese,” Findings of EMNLP 2020.",
-    "[4] Vietnamese Quality-Assured SMS Dataset, IEEE Access 2026 (doi pending) — nguồn dữ liệu tin nhắn bình thường.",
+    "[4] N. T. T. Tran, H. K. Le, M. T. Nguyen, V. T. Nguyen, and H. D. Mai, “Vietnamese SMS Dataset with Quality Assurance,” IEEE Access, 2026 (theo trích dẫn của tác giả trong README bộ dữ liệu; chưa có tập/DOI). GitHub: trannguyenthaituan251209/vietnamese_sms_dataset (1.944 mẫu: 1.773 bình thường + 171 lừa đảo; giấy phép CC BY 4.0 theo README; truy cập 21/09/2026).",
     "[5] F. Pedregosa et al., “Scikit-learn: Machine Learning in Python,” JMLR vol. 12, 2011.",
+    "[6] Nguồn bổ sung của tập lừa đảo (249/420 mẫu, có URL truy vết trong dataset.csv): GitHub ghitatruongle/lachancuocgoi (162), duynguyenhoang22/SMS_Phishing_Detection — đồ án IE403 (73), duynguyenhoang22/ViSmish_Detection (1); báo chí và video: Thanh Niên, Dân trí, Tuổi Trẻ, VTV24 (13); truy cập 21/09/2026.",
   ];
-  const top = CY + 0.15, rowH = (BOTTOM - top - 0.05) / refs.length;
-  refs.forEach((ref, i) => {
-    slide.addText(ref, {
-      x: M, y: top + i * rowH, w: CW, h: rowH - 0.1, fontSize: 14, color: T.text, fontFace: "Calibri",
-      valign: "middle", shrinkText: true,
-    });
+  slide.addText(refs.map((ref) => ({ text: ref, options: { breakLine: true, paraSpaceAfter: 9 } })), {
+    x: M, y: CY + 0.15, w: CW, h: BOTTOM - CY - 0.2, fontSize: 13, color: T.text, fontFace: "Calibri",
+    valign: "middle", margin: [2, 0, 2, 0],
   });
 
-  slide.addNotes("SLIDE 15 — THAM KHẢO\n- [1] XGBoost, [2] hiệu chỉnh xác suất SVM (CalibratedClassifierCV), [3] PhoBERT (hướng phát triển), [4] nguồn dữ liệu bình thường, [5] scikit-learn\n- Q&A: [4] đang chờ DOI — trình bày rõ là nguồn dữ liệu công khai nhóm đã ghi provenance trong dataset");
+  slide.addNotes("SLIDE 15 — THAM KHẢO\n- [1] XGBoost, [2] hiệu chỉnh xác suất SVM (CalibratedClassifierCV), [3] PhoBERT (hướng phát triển), [4] bộ dữ liệu SMS chính, [5] scikit-learn, [6] các nguồn dữ liệu bổ sung\n- Q&A về [4]: trích đúng theo yêu cầu của tác giả bộ dữ liệu trong README (bài IEEE Access 2026); nhóm không khẳng định bài đã xuất bản (chưa có tập/DOI). Điều nhóm dùng và kiểm chứng được là bộ dữ liệu công khai trên GitHub, mỗi mẫu có URL truy vết trong dataset.csv\n- 1.944/2.193 mẫu (88.7%) đến từ repo [4]; 249 mẫu lừa đảo còn lại từ nguồn [6]");
 })();
 
 // ─── SLIDE 16: THANK YOU ─────────────────────────────────────────────────────
@@ -652,7 +650,7 @@ pptx.writeFile({ fileName: outputFile })
     console.log("📝 Next steps (PowerShell, Windows):");
     console.log("   1. Kiểm tra bố cục:   python <skill-root>/scripts/check_overlaps.py phase09_presentation.pptx");
     console.log("   2. Xuất PDF để xem:   python <skill-root>/scripts/soffice.py --headless --convert-to pdf --outdir qa phase09_presentation.pptx");
-    console.log("   (Hiệu ứng chuyển slide dạng morph/fracture chưa được kiểm chứng trên PowerPoint — chỉ dùng nếu đã mở thử.)");
+    console.log("   Hiệu ứng chuyển slide: bật thủ công trong PowerPoint (Transitions → Fade 0.3s → Apply To All); KHÔNG dùng inject_transitions.py.");
   })
   .catch((err) => {
     console.error("❌ Error generating presentation:", err);
