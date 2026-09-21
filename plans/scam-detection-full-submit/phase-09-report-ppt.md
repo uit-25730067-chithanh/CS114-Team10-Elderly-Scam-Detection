@@ -81,7 +81,7 @@ Theo yêu cầu trong [README.md](../../README.md):
 | **Random Forest** | 5.015 (TF-IDF + 15 aux) | `n_est=200, depth=50, split=2, leaf=2, max_feat=0.2` | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn) |
 | **MultinomialNB** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (GridSearchCV 5-fold) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline vượt F1≥0.88, FN=6, FP=14 (Phase 04 — Cẩm) |
 
-- **Hệ thống 28 biểu đồ trực quan hóa chuẩn 300 DPI (`draft/scam-detection/reports/figures/`):**
+- **Hệ thống 28 biểu đồ trực quan hóa mô hình chuẩn 300 DPI (kết hợp 4 ảnh demo ở Mục 4.4 tạo thành hệ thống 32 hình ảnh chuẩn của dự án tại `draft/scam-detection/reports/figures/`):**
   - **7 Biểu đồ EDA (Phase 03):** `label_distribution.png`, `scam_category_distribution.png`, `text_length_comparison.png`, `wordcloud_scam_vs_normal.png`, `top_ngrams_scam_vs_normal.png`, `auxiliary_correlation_heatmap.png`, `source_distribution.png`.
   - **15 Biểu đồ đơn mô hình (Phase 04–06):** Confusion Matrix, ROC curve, Learning curve, Feature Importance của từng mô hình (NB, RF, XGB, Linear SVM).
   - **6 Biểu đồ so sánh tổng hợp & XAI (Phase 07 — Thanh):**
