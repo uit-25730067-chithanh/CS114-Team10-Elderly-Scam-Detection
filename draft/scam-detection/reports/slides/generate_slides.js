@@ -549,7 +549,7 @@ addDivider("PHẦN 2", "Dữ liệu & Phương pháp", "Thu thập  ·  Tiền x
   slide.addText([
     { text: "Không gian đặc trưng vector đầu vào:  ", options: { bold: true, fontSize: 11, color: "93C5FD" } },
     { text: "x = [ TF-IDF(w₁, d), ..., TF-IDF(w₅₀₀₀, d) | f_meta₁, ..., f_meta₁₅ ]ᵀ ∈ ℝ⁵⁰¹⁵\n", options: { bold: true, fontSize: 10, fontFace: "Cambria", color: "FFFFFF" } },
-    { text: "• 5.000 đặc trưng từ vựng n-gram + 15 đặc trưng miền tâm lý (URL, OTP, Hotline...)  •  Naive Bayes chỉ dùng 5.000 TF-IDF", options: { fontSize: 9.5, color: "CBD5E1" } }
+    { text: "• 5.000 đặc trưng từ vựng n-gram + 15 đặc trưng miền tâm lý (URL, OTP, SĐT...)  •  Naive Bayes chỉ dùng 5.000 TF-IDF", options: { fontSize: 9.5, color: "CBD5E1" } }
   ], {
     x: M + 0.15, y: 2.90, w: CW - 0.3, h: 0.58, fontFace: "Calibri", valign: "middle", shrinkText: true,
   });
