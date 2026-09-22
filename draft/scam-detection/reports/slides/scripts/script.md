@@ -113,60 +113,56 @@ flowchart LR
 
 Em kính chào Thầy Cáp Phạm Đình Thăng và các bạn!
 
-Em là **Đặng Chí Thanh**, trưởng nhóm **Nhóm 10**. Hôm nay, nhóm em xin báo cáo đồ án môn học Máy học với đề tài: **"Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam"**.
+Em là **Chí Thanh**, đại diện **Nhóm 10**. Hôm nay, nhóm em xin báo cáo đồ án môn học Máy học với đề tài: **"Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam"**.
 
-Nhóm gồm 3 thành viên:
+Nhóm em gồm 3 thành viên:
 - Em — **Đặng Chí Thanh**, phụ trách kiến trúc dữ liệu, tiền xử lý NLP và kỹ thuật đặc trưng.
 - Bạn **Bùi Thị Mỷ Cẩm** — phụ trách mô hình học máy và giải thích AI với SHAP.
 - Và bạn **Hoàng Cao Sơn** — phụ trách thu thập dữ liệu, mô hình Random Forest và ứng dụng Web Demo.
 
-Sau đây, em xin phép bắt đầu buổi báo cáo ạ.
+Sau đây, em xin phép bắt đầu buổi báo cáo.
 
 ---
 
 ## SLIDE 2 – LỘ TRÌNH BÁO CÁO (AGENDA)
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~15s (~50 từ)**
 
-Bài báo cáo của nhóm gồm **5 phần chính**:
+Bài báo cáo của nhóm sẽ đi qua **5 phần chính**:
 - **Phần 1**: Bối cảnh thực tế, 3 thách thức kỹ thuật và mục tiêu nghiên cứu.
 - **Phần 2**: Bộ dữ liệu 2.193 mẫu thực tế, 4 nhóm bẫy tâm lý và pipeline tiền xử lý Zero-Leakage.
 - **Phần 3**: Bạn Mỷ Cẩm sẽ đối chuẩn 4 mô hình học máy và bóc tách SHAP.
 - **Phần 4 & 5**: Bạn Cao Sơn sẽ trực tiếp Demo Web Streamlit và tổng kết đồ án.
 
-Em xin đi ngay vào **Phần 1** ạ.
-
 ---
 
-## SLIDE 3 – BỐI CẢNH & TÍNH CẤP THIẾT
+## SLIDE 3 – BỐI CẢNH & 3 THÁCH THỨC KỸ THUẬT CỐT LÕI
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~45s (~140 từ)**
 
-Kính thưa Thầy và các bạn, về mặt thực tế tại Việt Nam giai đoạn 2025–2026, người cao tuổi là nhóm đối tượng chịu rủi ro lừa đảo lớn nhất. Kẻ gian không cần dùng mã độc công nghệ cao, mà triệt để khai thác **kỹ thuật thao túng tâm lý (Social Engineering)** — đánh vào tâm lý sợ vi phạm pháp luật hoặc lo lắng cho con cháu qua tin nhắn SMS và Zalo.
+Thực tế tại Việt Nam hiện nay, người cao tuổi là nhóm đối tượng chịu rủi ro lừa đảo lớn nhất. Kẻ gian không cần dùng mã độc công nghệ cao, mà đánh thẳng vào **tâm lý lo sợ pháp luật hoặc tình cảm gia đình** qua tin nhắn SMS và Zalo.
 
-Khi giải quyết bài toán này, nhóm em xác định **3 thách thức kỹ thuật cốt lõi**:
-- **Một là Class Imbalance (Mất cân bằng lớp):** Dữ liệu lừa đảo rất lệch, tỷ lệ 4.2 : 1. Nếu một mô hình ngây thơ lúc nào cũng đoán "Bình thường" thì Accuracy đã đạt hơn 80%, nhưng sẽ bỏ lọt 100% kẻ gian. Do đó, nhóm bắt buộc phải lấy **Recall và F1-Score** làm kim chỉ nam.
-- **Hai là Cost Asymmetry (Tổn thất bất đối xứng):** Bỏ sót 1 tin lừa đảo thì người già mất trắng tài sản tích lũy cả đời. Trong khi cảnh báo nhầm thì chỉ yêu cầu xác thực lại. Vì vậy, chi phí phạt cho việc bỏ sót (False Negative) nặng nề hơn rất nhiều.
-- **Ba là tính chân thực (Zero Synthetic Text):** Nhóm kiên quyết thu thập 100% tin nhắn đời thực, tuyệt đối không dùng AI sinh dữ liệu giả lập, nhằm nắm bắt chính xác thủ đoạn thực tế của tội phạm.
+Khi giải quyết bài toán này, nhóm em đối mặt với **3 thách thức kỹ thuật lớn nhất**:
+- **Một là Class Imbalance (Mất cân bằng lớp):** Tỉ lệ lệch hơn 4 chọi 1. Nếu một mô hình ngây thơ cứ đoán bừa 100% là tin thường thì Accuracy đã hơn 80%, nhưng sẽ bỏ lọt toàn bộ kẻ gian. Vì vậy, nhóm bắt buộc phải lấy **Recall và F1-Score** làm kim chỉ nam.
+- **Hai là Cost Asymmetry (Tổn thất bất đối xứng):** Bỏ sót 1 tin lừa đảo thì nạn nhân mất sạch tiền tích lũy cả đời. Trong khi cảnh báo nhầm thì chỉ cần kiểm tra lại. Do đó, chi phí phạt cho việc bỏ sót (False Negative) phải đặt lên hàng đầu.
+- **Ba là tính chân thực (Zero Synthetic Text):** Nhóm kiên quyết dùng 100% tin nhắn đời thực, tuyệt đối không dùng ChatGPT để tự sinh văn bản giả, nhằm nắm bắt chính xác thủ đoạn thực tế của tội phạm.
 
 ---
 
 ## SLIDE 4 – MỤC TIÊU NGHIÊN CỨU & ĐÓNG GÓP CỐT LÕI
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~40s (~130 từ)**
 
-Từ 3 thách thức trên, nhóm đặt ra và đã giải quyết trọn vẹn **4 mục tiêu kỹ thuật cụ thể**, thể hiện ở 4 ô trên màn hình:
+Từ 3 thách thức trên, nhóm đặt ra và giải quyết trọn vẹn **4 mục tiêu kỹ thuật cụ thể**, thể hiện ở 4 ô trên màn hình:
 
 - **Thứ nhất — Đối chuẩn đa mô hình:** Đưa 4 thuật toán Machine Learning kinh điển lên cùng một bàn cân thực nghiệm trên 439 mẫu test độc lập: Naive Bayes, Random Forest, Linear SVM và XGBoost.
-- **Thứ hai — Vượt chỉ tiêu hiệu năng:** Đặt ngưỡng cam kết F1 ≥ 88% và Recall ≥ 92%. Kết quả thực nghiệm cả 4 mô hình đều vượt chỉ tiêu, mô hình tối ưu đạt Recall tới 97.62%.
+- **Thứ hai — Vượt chỉ tiêu hiệu năng:** Đặt ngưỡng cam kết F1 ≥ 88% và Recall ≥ 92%. Kết quả thực nghiệm cả 4 mô hình đều vượt xa chỉ tiêu, mô hình tối ưu đạt Recall tới 97.62%.
 - **Thứ ba — Xóa bỏ "hộp đen" với XAI:** Tích hợp SHAP TreeExplainer và trích xuất Top-20 từ khóa đồng thuận để giải thích minh bạch vì sao một tin nhắn bị cảnh báo.
 - **Thứ tư — Đưa vào thực tiễn:** Xây dựng ứng dụng Web Streamlit tối ưu riêng cho người cao tuổi, với chữ phóng to 150% và nút gọi khẩn cấp 156/113 chỉ với 1 chạm.
-
-Sau đây, em xin đi vào **Phần 02 — Dữ liệu và Phương pháp tiếp cận**.
 
 ---
 
 ## SLIDE 5 – PHẦN 2: DỮ LIỆU & PHƯƠNG PHÁP
-> **Slide phân đoạn nội dung (chuyển tiếp nhanh ~5s)**
+> **Slide phân đoạn nội dung (lướt nhanh 3s)**
 
-Sau khi đã làm rõ bối cảnh và mục tiêu, chúng ta đến với **Phần 02 — Dữ liệu thực nghiệm và Quy trình tiền xử lý** ạ.
+Sau khi làm rõ bối cảnh và mục tiêu, chúng ta đến với **Phần 02 — Dữ liệu thực nghiệm và Quy trình tiền xử lý**.
 
 ---
 
@@ -176,11 +172,11 @@ Sau khi đã làm rõ bối cảnh và mục tiêu, chúng ta đến với **Ph�
 Để thực nghiệm khách quan, nhóm em xây dựng bộ dữ liệu gồm **2.193 tin nhắn tiếng Việt thực tế 100%**:
 - **1.773 tin bình thường:** Tuyển chọn từ bộ dữ liệu SMS chất lượng cao của tác giả Trần Nguyên Thái Tuấn theo giấy phép mở CC BY 4.0.
 - **420 tin lừa đảo:** Thu thập từ các kho dữ liệu an toàn thông tin cộng đồng và phóng sự điều tra của VTV24, mỗi mẫu đều lưu trữ URL nguồn gốc để kiểm chứng độc lập.
-- Dữ liệu trải qua **quy trình kiểm toán 7 tầng**, dùng Regex che toàn bộ số điện thoại, tài khoản ngân hàng, CCCD và địa chỉ để bảo vệ quyền riêng tư.
+- Toàn bộ dữ liệu trải qua **quy trình kiểm toán 7 tầng**, dùng Regex che sạch số điện thoại, tài khoản ngân hàng, CCCD và địa chỉ để bảo vệ quyền riêng tư.
 
-Ở biểu đồ bên phải, tỷ lệ mất cân bằng giữa hai lớp là **4.2 : 1** (lừa đảo chiếm ~19.2%).
+Ở biểu đồ bên phải, tỷ lệ lệch lớp là **4.2 : 1** (lừa đảo chiếm ~19.2%).
 
-Đặc biệt, về mặt phương pháp: **Nhóm kiên quyết không dùng SMOTE để sinh dữ liệu nhân tạo**. Bởi trong NLP tiếng Việt, nội suy toán học giữa các vector từ rất dễ tạo ra các câu văn lai tạp vô nghĩa. Thay vào đó, nhóm bù trừ trực tiếp độ lệch lớp trong hàm mất mát của XGBoost bằng trọng số phạt `scale_pos_weight = 4.22`.
+Đặc biệt, về phương pháp: **Nhóm quyết định dứt khoát không dùng SMOTE để sinh dữ liệu nhân tạo**. Trong NLP tiếng Việt, nội suy toán học giữa các vector từ rất dễ tạo ra các câu văn lai tạp vô nghĩa. Thay vào đó, nhóm bù trừ trực tiếp vào hàm mất mát của XGBoost bằng trọng số phạt `scale_pos_weight = 4.22`.
 
 Dữ liệu được chia phân tầng 80/20: **1.754 mẫu Train** và **439 mẫu Test** hoàn toàn độc lập.
 
@@ -189,14 +185,14 @@ Dữ liệu được chia phân tầng 80/20: **1.754 mẫu Train** và **439 m�
 ## SLIDE 7 – CƠ CẤU 4 NHÓM BẪY THAO TÚNG TÂM LÝ
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~45s (~140 từ)**
 
-Khi phân tích sâu 420 mẫu lừa đảo trên notebook EDA, em đúc kết được **4 kịch bản thao túng tâm lý điển hình** nhắm vào người già:
+Khi phân tích sâu 420 mẫu lừa đảo trên notebook EDA, em đúc kết được **4 kịch bản thao túng tâm lý điển hình**:
 
 - **Phổ biến nhất là Giả mạo dịch vụ công (159 mẫu, chiếm 37.9%):** Giả danh cán bộ Thuế, Bảo hiểm xã hội hoặc Công an phường, yêu cầu cập nhật định danh VNeID mức 2 hoặc dọa khóa tài khoản.
 - **Thứ hai là Đe dọa quyền lực (127 mẫu, chiếm 30.2%):** Mạo danh Viện kiểm sát, Tòa án thông báo nạn nhân dính vào đường dây rửa tiền, ép chuyển tiền "tạm giữ" để phục vụ điều tra.
 - **Thứ ba là Khẩn cấp gia đình (88 mẫu, chiếm 21.0%):** Báo tin con cháu bị tai nạn đang cấp cứu tại bệnh viện, thúc ép chuyển viện phí ngay.
 - **Cuối cùng là Dụ dỗ quà tặng sức khỏe (46 mẫu, chiếm 11.0%):** Mời nhận sữa non, thuốc bổ miễn phí để lừa nạp tiền phí vận chuyển hoặc tiền trúng thưởng.
 
-Một insight rất đắt giá: **Hai nhóm đầu chiếm tới hơn 68%**, chứng minh kẻ lừa đảo đánh mạnh nhất vào tâm lý sợ vi phạm pháp luật và trách nhiệm công dân của người cao tuổi.
+Insight đắt giá nhất ở đây: **Hai nhóm đầu chiếm tới hơn 68%**, chứng minh kẻ lừa đảo đánh mạnh nhất vào tâm lý sợ vi phạm pháp luật và trách nhiệm công dân của người cao tuổi.
 
 ---
 
@@ -212,9 +208,9 @@ Một insight rất đắt giá: **Hai nhóm đầu chiếm tới hơn 68%**, ch
 
 Kết quả tạo ra không gian vector kết hợp **5.015 chiều**.
 
-Và điểm quan trọng nhất về kỷ luật kỹ thuật: **Nhóm tuân thủ nghiêm ngặt quy chuẩn Zero-Leakage 100%**. Toàn bộ từ điển TF-IDF và bộ scaler **chỉ được `fit` trên 1.754 mẫu Train**, sau đó chỉ dùng `transform` mù sang tập Test. Tập Test được giữ nguyên vẹn nhằm phản ánh khách quan năng lực tổng quát hóa.
+Và nguyên tắc kỹ thuật cốt lõi: **Nhóm tuân thủ nghiêm ngặt quy chuẩn Zero-Leakage 100%**. Toàn bộ từ điển TF-IDF và bộ scaler **chỉ được `fit` trên 1.754 mẫu Train**, sau đó chỉ dùng `transform` mù sang tập Test. Tập Test được giữ nguyên vẹn để phản ánh khách quan năng lực tổng quát hóa.
 
-Sau đây, em xin chuyển phần trình bày cho bạn **Bùi Thị Mỷ Cẩm** tiếp tục với kết quả thực nghiệm 4 mô hình học máy ở Phần 3 ạ. Mời Cẩm!
+Sau đây, em xin chuyển phần trình bày cho bạn **Bùi Thị Mỷ Cẩm** tiếp tục với kết quả thực nghiệm 4 mô hình học máy ở Phần 3 ạ. Xin mời Cẩm!
 
 ---
 
