@@ -38,7 +38,7 @@
 | **Zero Synthetic Text** | Dữ liệu thực tế, không sinh nhân tạo | 100% mẫu tin nhắn có nguồn gốc đời thực, không dùng mô hình ngôn ngữ lớn (LLM) để sinh văn bản giả lập. |
 | **Class Imbalance** | Mất cân bằng lớp dữ liệu | Tỷ lệ 4.2 : 1 giữa tin bình thường (1.773 mẫu) và tin lừa đảo (420 mẫu). |
 | **Zero-Leakage Protocol** | Giao thức chống rò rỉ dữ liệu | Phân chia Stratified Split 80/20 độc lập; TF-IDF và Scaler chỉ thực hiện `fit` trên tập huấn luyện (Train). |
-| **Masking Tags** | Thẻ ẩn danh hóa dữ liệu | Các token `[MONEY]`, `[NUMBER]`, `[URL]` có sẵn từ nguồn thu thập dữ liệu gốc. |
+| **Masking Tags** | Thẻ ẩn danh hóa dữ liệu | Các token `[MONEY]`, `[NUMBER]`, `[ĐƯỜNG_DẪN]` có sẵn từ nguồn thu thập dữ liệu gốc. |
 | **Ablation Study** | Nghiên cứu bóc tách thành phần | Thí nghiệm loại bỏ 453 đặc trưng chứa thẻ ẩn danh nhằm kiểm chứng mô hình không học vẹt định dạng. |
 | **TreeExplainer (SHAP)** | Trình giải thích cấu trúc cây | Thuật toán tính toán giá trị Shapley trong thời gian đa thức cho mô hình cây quyết định (XGBoost). |
 | **Platt Scaling** | Hiệu chỉnh xác suất Platt | Phương pháp sử dụng hàm Sigmoid để chuyển đổi khoảng cách phân cách của Linear SVM thành xác suất [0, 1]. |
@@ -59,7 +59,7 @@ flowchart LR
     
     subgraph E [Không gian vector 5.015 chiều]
         E1[5.000 từ vựng TF-IDF<br/>n-gram 1-2]
-        E2[15 đặc trưng tâm lý phụ<br/>SĐT, OTP, Urgency Score]
+        E2[15 đặc trưng tâm lý phụ<br/>SĐT, OTP, has_urgent_words]
     end
     
     E --> F{Bộ điều phối 4 mô hình}
@@ -207,7 +207,7 @@ Hai nhóm đầu tiên chiếm tới 68% tổng số vụ việc, cho thấy đ�
 2. **Bộ từ điển Teencode chuyên dụng:** Tinh chỉnh 160 quy tắc viết tắt tiếng Việt phổ biến và 22 mẫu ký tự leet-speak để khôi phục dạng từ chuẩn mà không làm biến dạng ngữ nghĩa.
 3. **Tách từ tiếng Việt với PyVi:** Ghép các âm tiết đơn thành từ ghép có nghĩa, ví dụ: `viện_phí`, `số_tiền`.
 4. **Trích xuất đặc trưng TF-IDF:** Khai thác 5.000 n-grams từ 1 đến 2 từ có lượng thông tin phân biệt cao.
-5. **Trích xuất 15 đặc trưng miền tâm lý:** Đo lường các tín hiệu kích động như điểm số khẩn cấp (`urgency_score`), sự xuất hiện của liên kết URL, số điện thoại, từ khóa tiền tệ và mã xác thực OTP.
+5. **Trích xuất 15 đặc trưng miền tâm lý:** Đo lường các tín hiệu kích động như cờ nhận diện từ khóa khẩn cấp (`has_urgent_words`), sự xuất hiện của liên kết URL, số điện thoại, từ khóa tiền tệ và mã xác thực OTP.
 
 Không gian đặc trưng đầu vào là vector kết hợp **5.015 chiều**.
 
@@ -451,7 +451,7 @@ Dưới đây là 4 chủ đề kỹ thuật then chốt được nhóm trình b
   > 3. Tầng 3: Ẩn danh hóa số thẻ Căn cước công dân và mã định danh thành `[CCCD]`.  
   > 4. Tầng 4: Loại bỏ tên riêng cụ thể của cá nhân, thay bằng các danh xưng trung tính.  
   > 5. Tầng 5: Thay thế địa chỉ nhà riêng cụ thể thành token `[ĐỊA_CHỈ]`.  
-  > 6. Tầng 6: Rút gọn các liên kết URL độc hại thành token `[URL]`, chỉ lưu lại tên miền phục vụ kiểm tra.  
+  > 6. Tầng 6: Rút gọn các liên kết URL độc hại thành token `[ĐƯỜNG_DẪN]`, chỉ lưu lại tên miền phục vụ kiểm tra.  
   > 7. Tầng 7: Cả 3 thành viên tiến hành rà soát chéo thủ công 100% các mẫu trước khi đưa vào tập dữ liệu chính thức ạ."
 
 ---
