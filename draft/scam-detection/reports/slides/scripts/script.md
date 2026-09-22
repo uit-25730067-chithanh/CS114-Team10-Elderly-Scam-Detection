@@ -138,7 +138,7 @@ Bài báo cáo của nhóm sẽ đi qua **5 phần chính**:
 ## SLIDE 3 – BỐI CẢNH & 3 THÁCH THỨC KỸ THUẬT CỐT LÕI
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~45s (~140 từ)**
 
-Thực tế tại Việt Nam hiện nay, người cao tuổi là nhóm đối tượng chịu rủi ro lừa đảo lớn nhất. Kẻ gian không cần dùng mã độc công nghệ cao, mà đánh thẳng vào **tâm lý lo sợ pháp luật hoặc tình cảm gia đình** qua tin nhắn SMS và Zalo.
+Thực tế tại Việt Nam hiện nay, người cao tuổi là nhóm đối tượng chịu rủi ro lừa đảo lớn nhất. Kẻ gian nhiều khi chẳng cần dùng đến mã độc công nghệ cao, mà chúng đánh thẳng vào **tâm lý lo sợ pháp luật hoặc tình cảm gia đình** qua tin nhắn SMS và Zalo.
 
 Khi giải quyết bài toán này, nhóm em đối mặt với **3 thách thức kỹ thuật lớn nhất**:
 - **Một là Class Imbalance (Mất cân bằng lớp):** Tỉ lệ lệch hơn 4 chọi 1. Nếu một mô hình ngây thơ cứ đoán bừa 100% là tin thường thì Accuracy đã hơn 80%, nhưng sẽ bỏ lọt toàn bộ kẻ gian. Vì vậy, nhóm bắt buộc phải lấy **Recall và F1-Score** làm kim chỉ nam.
