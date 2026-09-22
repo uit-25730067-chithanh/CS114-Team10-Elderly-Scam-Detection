@@ -94,13 +94,13 @@ flowchart LR
 | 🏁 | **Khối 3 (Cẩm)** | **Cẩm** | **Tổng thời gian trình bày của Bùi Thị Mỷ Cẩm** | **~585** | **135** | **4m20s** | — | Đúng khung kế hoạch |
 | **13** | Slide 13: Divider P4 | — | *Slide chuyển đoạn Phần 4: Demo ứng dụng (chuyển nhanh)* | 0 | — | **0s** | Phần 4 | Chuyển slide |
 | **14** | Slide 14: Demo UI | **Sơn** | Giao diện Streamlit, font 150%, Hotline 156/113, Dán tin 1 chạm, 16 tests | ~300 | 150 | **120s** | Phần 4 | Trực quan hóa sản phẩm thực tế |
-| **15** | Slide 15: Divider P5 | — | *Slide chuyển đoạn Phần 5: Kết luận (chuyển nhanh)* | 0 | — | **0s** | Phần 5 | Chuyển slide |
-| **16** | Slide 16: Kết luận | **Sơn** | Hoàn thành 100% mục tiêu; nhìn nhận khách quan hạn chế test 84 ca | ~150 | 150 | **60s** | Phần 5 | Đánh giá trung thực, khoa học |
-| **17** | Slide 17: Tham khảo | **Sơn** | 15 tài liệu kiểm chứng xếp theo chu trình vòng đời dự án | ~100 | 150 | **40s** | Phần 5 | Cơ sở học thuật vững chắc |
-| **18** | Slide 18: Cảm ơn | **Sơn** | Cảm ơn ThS. Cáp Phạm Đình Thăng và lớp, mở phiên hỏi đáp Q&A | ~90 | 150 | **35s** | Phần 5 | Chuyển sang phần thảo luận |
-| 🏁 | **Khối 4 & 5 (Sơn)** | **Sơn** | **Tổng thời gian trình bày của Hoàng Cao Sơn** | **~640** | **150** | **4m15s** | — | Đúng khung kế hoạch |
-| ⏱️ | **Dự phòng (Buffer)** | **Cả nhóm** | Khoảng đệm điều phối âm thanh, chuyển lượt nói trên MS Teams | — | — | **1m45s** | — | Đảm bảo an toàn thời lượng |
-| 🏆 | **TOÀN BỘ BÀI BÁO CÁO** | **3 bạn** | **18 slide trình bày nội dung chính + 4 slide Phụ lục dự bị** | **~2.085** | — | **15m00s** | — | Hoàn thành trong 15 phút |
+| **15** | Slide 15: Divider P5 | **Sơn** | *Chuyển tiếp nhanh sang phần kết luận* | ~15 | 150 | **5s** | Phần 5 | Chuyển tiếp mượt mà |
+| **16** | Slide 16: Kết luận | **Sơn** | 4 mục tiêu hoàn thành, thẳng thắn 84 ca test (1.2%/ca), PhoBERT & Voice Deepfake | ~95 | 150 | **45s** | Phần 5 | Tinh gọn, trung thực khoa học |
+| **17** | Slide 17: Tham khảo | **Sơn** | 15 tài liệu chuẩn DOI theo vòng đời dự án (lướt nhanh) | ~35 | 150 | **15s** | Phần 5 | Cơ sở học thuật minh bạch |
+| **18** | Slide 18: Cảm ơn | **Sơn** | Cảm ơn Thầy Cáp Phạm Đình Thăng, chủ động mở phiên Q&A | ~50 | 150 | **20s** | Phần 5 | Dứt khoát, mồi phản biện |
+| 🏁 | **Khối 4 & 5 (Sơn)** | **Sơn** | **Tổng thời gian trình bày của Hoàng Cao Sơn** | **~495** | **150** | **3m25s** | — | Đúng khung kế hoạch |
+| ⏱️ | **Dự phòng (Buffer)** | **Cả nhóm** | Khoảng đệm điều phối âm thanh, chuyển lượt nói trên MS Teams | — | — | **2m35s** | — | Đảm bảo an toàn thời lượng |
+| 🏆 | **TOÀN BỘ BÀI BÁO CÁO** | **3 bạn** | **18 slide trình bày nội dung chính + 4 slide Phụ lục dự bị** | **~1.940** | — | **15m00s** | — | Hoàn thành trong 15 phút |
 
 ---
 
@@ -290,51 +290,38 @@ Sau đây mình xin chuyển sang Phần 5: Kết luận và Hướng phát tri�
 ---
 
 ## SLIDE 15 – PHẦN 5: KẾT LUẬN & HƯỚNG PHÁT TRIỂN
-> **Slide phân đoạn nội dung (chuyển tiếp nhanh)**
+> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~5s (~15 từ)**
+
+Dạ, sau phần trải nghiệm thực tế vừa rồi, em xin phép bước sang phần cuối cùng: **Kết luận và Hướng phát triển của đồ án**.
 
 ---
 
 ## SLIDE 16 – KẾT LUẬN & HƯỚNG MỞ RỘNG
-> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~60s (~150 từ)**
+> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~45s (~95 từ)**
 
-Tóm lại, đồ án của Nhóm 10 đã hoàn thành 4 cam kết đề ra:
-- Xây dựng thành công bộ dữ liệu chuẩn gồm **2.193 tin nhắn thực tế** với 4 nhóm kịch bản thao túng tâm lý.
-- Pipeline tiền xử lý ngôn ngữ tiếng Việt tuân thủ **nguyên tắc Zero-Leakage Protocol**.
-- Mô hình XGBoost đạt hiệu năng cao với **F1-Score 95.35%** và **Recall 97.62%**, có khả năng giải thích minh bạch với SHAP.
-- Sản phẩm Web Demo hoàn chỉnh, đáp ứng tốt tiêu chuẩn trợ năng cho người lớn tuổi.
+Chào Thầy, nhìn lại toàn bộ quá trình, nhóm em đã hoàn thành trọn vẹn cả 4 mục tiêu: từ bộ dữ liệu thực tế hơn 2.100 mẫu, quy trình chống rò rỉ dữ liệu tuyệt đối, mô hình XGBoost đạt **F1 hơn 95%**, cho tới ứng dụng Web Demo đã kiểm thử xong toàn bộ 16 kịch bản.
 
-Về mặt giới hạn thực nghiệm, nhóm thẳng thắn nhìn nhận: **tập kiểm thử Test hiện có 84 mẫu lừa đảo** do tính chất khan hiếm của dữ liệu thực tế, do đó mỗi ca bỏ sót FN sẽ tác động khoảng 1.19% đến chỉ số Recall. Nhóm đã sử dụng kiểm định chéo 5-fold CV trên tập huấn luyện để đối chiếu và bảo đảm tính hội tụ ổn định.
+Về mặt học thuật, nhóm em cũng nhìn nhận rất thẳng thắn: tập test hiện có **84 tin lừa đảo**, nên mỗi ca lọt sẽ dịch chuyển khoảng **1.2% Recall**. Đó là lý do nhóm sử dụng kiểm định chéo 5-fold trên tập train để bảo đảm mô hình hội tụ thực sự ổn định.
 
-Về định hướng tương lai, nhóm xác định 3 hướng phát triển:
-1. Thử nghiệm tinh chỉnh các mô hình ngôn ngữ sâu như **PhoBERT** khi có điều kiện về hạ tầng tính toán.
-2. Mở rộng bài toán sang **phát hiện lừa đảo qua giọng nói (Voice Scam / Deepfake Audio)** — một hình thức đang gia tăng nhanh chóng.
-3. Chuẩn hóa API để có thể tích hợp vào các ứng dụng ngân hàng số hoặc ứng dụng bảo vệ người dùng trên thiết bị di động.
+Sắp tới, nhóm hướng đến việc thử nghiệm thêm **PhoBERT** và mở rộng sang bài toán phát hiện **lừa đảo bằng giọng nói Deepfake** — một hình thức đang nhắm rất mạnh vào người cao tuổi hiện nay.
 
 ---
 
 ## SLIDE 17 – TÀI LIỆU THAM KHẢO THEO VÒNG ĐỜI DỰ ÁN
-> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~40s (~100 từ)**
+> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~15s (~35 từ)**
 
-Tại Slide 17, nhóm tổng hợp **15 tài liệu tham khảo tiêu biểu** trong tổng số các công trình được nhóm nghiên cứu, toàn bộ đều có mã định danh DOI hoặc nguồn xuất bản khoa học rõ ràng.
-
-Các tài liệu được cấu trúc tương ứng theo **vòng đời phát triển của đề tài**:
-- Nguồn dữ liệu SMS tiếng Việt của tác giả Trần Nguyên Thái Tuấn và các báo cáo an toàn thông tin.
-- Các công trình nền tảng về xử lý ngôn ngữ tự nhiên tiếng Việt: Unicode, PyVi, Underthesea và biểu diễn TF-IDF.
-- Các công trình học máy kinh điển: XGBoost của Chen & Guestrin, Random Forest của Breiman, Support Vector Machines của Vapnik và hiệu chỉnh xác suất Platt scaling.
-- Lý thuyết giải thích mô hình SHAP của Lundberg, tiêu chuẩn trợ năng W3C WCAG 2.1 và mô hình ngôn ngữ PhoBERT.
+Ở Slide 17, nhóm đã hệ thống lại 15 tài liệu tham khảo theo đúng vòng đời đề tài. Toàn bộ các nghiên cứu từ xử lý tiếng Việt, học máy cho đến tiêu chuẩn trợ năng đều có **mã DOI và phản biện quốc tế minh bạch**, em xin phép để Thầy theo dõi trực tiếp trên slide ạ.
 
 ---
 
 ## SLIDE 18 – LỜI CẢM ƠN & MỞ PHIÊN HỎI ĐÁP (Q&A)
-> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~35s (~90 từ)**
+> **Người trình bày: Hoàng Cao Sơn | Thời lượng dự kiến: ~20s (~50 từ)**
 
-Kính thưa Thầy và các bạn, toàn bộ mã nguồn chương trình, bộ dữ liệu thực nghiệm đã kiểm toán, báo cáo chuyên đề và tài liệu thuyết trình đã được nhóm đồng bộ trên GitHub repository chính thức của đồ án.
+Toàn bộ mã nguồn, dữ liệu sạch và tài liệu kỹ thuật đã được nhóm công khai đầy đủ trên GitHub.
 
-Thay mặt cho cả 3 thành viên Nhóm 10 — Đặng Chí Thanh, Bùi Thị Mỷ Cẩm và Hoàng Cao Sơn, em xin gửi lời cảm ơn chân thành đến **Thầy ThS. Cáp Phạm Đình Thăng** đã tận tình hướng dẫn và đóng góp những định hướng chuyên môn quý báu cho nhóm em trong suốt học kỳ vừa qua.
+Thay mặt Nhóm 10, em xin gửi lời cảm ơn chân thành đến **Thầy Cáp Phạm Đình Thăng** đã tận tình hướng dẫn nhóm em suốt học kỳ qua.
 
-Sau đây, nhóm chúng em xin trân trọng kính mời Thầy đưa ra những nhận xét, câu hỏi để nhóm có cơ hội làm rõ và bảo vệ đồ án ạ!
-
-Em xin trân trọng cảm ơn Thầy!
+Nhóm em đã sẵn sàng, xin trân trọng kính mời Thầy và các bạn đặt câu hỏi để nhóm có cơ hội làm rõ hơn về đồ án ạ!
 
 ---
 
