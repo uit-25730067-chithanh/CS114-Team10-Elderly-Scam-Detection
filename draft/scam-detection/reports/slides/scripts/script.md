@@ -88,10 +88,10 @@ flowchart LR
 | **08** | Slide 8: Pipeline | **Thanh** | Pipeline 5 bước, vector 5.015 chiều & kỷ luật Zero-Leakage 100% | ~160 | 180 | **55s** | Phần 2 | Tính toàn vẹn kiến trúc |
 | 🏁 | **Khối 1 & 2 (Thanh)** | **Thanh** | **Tổng thời gian trình bày của Đặng Chí Thanh** | **~860** | **180** | **4m40s** | — | Dứt khoát, đúng trọng tâm |
 | **09** | Slide 9: Divider P3 | — | *Slide chuyển đoạn Phần 3: Mô hình & Kết quả (chuyển nhanh)* | 0 | — | **0s** | Phần 3 | Chuyển slide |
-| **10** | Slide 10: Đối chuẩn | **Cẩm** | Bảng so sánh 4 mô hình: XGBoost F1 95.35% (FN=2), SVM, RF, NB | ~190 | 135 | **85s** | Phần 3 | Trọng tâm mô hình & đánh đổi kỹ thuật |
-| **11** | Slide 11: ROC/PR | **Cẩm** | ROC-AUC 99.11%–99.86%; Phân tích đường Precision-Recall trên dữ liệu lệch | ~145 | 135 | **65s** | Phần 3 | Đánh giá trực quan |
-| **12** | Slide 12: SHAP & XAI | **Cẩm** | SHAP TreeExplainer, Top-20 từ khóa, kiểm chứng Ablation Study | ~250 | 135 | **110s** | Phần 3 | Trọng tâm minh bạch mô hình |
-| 🏁 | **Khối 3 (Cẩm)** | **Cẩm** | **Tổng thời gian trình bày của Bùi Thị Mỷ Cẩm** | **~585** | **135** | **4m20s** | — | Đúng khung kế hoạch |
+| **10** | Slide 10: Đối chuẩn | **Cẩm** | Bảng so sánh 4 mô hình: XGBoost F1 95.35% (FN=2), SVM, RF, NB | ~257 | 135 | **115s** | Phần 3 | Trọng tâm mô hình & đánh đổi kỹ thuật |
+| **11** | Slide 11: ROC/PR | **Cẩm** | ROC-AUC 99.11%–99.86%; Phân tích đường Precision-Recall trên dữ liệu lệch | ~202 | 135 | **90s** | Phần 3 | Đánh giá trực quan |
+| **12** | Slide 12: SHAP & XAI | **Cẩm** | SHAP TreeExplainer, Top-20 từ khóa, kiểm chứng Ablation Study | ~308 | 135 | **135s** | Phần 3 | Trọng tâm minh bạch mô hình |
+| 🏁 | **Khối 3 (Cẩm)** | **Cẩm** | **Tổng thời gian trình bày của Bùi Thị Mỷ Cẩm** | **~767** | **135** | **5m40s** | — | Đúng khung kế hoạch |
 | **13** | Slide 13: Divider P4 | — | *Slide chuyển đoạn Phần 4: Demo ứng dụng (chuyển nhanh)* | 0 | — | **0s** | Phần 4 | Chuyển slide |
 | **14** | Slide 14: Demo UI | **Sơn** | Giao diện Streamlit, font 150%, Hotline 156/113, Dán tin 1 chạm, 16 tests | ~300 | 150 | **120s** | Phần 4 | Trực quan hóa sản phẩm thực tế |
 | **15** | Slide 15: Divider P5 | **Sơn** | *Chuyển tiếp nhanh sang phần kết luận* | ~15 | 150 | **5s** | Phần 5 | Chuyển tiếp mượt mà |
@@ -99,8 +99,8 @@ flowchart LR
 | **17** | Slide 17: Tham khảo | **Sơn** | 15 tài liệu chuẩn DOI theo vòng đời dự án (lướt nhanh) | ~35 | 150 | **15s** | Phần 5 | Cơ sở học thuật minh bạch |
 | **18** | Slide 18: Cảm ơn | **Sơn** | Cảm ơn Thầy Cáp Phạm Đình Thăng, chủ động mở phiên Q&A | ~50 | 150 | **20s** | Phần 5 | Dứt khoát, mồi phản biện |
 | 🏁 | **Khối 4 & 5 (Sơn)** | **Sơn** | **Tổng thời gian trình bày của Hoàng Cao Sơn** | **~495** | **150** | **3m25s** | — | Đúng khung kế hoạch |
-| ⏱️ | **Dự phòng (Buffer)** | **Cả nhóm** | Khoảng đệm điều phối âm thanh, chuyển lượt nói trên MS Teams | — | — | **2m35s** | — | Đảm bảo an toàn thời lượng |
-| 🏆 | **TOÀN BỘ BÀI BÁO CÁO** | **3 bạn** | **18 slide trình bày nội dung chính + 4 slide Phụ lục dự bị** | **~1.940** | — | **15m00s** | — | Hoàn thành trong 15 phút |
+| ⏱️ | **Dự phòng (Buffer)** | **Cả nhóm** | Khoảng đệm điều phối âm thanh, chuyển lượt nói trên MS Teams | — | — | **1m15s** | — | Đảm bảo an toàn thời lượng |
+| 🏆 | **TOÀN BỘ BÀI BÁO CÁO** | **3 bạn** | **18 slide trình bày nội dung chính + 4 slide Phụ lục dự bị** | **~2.137** | — | **15m00s** | — | Hoàn thành trong 15 phút |
 
 ---
 
@@ -220,50 +220,51 @@ Sau đây, em xin chuyển phần trình bày cho bạn **Bùi Thị Mỷ Cẩm*
 ---
 
 ## SLIDE 10 – BẢNG ĐỐI CHUẨN HIỆU NĂNG 4 MÔ HÌNH
-> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~85s (~190 từ)**
+> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~115s (~257 từ)**
 
-Dạ em cảm ơn anh Thanh. Em kính chào Thầy và các bạn, em là **Mỷ Cẩm**. Em xin phép đại diện nhóm trình bày kết quả thực nghiệm của 4 mô hình Machine Learning.
+Dạ em cảm ơn anh Thanh. Em kính chào Thầy và các bạn, em là **Mỷ Cẩm**, phụ trách phần huấn luyện và đánh giá mô hình của nhóm.
 
-Quan sát bảng đối chuẩn ở Slide 10, toàn bộ kết quả đều được đo đạc trực tiếp trên cùng một tập Test độc lập gồm **439 mẫu** (355 tin bình thường và 84 tin lừa đảo):
+Nhóm em huấn luyện song song 4 thuật toán, từ đơn giản đến phức tạp, rồi đối chuẩn công bằng trên cùng một tập kiểm thử độc lập. Nhìn vào bảng trên slide, có ba điểm nổi bật nhất mà em muốn làm rõ.
 
-- **Mô hình tối ưu toàn diện là XGBoost:** Đạt chỉ số **F1-Score 95.35%** và **Recall 97.62%**, độ chính xác tổng thể đạt 98.18%. Trên tập kiểm thử 84 tin nhắn lừa đảo phức tạp, XGBoost **chỉ bỏ sót 2 ca** (`FN = 2`), phát hiện chính xác 82 ca, và chỉ báo nhầm 6 ca tin bình thường.
-- **Mô hình tuyến tính tốt nhất là Linear SVM:** Sử dụng kỹ thuật hiệu chỉnh Platt scaling qua 5-fold cross-validation, đạt **F1 94.74%**, Recall 96.43% (bỏ sót 3 ca), và có diện tích **ROC-AUC cao nhất đạt 99.86%**.
-- **Mô hình Random Forest:** Đạt Recall **97.62%** (bỏ sót 2 ca), F1 đạt 94.25% và ROC-AUC đạt 99.77%.
-- **Và Naive Bayes:** Đóng vai trò là đường cơ sở (Baseline) với `alpha = 0.01`, đạt F1 88.64% và Recall 92.86%.
+Thứ nhất, tập kiểm thử gồm **439 tin**, trong đó chỉ **84 tin là lừa đảo thật** — một con số khá nhỏ vì dữ liệu lừa đảo thực tế vốn khan hiếm, nên mỗi sai số đều có trọng lượng đáng kể.
 
-Cả 4 mô hình đều vượt mục tiêu đề ra. Đáng chú ý, mặc dù **Linear SVM đạt ROC-AUC cao nhất (99.86%)**, nhưng khi lựa chọn mô hình triển khai thực tế, nhóm **quyết định chọn XGBoost** dựa trên tiêu chí tối ưu hóa số ca bỏ sót thực tế và tính tương thích với công cụ giải thích SHAP.
+Thứ hai, **XGBoost là mô hình tối ưu nhất**: F1, tức điểm điều hòa giữa Precision — độ chính xác — và Recall — độ phủ, đạt **95.35%**; riêng Recall đạt **97.62%**, tức trong 84 tin lừa đảo chỉ bỏ sót đúng 2 tin.
+
+Thứ ba, tuy **Linear SVM** đạt AUC — diện tích dưới đường cong ROC — cao nhất, tới **99.86%**, nhờ kỹ thuật hiệu chỉnh xác suất Platt Scaling, nhóm vẫn chọn XGBoost để triển khai vì ưu tiên hàng đầu là giảm tối đa số ca bỏ sót. Random Forest cũng chỉ bỏ sót 2 ca như XGBoost, còn Naive Bayes đóng vai trò đường cơ sở nhưng vẫn vượt chỉ tiêu đề ra.
+
+Vậy vì sao AUC cao hơn mà nhóm không chọn SVM? Em xin phân tích kỹ hơn qua hai biểu đồ tiếp theo.
 
 ---
 
 ## SLIDE 11 – PHÂN TÍCH ĐƯỜNG CONG ROC & PRECISION-RECALL
-> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~65s (~145 từ)**
+> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~90s (~202 từ)**
 
-Nhìn vào hai biểu đồ thực nghiệm trên slide:
-- Ở hình (a) bên trái là **ROC Curves**: Cả 4 đường cong đều tiến sát góc trên cùng bên trái với diện tích dưới đường cong lớn, dao động từ **99.11% đến 99.86%**. Điều này khẳng định không gian 5.015 chiều có năng lực phân tách ranh giới giữa hai nhóm tin nhắn rất hiệu quả.
-- Tuy nhiên, như anh Thanh đã phân tích, do dữ liệu thực tế mất cân bằng theo tỷ lệ 4.2 : 1, thước đo đánh giá thực chất hơn chính là biểu đồ (b) bên phải — **Precision-Recall Curves**.
+Hai biểu đồ trên slide này bổ sung cho bảng số liệu vừa rồi, nhưng nhìn từ hai góc độ khác nhau.
 
-Đường PR của XGBoost và SVM duy trì được Precision trên **90%** ngay cả khi đẩy độ phủ Recall lên mức **97.6%**. Sự đánh đổi giữa việc tăng độ bao phủ và tỷ lệ báo động giả diễn ra rất ổn định, đảm bảo hệ thống có tính khả dụng cao khi triển khai ngoài đời thực.
+Đường cong ROC bên trái cho thấy cả 4 mô hình đều bám rất sát góc trên bên trái, với AUC dao động từ **99.11% đến 99.86%**, chứng tỏ không gian đặc trưng hơn năm nghìn chiều nhóm xây dựng phân tách hai lớp rất hiệu quả.
 
-Tiếp theo, em xin giải thích cơ chế ra quyết định của mô hình thông qua phân tích SHAP.
+Nhưng dữ liệu lệch lớp khá nặng, tỷ lệ 4.2 trên 1, nên ROC dễ tạo cảm giác lạc quan hơn thực tế. Thước đo phản ánh đúng bản chất bài toán hơn chính là đường cong bên phải: **Precision-Recall**.
+
+Ở đây, cả XGBoost và SVM vẫn giữ được Precision trên **90%** ngay cả khi đẩy Recall lên tới **97.6%**. Nói cách khác, cứ 10 cảnh báo được đưa ra, chưa tới 1 lần là báo nhầm, trong khi hệ thống vẫn bắt được gần như toàn bộ tin lừa đảo thật — đúng điểm cân bằng một ứng dụng bảo vệ người cao tuổi cần có.
+
+Vậy điều gì giúp mô hình đạt được sự cân bằng này? Em xin trình bày cơ chế ra quyết định qua phân tích SHAP.
 
 ---
 
 ## SLIDE 12 – GIẢI THÍCH MÔ HÌNH — SHAP ANALYSIS & ABLATION STUDY
-> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~110s (~250 từ)**
+> **Người trình bày: Bùi Thị Mỷ Cẩm | Thời lượng dự kiến: ~135s (~308 từ)**
 
-Để trả lời câu hỏi cốt lõi: *"Mô hình dựa vào căn cứ nào để đưa ra phán quyết, và liệu các quyết định này có thực sự hợp lý về mặt ngữ nghĩa hay không?"*.
+Câu hỏi cốt lõi ở phần này là: mô hình dựa vào căn cứ nào để phán đoán một tin nhắn là lừa đảo, và những căn cứ đó có thực sự hợp lý về mặt ngữ nghĩa hay không?
 
-Nhóm áp dụng thuật toán **SHAP TreeExplainer** trên mô hình XGBoost, kết quả thể hiện qua biểu đồ Beeswarm bên phải slide:
-- Trục hoành biểu thị độ lệch đóng góp SHAP: dịch sang phải làm tăng xác suất lừa đảo, dịch sang trái làm tăng xác suất bình thường.
-- Phân tích Top-20 đặc trưng có trọng số đồng thuận cao nhất:
-  - Các từ khóa đẩy mạnh quyết định về phía lừa đảo gồm: `mày`, `gấp`, `viện_phí`, `thuế`, `số_định_danh`. Đây đều là các từ ngữ mang tính thúc ép, đe dọa hoặc tạo bối cảnh tâm lý nguy cấp.
-  - Ngược lại, các từ như `money`, `number`, `time`, `liên_hệ 198`, `soạn`, `viettel` lại có giá trị SHAP âm, phản ánh các mẫu tin nhắn chăm sóc khách hàng viễn thông thông thường.
+Nhóm áp dụng **SHAP TreeExplainer** — bộ giải thích dựa trên giá trị Shapley, tính toán trong thời gian đa thức cho mô hình dạng cây — để bóc tách mức độ đóng góp của từng từ trong XGBoost. Biểu đồ Beeswarm, tức biểu đồ tổ ong, bên slide thể hiện: từ nào đẩy dự đoán về phía lừa đảo, từ nào kéo về phía bình thường.
 
-Tại đây, từ `money` và `number` thực chất là các **thẻ ẩn danh (masking tags)** có sẵn trong tập dữ liệu gốc. Nhằm kiểm chứng mô hình **không học vẹt dựa trên sự xuất hiện của các thẻ này**, nhóm đã tiến hành một nghiên cứu bóc tách (**Ablation Study**) độc lập: loại bỏ toàn bộ **453 đặc trưng** chứa các thẻ ẩn danh rồi huấn luyện lại mô hình trong cùng điều kiện.
+Nhóm từ khóa đẩy mạnh về phía lừa đảo gồm `gấp`, `viện_phí`, `thuế`, `số_định_danh` — đều tạo cảm giác thúc ép, cấp bách, đúng kịch bản đe dọa quyền lực hoặc khẩn cấp gia đình anh Thanh đã trình bày. Ngược lại, `money`, `number`, `viettel` kéo dự đoán về phía bình thường, vì đó là các mẫu tin chăm sóc khách hàng viễn thông quen thuộc.
 
-Kết quả thực nghiệm cho thấy F1 của XGBoost chỉ giảm nhẹ từ **95.35% xuống 94.25%**, và chỉ số quan trọng nhất là Recall **vẫn giữ nguyên 97.62%**. Điều này khẳng định mô hình thực sự phân loại dựa trên ngữ nghĩa của các bẫy tâm lý chứ không phụ thuộc vào định dạng thẻ.
+Nhưng `money` và `number` thực ra là **thẻ ẩn danh (masking tags)** có sẵn trong dữ liệu gốc, không phải nội dung tự nhiên. Lo ngại mô hình học vẹt theo định dạng này, nhóm tiến hành thêm một nghiên cứu bóc tách — **Ablation Study**: loại bỏ hoàn toàn **453 đặc trưng** chứa thẻ ẩn danh rồi huấn luyện lại.
 
-Tiếp theo, em xin trân trọng kính mời bạn **Hoàng Cao Sơn** trình bày phần Demo và Kết luận của đồ án.
+Kết quả, F1 chỉ giảm nhẹ từ **95.35% xuống 94.25%**, còn Recall — chỉ số quan trọng nhất với bài toán này — vẫn giữ nguyên **97.62%**. Điều đó chứng minh mô hình thực sự phân loại dựa trên ngữ nghĩa của các bẫy tâm lý, chứ không phụ thuộc vào định dạng thẻ.
+
+Em xin trân trọng mời bạn **Hoàng Cao Sơn** trình bày phần demo và kết luận.
 
 ---
 
@@ -469,7 +470,7 @@ Dưới đây là 4 chủ đề kỹ thuật then chốt được nhóm trình b
   > "Dạ thưa Thầy, quan sát đường cong học tập tại Slide 22:  
   > - Trong không gian 5.015 chiều (vốn có tính chất thưa lớn), các cây quyết định có xu hướng phát triển độ sâu để phân tách các từ khóa hiếm. Điểm Train F1 đạt xấp xỉ 99%, trong khi Validation F1 đạt khoảng 94% — xuất hiện khoảng cách nhất định giữa tập huấn luyện và tập kiểm định.  
   > - Tuy nhiên, nhóm đã kiểm soát hiện tượng quá khớp thông qua cơ chế đóng bao (Bagging) với **200 cây quyết định độc lập**, kết hợp các ràng buộc điều hòa `min_samples_split = 2`, `min_samples_leaf = 2` và lấy mẫu ngẫu nhiên 20% đặc trưng tại mỗi nhánh phân chia (`max_features = 0.2`).  
-  > - Thực tế trên tập Test độc lập, Random Forest vẫn đạt F1 **94.25%** và Recall **97.62%** (rất sát với điểm CV F1 là 0.9412), chứng minh mô hình vẫn duy trì khả năng khái quát hóa tốt trên dữ liệu mới ạ."
+  > - Thực tế trên tập Test độc lập, Random Forest vẫn đạt F1 **94.25%** và Recall **97.62%** (rất sát với điểm CV F1 là 0.9479), chứng minh mô hình vẫn duy trì khả năng khái quát hóa tốt trên dữ liệu mới ạ."
 
 ---
 
