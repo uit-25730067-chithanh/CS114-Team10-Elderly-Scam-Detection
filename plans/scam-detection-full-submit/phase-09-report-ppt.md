@@ -13,7 +13,8 @@
 | Owner | **PPT: Cẩm (25730013) · Report: Sơn (25730061) · Review/Merge: Thanh (25730067)** |
 | Priority | P1 |
 | Status | `in-progress` |
-| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word đang hoàn thiện |
+| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word đang hoàn thiện theo góp ý Buổi 8 |
+| Kế hoạch chi tiết | 🔗 [Kế hoạch hoàn thiện Báo cáo theo góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/plan.md) · [Góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/research-buoi-08-lecture-feedback.md) |
 | Estimated effort | 8–12h |
 | Sprint | Sprint 2–3 Fast-Track (15/09 – 22/09/2026) |
 
@@ -23,7 +24,8 @@
 |--------|-------|----------------------|-----------|
 | `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Hoàn tất ✅ — PR #26 đã merge vào main (22 slide, 3.4 MB PPTX/PDF) |
 | `feat/phase-09-presentation-script` | **Thanh** tạo PR | [`script.md`](../../draft/scam-detection/reports/slides/scripts/script.md) (51 KB) | Hoàn tất ✅ — PR #27 kịch bản 15p chuẩn WPM & 10 chủ đề Q&A |
-| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Đang triển khai 🟡 — Sơn biên soạn 5 chương trên branch |
+| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Hoàn thành khung 🟡 — Sơn biên soạn 5 chương trên branch |
+| [`feat/phase-09-defense-feedback-enhancements`](../20260923-phase09-defense-feedback-enhancements/plan.md) | **Cả nhóm (Thanh lead)** | [Kế hoạch chi tiết](../20260923-phase09-defense-feedback-enhancements/plan.md) · [Góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/research-buoi-08-lecture-feedback.md) · `report-source.md` · `run_ablation_studies.py` | Đang triển khai 🚀 — Bổ sung 2 thực nghiệm đối chứng (Ablation Tiền xử lý & Không gian đặc trưng), phân định bài toán vs tin giả, ca test đe dọa trực diện N-gram và hoàn thiện Báo cáo Word theo góp ý Buổi 8 của ThS. Cáp Phạm Đình Thăng |
 
 ## Context
 
@@ -92,7 +94,12 @@ Theo yêu cầu trong [README.md](../../README.md):
     - `top20_keywords_barplot.png`: Biểu đồ ngang 20 từ khóa kích hoạt bẫy tâm lý có trọng số đồng thuận cao nhất (`money`, `số_tiền`, `viện_phí`, `gấp`, `số_định_danh`).
     - `shap_summary.png`: Biểu đồ SHAP Beeswarm của XGBoost giải thích đóng góp vi mô từng giá trị đặc trưng.
 
-#### 4.4. Ứng dụng Thực tế & Giao diện Web Demo (Phase 08 — Sơn)
+#### 4.4. Thực nghiệm Đối chứng (Ablation Studies — Bổ sung theo góp ý ThS. Cáp Phạm Đình Thăng tại Buổi 8)
+- **Thực nghiệm 1 (Ablation on Preprocessing)**: So sánh Raw Text (chưa tiền xử lý) vs Preprocessed Text (Unicode NFC + 160 teencode + PyVi) trên cùng tập Test (439 mẫu). Chứng minh con số thực tế F1/Recall tăng vọt nhờ tiền xử lý.
+- **Thực nghiệm 2 (Ablation on Feature Spaces)**: So sánh Chỉ dùng 5.000 TF-IDF vs Chỉ dùng 15 Đặc trưng tâm lý vs Kết hợp 5.015 đặc trưng trên XGBoost và Linear SVM. Chứng minh 15 đặc trưng mang lại thông tin hành vi độc lập giúp bảo toàn Recall ≥ 97%.
+- **Thực nghiệm 3 (Phân tích Mất cân bằng dữ liệu & Hàm mất mát)**: Phân tích tỷ lệ mất cân bằng 4.2:1, trình bày công thức toán Cost-sensitive learning (`scale_pos_weight = 4.22`), lý giải khoa học lý do từ chối SMOTE trên văn bản tiếng Việt.
+
+#### 4.5. Ứng dụng Thực tế & Giao diện Web Demo (Phase 08 — Sơn)
 - Ứng dụng Streamlit Split-View Workbench tối ưu trợ năng cho người cao tuổi:
   - Phóng đại cỡ chữ linh hoạt 100% – 125% – 150% với tỷ lệ tương phản cao.
   - Tự động phân tích và bôi đỏ từ khóa bẫy tâm lý với regex biên dịch trước (<10ms).
