@@ -137,9 +137,9 @@ PRESET_SAMPLES = {
     "bank": {
         "title": "💳 Biến động số dư Vietcombank",
         "text": (
-            "VCB: 17/09/2026 14:30. Số dư TK 0071000xxx thay đổi +2.000.000 VND. "
-            "Số dư hiện tại: 15.450.000 VND. Nội dung: CON GUI TIEN THUOC CHO ME. "
-            "Cảm ơn quý khách đã sử dụng dịch vụ của Vietcombank."
+            "VCB: So du TK 0071000xxx thay doi +2,000,000 VND luc 14:30 17/09/2026. "
+            "So du: 15,450,000 VND. Noi dung: Con gui tien cho me. "
+            "Cam on quy khach da su dung dich vu Vietcombank."
         ),
     },
 }
