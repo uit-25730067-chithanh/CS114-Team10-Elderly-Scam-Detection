@@ -84,7 +84,7 @@ flowchart LR
 | **04** | Slide 4: Mục tiêu | **Thanh** | 4 mục tiêu cụ thể: 4 mô hình, ngưỡng F1/Recall, XAI, Web Demo | ~90 | 140 | **35s** | Phần 1 | Mục tiêu đo lường được |
 | **05** | Slide 5: Divider P2 | — | *Slide chuyển đoạn Phần 2: Dữ liệu & Phương pháp (chuyển nhanh)* | ~16 | 140 | **5s** | Phần 2 | Chuyển tiếp mượt mà |
 | **06** | Slide 6: Dataset | **Thanh** | 2.193 mẫu thực tế, kiểm toán 7 tầng, scale_pos_weight = 4.22 | ~125 | 140 | **45s** | Phần 2 | Zero Synthetic Text & Loss weighting |
-| **07** | Slide 7: 4 Nhóm bẫy | **Thanh** | Giả mạo công quyền, Đe dọa, Gia đình, Quà tặng sức khỏe | ~110 | 140 | **40s** | Phần 2 | Insight hành vi đắt giá (>68%) |
+| **07** | Slide 7: 4 Nhóm bẫy | **Thanh** | Giả mạo công quyền, Đe dọa, Gia đình, Quà tặng sức khỏe | ~110 | 140 | **40s** | Phần 2 | Đe dọa & Công quyền chiếm >68% |
 | **08** | Slide 8: Pipeline | **Thanh** | Pipeline 5 bước, vector 5.015 chiều & kỷ luật Zero-Leakage 100% | ~125 | 140 | **45s** | Phần 2 | Tính toàn vẹn kiến trúc |
 | 🏁 | **Khối 1 & 2 (Thanh)** | **Thanh** | **Tổng thời gian trình bày của Đặng Chí Thanh** | **~701** | **140** | **4m50s** | — | Dứt khoát, đúng trọng tâm |
 | **09** | Slide 9: Divider P3 | — | *Slide chuyển đoạn Phần 3: Mô hình & Kết quả (chuyển nhanh)* | 0 | — | **0s** | Phần 3 | Chuyển slide |
@@ -140,7 +140,7 @@ Bài báo cáo của nhóm sẽ đi qua **5 phần chính**:
 Thực tế tại Việt Nam hiện nay, người cao tuổi là nhóm đối tượng chịu rủi ro lừa đảo lớn nhất. Kẻ gian nhiều khi chẳng cần dùng đến mã độc công nghệ cao, mà chúng đánh thẳng vào **tâm lý lo sợ pháp luật hoặc tình cảm gia đình** qua tin nhắn SMS và Zalo.
 
 Khi giải quyết bài toán này, nhóm em đối mặt với **3 thách thức kỹ thuật lớn nhất**:
-- **Một là Class Imbalance (Mất cân bằng lớp):** Tỉ lệ lệch hơn 4 chọi 1. Nếu một mô hình ngây thơ cứ đoán bừa 100% là tin thường thì Accuracy đã hơn 80%, nhưng sẽ bỏ lọt toàn bộ kẻ gian. Vì vậy, nhóm bắt buộc phải lấy **Recall và F1-Score** làm kim chỉ nam.
+- **Một là Class Imbalance (Mất cân bằng lớp):** Tỉ lệ lệch hơn 4 chọi 1. Nếu mô hình cứ đoán bừa 100% là tin thường thì Accuracy đã hơn 80%, nhưng sẽ bỏ lọt toàn bộ kẻ gian. Vì vậy, nhóm bắt buộc phải lấy **Recall và F1-Score** làm thước đo chính.
 - **Hai là Cost Asymmetry (Tổn thất bất đối xứng):** Bỏ sót 1 tin lừa đảo thì nạn nhân mất sạch tiền tích lũy cả đời. Trong khi cảnh báo nhầm thì chỉ cần kiểm tra lại. Do đó, chi phí phạt cho việc bỏ sót (False Negative) phải đặt lên hàng đầu.
 - **Ba là tính chân thực (Zero Synthetic Text):** Nhóm kiên quyết dùng 100% tin nhắn đời thực, tuyệt đối không dùng AI để tự sinh văn bản giả, nhằm nắm bắt chính xác thủ đoạn thực tế của tội phạm.
 
@@ -149,11 +149,11 @@ Khi giải quyết bài toán này, nhóm em đối mặt với **3 thách thứ
 ## SLIDE 4 – MỤC TIÊU NGHIÊN CỨU & ĐÓNG GÓP CỐT LÕI
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~35s (~90 từ)**
 
-Từ 3 thách thức trên, nhóm đặt ra và giải quyết trọn vẹn **4 mục tiêu kỹ thuật cụ thể**:
+Từ 3 thách thức trên, nhóm đặt ra **4 mục tiêu kỹ thuật cụ thể**:
 
-- **Thứ nhất — Đối chuẩn đa mô hình:** Đưa 4 thuật toán kinh điển từ Naive Bayes, Random Forest, Linear SVM đến XGBoost lên cùng một bàn cân thực nghiệm độc lập.
-- **Thứ hai — Vượt chỉ tiêu hiệu năng:** Nhóm cam kết ngưỡng F1 ≥ 88% và Recall ≥ 92%. Kết quả thực nghiệm cả 4 mô hình đều vượt xa chỉ tiêu, mô hình tối ưu đạt Recall tới 97.62%.
-- **Thứ ba — Xóa bỏ "hộp đen" với XAI:** Dùng SHAP TreeExplainer bóc tách minh bạch cơ chế ra quyết định của mô hình.
+- **Thứ nhất — Đối chuẩn đa mô hình:** Đưa 4 thuật toán từ Naive Bayes, Random Forest, Linear SVM đến XGBoost vào thực nghiệm đối chuẩn trên cùng tập kiểm thử.
+- **Thứ hai — Vượt chỉ tiêu hiệu năng:** Nhóm đặt ngưỡng F1 ≥ 88% và Recall ≥ 92%. Kết quả thực nghiệm cả 4 mô hình đều vượt chỉ tiêu, mô hình tốt nhất đạt Recall tới 97.62%.
+- **Thứ ba — Giải thích quyết định với XAI:** Dùng SHAP TreeExplainer bóc tách rõ lý do và từ khóa khiến mô hình đưa ra cảnh báo.
 - **Thứ tư — Đưa vào thực tiễn:** Xây dựng ứng dụng Web Streamlit tối ưu trợ năng cho người cao tuổi, có cỡ chữ phóng to 150% và nút gọi khẩn cấp 156/113 một chạm.
 
 ---
@@ -161,18 +161,18 @@ Từ 3 thách thức trên, nhóm đặt ra và giải quyết trọn vẹn **4 
 ## SLIDE 5 – PHẦN 2: DỮ LIỆU & PHƯƠNG PHÁP
 > **Slide phân đoạn nội dung (lướt nhanh 5s, ~16 từ)**
 
-Sau khi làm rõ bối cảnh và mục tiêu, em xin đi vào **Phần 02 — Dữ liệu thực nghiệm và Quy trình tiền xử lý**.
+Tiếp theo, em xin đi vào **Phần 02 — Dữ liệu thực nghiệm và Quy trình tiền xử lý**.
 
 ---
 
 ## SLIDE 6 – BỘ DỮ LIỆU 2.193 MẪU & KIỂM TOÁN 7 TẦNG
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~45s (~125 từ)**
 
-Để thực nghiệm khách quan, nhóm em xây dựng bộ dữ liệu gồm **2.193 tin nhắn tiếng Việt thực tế 100%**: gồm 1.773 tin bình thường và 420 tin lừa đảo thu thập từ các kho an toàn thông tin cộng đồng và phóng sự điều tra của VTV24. Toàn bộ dữ liệu trải qua **quy trình kiểm toán 7 tầng**, dùng Regex che sạch số điện thoại, tài khoản ngân hàng và CCCD để bảo vệ quyền riêng tư.
+Về dữ liệu thực nghiệm, nhóm em xây dựng bộ tập dữ liệu gồm **2.193 tin nhắn tiếng Việt thực tế 100%**: gồm 1.773 tin bình thường và 420 tin lừa đảo thu thập từ các kho an toàn thông tin cộng đồng và phóng sự điều tra của VTV24. Toàn bộ dữ liệu trải qua **quy trình kiểm toán 7 tầng**, dùng Regex che sạch số điện thoại, tài khoản ngân hàng và CCCD để bảo vệ quyền riêng tư.
 
 Ở biểu đồ bên phải, tỷ lệ lệch lớp là **4.2 : 1**.
 
-Đặc biệt, về phương pháp: **Nhóm quyết định dứt khoát không dùng SMOTE để sinh dữ liệu nhân tạo**. Trong NLP tiếng Việt, nội suy toán học giữa các vector từ rất dễ tạo ra các câu văn lai tạp vô nghĩa. Thay vào đó, nhóm bù trừ trực tiếp vào hàm mất mát của XGBoost bằng trọng số phạt `scale_pos_weight = 4.22`.
+Đặc biệt, về phương pháp: **Nhóm quyết định không dùng SMOTE để sinh dữ liệu nhân tạo**. Trong NLP tiếng Việt, nội suy toán học giữa các vector từ rất dễ tạo ra các câu văn lai tạp vô nghĩa. Thay vào đó, nhóm bù trừ trực tiếp vào hàm mất mát của XGBoost bằng trọng số phạt `scale_pos_weight = 4.22`.
 
 Dữ liệu được chia phân tầng 80/20: **1.754 mẫu Train** và **439 mẫu Test** hoàn toàn độc lập.
 
@@ -181,26 +181,26 @@ Dữ liệu được chia phân tầng 80/20: **1.754 mẫu Train** và **439 m�
 ## SLIDE 7 – CƠ CẤU 4 NHÓM BẪY THAO TÚNG TÂM LÝ
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~40s (~110 từ)**
 
-Khi phân tích sâu 420 mẫu lừa đảo trên notebook EDA, em đúc kết được **4 kịch bản thao túng tâm lý điển hình** như ở bảng bên phải:
+Khi phân tích 420 mẫu lừa đảo trên notebook EDA, em thống kê và chia làm **4 kịch bản thao túng tâm lý điển hình** như ở bảng bên phải:
 
 - **Phổ biến nhất là Giả mạo dịch vụ công:** Giả danh Công an, Thuế hoặc Bảo hiểm xã hội, ép cập nhật định danh VNeID mức 2.
 - **Thứ hai là Đe dọa quyền lực:** Mạo danh Viện kiểm sát, Tòa án thông báo dính án rửa tiền, ép chuyển tiền "tạm giữ".
 - **Thứ ba là Khẩn cấp gia đình:** Báo tin con cháu bị tai nạn cấp cứu tại bệnh viện để đòi chuyển viện phí gấp.
 - **Cuối cùng là Dụ dỗ quà tặng sức khỏe:** Mời nhận sữa non, thuốc bổ miễn phí để lừa nạp phí vận chuyển.
 
-Insight đắt giá nhất ở đây: **Hai nhóm đầu chiếm tới hơn 68%**, chứng minh kẻ lừa đảo đánh mạnh nhất vào tâm lý sợ vi phạm pháp luật và trách nhiệm công dân của người già.
+Điểm đáng chú ý nhất ở đây: **Hai nhóm đầu chiếm tới hơn 68%**, chứng minh kẻ lừa đảo đánh mạnh nhất vào tâm lý sợ vi phạm pháp luật và sợ liên lụy của người già.
 
 ---
 
 ## SLIDE 8 – PIPELINE TIỀN XỬ LÝ & KỸ THUẬT ĐẶC TRƯNG
 > **Người trình bày: Đặng Chí Thanh | Thời lượng dự kiến: ~45s (~125 từ)**
 
-Để đưa văn bản thô vào mô hình, em xây dựng **Pipeline 5 bước khép kín** ở sơ đồ bên dưới:
+Để đưa văn bản thô vào mô hình, em xây dựng **Pipeline 5 bước** như sơ đồ bên dưới:
 - Đầu tiên là **chuẩn hóa Unicode NFC** và bộ **160 quy tắc xử lý teencode**.
 - Tiếp theo, dùng **PyVi tách từ** để giữ đúng nghĩa từ ghép tiếng Việt, kết hợp với bộ **TF-IDF 5.000 từ vựng**.
-- Cuối cùng, nhóm bổ sung **15 đặc trưng tâm lý chuyên sâu** như cờ khẩn cấp, số điện thoại, URL và từ khóa tài chính — tạo ra không gian vector kết hợp **5.015 chiều**.
+- Cuối cùng, nhóm bổ sung **15 đặc trưng tâm lý** như cờ khẩn cấp, số điện thoại, URL và từ khóa tài chính — tạo ra không gian vector kết hợp **5.015 chiều**.
 
-Và nguyên tắc kỹ thuật cốt lõi: **Nhóm tuân thủ nghiêm ngặt quy chuẩn Zero-Leakage 100%**. Toàn bộ từ điển TF-IDF và bộ scaler **chỉ được `fit` trên 1.754 mẫu Train**, sau đó chỉ dùng `transform` mù sang tập Test để phản ánh khách quan năng lực tổng quát hóa.
+Về mặt kỹ thuật, **nhóm tuân thủ nguyên tắc Zero-Leakage**: toàn bộ từ điển TF-IDF và bộ scaler **chỉ được `fit` trên 1.754 mẫu Train**, sau đó chỉ `transform` sang tập Test để đánh giá đúng năng lực tổng quát hóa.
 
 Sau đây, em xin chuyển phần trình bày cho bạn **Mỷ Cẩm** tiếp tục với kết quả thực nghiệm 4 mô hình học máy ở Phần 3 ạ. Xin mời Cẩm!
 
