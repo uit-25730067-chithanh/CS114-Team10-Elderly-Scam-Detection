@@ -305,6 +305,37 @@ Nhóm thực hiện 7 biểu đồ EDA tại 300 DPI:
 
 ## 4.2. Kết quả thực nghiệm
 
+### 4.2.0. Các thước đo đánh giá
+Trước khi trình bày kết quả, mục này định nghĩa các thước đo được dùng. Coi lớp "lừa đảo" là lớp dương (nhãn 1), từ ma trận nhầm lẫn trên tập kiểm thử ta có bốn đại lượng: **TP** (lừa đảo, dự đoán đúng), **TN** (bình thường, dự đoán đúng), **FP** (bình thường bị báo là lừa đảo, báo sai) và **FN** (lừa đảo bị bỏ sót).
+
+| Thước đo | Công thức | Ý nghĩa trong bài toán |
+|---|---|---|
+| Accuracy | (TP + TN) / (TP + TN + FP + FN) | Tỷ lệ dự đoán đúng; dễ gây hiểu lầm khi dữ liệu mất cân bằng (mục 3.5.1) |
+| Precision | TP / (TP + FP) | Trong các tin bị báo là lừa đảo, bao nhiêu tin thật sự là lừa đảo; thấp nghĩa là báo sai nhiều |
+| Recall | TP / (TP + FN) | Trong các tin lừa đảo, bao nhiêu tin được phát hiện; đây là thước đo ưu tiên vì bỏ sót nguy hiểm hơn báo sai |
+| F1-Score | 2 · Precision · Recall / (Precision + Recall) | Trung bình điều hòa của Precision và Recall |
+| ROC-AUC | ∫₀¹ TPR(FPR) d(FPR), với TPR = Recall và FPR = FP / (FP + TN) | Khả năng xếp hạng, không phụ thuộc ngưỡng quyết định |
+
+**Về ROC-AUC.** Đường ROC được vẽ bằng cách thay đổi ngưỡng quyết định từ 0 đến 1 và ghi lại cặp (FPR, TPR) tại mỗi ngưỡng. Diện tích dưới đường này bằng xác suất một tin lừa đảo được chọn ngẫu nhiên có điểm nguy cơ cao hơn một tin bình thường được chọn ngẫu nhiên (các điểm bằng nhau tính một nửa). AUC = 1 là xếp hạng hoàn hảo, AUC = 0,5 tương đương đoán ngẫu nhiên. Vì không phụ thuộc ngưỡng nên ROC-AUC không phản ánh được số lỗi cụ thể ở ngưỡng 0,5 của ứng dụng; do đó báo cáo luôn trình bày kèm Recall, Precision và số ca FN, FP.
+
+**Ví dụ tính tay (XGBoost, tập kiểm thử 439 mẫu).** Ma trận nhầm lẫn có TP = 82, TN = 349, FP = 6, FN = 2:
+- Accuracy = (82 + 349) / 439 = 0,9818
+- Precision = 82 / (82 + 6) = 0,9318
+- Recall = 82 / (82 + 2) = 0,9762
+- F1 = 2 · 0,9318 · 0,9762 / (0,9318 + 0,9762) = 0,9535
+
+Các giá trị này trùng với bảng ở mục 4.2.1.
+
+**Công thức TF-IDF** (cấu hình `TfidfVectorizer` của nhóm [6], `sublinear_tf=True`, làm trơn idf mặc định). Với từ hoặc cụm từ t trong tin nhắn d:
+
+tf(t, d) = 1 + ln(f_{t,d}), với f_{t,d} là số lần t xuất hiện trong d (bằng 0 nếu t không xuất hiện)
+
+idf(t) = ln((1 + n) / (1 + df(t))) + 1, với n là số tin nhắn huấn luyện và df(t) là số tin chứa t
+
+tfidf(t, d) = tf(t, d) · idf(t)
+
+Mỗi vector tin nhắn sau đó được chuẩn hóa L2 (độ dài bằng 1). Từ vựng gồm 5.000 từ và cụm 2 từ (`ngram_range=(1,2)`) xuất hiện trong ít nhất 2 tin và không quá 95% số tin (`min_df=2`, `max_df=0.95`); `n` và `df(t)` chỉ tính trên tập huấn luyện (Zero-Leakage).
+
 ### 4.2.1. Bảng so sánh tổng thể 4 mô hình
 
 | Mô hình | Accuracy | Precision | Recall | F1-Score | ROC-AUC |

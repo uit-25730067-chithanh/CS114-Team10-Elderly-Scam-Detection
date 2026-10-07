@@ -19,15 +19,15 @@
 - [ ] Lý giải thuyết phục tại sao nhóm chọn Học máy kết hợp Trích xuất đặc trưng chuyên biệt (nhẹ, inference <50ms, chạy offline an toàn cho người cao tuổi, giải thích trực quan với SHAP).
 
 ### Chương 3 — Phương Pháp Đề Xuất
-- [ ] Sơ đồ kiến trúc luồng dữ liệu Đầu vào – Đầu ra (Input/Output System Flowchart) từ văn bản thô đến phân loại bẫy tâm lý.
-- [ ] Mô tả chi tiết 5 bước tiền xử lý: Chuẩn hóa Unicode NFC, 160 quy tắc teencode, tách từ PyVi, lọc bỏ ký tự đặc biệt, loại bỏ stop words chuyên dụng.
-- [ ] Trình bày giải pháp chống Mất cân bằng dữ liệu: Công thức toán hàm mất mát có trọng số (Cost-sensitive loss function, `scale_pos_weight = 4.22`), phân tầng Stratified K-Fold và lý giải vì sao không dùng SMOTE cho văn bản tiếng Việt.
+- [x] Sơ đồ kiến trúc luồng dữ liệu Đầu vào – Đầu ra (Input/Output System Flowchart) từ văn bản thô đến phân loại bẫy tâm lý. (Cẩm hoàn thành ✅ — Hình 3.1, mục 3.4)
+- [x] Mô tả chi tiết 5 bước tiền xử lý: Chuẩn hóa Unicode NFC, 160 quy tắc teencode, tách từ PyVi, lọc bỏ ký tự đặc biệt, loại bỏ stop words chuyên dụng. (Cẩm hoàn thành ✅ — mục 3.1)
+- [x] Trình bày giải pháp chống Mất cân bằng dữ liệu: Công thức toán hàm mất mát có trọng số (Cost-sensitive loss function, `scale_pos_weight = 4.22`), phân tầng Stratified K-Fold và lý giải vì sao không dùng SMOTE cho văn bản tiếng Việt. (Cẩm hoàn thành ✅ — mục 3.5; SMOTE trình bày là lập luận thiết kế, chưa có thực nghiệm; CV là 5-fold phân tầng khi tune siêu tham số)
 
 ### Chương 4 — Thực Nghiệm & Đánh Giá
-- [ ] Trình bày công thức toán học tường minh của các metric: Accuracy, Precision, Recall, F1-Score, ROC-AUC, công thức TF-IDF. (Cẩm phụ trách)
+- [x] Trình bày công thức toán học tường minh của các metric: Accuracy, Precision, Recall, F1-Score, ROC-AUC, công thức TF-IDF. (Cẩm phụ trách) (Cẩm hoàn thành ✅ — mục 4.2.0, kèm ví dụ tính tay XGBoost)
 - [x] **Bảng Thực nghiệm Đối chứng 1 (Ablation on Preprocessing)**: Raw Text vs Preprocessed Text. (Thanh hoàn thành ✅)
 - [x] **Bảng Thực nghiệm Đối chứng 2 (Ablation on Feature Spaces)**: Chỉ TF-IDF 5.000 vs Chỉ 15 Features vs Kết hợp 5.015. (Thanh hoàn thành ✅)
-- [ ] Bảng so sánh 4 mô hình học máy đã nghiệm thu (XGBoost F1=0.9535, SVM F1=0.9474, RF F1=0.9425, NB F1=0.8864).
+- [x] Bảng so sánh 4 mô hình học máy đã nghiệm thu (XGBoost F1=0.9535, SVM F1=0.9474, RF F1=0.9425, NB F1=0.8864). (Cẩm rà soát ✅ — khớp `models/*_metrics.json`)
 - [ ] Chèn các biểu đồ 300 DPI: ROC Curves, Precision-Recall Curves, Ma trận nhầm lẫn, SHAP Beeswarm và Top-20 từ khóa kích hoạt bẫy tâm lý. (Sơn phụ trách chèn và nhận xét)
 - [x] **Phân tích sai số (Error Analysis — Mục 4.6)**: Mổ xẻ chi tiết ca biên đe dọa trực diện cuối buổi *"Cướp đây, đưa hết tiền đây!"* (mô hình báo 4.1% nguy cơ - an toàn). (Thanh hoàn thành ✅)
   1. *Lệch phân phối kịch bản (Domain Gap)*: Dữ liệu tập trung vào lừa đảo thao túng tâm lý / phi bạo lực qua mạng (Social Engineering), thiếu hụt tội phạm cưỡng đoạt tài sản bạo lực ngoài đời thực (Physical Extortion).
@@ -40,4 +40,4 @@
   - Bổ sung nhóm đặc trưng từ khóa cưỡng bức trực diện (`imperative_threat`) vào không gian đặc trưng tâm lý.
   - Ứng dụng mô hình ngữ cảnh Transformer (PhoBERT) với cơ chế Self-Attention để bắt trọn ngữ nghĩa câu ngắn.
   - Nhận diện lừa đảo giọng nói deepfake đa phương thức.
-- [ ] Danh mục Tài liệu tham khảo: Bổ sung đủ ≥ 15 tài liệu chuẩn IEEE/APA. (Cẩm phụ trách)
+- [x] Danh mục Tài liệu tham khảo: Bổ sung đủ ≥ 15 tài liệu chuẩn IEEE/APA. (Cẩm phụ trách) (Cẩm hoàn thành ✅ — 20 nguồn IEEE; còn [1], [2], [12]–[15], [18] chờ được trích trong thân bài)
