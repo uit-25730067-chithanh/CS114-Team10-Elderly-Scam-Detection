@@ -24,20 +24,20 @@
 - [ ] Trình bày giải pháp chống Mất cân bằng dữ liệu: Công thức toán hàm mất mát có trọng số (Cost-sensitive loss function, `scale_pos_weight = 4.22`), phân tầng Stratified K-Fold và lý giải vì sao không dùng SMOTE cho văn bản tiếng Việt.
 
 ### Chương 4 — Thực Nghiệm & Đánh Giá
-- [ ] Trình bày công thức toán học tường minh của các metric: Accuracy, Precision, Recall, F1-Score, ROC-AUC, công thức TF-IDF.
-- [ ] **Bảng Thực nghiệm Đối chứng 1 (Ablation on Preprocessing)**: Raw Text vs Preprocessed Text.
-- [ ] **Bảng Thực nghiệm Đối chứng 2 (Ablation on Feature Spaces)**: Chỉ TF-IDF 5.000 vs Chỉ 15 Features vs Kết hợp 5.015.
+- [ ] Trình bày công thức toán học tường minh của các metric: Accuracy, Precision, Recall, F1-Score, ROC-AUC, công thức TF-IDF. (Cẩm phụ trách)
+- [x] **Bảng Thực nghiệm Đối chứng 1 (Ablation on Preprocessing)**: Raw Text vs Preprocessed Text. (Thanh hoàn thành ✅)
+- [x] **Bảng Thực nghiệm Đối chứng 2 (Ablation on Feature Spaces)**: Chỉ TF-IDF 5.000 vs Chỉ 15 Features vs Kết hợp 5.015. (Thanh hoàn thành ✅)
 - [ ] Bảng so sánh 4 mô hình học máy đã nghiệm thu (XGBoost F1=0.9535, SVM F1=0.9474, RF F1=0.9425, NB F1=0.8864).
-- [ ] Chèn các biểu đồ 300 DPI: ROC Curves, Precision-Recall Curves, Ma trận nhầm lẫn, SHAP Beeswarm và Top-20 từ khóa kích hoạt bẫy tâm lý.
-- [ ] **Phân tích sai số (Error Analysis — Mục 4.5)**: Mổ xẻ chi tiết ca biên đe dọa trực diện cuối buổi *"Cướp đây, đưa hết tiền đây!"* (mô hình báo 4.1% nguy cơ - an toàn). Phân tích rõ nguyên nhân do:
+- [ ] Chèn các biểu đồ 300 DPI: ROC Curves, Precision-Recall Curves, Ma trận nhầm lẫn, SHAP Beeswarm và Top-20 từ khóa kích hoạt bẫy tâm lý. (Sơn phụ trách chèn và nhận xét)
+- [x] **Phân tích sai số (Error Analysis — Mục 4.6)**: Mổ xẻ chi tiết ca biên đe dọa trực diện cuối buổi *"Cướp đây, đưa hết tiền đây!"* (mô hình báo 4.1% nguy cơ - an toàn). (Thanh hoàn thành ✅)
   1. *Lệch phân phối kịch bản (Domain Gap)*: Dữ liệu tập trung vào lừa đảo thao túng tâm lý / phi bạo lực qua mạng (Social Engineering), thiếu hụt tội phạm cưỡng đoạt tài sản bạo lực ngoài đời thực (Physical Extortion).
   2. *Hạn chế của Unigram*: Các từ đơn lẻ `tiền`, `đưa`, `đây` xuất hiện phổ biến trong tin nhắn giao dịch thông thường, làm loãng trọng số rủi ro khi không có mồi nhử URL/tài khoản.
 
 ### Chương 5 — Kết Luận & Hướng Phát Triển
-- [ ] Khẳng định tính toàn vẹn của quy trình Zero Data Leakage (Fit duy nhất trên Train, Transform sang Test).
-- [ ] **Định hướng giải pháp mở rộng theo lời Thầy Thăng**:
+- [x] Khẳng định tính toàn vẹn của quy trình Zero Data Leakage (Fit duy nhất trên Train, Transform sang Test). (Thanh hoàn thành ✅)
+- [x] **Định hướng giải pháp mở rộng theo lời Thầy Thăng**: (Thanh hoàn thành ✅)
   - Mở rộng N-gram range lên `(1, 2)` và `(1, 3)` cho TF-IDF 5.000 chiều để bắt trọn các cụm từ nối tiếp mang tính đe dọa cưỡng bức như `"cướp đây"`, `"đưa hết tiền"`, `"chuyển tiền ngay"`.
   - Bổ sung nhóm đặc trưng từ khóa cưỡng bức trực diện (`imperative_threat`) vào không gian đặc trưng tâm lý.
   - Ứng dụng mô hình ngữ cảnh Transformer (PhoBERT) với cơ chế Self-Attention để bắt trọn ngữ nghĩa câu ngắn.
   - Nhận diện lừa đảo giọng nói deepfake đa phương thức.
-- [ ] Danh mục Tài liệu tham khảo: Bổ sung đủ ≥ 15 tài liệu chuẩn IEEE/APA.
+- [ ] Danh mục Tài liệu tham khảo: Bổ sung đủ ≥ 15 tài liệu chuẩn IEEE/APA. (Cẩm phụ trách)
