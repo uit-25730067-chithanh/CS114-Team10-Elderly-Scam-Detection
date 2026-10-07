@@ -175,7 +175,7 @@ Nhận xét: các đặc trưng 2, 4, 5, 6, 9 và 14 có giá trị trung bình 
 
 ## 3.2. Feature Engineering tổng thể
 
-Vector đặc trưng cuối cùng: **X ∈ R^{5015}**
+Vector đặc trưng cuối cùng: **X ∈ ℝ⁵⁰¹⁵**
 - 5.000 đặc trưng TF-IDF
 - 15 đặc trưng phụ (auxiliary)
 - Zero-leakage: scaler và vectorizer không fit trên test set
@@ -228,7 +228,7 @@ Bốn mô hình (Naive Bayes, Random Forest, XGBoost, Linear SVM) được huấ
 Bộ dữ liệu có 2.193 mẫu, gồm 1.773 tin bình thường và 420 tin lừa đảo (tỷ lệ 4,22 : 1). Sau khi chia phân tầng 80/20, tập huấn luyện có 1.754 mẫu (1.418 bình thường, 336 lừa đảo) và tập kiểm thử có 439 mẫu (355 bình thường, 84 lừa đảo). Một bộ phân loại luôn trả lời "bình thường" sẽ đạt độ chính xác 355/439 = 80,9% trên tập kiểm thử mà không phát hiện được tin lừa đảo nào. Vì vậy nhóm không dùng Accuracy làm thước đo chính mà dùng Recall, F1 và ROC-AUC, trong đó Recall được ưu tiên vì bỏ sót một tin lừa đảo (âm tính giả) gây hậu quả nặng hơn báo nhầm một tin bình thường.
 
 ### 3.5.2. Hướng tiếp cận: học nhạy cảm với chi phí
-Nhóm không can thiệp vào dữ liệu mà đưa chi phí sai lệch giữa hai lớp vào hàm mất mát (cost-sensitive learning) [20]. Với nhãn y_i ∈ {0, 1} (1 là lừa đảo) và xác suất dự đoán p_i = P(y_i = 1 | x_i), hàm mất mát entropy chéo nhị phân có trọng số lớp dương w là:
+Nhóm không can thiệp vào dữ liệu mà đưa chi phí sai lệch giữa hai lớp vào hàm mất mát (cost-sensitive learning) [20]. Với nhãn yᵢ ∈ {0, 1} (1 là lừa đảo) và xác suất dự đoán pᵢ = P(yᵢ = 1 | xᵢ), hàm mất mát entropy chéo nhị phân có trọng số lớp dương w là:
 
 L(θ) = − Σᵢ [ w · yᵢ · log(pᵢ) + (1 − yᵢ) · log(1 − pᵢ) ]
 
@@ -240,9 +240,9 @@ Như vậy một mẫu lừa đảo bị dự đoán sai bị phạt nặng gấ
 
 **XGBoost** [7] dùng logistic loss ở trên với w = `scale_pos_weight` = 4,2202, cộng thêm số hạng điều chuẩn Ω(f) = γT + ½λ‖ω‖² của cây. Ở mỗi vòng boosting, đạo hàm bậc nhất và bậc hai của mẫu dương được nhân với w: g = w(p − y) và h = w·p(1 − p).
 
-**Random Forest** [8] và **Linear SVM** [9] dùng `class_weight='balanced'`, tức trọng số mỗi lớp c là w_c = n / (2·n_c) với n là số mẫu huấn luyện. Với dữ liệu này w₊ = 2,6101 và w₋ = 0,6185, tỷ lệ w₊ / w₋ = 4,22, trùng với XGBoost. Với SVM, trọng số lớp nhân vào tham số phạt của từng mẫu:
+**Random Forest** [8] và **Linear SVM** [9] dùng `class_weight='balanced'`, tức trọng số của lớp c là w(c) = n / (2 · n(c)), với n là số mẫu huấn luyện và n(c) là số mẫu của lớp c. Với dữ liệu này w₊ = 2,6101 và w₋ = 0,6185, tỷ lệ w₊ / w₋ = 4,22, trùng với XGBoost. Với SVM (quy ước nhãn yᵢ ∈ {−1, +1} cho hàm hinge), trọng số lớp nhân vào tham số phạt của từng mẫu:
 
-min ½‖ω‖² + C · Σᵢ w_{yᵢ} · max(0, 1 − yᵢ · f(xᵢ))
+min ½‖ω‖² + C · Σᵢ w(yᵢ) · max(0, 1 − yᵢ · f(xᵢ))
 
 **Naive Bayes** [17] không có cơ chế bù lớp, chỉ có làm trơn Laplace (`alpha = 0,01`). Đây là một lý do hợp lý khiến mô hình này có Recall thấp nhất trong bốn mô hình (92,86%), tuy nhóm chưa kiểm chứng bằng thực nghiệm riêng.
 
@@ -328,7 +328,7 @@ Các giá trị này trùng với bảng ở mục 4.2.1.
 
 **Công thức TF-IDF** (cấu hình `TfidfVectorizer` của nhóm [6], `sublinear_tf=True`, làm trơn idf mặc định). Với từ hoặc cụm từ t trong tin nhắn d:
 
-tf(t, d) = 1 + ln(f_{t,d}), với f_{t,d} là số lần t xuất hiện trong d (bằng 0 nếu t không xuất hiện)
+tf(t, d) = 1 + ln(f(t, d)), với f(t, d) là số lần t xuất hiện trong d (bằng 0 nếu t không xuất hiện)
 
 idf(t) = ln((1 + n) / (1 + df(t))) + 1, với n là số tin nhắn huấn luyện và df(t) là số tin chứa t
 
