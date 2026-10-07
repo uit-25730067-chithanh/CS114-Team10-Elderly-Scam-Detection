@@ -131,7 +131,7 @@ Văn bản thô ─┬─► [Nhánh A] 15 đặc trưng phụ (regex trên văn
 Kẻ lừa đảo thường thay chữ bằng số hoặc ký tự lạ để né bộ lọc (ví dụ "th0ng bao", "kh0a the"). Nhóm dùng 22 mẫu regex để khôi phục về chữ gốc. Các thẻ ẩn danh dính liền chữ (ví dụ `[ĐƯỜNG_DẪN]de`) được tách bằng khoảng trắng.
 
 ### Bước 2: Chuẩn hóa Unicode NFC và vị trí dấu thanh
-Chuyển văn bản về dạng Unicode NFC, chuẩn hóa vị trí dấu thanh theo quy tắc đặt dấu hiện hành (thư viện `underthesea`), sau đó đưa về chữ thường. Bước này bảo đảm cùng một từ không bị tính thành nhiều dạng khác nhau chỉ vì cách gõ dấu hay bảng mã.
+Chuyển văn bản về dạng Unicode NFC [3], chuẩn hóa vị trí dấu thanh theo quy tắc đặt dấu hiện hành (thư viện `underthesea` [5]), sau đó đưa về chữ thường. Bước này bảo đảm cùng một từ không bị tính thành nhiều dạng khác nhau chỉ vì cách gõ dấu hay bảng mã.
 
 ### Bước 3: Chuẩn hóa thực thể, teencode và ký tự nhiễu
 - Xóa URL, số điện thoại và địa chỉ email còn nguyên dạng trong văn bản.
@@ -140,12 +140,13 @@ Chuyển văn bản về dạng Unicode NFC, chuẩn hóa vị trí dấu thanh 
 - Loại ký tự đặc biệt nhưng giữ nguyên chữ cái có dấu tiếng Việt, rồi gộp khoảng trắng.
 
 ### Bước 4: Tách từ bằng PyVi
-Tiếng Việt viết có khoảng trắng giữa các âm tiết, nên một từ ghép như "tài khoản" sẽ bị tách thành hai đơn vị nếu không tách từ. Nhóm dùng PyVi để ghép thành `tài_khoản`. Với tin nhắn viết không dấu (chiếm khoảng 55% tin bình thường trong bộ dữ liệu), một danh sách các cụm không dấu thường gặp được ghép trước khi chạy PyVi.
+Tiếng Việt viết có khoảng trắng giữa các âm tiết, nên một từ ghép như "tài khoản" sẽ bị tách thành hai đơn vị nếu không tách từ. Nhóm dùng PyVi [4] để ghép thành `tài_khoản`. Với tin nhắn viết không dấu (chiếm khoảng 55% tin bình thường trong bộ dữ liệu), một danh sách các cụm không dấu thường gặp được ghép trước khi chạy PyVi.
 
 ### Bước 5: Lọc từ dừng có bảo vệ từ khóa miền
 Loại 83 từ dừng ngữ pháp (liên từ, giới từ, từ nối). Danh sách 44 từ khóa miền (ví dụ `công_an`, `khẩn`, `chuyển_khoản`, `otp`, `viện_phí`) được bảo vệ, không bao giờ bị loại. Nếu kết quả rỗng, hệ thống giữ lại văn bản đã làm sạch ở bước 3 để không tạo ra dòng trống.
 
 ### Vector hóa TF-IDF
+Trọng số TF-IDF theo [6].
 - Cấu hình: `max_features=5000`, `ngram_range=(1,2)` (đơn từ và cụm hai từ), `min_df=2`, `max_df=0.95`, `sublinear_tf=True`.
 - **Quan trọng**: `fit()` chỉ chạy trên tập huấn luyện, sau đó `transform` tập kiểm thử (Zero-Leakage).
 
@@ -183,26 +184,26 @@ Vector đặc trưng cuối cùng: **X ∈ R^{5015}**
 
 ### Mô hình 1: Naive Bayes (Baseline)
 <!-- Phase 04 — Cẩm -->
-- **Loại**: MultinomialNB với Laplace smoothing
+- **Loại**: MultinomialNB với Laplace smoothing [17]
 - **Tham số tốt nhất**: `alpha=0.01` (GridSearchCV 5-fold)
 - **Đặc trưng đầu vào**: chỉ 5.000 chiều TF-IDF (không âm)
 - **Lý do chọn**: baseline nhanh, interpretable, phù hợp TF-IDF
 
 ### Mô hình 2: Random Forest
 <!-- Phase 05 — Sơn -->
-- **Loại**: sklearn RandomForestClassifier
+- **Loại**: sklearn RandomForestClassifier [8], [11]
 - **Tham số**: `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2, class_weight="balanced"`
 - **Lý do chọn**: ensemble robustness, ít overfit
 
 ### Mô hình 3: XGBoost
 <!-- Phase 05 — Cẩm -->
-- **Loại**: XGBClassifier
+- **Loại**: XGBClassifier [7]
 - **Tham số**: `n_estimators=300, max_depth=5, learning_rate=0.05, scale_pos_weight=4.22`
-- **scale_pos_weight**: xử lý class imbalance 4.22:1 (Bình thường:Lừa đảo)
+- **scale_pos_weight**: xử lý mất cân bằng lớp 4,22 : 1 (Bình thường : Lừa đảo), chi tiết ở mục 3.5
 
 ### Mô hình 4: SVM Linear (Best Linear)
 <!-- Phase 06 — Cẩm -->
-- **Loại**: LinearSVC + CalibratedClassifierCV (5-fold)
+- **Loại**: LinearSVC (LIBLINEAR [16]) + CalibratedClassifierCV 5-fold (hiệu chỉnh xác suất theo Platt [10]) trên nền SVM [9]
 - **Tham số**: `C=10.0`
 - **Lý do chọn**: tốt với high-dimensional sparse features (TF-IDF)
 
@@ -220,6 +221,47 @@ Hai nhánh được ghép thành vector X ∈ ℝ⁵⁰¹⁵ trước khi đưa 
 *Hình 3.1. Sơ đồ luồng Đầu vào – Đầu ra của hệ thống phát hiện tin nhắn lừa đảo.*
 
 Bốn mô hình (Naive Bayes, Random Forest, XGBoost, Linear SVM) được huấn luyện độc lập trên cùng một tập dữ liệu và là các **phương án thay thế** của nhau, không phải một hệ thống ensemble. Ứng dụng demo cho phép chọn một mô hình, mặc định là XGBoost, và trả về xác suất p = P(lừa đảo). Tin nhắn được gắn nhãn lừa đảo khi p ≥ 0,5. Kết quả hiển thị gồm thang mức độ nguy cơ, các từ khóa đáng ngờ được đánh dấu theo bộ từ khóa thao túng tâm lý, và khuyến nghị an toàn cho người cao tuổi. Phân tích SHAP (mục 4.3) là giải thích toàn cục thực hiện offline trên tập kiểm thử, không chạy theo từng tin nhắn trong ứng dụng.
+
+## 3.5. Xử lý mất cân bằng lớp
+
+### 3.5.1. Mức độ mất cân bằng
+Bộ dữ liệu có 2.193 mẫu, gồm 1.773 tin bình thường và 420 tin lừa đảo (tỷ lệ 4,22 : 1). Sau khi chia phân tầng 80/20, tập huấn luyện có 1.754 mẫu (1.418 bình thường, 336 lừa đảo) và tập kiểm thử có 439 mẫu (355 bình thường, 84 lừa đảo). Một bộ phân loại luôn trả lời "bình thường" sẽ đạt độ chính xác 355/439 = 80,9% trên tập kiểm thử mà không phát hiện được tin lừa đảo nào. Vì vậy nhóm không dùng Accuracy làm thước đo chính mà dùng Recall, F1 và ROC-AUC, trong đó Recall được ưu tiên vì bỏ sót một tin lừa đảo (âm tính giả) gây hậu quả nặng hơn báo nhầm một tin bình thường.
+
+### 3.5.2. Hướng tiếp cận: học nhạy cảm với chi phí
+Nhóm không can thiệp vào dữ liệu mà đưa chi phí sai lệch giữa hai lớp vào hàm mất mát (cost-sensitive learning) [20]. Với nhãn y_i ∈ {0, 1} (1 là lừa đảo) và xác suất dự đoán p_i = P(y_i = 1 | x_i), hàm mất mát entropy chéo nhị phân có trọng số lớp dương w là:
+
+L(θ) = − Σᵢ [ w · yᵢ · log(pᵢ) + (1 − yᵢ) · log(1 − pᵢ) ]
+
+Trọng số w được tính **chỉ từ tập huấn luyện** bằng tỷ lệ giữa số mẫu lớp âm và lớp dương:
+
+w = N₋ / N₊ = 1.418 / 336 = 4,2202
+
+Như vậy một mẫu lừa đảo bị dự đoán sai bị phạt nặng gấp khoảng 4,22 lần một mẫu bình thường bị dự đoán sai, và tổng trọng số của hai lớp trong quá trình huấn luyện được cân bằng (w · N₊ = N₋).
+
+**XGBoost** [7] dùng logistic loss ở trên với w = `scale_pos_weight` = 4,2202, cộng thêm số hạng điều chuẩn Ω(f) = γT + ½λ‖ω‖² của cây. Ở mỗi vòng boosting, đạo hàm bậc nhất và bậc hai của mẫu dương được nhân với w: g = w(p − y) và h = w·p(1 − p).
+
+**Random Forest** [8] và **Linear SVM** [9] dùng `class_weight='balanced'`, tức trọng số mỗi lớp c là w_c = n / (2·n_c) với n là số mẫu huấn luyện. Với dữ liệu này w₊ = 2,6101 và w₋ = 0,6185, tỷ lệ w₊ / w₋ = 4,22, trùng với XGBoost. Với SVM, trọng số lớp nhân vào tham số phạt của từng mẫu:
+
+min ½‖ω‖² + C · Σᵢ w_{yᵢ} · max(0, 1 − yᵢ · f(xᵢ))
+
+**Naive Bayes** [17] không có cơ chế bù lớp, chỉ có làm trơn Laplace (`alpha = 0,01`). Đây là một lý do hợp lý khiến mô hình này có Recall thấp nhất trong bốn mô hình (92,86%), tuy nhóm chưa kiểm chứng bằng thực nghiệm riêng.
+
+**Lưu ý về xác suất.** Vì huấn luyện với w > 1 nên xác suất p mà mô hình trả về tương ứng với tiên nghiệm cân bằng, không phản ánh tần suất lừa đảo ngoài thực tế (thấp hơn nhiều). Ngưỡng quyết định của ứng dụng là p ≥ 0,5 trên xác suất này, và p nên được hiểu là mức độ nguy cơ chứ không phải xác suất tuyệt đối.
+
+### 3.5.3. Lý do không dùng SMOTE
+SMOTE (Synthetic Minority Over-sampling Technique) [19] sinh thêm mẫu thiểu số bằng cách nội suy tuyến tính giữa một mẫu và một trong k láng giềng gần nhất của nó. Nhóm không chọn SMOTE vì các lý do thiết kế sau:
+
+1. **Mẫu sinh ra không phải là tin nhắn thật.** Vector TF-IDF 5.000 chiều là vector thưa; nội suy giữa hai tin nhắn tạo ra vector có trọng số từ phân số thuộc cả hai tin, không tương ứng với bất kỳ câu tiếng Việt nào.
+2. **Đặc trưng phụ rời rạc bị phá vỡ.** Nhiều trong 15 đặc trưng phụ là cờ 0/1 hoặc số đếm (ví dụ `has_otp_request`, `num_urls`). Nội suy cho giá trị như 0,37, không có nghĩa là "có" hay "không".
+3. **Láng giềng gần nhất kém tin cậy trong không gian thưa nhiều chiều.** SMOTE dựa vào khoảng cách; ở 5.015 chiều, khoảng cách giữa các điểm khó phân biệt, nên "láng giềng" có thể không cùng kiểu thao túng tâm lý (bốn nhóm bẫy khác nhau về nội dung).
+4. **Nguy cơ rò rỉ dữ liệu.** SMOTE chỉ được áp dụng trong từng fold huấn luyện; nếu sinh mẫu trước khi chia fold, mẫu tổng hợp sẽ lọt sang fold kiểm định và làm kết quả cross-validation bị thổi phồng. Trọng số lớp không có rủi ro này vì không thêm mẫu.
+5. **Cùng mục tiêu với ít can thiệp hơn.** Trọng số lớp cân bằng ảnh hưởng của hai lớp mà vẫn giữ nguyên 100% dữ liệu thật đã được thu thập và kiểm toán nguồn.
+
+**Giới hạn:** nhóm chưa chạy thực nghiệm so sánh SMOTE với trọng số lớp trên bộ dữ liệu này. Do đó đây là lập luận thiết kế, chưa phải kết quả đo được. Việc so sánh trực tiếp là một hướng mở rộng ở Chương 5.
+
+### 3.5.4. Chia dữ liệu và kiểm định chéo
+- Chia train/test phân tầng 80/20 (`stratify=label`, `random_state=42`), thực hiện **trước** mọi bước `fit` để TF-IDF và scaler không nhìn thấy tập kiểm thử (Zero-Leakage).
+- Siêu tham số của bốn mô hình được chọn bằng kiểm định chéo 5-fold trên tập huấn luyện (`RandomizedSearchCV` cho XGBoost và Random Forest, `GridSearchCV` cho Naive Bayes và SVM). Khi tham số `cv=5` được truyền cho bộ phân loại, scikit-learn [11] tự dùng `StratifiedKFold`, nên tỷ lệ lớp được giữ ở mỗi fold. Tập kiểm thử không tham gia bước chọn tham số.
 
 ---
 
@@ -442,18 +484,58 @@ Từ các kết quả thực nghiệm và phân tích hạn chế kỹ thuật, 
 
 # Tài liệu tham khảo
 
-[1] T. Chen và C. Guestrin, "XGBoost: A Scalable Tree Boosting System," trong *Proceedings KDD 2016*, San Francisco, CA, USA, 2016, tr. 785-794.
+*Ghi chú: các mục [1]–[15] đánh số trùng với slide thuyết trình; [16]–[20] là các nguồn bổ sung cho báo cáo. Nguồn có DOI đã được đối chiếu với Crossref; chi tiết ở `reports/research-cam-phase09-references-lifecycle.md`.*
 
-[2] J. Platt, "Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods," trong *Advances in Large Margin Classifiers*, MIT Press, 1999, tr. 61-74.
+**Nguồn dữ liệu**
 
-[3] D. Q. Nguyen và cộng sự, "PhoBERT: Pre-trained Language Models for Vietnamese," trong *Findings of EMNLP 2020*, Punta Cana, Dominican Republic, 2020.
+[1] N. T. T. Tran và cộng sự, "Vietnamese SMS Dataset with Quality Assurance," *IEEE Access*, 2026 (theo trích dẫn của tác giả bộ dữ liệu; chưa có tập, số, DOI). [Trực tuyến]. Available: https://github.com/trannguyenthaituan251209/vietnamese_sms_dataset
 
-[4] [TODO Sơn: Thêm citation cho Vietnamese SMS Dataset IEEE Access 2026]
+[2] Các nguồn bổ sung của tập lừa đảo: GitHub `ghitatruongle/lachancuocgoi`, `duynguyenhoang22/SMS_Phishing_Detection`, `duynguyenhoang22/ViSmish_Detection`; báo chí và VTV24 (13 mẫu). Đường dẫn từng mẫu nằm trong cột `source_url` của `data/raw/dataset.csv`.
 
-[5] F. Pedregosa và cộng sự, "Scikit-learn: Machine Learning in Python," *Journal of Machine Learning Research*, tập 12, tr. 2825-2830, 2011.
+**Tiền xử lý ngôn ngữ**
 
-[6] S. M. Lundberg và S.-I. Lee, "A Unified Approach to Interpreting Model Predictions," trong *Proceedings NeurIPS 2017*, Long Beach, CA, USA, 2017.
+[3] Unicode Consortium, "UAX #15: Unicode Normalization Forms," Unicode 18.0.0, 12/8/2026. [Trực tuyến]. Available: https://unicode.org/reports/tr15/
 
----
+[4] V.-T. Tran, "PyVi: Python Vietnamese Toolkit," phiên bản 0.1.1. [Trực tuyến]. Available: https://github.com/trungtv/pyvi
 
-*Báo cáo được tạo theo template `uit:academic-report` | Branch: `feat/phase-09-report-template`*
+[5] Underthesea NLP, "underthesea: Vietnamese NLP Toolkit," phiên bản 9.5.0. [Trực tuyến]. Available: https://github.com/undertheseanlp/underthesea
+
+[6] G. Salton và C. Buckley, "Term-weighting approaches in automatic text retrieval," *Information Processing & Management*, tập 24, số 5, tr. 513-523, 1988, doi: 10.1016/0306-4573(88)90021-0.
+
+**Thuật toán học máy**
+
+[7] T. Chen và C. Guestrin, "XGBoost: A scalable tree boosting system," trong *Proc. 22nd ACM SIGKDD Int. Conf. Knowledge Discovery and Data Mining (KDD)*, San Francisco, CA, USA, 2016, tr. 785-794, doi: 10.1145/2939672.2939785.
+
+[8] L. Breiman, "Random forests," *Machine Learning*, tập 45, số 1, tr. 5-32, 2001, doi: 10.1023/A:1010933404324.
+
+[9] C. Cortes và V. Vapnik, "Support-vector networks," *Machine Learning*, tập 20, số 3, tr. 273-297, 1995, doi: 10.1007/BF00994018.
+
+[10] J. C. Platt, "Probabilities for SV machines," trong *Advances in Large-Margin Classifiers*, A. J. Smola, P. L. Bartlett, B. Schölkopf và D. Schuurmans, Biên tập, Cambridge, MA, USA: MIT Press, 2000, tr. 61-74, doi: 10.7551/mitpress/1113.003.0008.
+
+[11] F. Pedregosa và cộng sự, "Scikit-learn: Machine learning in Python," *Journal of Machine Learning Research*, tập 12, tr. 2825-2830, 2011.
+
+[16] R.-E. Fan, K.-W. Chang, C.-J. Hsieh, X.-R. Wang và C.-J. Lin, "LIBLINEAR: A library for large linear classification," *Journal of Machine Learning Research*, tập 9, tr. 1871-1874, 2008.
+
+[17] A. McCallum và K. Nigam, "A comparison of event models for naive Bayes text classification," trong *AAAI-98 Workshop on Learning for Text Categorization*, Tech. Rep. WS-98-05, 1998.
+
+**Mất cân bằng lớp**
+
+[19] N. V. Chawla, K. W. Bowyer, L. O. Hall và W. P. Kegelmeyer, "SMOTE: Synthetic minority over-sampling technique," *Journal of Artificial Intelligence Research*, tập 16, tr. 321-357, 2002, doi: 10.1613/jair.953.
+
+[20] H. He và E. A. Garcia, "Learning from imbalanced data," *IEEE Transactions on Knowledge and Data Engineering*, tập 21, số 9, tr. 1263-1284, 2009, doi: 10.1109/TKDE.2008.239.
+
+**Giải thích mô hình (XAI)**
+
+[12] S. M. Lundberg và S.-I. Lee, "A unified approach to interpreting model predictions," trong *Advances in Neural Information Processing Systems 30 (NeurIPS)*, Long Beach, CA, USA, 2017.
+
+[13] S. M. Lundberg và cộng sự, "From local explanations to global understanding with explainable AI for trees," *Nature Machine Intelligence*, tập 2, số 1, tr. 56-67, 2020, doi: 10.1038/s42256-019-0138-9.
+
+**Ứng dụng web và trợ năng**
+
+[14] W3C, "Web Content Accessibility Guidelines (WCAG) 2.1," W3C Recommendation, 5/6/2018 (cập nhật 6/5/2025). [Trực tuyến]. Available: https://www.w3.org/TR/WCAG21/
+
+[18] Streamlit Inc., "Streamlit," phiên bản 1.63.0. [Trực tuyến]. Available: https://streamlit.io
+
+**Hướng phát triển**
+
+[15] D. Q. Nguyen và A. T. Nguyen, "PhoBERT: Pre-trained language models for Vietnamese," trong *Findings of the Association for Computational Linguistics: EMNLP 2020*, 2020, tr. 1037-1042, doi: 10.18653/v1/2020.findings-emnlp.92.
