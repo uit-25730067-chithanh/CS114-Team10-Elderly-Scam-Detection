@@ -1,0 +1,152 @@
+{
+  "experiment_1_preprocessing_ablation": {
+    "title": "Thực nghiệm đối chứng 1: Vai trò của Tiền xử lý NLP",
+    "models": [
+      "XGBoost",
+      "Naive Bayes"
+    ],
+    "records": [
+      {
+        "model": "XGBoost (Raw Text)",
+        "accuracy": 0.9772209567198178,
+        "precision": 0.8936170212765957,
+        "recall": 1.0,
+        "f1": 0.9438202247191011,
+        "roc_auc": 0.9982226693494299,
+        "brier_score": 0.015865545719861984,
+        "true_negatives": 345,
+        "false_positives": 10,
+        "false_negatives": 0,
+        "true_positives": 84
+      },
+      {
+        "model": "XGBoost (Preprocessed)",
+        "accuracy": 0.9749430523917996,
+        "precision": 0.8924731182795699,
+        "recall": 0.9880952380952381,
+        "f1": 0.9378531073446328,
+        "roc_auc": 0.9979208584842388,
+        "brier_score": 0.017950251698493958,
+        "true_negatives": 345,
+        "false_positives": 10,
+        "false_negatives": 1,
+        "true_positives": 83
+      },
+      {
+        "model": "Naive Bayes (Raw Text)",
+        "accuracy": 0.9476082004555809,
+        "precision": 0.8080808080808081,
+        "recall": 0.9523809523809523,
+        "f1": 0.8743169398907104,
+        "roc_auc": 0.9921529175050302,
+        "brier_score": 0.03860462394691289,
+        "true_negatives": 336,
+        "false_positives": 19,
+        "false_negatives": 4,
+        "true_positives": 80
+      },
+      {
+        "model": "Naive Bayes (Preprocessed)",
+        "accuracy": 0.9544419134396356,
+        "precision": 0.8478260869565217,
+        "recall": 0.9285714285714286,
+        "f1": 0.8863636363636364,
+        "roc_auc": 0.9911468812877264,
+        "brier_score": 0.03422142681425785,
+        "true_negatives": 341,
+        "false_positives": 14,
+        "false_negatives": 6,
+        "true_positives": 78
+      }
+    ],
+    "markdown_table": "| model                      | accuracy   | precision   | recall   |     f1 |   roc_auc |   false_negatives |   false_positives |\n|:---------------------------|:-----------|:------------|:---------|-------:|----------:|------------------:|------------------:|\n| XGBoost (Raw Text)         | 97.72%     | 89.36%      | 100.00%  | 0.9438 |    0.9982 |                 0 |                10 |\n| XGBoost (Preprocessed)     | 97.49%     | 89.25%      | 98.81%   | 0.9379 |    0.9979 |                 1 |                10 |\n| Naive Bayes (Raw Text)     | 94.76%     | 80.81%      | 95.24%   | 0.8743 |    0.9922 |                 4 |                19 |\n| Naive Bayes (Preprocessed) | 95.44%     | 84.78%      | 92.86%   | 0.8864 |    0.9911 |                 6 |                14 |"
+  },
+  "experiment_2_feature_space_ablation": {
+    "title": "Thực nghiệm đối chứng 2: Vai trò của 15 Đặc trưng tâm lý",
+    "models": [
+      "XGBoost",
+      "SVM Linear"
+    ],
+    "records": [
+      {
+        "model": "XGBoost — TF-IDF Only (5,000)",
+        "accuracy": 0.9749430523917996,
+        "precision": 0.8924731182795699,
+        "recall": 0.9880952380952381,
+        "f1": 0.9378531073446328,
+        "roc_auc": 0.9979208584842388,
+        "brier_score": 0.017950251698493958,
+        "true_negatives": 345,
+        "false_positives": 10,
+        "false_negatives": 1,
+        "true_positives": 83
+      },
+      {
+        "model": "SVM Linear — TF-IDF Only (5,000)",
+        "accuracy": 0.9886104783599089,
+        "precision": 0.9876543209876543,
+        "recall": 0.9523809523809523,
+        "f1": 0.9696969696969697,
+        "roc_auc": 0.9985580147551978,
+        "brier_score": 0.011848640891109843,
+        "true_negatives": 354,
+        "false_positives": 1,
+        "false_negatives": 4,
+        "true_positives": 80
+      },
+      {
+        "model": "XGBoost — Aux Only (15)",
+        "accuracy": 0.9476082004555809,
+        "precision": 0.8279569892473119,
+        "recall": 0.9166666666666666,
+        "f1": 0.8700564971751412,
+        "roc_auc": 0.9767270288397049,
+        "brier_score": 0.04128492996096611,
+        "true_negatives": 339,
+        "false_positives": 16,
+        "false_negatives": 7,
+        "true_positives": 77
+      },
+      {
+        "model": "SVM Linear — Aux Only (15)",
+        "accuracy": 0.908883826879271,
+        "precision": 0.7619047619047619,
+        "recall": 0.7619047619047619,
+        "f1": 0.7619047619047619,
+        "roc_auc": 0.9449027498323274,
+        "brier_score": 0.06906831717822787,
+        "true_negatives": 335,
+        "false_positives": 20,
+        "false_negatives": 20,
+        "true_positives": 64
+      },
+      {
+        "model": "XGBoost — Combined (5,015)",
+        "accuracy": 0.9817767653758542,
+        "precision": 0.9318181818181818,
+        "recall": 0.9761904761904762,
+        "f1": 0.9534883720930233,
+        "roc_auc": 0.9983903420523138,
+        "brier_score": 0.014975466765463352,
+        "true_negatives": 349,
+        "false_positives": 6,
+        "false_negatives": 2,
+        "true_positives": 82
+      },
+      {
+        "model": "SVM Linear — Combined (5,015)",
+        "accuracy": 0.979498861047836,
+        "precision": 0.9310344827586207,
+        "recall": 0.9642857142857143,
+        "f1": 0.9473684210526315,
+        "roc_auc": 0.9986250838363514,
+        "brier_score": 0.01263488231003013,
+        "true_negatives": 349,
+        "false_positives": 6,
+        "false_negatives": 3,
+        "true_positives": 81
+      }
+    ],
+    "markdown_table": "| model                            | accuracy   | precision   | recall   |     f1 |   roc_auc |   false_negatives |   false_positives |\n|:---------------------------------|:-----------|:------------|:---------|-------:|----------:|------------------:|------------------:|\n| XGBoost — TF-IDF Only (5,000)    | 97.49%     | 89.25%      | 98.81%   | 0.9379 |    0.9979 |                 1 |                10 |\n| SVM Linear — TF-IDF Only (5,000) | 98.86%     | 98.77%      | 95.24%   | 0.9697 |    0.9986 |                 4 |                 1 |\n| XGBoost — Aux Only (15)          | 94.76%     | 82.80%      | 91.67%   | 0.8701 |    0.9767 |                 7 |                16 |\n| SVM Linear — Aux Only (15)       | 90.89%     | 76.19%      | 76.19%   | 0.7619 |    0.9449 |                20 |                20 |\n| XGBoost — Combined (5,015)       | 98.18%     | 93.18%      | 97.62%   | 0.9535 |    0.9984 |                 2 |                 6 |\n| SVM Linear — Combined (5,015)    | 97.95%     | 93.10%      | 96.43%   | 0.9474 |    0.9986 |                 3 |                 6 |"
+  }
+}
