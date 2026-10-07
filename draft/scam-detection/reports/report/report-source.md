@@ -119,37 +119,58 @@ Nhóm chọn hướng Machine Learning cổ điển vì:
 
 ## 3.1. Pipeline Tiền xử lý Tiếng Việt
 
-Nhóm xây dựng pipeline 5 bước:
+Tin nhắn thô được xử lý theo hai nhánh song song (xem Hình 3.1). Điểm cần lưu ý về thứ tự: **15 đặc trưng phụ được trích từ văn bản gốc trước khi làm sạch**, vì các bước làm sạch xóa mất URL, số điện thoại, chữ in hoa và dấu câu, đúng là những tín hiệu mà các đặc trưng này cần đếm. Nhánh văn bản gồm năm bước theo thứ tự dưới đây.
 
 ```
-Văn bản thô → Unicode NFC → 160 Teencode → PyVi Tokenizer
-             → TF-IDF (5.000 từ) → 15 Auxiliary Features
-             → Feature Vector X (5.015 chiều)
+Văn bản thô ─┬─► [Nhánh A] 15 đặc trưng phụ (regex trên văn bản gốc) ─► StandardScaler ─┐
+             │                                                                          ├─► X ∈ R^5015
+             └─► [Nhánh B] Bước 1 → 2 → 3 → 4 → 5 ─► TF-IDF 5.000 chiều ──────────────┘
 ```
 
-### Bước 1: Chuẩn hóa Unicode NFC
-Đảm bảo đồng nhất encoding tiếng Việt, loại bỏ ký tự đặc biệt không hợp lệ.
+### Bước 1: Gỡ ký tự thay thế (leet-speak) và tách thẻ ẩn danh
+Kẻ lừa đảo thường thay chữ bằng số hoặc ký tự lạ để né bộ lọc (ví dụ "th0ng bao", "kh0a the"). Nhóm dùng 22 mẫu regex để khôi phục về chữ gốc. Các thẻ ẩn danh dính liền chữ (ví dụ `[ĐƯỜNG_DẪN]de`) được tách bằng khoảng trắng.
 
-### Bước 2: Chuẩn hóa Teencode (160 pattern)
-Chuyển đổi 160 từ viết tắt phổ biến (vd: "kq" → "kết quả", "đc" → "được").
+### Bước 2: Chuẩn hóa Unicode NFC và vị trí dấu thanh
+Chuyển văn bản về dạng Unicode NFC, chuẩn hóa vị trí dấu thanh theo quy tắc đặt dấu hiện hành (thư viện `underthesea`), sau đó đưa về chữ thường. Bước này bảo đảm cùng một từ không bị tính thành nhiều dạng khác nhau chỉ vì cách gõ dấu hay bảng mã.
 
-### Bước 3: Tách từ PyVi
-Sử dụng thư viện PyVi cho word segmentation tiếng Việt.
+### Bước 3: Chuẩn hóa thực thể, teencode và ký tự nhiễu
+- Xóa URL, số điện thoại và địa chỉ email còn nguyên dạng trong văn bản.
+- Chuyển các thẻ ẩn danh của bộ dữ liệu sang token ngữ nghĩa: `[ĐƯỜNG_DẪN]` thành `link_truy_cap`, `[SỐ_ĐIỆN_THOẠI]` thành `so_dien_thoai`, `[MONEY]` hoặc `[SỐ_TIỀN]` thành `so_tien`, `[MÃ_OTP]` thành `ma_otp`, `[THƯƠNG_HIỆU]` thành `thuong_hieu`.
+- Mở rộng 160 từ viết tắt và teencode do nhóm tự xây dựng (ví dụ "kq" thành "kết quả", "đc" thành "được").
+- Loại ký tự đặc biệt nhưng giữ nguyên chữ cái có dấu tiếng Việt, rồi gộp khoảng trắng.
 
-### Bước 4: TF-IDF Vectorization
-- `max_features=5000`, `max_df=0.85`, `min_df=2`
-- `ngram_range=(1,2)`: đơn từ và cụm 2 từ
-- **Quan trọng**: `fit()` chỉ trên X_train (Zero-Leakage)
+### Bước 4: Tách từ bằng PyVi
+Tiếng Việt viết có khoảng trắng giữa các âm tiết, nên một từ ghép như "tài khoản" sẽ bị tách thành hai đơn vị nếu không tách từ. Nhóm dùng PyVi để ghép thành `tài_khoản`. Với tin nhắn viết không dấu (chiếm khoảng 55% tin bình thường trong bộ dữ liệu), một danh sách các cụm không dấu thường gặp được ghép trước khi chạy PyVi.
 
-### Bước 5: 15 Auxiliary Features
-<!-- TODO Sơn: Liệt kê 15 auxiliary features từ feature_engineering.py -->
+### Bước 5: Lọc từ dừng có bảo vệ từ khóa miền
+Loại 83 từ dừng ngữ pháp (liên từ, giới từ, từ nối). Danh sách 44 từ khóa miền (ví dụ `công_an`, `khẩn`, `chuyển_khoản`, `otp`, `viện_phí`) được bảo vệ, không bao giờ bị loại. Nếu kết quả rỗng, hệ thống giữ lại văn bản đã làm sạch ở bước 3 để không tạo ra dòng trống.
 
-| Feature | Mô tả | Ý nghĩa |
-|---------|-------|---------|
-| urgency_score | Tổng hợp 8 tín hiệu khẩn cấp | Chỉ số mức độ thúc ép |
-| exclamation_count | Số dấu "!" | Thường cao trong tin lừa đảo |
-| caps_ratio | Tỷ lệ chữ hoa | Nhấn mạnh bất thường |
-| [TODO: thêm 12 features còn lại] | | |
+### Vector hóa TF-IDF
+- Cấu hình: `max_features=5000`, `ngram_range=(1,2)` (đơn từ và cụm hai từ), `min_df=2`, `max_df=0.95`, `sublinear_tf=True`.
+- **Quan trọng**: `fit()` chỉ chạy trên tập huấn luyện, sau đó `transform` tập kiểm thử (Zero-Leakage).
+
+### 15 đặc trưng phụ (Auxiliary Features)
+Các đặc trưng này được trích bằng regex trên văn bản gốc, rồi chuẩn hóa bằng `StandardScaler` (fit chỉ trên tập huấn luyện). Cột trung bình tính trên toàn bộ 2.193 mẫu của bộ dữ liệu, chỉ để mô tả.
+
+| STT | Đặc trưng | Kiểu | Mô tả | TB lừa đảo | TB bình thường |
+|:---:|-----------|:----:|-------|:---------:|:--------------:|
+| 1 | `num_urls` | Đếm | Số URL hoặc thẻ `[ĐƯỜNG_DẪN]` | 0,40 | 0,46 |
+| 2 | `num_phone_numbers` | Đếm | Số điện thoại hoặc thẻ `[SỐ_ĐIỆN_THOẠI]`, `[HOTLINE]` | 0,03 | 0,00 |
+| 3 | `num_money_mentions` | Đếm | Số lần nhắc số tiền (triệu, tỷ, nghìn, đồng, `[MONEY]`...) | 0,24 | 1,40 |
+| 4 | `has_urgent_words` | Cờ 0/1 | Có từ thúc ép (gấp, khẩn, phong tỏa, khóa tài khoản, hết hạn...) | 0,19 | 0,04 |
+| 5 | `num_authority_words` | Đếm | Số từ chỉ cơ quan quyền lực (công an, viện kiểm sát, VNeID...) | 0,13 | 0,04 |
+| 6 | `has_emergency_words` | Cờ 0/1 | Có từ tình huống khẩn cấp gia đình (cấp cứu, tai nạn, viện phí...) | 0,10 | 0,00 |
+| 7 | `has_gift_words` | Cờ 0/1 | Có từ dụ quà tặng (trúng thưởng, tri ân, miễn phí, quay số...) | 0,09 | 0,11 |
+| 8 | `has_otp_request` | Cờ 0/1 | Có cụm yêu cầu mã OTP, mật khẩu, mã xác thực | 0,01 | 0,04 |
+| 9 | `has_leet_speak` | Cờ 0/1 | Có dấu hiệu thay chữ bằng số (th0ng, kh0a...) | 0,03 | 0,00 |
+| 10 | `is_unaccented` | Cờ 0/1 | Toàn bộ tin nhắn không có dấu tiếng Việt | 0,02 | 0,55 |
+| 11 | `text_length` | Số | Số ký tự của văn bản gốc | 140,8 | 232,9 |
+| 12 | `num_words` | Số | Số từ (tách theo khoảng trắng) | 28,7 | 44,3 |
+| 13 | `num_exclamation` | Đếm | Số dấu chấm than | 0,12 | 0,30 |
+| 14 | `num_question` | Đếm | Số dấu chấm hỏi | 0,04 | 0,02 |
+| 15 | `num_uppercase_words` | Đếm | Số từ viết hoa toàn bộ (từ hai ký tự trở lên) | 2,34 | 8,05 |
+
+Nhận xét: các đặc trưng 2, 4, 5, 6, 9 và 14 có giá trị trung bình cao hơn ở tin lừa đảo như kỳ vọng, còn số lần nhắc tiền, số từ in hoa, độ dài và tính không dấu lại cao hơn ở tin bình thường. Riêng đặc trưng số lần nhắc tiền, nguyên nhân nằm ở bộ dữ liệu: thẻ `[MONEY]` xuất hiện trong 1.236 tin, trong đó 1.221 tin (khoảng 99%) thuộc lớp bình thường. Nhóm chưa phân tích nguyên nhân của các đặc trưng còn lại. Vì vậy, giá trị của 15 đặc trưng được đánh giá bằng thực nghiệm đối chứng ở Chương 4 chứ không dựa vào trực giác.
 
 ## 3.2. Feature Engineering tổng thể
 
@@ -163,13 +184,14 @@ Vector đặc trưng cuối cùng: **X ∈ R^{5015}**
 ### Mô hình 1: Naive Bayes (Baseline)
 <!-- Phase 04 — Cẩm -->
 - **Loại**: MultinomialNB với Laplace smoothing
-- **Tham số tốt nhất**: `alpha=0.5`
+- **Tham số tốt nhất**: `alpha=0.01` (GridSearchCV 5-fold)
+- **Đặc trưng đầu vào**: chỉ 5.000 chiều TF-IDF (không âm)
 - **Lý do chọn**: baseline nhanh, interpretable, phù hợp TF-IDF
 
 ### Mô hình 2: Random Forest
 <!-- Phase 05 — Sơn -->
 - **Loại**: sklearn RandomForestClassifier
-- **Tham số**: `n_estimators=200, max_depth=50, min_samples_split=2`
+- **Tham số**: `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2, class_weight="balanced"`
 - **Lý do chọn**: ensemble robustness, ít overfit
 
 ### Mô hình 3: XGBoost
@@ -186,33 +208,18 @@ Vector đặc trưng cuối cùng: **X ∈ R^{5015}**
 
 ## 3.4. Kiến trúc tổng thể hệ thống
 
-```
-[Input: Tin nhắn thô]
-       ↓
-[Text Preprocessing Pipeline]
-  • Unicode NFC normalization
-  • 160 Teencode expansion
-  • PyVi word segmentation
-       ↓
-[Feature Engineering]
-  • TF-IDF 5,000 features (fit on train only)
-  • 15 Auxiliary features
-  → X ∈ R^{5,015}
-       ↓
-[Model Ensemble]
-  • Naive Bayes (baseline)
-  • Random Forest
-  • XGBoost ← Best Overall
-  • SVM Linear
-       ↓
-[Prediction + Confidence Score]
-       ↓
-[XAI: SHAP Beeswarm]
-  • Top-20 trigger keywords
-  • Per-prediction explanation
-       ↓
-[Output: Cảnh báo + Mức độ nguy cơ]
-```
+Hình 3.1 mô tả luồng dữ liệu từ đầu vào đến đầu ra của hệ thống. Tin nhắn thô được tách thành hai nhánh song song:
+
+- **Nhánh A (tín hiệu hành vi):** 15 đặc trưng phụ được trích bằng regex trực tiếp từ văn bản **gốc**, trước khi làm sạch, để không làm mất các dấu hiệu như URL, số điện thoại, chữ in hoa hay dấu chấm than. Sau đó chuẩn hóa bằng `StandardScaler`.
+- **Nhánh B (nội dung văn bản):** làm sạch (gỡ leet-speak, chuẩn hóa Unicode NFC và vị trí dấu, đưa về chữ thường, chuyển thẻ ẩn danh thành token ngữ nghĩa, 160 quy tắc teencode, lọc ký tự), tách từ PyVi, lọc stopwords có bảo vệ từ khóa miền, rồi vector hóa TF-IDF 5.000 chiều (n-gram 1–2).
+
+Hai nhánh được ghép thành vector X ∈ ℝ⁵⁰¹⁵ trước khi đưa vào bộ phân loại. Vectorizer và scaler chỉ được `fit` trên tập huấn luyện (Zero-Leakage). Naive Bayes là ngoại lệ: mô hình này chỉ dùng 5.000 chiều TF-IDF vì không nhận được giá trị âm của đặc trưng đã chuẩn hóa.
+
+![Sơ đồ luồng Đầu vào – Đầu ra của hệ thống](../figures/system_io_flowchart.png)
+
+*Hình 3.1. Sơ đồ luồng Đầu vào – Đầu ra của hệ thống phát hiện tin nhắn lừa đảo.*
+
+Bốn mô hình (Naive Bayes, Random Forest, XGBoost, Linear SVM) được huấn luyện độc lập trên cùng một tập dữ liệu và là các **phương án thay thế** của nhau, không phải một hệ thống ensemble. Ứng dụng demo cho phép chọn một mô hình, mặc định là XGBoost, và trả về xác suất p = P(lừa đảo). Tin nhắn được gắn nhãn lừa đảo khi p ≥ 0,5. Kết quả hiển thị gồm thang mức độ nguy cơ, các từ khóa đáng ngờ được đánh dấu theo bộ từ khóa thao túng tâm lý, và khuyến nghị an toàn cho người cao tuổi. Phân tích SHAP (mục 4.3) là giải thích toàn cục thực hiện offline trên tập kiểm thử, không chạy theo từng tin nhắn trong ứng dụng.
 
 ---
 
