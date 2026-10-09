@@ -44,7 +44,7 @@ Nhánh `feat/phase-09-defense-feedback-enhancements` được tạo ra để **c
 | Phase | Tên giai đoạn | Trọng tâm | File chi tiết | Trạng thái |
 |:---:|---|---|---|:---:|
 | **01** | **Ablation Experiments** | Viết script đo lường thực tế 2 bảng đối chứng trên tập Test 439 mẫu | [phase-01-ablation-experiments.md](./phase-01-ablation-experiments.md) | `passed` ✅ |
-| **02** | **Report Markdown Enrichment** | Bổ sung số liệu thực nghiệm, công thức toán và phân định bài toán vào `report-source.md` | [phase-02-report-markdown-enrichment.md](./phase-02-report-markdown-enrichment.md) | `ready` |
+| **02** | **Report Markdown Enrichment** | Bổ sung số liệu thực nghiệm, công thức toán và phân định bài toán vào `report-source.md` | [phase-02-report-markdown-enrichment.md](./phase-02-report-markdown-enrichment.md) | `passed` ✅ |
 | **03** | **DOCX Compilation & Styling** | Biên dịch sang `report.docx` chuẩn UIT (Times New Roman 13pt, bìa hoa văn, TOC) | [phase-03-docx-compilation-formatting.md](./phase-03-docx-compilation-formatting.md) | `ready` |
 | **04** | **Verification & Parity** | Chạy `verify_final.py`, kiểm toán PR, đồng bộ tài liệu chuẩn bị nộp bài (Phase 10) | [phase-04-verification-parity.md](./phase-04-verification-parity.md) | `ready` |
 
