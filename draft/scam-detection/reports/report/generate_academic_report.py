@@ -29,11 +29,94 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
 
-PROJECT_ROOT = Path(__file__).resolve().parents[4]
+def find_project_root(current: Path) -> Path:
+    for parent in current.parents:
+        if (parent / ".git").exists() or (parent / "draft/scam-detection").exists():
+            return parent
+    return current.parents[4] if len(current.parents) > 4 else current.parent
+
+PROJECT_ROOT = find_project_root(Path(__file__).resolve())
 FIGURES_DIR = PROJECT_ROOT / "draft/scam-detection/reports/figures"
 REPORT_DIR = PROJECT_ROOT / "draft/scam-detection/reports/report"
+ABLATION_JSON = PROJECT_ROOT / "draft/scam-detection/reports/ablation_studies.json"
 DOCS_DIR = PROJECT_ROOT / "docs"
 COVER_IMG = DOCS_DIR / "cover.png"
+
+def load_ablation_tables(json_path: Path):
+    """Load ablation study tables dynamically from JSON artifact adhering to SSOT."""
+    if not json_path.exists():
+        prep_rows = [
+            ["Naive Bayes", "Chưa xử lý (Raw)", "94.76%", "80.81%", "95.24%", "0.8743", "0.9922", "19", "4"],
+            ["Naive Bayes", "Tiền xử lý chuẩn", "95.44%", "84.78%", "92.86%", "0.8864", "0.9911", "14", "6"],
+            ["XGBoost", "Chưa xử lý (Raw)", "97.72%", "89.36%", "100.00%", "0.9438", "0.9982", "10", "0"],
+            ["XGBoost", "Tiền xử lý chuẩn", "97.49%", "89.25%", "98.81%", "0.9379", "0.9979", "10", "1"],
+        ]
+        feat_rows = [
+            ["Chỉ 15 Đặc trưng phụ (Aux Only)", "XGBoost", "94.76%", "82.80%", "91.67%", "0.8701", "0.9767", "16", "7"],
+            ["Chỉ 15 Đặc trưng phụ (Aux Only)", "SVM Linear", "90.89%", "76.19%", "76.19%", "0.7619", "0.9449", "20", "20"],
+            ["Chỉ 5.000 TF-IDF (TF-IDF Only)", "XGBoost", "97.49%", "89.25%", "98.81%", "0.9379", "0.9979", "10", "1"],
+            ["Chỉ 5.000 TF-IDF (TF-IDF Only)", "SVM Linear", "98.86%", "98.77%", "95.24%", "0.9697", "0.9986", "1", "4"],
+            ["Kết hợp cả hai (5.015 chiều) ⭐", "XGBoost", "98.18%", "93.18%", "97.62%", "0.9535", "0.9984", "6", "2"],
+            ["Kết hợp cả hai (5.015 chiều)", "SVM Linear", "97.95%", "93.10%", "96.43%", "0.9474", "0.9986", "6", "3"],
+        ]
+        return prep_rows, feat_rows
+
+    import json
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # Experiment 1
+    exp1_records = data.get("experiment_1_preprocessing_ablation", {}).get("records", [])
+    prep_rows = []
+    # Guarantee consistent order: Naive Bayes first, then XGBoost
+    rec_by_name = {r.get("model", ""): r for r in exp1_records}
+    exp1_order = [
+        ("Naive Bayes", "Chưa xử lý (Raw)", "Naive Bayes (Raw Text)"),
+        ("Naive Bayes", "Tiền xử lý chuẩn", "Naive Bayes (Preprocessed)"),
+        ("XGBoost", "Chưa xử lý (Raw)", "XGBoost (Raw Text)"),
+        ("XGBoost", "Tiền xử lý chuẩn", "XGBoost (Preprocessed)"),
+    ]
+    for model_label, prep_label, key in exp1_order:
+        r = rec_by_name.get(key, {})
+        if r:
+            prep_rows.append([
+                model_label, prep_label,
+                f"{r.get('accuracy', 0)*100:.2f}%",
+                f"{r.get('precision', 0)*100:.2f}%",
+                f"{r.get('recall', 0)*100:.2f}%",
+                f"{r.get('f1', 0):.4f}",
+                f"{r.get('roc_auc', 0):.4f}",
+                str(r.get("false_positives", 0)),
+                str(r.get("false_negatives", 0)),
+            ])
+
+    # Experiment 2
+    exp2_records = data.get("experiment_2_feature_space_ablation", {}).get("records", [])
+    feat_rows = []
+    rec2_by_name = {r.get("model", ""): r for r in exp2_records}
+    exp2_order = [
+        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "XGBoost", "XGBoost — Aux Only (15)"),
+        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "SVM Linear", "SVM Linear — Aux Only (15)"),
+        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "XGBoost", "XGBoost — TF-IDF Only (5,000)"),
+        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "SVM Linear", "SVM Linear — TF-IDF Only (5,000)"),
+        ("Kết hợp cả hai (5.015 chiều) ⭐", "XGBoost", "XGBoost — Combined (5,015)"),
+        ("Kết hợp cả hai (5.015 chiều)", "SVM Linear", "SVM Linear — Combined (5,015)"),
+    ]
+    for cfg_label, model_label, key in exp2_order:
+        r = rec2_by_name.get(key, {})
+        if r:
+            feat_rows.append([
+                cfg_label, model_label,
+                f"{r.get('accuracy', 0)*100:.2f}%",
+                f"{r.get('precision', 0)*100:.2f}%",
+                f"{r.get('recall', 0)*100:.2f}%",
+                f"{r.get('f1', 0):.4f}",
+                f"{r.get('roc_auc', 0):.4f}",
+                str(r.get("false_positives", 0)),
+                str(r.get("false_negatives", 0)),
+            ])
+
+    return prep_rows, feat_rows
 
 NAVY_COLOR = RGBColor(27, 54, 93)     # #1B365D - UIT Navy
 GOLD_COLOR = RGBColor(197, 160, 89)   # #C5A059 - UIT Gold Accent
@@ -747,6 +830,7 @@ def generate_report():
 
     add_image_with_caption(doc, FIGURES_DIR / "shap_summary.png", 
                            "Hình 4.8: Biểu đồ SHAP Beeswarm của mô hình XGBoost — Đóng góp vi mô của từng giá trị đặc trưng vào xác suất lừa đảo", width_inches=5.6)
+    add_body_p(doc, "Bảng 4.3 tổng hợp chi tiết Top-20 từ khóa kích hoạt bẫy tâm lý có giá trị đóng góp SHAP lớn nhất trên mô hình XGBoost và ý nghĩa thực tế phát hiện lừa đảo:")
 
     top_keywords_table = [
         ["1. urgency_score", "Rất cao (1.0000)", "Đặc trưng phụ: Hệ số tổng hợp các từ thúc giục thời gian và dấu cảm thán."],
@@ -785,12 +869,7 @@ def generate_report():
     add_heading_3(doc, "4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)")
     add_body_p(doc, "Mục tiêu: Đo lường chính xác hiệu quả của pipeline tiền xử lý 5 bước so với việc đưa trực tiếp văn bản thô (Raw Text) vào mô hình (Bảng 4.4 và Hình 4.10):")
 
-    ablation_prep_table = [
-        ["Naive Bayes", "Chưa xử lý (Raw)", "94.76%", "80.81%", "95.24%", "0.8743", "0.9922", "19", "4"],
-        ["Naive Bayes", "Tiền xử lý chuẩn", "95.44%", "84.78%", "92.86%", "0.8864", "0.9911", "14", "6"],
-        ["XGBoost", "Chưa xử lý (Raw)", "97.72%", "89.36%", "100.00%", "0.9438", "0.9982", "10", "0"],
-        ["XGBoost", "Tiền xử lý chuẩn", "97.49%", "89.25%", "98.81%", "0.9379", "0.9979", "10", "1"],
-    ]
+    ablation_prep_table, ablation_feat_table = load_ablation_tables(ABLATION_JSON)
     create_table(doc, ["MÔ HÌNH", "TIỀN XỬ LÝ", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_prep_table, col_widths=[1.1, 1.2, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5])
 
     add_image_with_caption(doc, FIGURES_DIR / "ablation_preprocessing_comparison.png", 
@@ -800,14 +879,6 @@ def generate_report():
     add_heading_3(doc, "4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)")
     add_body_p(doc, "Mục tiêu: Đánh giá giá trị đóng góp và tính độc lập của 15 đặc trưng hành vi tâm lý khi kết hợp cùng túi từ TF-IDF 5.000 chiều trên 3 cấu hình: Chỉ 15 Đặc trưng phụ (Aux Only), Chỉ 5.000 TF-IDF (TF-IDF Only) và Kết hợp cả hai (5.015 chiều) (Bảng 4.5 và Hình 4.11):")
 
-    ablation_feat_table = [
-        ["Chỉ 15 Đặc trưng phụ (Aux Only)", "XGBoost", "94.76%", "82.80%", "91.67%", "0.8701", "0.9767", "16", "7"],
-        ["Chỉ 15 Đặc trưng phụ (Aux Only)", "SVM Linear", "90.89%", "76.19%", "76.19%", "0.7619", "0.9449", "20", "20"],
-        ["Chỉ 5.000 TF-IDF (TF-IDF Only)", "XGBoost", "97.49%", "89.25%", "98.81%", "0.9379", "0.9979", "10", "1"],
-        ["Chỉ 5.000 TF-IDF (TF-IDF Only)", "SVM Linear", "98.86%", "98.77%", "95.24%", "0.9697", "0.9986", "1", "4"],
-        ["Kết hợp cả hai (5.015 chiều) ⭐", "XGBoost", "98.18%", "93.18%", "97.62%", "0.9535", "0.9984", "6", "2"],
-        ["Kết hợp cả hai (5.015 chiều)", "SVM Linear", "97.95%", "93.10%", "96.43%", "0.9474", "0.9986", "6", "3"],
-    ]
     create_table(doc, ["CẤU HÌNH ĐẶC TRƯNG", "MÔ HÌNH", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_feat_table, col_widths=[1.5, 0.9, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5])
 
     add_image_with_caption(doc, FIGURES_DIR / "ablation_featurespace_comparison.png", 

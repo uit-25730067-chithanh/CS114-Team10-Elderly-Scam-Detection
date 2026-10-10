@@ -25,12 +25,20 @@ plt.rcParams["font.sans-serif"] = ["DejaVu Sans", "Arial"]
 def plot_preprocessing_ablation(exp_data: dict, out_path: Path) -> Path:
     """Plot grouped bar chart comparing Raw vs Preprocessed across Naive Bayes and XGBoost."""
     records = exp_data["records"]
-    # Model order: Naive Bayes (Raw vs Prep), XGBoost (Raw vs Prep)
+    rec_by_name = {r["model"]: r for r in records}
+
+    # Explicit mapping ensuring exact model-to-bar alignment (NB first, then XGB)
+    ordered_records = [
+        rec_by_name.get("Naive Bayes (Raw Text)", records[2] if len(records) > 2 else records[0]),
+        rec_by_name.get("Naive Bayes (Preprocessed)", records[3] if len(records) > 3 else records[1]),
+        rec_by_name.get("XGBoost (Raw Text)", records[0]),
+        rec_by_name.get("XGBoost (Preprocessed)", records[1] if len(records) > 1 else records[0]),
+    ]
     labels = ["NB (Raw)", "NB (Prep)", "XGB (Raw)", "XGB (Prep)"]
-    precisions = [r["precision"] * 100 for r in records]
-    recalls = [r["recall"] * 100 for r in records]
-    f1s = [r["f1"] * 100 for r in records]
-    fps = [r["false_positives"] for r in records]
+    precisions = [r["precision"] * 100 for r in ordered_records]
+    recalls = [r["recall"] * 100 for r in ordered_records]
+    f1s = [r["f1"] * 100 for r in ordered_records]
+    fps = [r["false_positives"] for r in ordered_records]
 
     fig, ax1 = plt.subplots(figsize=(10, 5.5), dpi=300)
     x = np.arange(len(labels))
@@ -70,7 +78,18 @@ def plot_preprocessing_ablation(exp_data: dict, out_path: Path) -> Path:
 def plot_featurespace_ablation(exp_data: dict, out_path: Path) -> Path:
     """Plot grouped bar chart comparing TF-IDF vs Aux vs Combined across XGBoost and Linear SVM."""
     records = exp_data["records"]
-    # 6 configurations: XGB (TF-IDF, Aux, Comb), SVM (TF-IDF, Aux, Comb)
+    rec_by_name = {r["model"]: r for r in records}
+
+    cfg_keys = [
+        "XGBoost — TF-IDF Only (5,000)",
+        "SVM Linear — TF-IDF Only (5,000)",
+        "XGBoost — Aux Only (15)",
+        "SVM Linear — Aux Only (15)",
+        "XGBoost — Combined (5,015)",
+        "SVM Linear — Combined (5,015)",
+    ]
+    ordered_records = [rec_by_name.get(k, records[i]) for i, k in enumerate(cfg_keys)]
+
     cfg_labels = [
         "XGB (TF-IDF)",
         "SVM (TF-IDF)",
@@ -79,9 +98,9 @@ def plot_featurespace_ablation(exp_data: dict, out_path: Path) -> Path:
         "XGB (5,015 Comb)",
         "SVM (5,015 Comb)",
     ]
-    precisions = [r["precision"] * 100 for r in records]
-    recalls = [r["recall"] * 100 for r in records]
-    f1s = [r["f1"] * 100 for r in records]
+    precisions = [r["precision"] * 100 for r in ordered_records]
+    recalls = [r["recall"] * 100 for r in ordered_records]
+    f1s = [r["f1"] * 100 for r in ordered_records]
 
     fig, ax = plt.subplots(figsize=(11, 5.5), dpi=300)
     x = np.arange(len(cfg_labels))
@@ -99,9 +118,9 @@ def plot_featurespace_ablation(exp_data: dict, out_path: Path) -> Path:
     ax.legend(loc="lower right", frameon=True)
 
     # Highlight peak combined F1 on XGBoost
-    comb_xgb_f1 = records[4]["f1"] * 100
+    comb_xgb_f1 = ordered_records[4]["f1"] * 100
     ax.annotate(
-        f"Peak F1: {comb_xgb_f1:.2f}% (FP=6)",
+        f"Peak XGB F1: {comb_xgb_f1:.2f}% (FP=6)",
         xy=(4 + width, comb_xgb_f1),
         xytext=(-20, 15),
         textcoords="offset points",
