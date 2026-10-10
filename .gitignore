@@ -64,3 +64,7 @@ models/*.bin
 # 
 credentials.json
 token.json
+
+# Submission package output (generated artifacts)
+submit/25730067*
+submit/*.zip
