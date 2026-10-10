@@ -3,8 +3,8 @@
 > **Kế hoạch cha:** [plan.md](./plan.md)  
 > **Người phụ trách:** Hoàng Cao Sơn (Lead) · Đặng Chí Thanh (Review)  
 > **File cấu hình:** `assignments/Final/draft/scam-detection/reports/report/report-meta.yaml`  
-> **Output:** `assignments/Final/draft/scam-detection/reports/report/report.docx` và PDF  
-> **Trạng thái:** `ready`
+> **Output:** `draft/scam-detection/reports/report/report.docx` và PDF  
+> **Trạng thái:** `passed` ✅
 
 ---
 
@@ -30,7 +30,7 @@ Theo quy định trình bày đồ án và cấu hình tại `report-meta.yaml`:
 
 ## 🛠️ Công Việc Cụ Thể
 
-- [ ] Tạo / Kiểm tra công cụ biên dịch tự động Markdown → DOCX (tận dụng skill `uit:it005-lab-report` hoặc script Python sử dụng `python-docx`).
-- [ ] Chèn chuẩn xác các hình ảnh chất lượng cao 300 DPI từ `draft/scam-detection/reports/figures/`.
-- [ ] Đảm bảo các bảng biểu (đặc biệt là 2 bảng Ablation Studies) không bị tràn lề, có tiêu đề bảng phía trên.
-- [ ] Xuất file `report.docx` hoàn chỉnh và kiểm tra bố cục trang (đạt độ dài ≥ 20 trang).
+- [x] Tạo / Kiểm tra công cụ biên dịch tự động Markdown → DOCX (sử dụng script Python `draft/scam-detection/reports/report/generate_academic_report.py` tích hợp `python-docx` và `docx2pdf`).
+- [x] Chèn chuẩn xác các hình ảnh chất lượng cao 300 DPI từ `draft/scam-detection/reports/figures/` (tổng cộng 11 hình ảnh biểu đồ và sơ đồ luồng hệ thống).
+- [x] Đảm bảo các bảng biểu (Bảng 2.1, 2.2, 4.2, Bảng 4.4 & 4.5 Ablation Studies) không bị tràn lề, có tiêu đề bảng phía trên, căn chỉnh đều đẹp.
+- [x] Xuất file `report.docx` (5.7 MB) và biên dịch `report.pdf` (6.2 MB) hoàn chỉnh, kiểm tra bố cục trang đạt chuẩn 34 trang (≥ 30 trang), sao chép đồng bộ vào `docs/DoAnMonHoc.docx` và `docs/DoAnMonHoc.pdf`.
