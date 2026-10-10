@@ -43,31 +43,32 @@
 
 ## Implementation Steps
 
-### Step 1 — Pre-flight Checks
+### Step 1 — Pre-flight Checks (Kiểm Tra Nguồn Dữ Liệu Gốc - Single Source of Truth)
 
 ```bash
-# Verify tất cả files tồn tại
-[ -f submit/DOCS/DoAnMonHoc.docx ] && echo "✅ Word" || echo "❌ Word missing"
-[ -f submit/DOCS/DoAnMonHoc.pdf ] && echo "✅ PDF" || echo "❌ PDF missing"
-[ -f submit/SLIDES/Presentation_CS114.pptx ] && echo "✅ PPT" || echo "❌ PPT missing"
-[ -d draft/scam-detection/src ] && echo "✅ Source" || echo "❌ Source missing"
+# Verify tất cả files gốc từ draft/ tồn tại (Không duy trì file tĩnh trùng lặp trong submit/)
+[ -f draft/scam-detection/reports/report/report.docx ] && echo "✅ Word Report" || echo "❌ Word missing"
+[ -f draft/scam-detection/reports/report/report.pdf ] && echo "✅ PDF Report" || echo "❌ PDF missing"
+[ -f draft/scam-detection/reports/slides/phase09_presentation.pptx ] && echo "✅ PPT Slides" || echo "❌ PPT missing"
+[ -d draft/scam-detection/src ] && echo "✅ Source code" || echo "❌ Source missing"
 [ -f draft/scam-detection/data/raw/dataset.csv ] && echo "✅ Dataset" || echo "❌ Dataset missing"
 ```
 
-### Step 2 — Copy Files to Submit Structure
+### Step 2 — Copy Files to Submit Structure (Đóng Gói Tự Động Tránh Duplicate Git)
 
 ```bash
 SUBMIT_DIR="submit/25730067-25730013-25730061"
+rm -rf "$SUBMIT_DIR"
 mkdir -p "$SUBMIT_DIR"/{DOCS,SLIDES,SOURCE}
 
-# Copy DOCS
-cp submit/DOCS/DoAnMonHoc.docx "$SUBMIT_DIR/DOCS/"
-cp submit/DOCS/DoAnMonHoc.pdf "$SUBMIT_DIR/DOCS/"
+# Copy DOCS trực tiếp từ Single Source of Truth trong draft/
+cp draft/scam-detection/reports/report/report.docx "$SUBMIT_DIR/DOCS/DoAnMonHoc.docx"
+cp draft/scam-detection/reports/report/report.pdf "$SUBMIT_DIR/DOCS/DoAnMonHoc.pdf"
 
-# Copy SLIDES
-cp submit/SLIDES/Presentation_CS114.pptx "$SUBMIT_DIR/SLIDES/"
+# Copy SLIDES trực tiếp từ draft/
+cp draft/scam-detection/reports/slides/phase09_presentation.pptx "$SUBMIT_DIR/SLIDES/Presentation_CS114.pptx"
 
-# Copy SOURCE (selective — không copy .venv, __pycache__)
+# Copy SOURCE (selective — loại trừ môi trường ảo và cache)
 rsync -av --exclude='.venv' --exclude='__pycache__' --exclude='.git' \
     draft/scam-detection/ "$SUBMIT_DIR/SOURCE/"
 

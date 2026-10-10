@@ -1,13 +1,13 @@
 ---
 title: "Kế Hoạch Hoàn Thiện Báo Cáo Final Dựa Trên Góp Ý Buổi 8 (ThS. Cáp Phạm Đình Thăng)"
 description: "Kế hoạch nâng cấp và hoàn thiện Báo cáo Word Đồ án CS114 (Phase 09) bằng cách tích hợp 2 bài thực nghiệm đối chứng (Ablation Studies), chuẩn hóa bài toán và hàm mất mát, và biên dịch DOCX chuẩn UIT."
-status: in-progress
+status: completed
 priority: P1
 effort: ~8-10h (Cả nhóm 10)
 branch: feat/phase-09-defense-feedback-enhancements
 tags: [cs114, phase09, academic-report, ablation-studies, feedback-defense, docx, uit]
 created: 2026-09-23
-updated: 2026-09-23
+updated: 2026-10-10
 ---
 
 # Kế Hoạch Hoàn Thiện Báo Cáo Đồ Án Cuối Kỳ Dựa Trên Góp Ý Buổi 8
@@ -46,7 +46,7 @@ Nhánh `feat/phase-09-defense-feedback-enhancements` được tạo ra để **c
 | **01** | **Ablation Experiments** | Viết script đo lường thực tế 2 bảng đối chứng trên tập Test 439 mẫu | [phase-01-ablation-experiments.md](./phase-01-ablation-experiments.md) | `passed` ✅ |
 | **02** | **Report Markdown Enrichment** | Bổ sung số liệu thực nghiệm, công thức toán và phân định bài toán vào `report-source.md` | [phase-02-report-markdown-enrichment.md](./phase-02-report-markdown-enrichment.md) | `passed` ✅ |
 | **03** | **DOCX Compilation & Styling** | Biên dịch sang `report.docx` chuẩn UIT (Times New Roman 13pt, bìa hoa văn, TOC) | [phase-03-docx-compilation-formatting.md](./phase-03-docx-compilation-formatting.md) | `passed` ✅ |
-| **04** | **Verification & Parity** | Chạy `verify_final.py`, kiểm toán PR, đồng bộ tài liệu chuẩn bị nộp bài (Phase 10) | [phase-04-verification-parity.md](./phase-04-verification-parity.md) | `ready` |
+| **04** | **Verification & Parity** | Chạy `verify_final.py`, kiểm toán PR, đồng bộ tài liệu chuẩn bị nộp bài (Phase 10) | [phase-04-verification-parity.md](./phase-04-verification-parity.md) | `passed` ✅ |
 
 ---
 

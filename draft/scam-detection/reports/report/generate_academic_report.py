@@ -29,7 +29,7 @@ from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
 
-PROJECT_ROOT = Path("c:/Users/hoang/OneDrive/Desktop/UIT-HK3/Máy học/CS114-Team10-Elderly-Scam-Detection")
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
 FIGURES_DIR = PROJECT_ROOT / "draft/scam-detection/reports/figures"
 REPORT_DIR = PROJECT_ROOT / "draft/scam-detection/reports/report"
 DOCS_DIR = PROJECT_ROOT / "docs"
@@ -407,40 +407,40 @@ def generate_report():
     
     toc_data = [
         ["LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT", "Trang 02"],
-        ["CHƯƠNG 1 — ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU", "Trang 04"],
-        ["    1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam", "Trang 04"],
-        ["    1.2. Phân định ranh giới: Lừa đảo thao túng tâm lý vs Tin giả", "Trang 05"],
-        ["    1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt", "Trang 06"],
-        ["    1.4. Ý nghĩa thực tiễn và tác động xã hội bảo vệ người cao tuổi", "Trang 07"],
-        ["CHƯƠNG 2 — TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN", "Trang 08"],
-        ["    2.1. Khảo sát các công trình nghiên cứu gian lận SMS tiếng Việt (Related Works)", "Trang 08"],
-        ["    2.2. So sánh toàn diện 4 hướng tiếp cận: Luật học, Học máy, PhoBERT và LLM", "Trang 09"],
+        ["CHƯƠNG 1 — ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU", "Trang 06"],
+        ["    1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam", "Trang 06"],
+        ["    1.2. Phân định ranh giới bài toán — Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả", "Trang 06"],
+        ["    1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt", "Trang 07"],
+        ["    1.4. Ý nghĩa thực tiễn và tác động xã hội", "Trang 08"],
+        ["CHƯƠNG 2 — TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN", "Trang 09"],
+        ["    2.1. Khảo sát các công trình liên quan (Related Works)", "Trang 09"],
+        ["    2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ", "Trang 09"],
         ["    2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt", "Trang 10"],
-        ["CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "Trang 11"],
-        ["    3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "Trang 11"],
-        ["    3.2. Trích xuất đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "Trang 13"],
-        ["    3.3. Kiến trúc huấn luyện 4 mô hình Machine Learning", "Trang 15"],
-        ["    3.4. Sơ đồ kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", "Trang 17"],
-        ["    3.5. Xử lý mất cân bằng lớp: Hàm mất mát có trọng số và lý do từ chối SMOTE", "Trang 18"],
-        ["CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "Trang 20"],
-        ["    4.1. Đặc tả tập dữ liệu thực tế và phân tích khám phá (EDA)", "Trang 20"],
-        ["    4.2. Kết quả thực nghiệm đối sánh 4 mô hình học máy", "Trang 23"],
-        ["        4.2.0. Định nghĩa các thước đo đánh giá và ví dụ tính tay XGBoost", "Trang 23"],
-        ["        4.2.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set", "Trang 25"],
-        ["        4.2.2. Phân tích đường cong ROC và Precision-Recall", "Trang 26"],
-        ["        4.2.3. Phân tích ma trận nhầm lẫn (Confusion Matrices)", "Trang 27"],
-        ["        4.2.4. Phân tích hiện tượng quá khớp qua Learning Curves", "Trang 28"],
-        ["    4.3. Trí tuệ nhân tạo có thể giải thích (XAI) với SHAP và Top 20 từ khóa", "Trang 29"],
-        ["    4.4. Ứng dụng thực tế Web Demo Streamlit tối ưu trợ năng người cao tuổi", "Trang 31"],
-        ["    4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "Trang 33"],
-        ["        4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)", "Trang 33"],
-        ["        4.5.2. Thực nghiệm 2: Vai trò của 15 đặc trưng tâm lý (TF-IDF vs Aux)", "Trang 35"],
-        ["    4.6. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", "Trang 37"],
-        ["CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "Trang 39"],
-        ["    5.1. Tổng kết các đóng góp chính của đề tài", "Trang 39"],
-        ["    5.2. Các hạn chế còn tồn tại", "Trang 40"],
-        ["    5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng bảo vệ", "Trang 41"],
-        ["TÀI LIỆU THAM KHẢO (CHUẨN HÓA 20 NGUỒN IEEE)", "Trang 42"],
+        ["CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "Trang 12"],
+        ["    3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "Trang 12"],
+        ["    3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "Trang 12"],
+        ["    3.3. Mô tả 4 mô hình Machine Learning", "Trang 13"],
+        ["    3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", "Trang 14"],
+        ["    3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", "Trang 15"],
+        ["CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "Trang 17"],
+        ["    4.1. Đặc tả tập dữ liệu thực tế và phân tích khám phá (EDA)", "Trang 17"],
+        ["    4.2. Kết quả thực nghiệm đối sánh 4 mô hình học máy", "Trang 19"],
+        ["        4.2.0. Định nghĩa các thước đo đánh giá và ví dụ tính tay", "Trang 19"],
+        ["        4.2.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set", "Trang 20"],
+        ["        4.2.2. Phân tích đường cong ROC và Precision-Recall", "Trang 20"],
+        ["        4.2.3. Phân tích ma trận nhầm lẫn (Confusion Matrices)", "Trang 22"],
+        ["        4.2.4. Phân tích hiện tượng quá khớp qua Learning Curves", "Trang 24"],
+        ["    4.3. Trí tuệ nhân tạo có thể giải thích (XAI) với SHAP và Top 20 từ khóa", "Trang 24"],
+        ["    4.4. Ứng dụng thực tế Web Demo Streamlit tối ưu trợ năng người cao tuổi", "Trang 26"],
+        ["    4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "Trang 27"],
+        ["        4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)", "Trang 27"],
+        ["        4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)", "Trang 28"],
+        ["    4.6. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", "Trang 30"],
+        ["CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "Trang 31"],
+        ["    5.1. Tổng kết các đóng góp chính của đề tài", "Trang 31"],
+        ["    5.2. Các hạn chế còn tồn tại", "Trang 31"],
+        ["    5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", "Trang 31"],
+        ["TÀI LIỆU THAM KHẢO (CHUẨN HÓA 20 NGUỒN IEEE)", "Trang 33"],
     ]
     create_table(doc, ["CẤU TRÚC BÁO CÁO ĐỒ ÁN", "TRANG"], toc_data, col_widths=[5.3, 1.0])
 
@@ -456,11 +456,11 @@ def generate_report():
     add_body_p(doc, "Theo thống kê chính thức từ Cục An toàn thông tin (Bộ Thông tin và Truyền thông) và Cục Cảnh sát hình sự (Bộ Công an) trong năm 2025 và đầu năm 2026, các cơ quan chức năng đã ghi nhận hàng chục nghìn phản ánh lừa đảo trực tuyến với tổng thiệt hại ước tính lên tới hàng nghìn tỷ đồng. Đáng báo động, các vụ án chiếm đoạt từ hàng trăm triệu đến hàng tỷ đồng phần lớn nhắm vào người hưu trí và người cao tuổi. Do phản xạ công nghệ còn chậm, thị lực suy giảm, khả năng xác minh thông tin viễn thông hạn chế và tâm lý cả tin, người cao tuổi rất dễ bị cô lập và thao túng khi nhận được các kịch bản tin nhắn được thiết kế bài bản.")
 
     add_heading_2(doc, "1.2. Phân định ranh giới bài toán — Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả")
-    add_body_p(doc, "Tại buổi báo vệ sớm, ThS. Cáp Phạm Đình Thăng đã chỉ đạo nhóm cần làm rõ sự khác biệt bản chất giữa bài toán của đề tài và bài toán kiểm chứng tin giả (Fake News Verification):")
+    add_body_p(doc, "Trong nghiên cứu này, bài toán phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing) nhắm vào người cao tuổi được phân định ranh giới bản chất với bài toán kiểm chứng tin giả báo chí (Fake News Verification):")
     add_bullet_p(doc, "• Kiểm chứng tin giả báo chí (Fake News): ", "Bản chất là bài toán đối chiếu tri thức (Fact-checking). Tin giả thường là các phát ngôn, sự kiện thời sự cộng đồng sai sự thật phát tán rộng rãi trên mạng xã hội; việc xác thực chủ yếu dựa vào truy vấn đối sánh với các cơ sở tri thức công cộng, văn bản pháp luật hoặc các nguồn báo chí chính thống đáng tin cậy.")
     add_bullet_p(doc, "• Phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing): ", "Bản chất là bài toán phát hiện hành vi tấn công kỹ nghệ xã hội trong giao tiếp cá nhân 1-1. Kẻ lừa đảo không bịa đặt sự kiện tin tức chung, mà nhắm thẳng vào nạn nhân cụ thể thông qua các kịch bản đe dọa, giục giã hoặc mồi nhử tài chính riêng tư. Không một cơ sở dữ liệu tin tức công cộng nào có thể chứa sẵn nội dung của một tin nhắn lừa đảo riêng lẻ. Do đó, việc phát hiện bắt buộc phải dựa trên phân tích ngữ cảnh bất thường, hành vi thúc ép và các tín hiệu thao túng tâm lý nội tại (từ khóa đe dọa quyền lực, thúc giục chuyển tiền gấp, yêu cầu cung cấp OTP, link mạo danh).")
 
-    add_body_p(doc, "Qua quá trình thu thập và chuẩn hóa hơn 2.100 mẫu tin nhắn thực tế, nhóm đã phân loại và bao phủ 4 nhóm bẫy thao túng tâm lý chủ đạo:")
+    add_body_p(doc, "Qua quá trình thu thập và chuẩn hóa 2.193 mẫu tin nhắn thực tế (1.773 tin nhắn thông thường và 420 tin nhắn lừa đảo), nhóm đã phân loại và bao phủ 4 nhóm bẫy thao túng tâm lý chủ đạo:")
     add_bullet_p(doc, "1. Đe dọa quyền lực (fear_authority): ", "Giả mạo Cơ quan Công an, Viện kiểm sát, Tòa án thông báo nạn nhân liên quan đến đường dây rửa tiền, buôn ma túy; đe dọa bắt giam nhằm ép chuyển tiền \"phục vụ điều tra\".")
     add_bullet_p(doc, "2. Khẩn cấp gia đình (family_emergency): ", "Thông báo con cháu, người thân gặp tai nạn giao thông nguy kịch, đang cấp cứu tại bệnh viện lớn, cần chuyển gấp viện phí phẫu thuật trong vòng 30 phút.")
     add_bullet_p(doc, "3. Dụ dỗ quà tặng & Sức khỏe (health_gift): ", "Mạo danh tri ân khách hàng cao tuổi tặng sữa dinh dưỡng, thuốc đông y trị bách bệnh miễn phí, hoặc mời tham gia bảo hiểm y tế lãi suất cao.")
@@ -929,15 +929,21 @@ def generate_report():
     # XUẤT CÁC FILE ĐÍCH
     # ══════════════════════════════════════════════════════════════════════════
     out_report = REPORT_DIR / "report.docx"
-    out_docs = DOCS_DIR / "DoAnMonHoc.docx"
-    
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    
     doc.save(str(out_report))
-    doc.save(str(out_docs))
     print(f"[✓] Đã xuất thành công: {out_report}")
-    print(f"[✓] Đã xuất thành công: {out_docs}")
+
+    # Chuyển đổi DOCX sang PDF nếu được chỉ định hoặc trên Windows
+    if "--pdf" in sys.argv or (sys.platform == "win32" and "--no-pdf" not in sys.argv):
+        try:
+            from docx2pdf import convert
+            out_pdf = REPORT_DIR / "report.pdf"
+            convert(str(out_report), str(out_pdf))
+            print(f"[✓] Đã xuất thành công: {out_pdf}")
+        except Exception as e:
+            print(f"[!] Chuyển đổi PDF bỏ qua hoặc gặp lỗi: {e}")
+    else:
+        print("[ℹ] Xuất DOCX hoàn tất. Để chuyển đổi PDF trên macOS/Linux, truyền cờ --pdf")
 
 if __name__ == "__main__":
     generate_report()

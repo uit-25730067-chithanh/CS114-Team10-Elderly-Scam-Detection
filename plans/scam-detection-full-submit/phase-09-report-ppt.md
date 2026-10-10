@@ -13,7 +13,7 @@
 | Owner | **PPT: Cẩm (25730013) · Report: Sơn (25730061) · Review/Merge: Thanh (25730067)** |
 | Priority | P1 |
 | Status | `in-progress` |
-| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word đang hoàn thiện theo góp ý Buổi 8 |
+| Review | 🟡 Khối Slide & Kịch bản hoàn tất (PR #26 merged, PR #27 open); Báo cáo Word chuẩn UIT hoàn tất biên soạn (PR #31 sẵn sàng review & merge) |
 | Kế hoạch chi tiết | 🔗 [Kế hoạch hoàn thiện Báo cáo theo góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/plan.md) · [Góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/research-buoi-08-lecture-feedback.md) |
 | Estimated effort | 8–12h |
 | Sprint | Sprint 2–3 Fast-Track (15/09 – 22/09/2026) |
@@ -24,8 +24,8 @@
 |--------|-------|----------------------|-----------|
 | `feat/phase-09-ppt-template` | **Cẩm** tạo PR | [`SLIDE_OUTLINE.md`](../../draft/scam-detection/reports/slides/SLIDE_OUTLINE.md) · [`generate_slides.js`](../../draft/scam-detection/reports/slides/generate_slides.js) | Hoàn tất ✅ — PR #26 đã merge vào main (22 slide, 3.4 MB PPTX/PDF) |
 | `feat/phase-09-presentation-script` | **Thanh** tạo PR | [`script.md`](../../draft/scam-detection/reports/slides/scripts/script.md) (51 KB) | Hoàn tất ✅ — PR #27 kịch bản 15p chuẩn WPM & 10 chủ đề Q&A |
-| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Hoàn thành khung 🟡 — Sơn biên soạn 5 chương trên branch |
-| [`feat/phase-09-defense-feedback-enhancements`](../20260923-phase09-defense-feedback-enhancements/plan.md) | **Cả nhóm (Thanh lead)** | [Kế hoạch chi tiết](../20260923-phase09-defense-feedback-enhancements/plan.md) · [Góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/research-buoi-08-lecture-feedback.md) · `report-source.md` · `run_ablation_studies.py` | Đang triển khai 🚀 — Bổ sung 2 thực nghiệm đối chứng (Ablation Tiền xử lý & Không gian đặc trưng), phân định bài toán vs tin giả, ca test đe dọa trực diện N-gram và hoàn thiện Báo cáo Word theo góp ý Buổi 8 của ThS. Cáp Phạm Đình Thăng |
+| `feat/phase-09-report-template` | **Sơn** tạo PR | `REPORT_OUTLINE.md` · `report-source.md` · `report-meta.yaml` | Hoàn tất ✅ — Sơn biên soạn 5 chương trên branch |
+| [`feat/phase-09-defense-feedback-enhancements`](../20260923-phase09-defense-feedback-enhancements/plan.md) | **Cả nhóm (Thanh lead)** | [Kế hoạch chi tiết](../20260923-phase09-defense-feedback-enhancements/plan.md) · [Góp ý Buổi 8](../20260923-phase09-defense-feedback-enhancements/research-buoi-08-lecture-feedback.md) · `report-source.md` · `run_ablation_studies.py` | Hoàn tất bàn giao ✅ — Bổ sung 2 thực nghiệm đối chứng (Ablation Tiền xử lý & Không gian đặc trưng), phân định bài toán vs tin giả, ca test đe dọa trực diện N-gram và hoàn thiện Báo cáo Word chuẩn UIT (Sẵn sàng review & merge PR #31) |
 
 ## Context
 
