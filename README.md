@@ -92,8 +92,8 @@
 | | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | 🟡 Đang hoàn thiện (Sơn lead) |
 | **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | ✅ Done (Phase 07 PASSED — Multi-model benchmark, SHAP beeswarm, PR #23) |
 | | **Sơn** | Tích hợp Model Catalog vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi & E2E Playwright | ✅ Done (Phase 08 PASSED — PR #21) |
-| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Slide PPT 22 trang (PR #26 merged) + Kịch bản thuyết trình 15p & Q&A (PR #27) + Báo cáo Word Chương 1–5 | 🟡 Đang hoàn thiện (Phase 09 — Cẩm PPT, Sơn Report, Thanh Script) |
-| | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067-25730013-25730061.zip` (22/09) | 🔲 Sẵn sàng triển khai (Phase 10) |
+| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Slide PPT 22 trang (PR #26) + Kịch bản 15p & Q&A (PR #27) + Báo cáo Word/PDF 32 trang (PR #31, #32) | ✅ Done (Phase 09 PASSED) |
+| | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067_25730013_25730061.zip` (14.14 MB, PR #33) | ✅ Done (Phase 10 PASSED) |
 | **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
 
 ---
@@ -111,8 +111,9 @@
 | 06 | [Phase 06 — Modeling — SVM (Optional: PhoBERT)](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) | **Cẩm** | `passed` ✅ |
 | 07 | [Phase 07 — Evaluation & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md) | **Thanh** | `passed` ✅ |
 | 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `passed` ✅ |
-| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) + **Thanh** (Script) | `in-progress` 🟡 |
-| 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `not-started` 🔲 |
+| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) + **Thanh** (Script) | `passed` ✅ |
+| 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `passed` ✅ |
+
 
 ---
 
@@ -180,16 +181,37 @@ Source code
 
 ---
 
-## 📦 Hướng dẫn nộp bài
+## 📦 Thông tin gói nộp bài chuẩn UIT
 
-Khi hoàn thành, tạo thư mục trong `submit/`:
+Gói bài nộp chính thức đã được tự động đóng gói tại `submit/`:
 
 ```
 submit/
-└── 25730067-25730013-25730061/
-    ├── DOCS/                ← Báo cáo Word + PDF
-    ├── SLIDES/              ← File PPT
-    └── SOURCE/              ← Code + Data + Models + Demo
+├── 25730067_25730013_25730061/
+│   ├── [Nhom10]_Report_ScamDetection.pdf      ← Báo cáo học thuật xuất bản (32 trang, 2.1 MB)
+│   ├── [Nhom10]_Slide_ScamDetection.pdf       ← Slide báo cáo thuyết trình (22 slide, 1.3 MB)
+│   └── source_code/
+│       ├── Chay_Demo.bat                      ← Khởi chạy Streamlit Demo 1-click (Windows)
+│       ├── Huong_dan_su_dung.docx             ← Hướng dẫn sử dụng Word chuẩn UIT
+│       ├── Huong_dan_su_dung.pdf              ← Hướng dẫn sử dụng PDF (2 trang tinh gọn)
+│       ├── requirements.txt                   ← Dependencies môi trường thực thi
+│       ├── demo/                              ← Mã nguồn ứng dụng Web Demo Streamlit
+│       │   ├── app.py
+│       │   ├── assets/
+│       │   ├── components/
+│       │   ├── Link_video_demo.txt
+│       │   └── README.md
+│       └── code/                              ← Toàn bộ mã nguồn & artifacts huấn luyện
+│           ├── notebooks/                     ← 01_preprocessing đến 06_evaluation_xai
+│           ├── data/                          ← dataset.csv, raw staging & processed features
+│           ├── models/                        ← Trọng số 4 mô hình ML + best bundle
+│           ├── reports/                       ← 19 biểu đồ 300 DPI & model_comparison.csv
+│           └── src/                           ← Core logic tiền xử lý & đánh giá
+├── 25730067_25730013_25730061.zip             ← Tệp nén chính thức (14.14 MB, 85 files)
+└── README.md                                  ← Manifest & SHA256 checksum kiểm định
 ```
 
-Zip lại: `25730067-25730013-25730061.zip`
+- **Tệp nén:** `25730067_25730013_25730061.zip` (14.14 MB < 50MB giới hạn cổng trường).
+- **Mã băm SHA256:** `2db2aea0702e045c72d6e56a28f9d8e722c7d8660db785101ba256b29d4fb8fc`.
+- **Kiểm định:** Đã loại trừ 100% rác hệ điều hành, `.git`, `.venv`, `__MACOSX`, sạch sẽ 100%.
+

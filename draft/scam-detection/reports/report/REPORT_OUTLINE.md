@@ -1,9 +1,9 @@
 # 📄 Report Outline — CS114 Final: Vietnamese Elderly Scam Detection
 
-> **Template mẫu Phase 09 — Bàn giao Hoàng Cao Sơn (25730061) tạo PR và hoàn thiện**
->
-> Skill: `uit:academic-report` | Branch: `feat/phase-09-report-template`
-> Reviewer: Đặng Chí Thanh (25730067)
+> **Trạng thái:** ✅ **HOÀN THÀNH 100% (PR #31 & #32 merged)**  
+> **Tài liệu xuất bản:** `report.docx` (5.75 MB) và `report.pdf` (6.09 MB, đúng 32 trang chuẩn UIT)  
+> Skill: `uit:academic-report` | Phụ trách: Hoàng Cao Sơn (25730061) | Reviewer: Đặng Chí Thanh (25730067)
+
 
 ---
 

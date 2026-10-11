@@ -222,29 +222,39 @@ Khi nhận PR từ thành viên, PM Agent đóng vai trò kiểm toán độc l�
 
 ## Submission Format
  
-Final package name: `25730067-25730013-25730061.zip`
+Final package name: `25730067_25730013_25730061.zip` (14.14 MB, SHA256: `2db2aea0702e045c72d6e56a28f9d8e722c7d8660db785101ba256b29d4fb8fc`)
  
 Contents:
 ```
-25730067-25730013-25730061/
-├── DOCS/          ← DoAnMonHoc.docx + DoAnMonHoc.pdf
-├── SLIDES/        ← Presentation_CS114.pptx
-├── SOURCE/
-│   ├── data/      ← dataset.csv và dữ liệu huấn luyện
-│   ├── models/    ← File trọng số model đã train (.pkl, .pt)
-│   ├── src/       ← Source code tiền xử lý, huấn luyện
-│   ├── app.py     ← File chạy Web Demo Streamlit
-│   └── requirements.txt
-└── README.md      ← Hướng dẫn chạy code
+25730067_25730013_25730061/
+├── [Nhom10]_Report_ScamDetection.pdf      ← Báo cáo học thuật xuất bản (32 trang, 2.1 MB)
+├── [Nhom10]_Slide_ScamDetection.pdf       ← Slide báo cáo thuyết trình (22 slide, 1.3 MB)
+└── source_code/
+    ├── Chay_Demo.bat                      ← Khởi chạy Streamlit Demo 1-click (Windows)
+    ├── Huong_dan_su_dung.docx             ← Hướng dẫn sử dụng Word chuẩn UIT
+    ├── Huong_dan_su_dung.pdf              ← Hướng dẫn sử dụng PDF (2 trang tinh gọn)
+    ├── requirements.txt                   ← Dependencies môi trường thực thi
+    ├── demo/                              ← Mã nguồn ứng dụng Web Demo Streamlit
+    │   ├── app.py
+    │   ├── assets/
+    │   ├── components/
+    │   ├── Link_video_demo.txt
+    │   └── README.md
+    └── code/                              ← Toàn bộ mã nguồn & artifacts huấn luyện
+        ├── notebooks/                     ← 01_preprocessing đến 06_evaluation_xai
+        ├── data/                          ← dataset.csv, raw staging & processed features
+        ├── models/                        ← Trọng số 4 mô hình ML + best bundle
+        ├── reports/                       ← 19 biểu đồ 300 DPI & model_comparison.csv
+        └── src/                           ← Core logic tiền xử lý & đánh giá
 ```
  
-Place in `Final/submit/` before zipping.
+Place in `Final/submit/` before zipping. Manifest at `submit/README.md`.
 
 ---
 
 ## Next Actions (Sprint 3 Final Stretch — Fast-Track 23/09 Mode)
  
-> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Chỉ còn ~36 giờ).**
+> **🚀 Mục tiêu tối thượng: Sẵn sàng bảo vệ đồ án trước GV vào ngày 23/09/2026 (Đã sẵn sàng 100%).**
 
 ### 🎯 Phân công luồng thực thi song song (`--parallels`):
 1. **Luồng A (Dữ liệu & Khóa Dataset — Sơn Lead):** ✅ **HOÀN THÀNH (15/09/2026)**
@@ -264,11 +274,15 @@ Place in `Final/submit/` before zipping.
    - Tích hợp Model Catalog 4 thuật toán với XGBoost mặc định, phân tích 15 đặc trưng tâm lý thời gian thực.
    - Bổ sung dán tự động qua Web Clipboard API, đồng bộ URL query params (`?text=...`), hotline 1-chạm 156/113.
    - Đạt 16/16 ca kiểm thử tự động Playwright E2E trên Google Chrome, xuất 4 ảnh nghiệm thu chuẩn 300 DPI (`reports/figures/demo_*.png`).
-5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** 🚀 **TRỌNG TÂM HIỆN TẠI (PHASE 09 — 20/09 – 22/09)**
+5. **Luồng E (Báo cáo Word, Slide PPT & Diễn tập — Cả nhóm):** ✅ **HOÀN THÀNH 100% (PHASE 09)**
    - Slide PPT 22 trang: Hoàn tất 100% & merge vào main qua PR #26 (Cẩm lead).
    - Kịch bản bảo vệ 15p & 10 chủ đề Q&A: Hoàn tất 100% trong `script.md` qua PR #27 (Thanh lead).
-   - Báo cáo Word Chương 1–5: Đang hoàn thiện các chương (Sơn lead, branch `feat/phase-09-report-template`).
-   - Diễn tập bấm giờ (≤15 phút): 21/09 – 22/09 theo kịch bản chuẩn WPM.
-   - Đóng gói ZIP `25730067-25730013-25730061.zip` vào 22/09/2026 (Phase 10 — Thanh).
-   - **18:30 ngày 23/09/2026: Thuyết trình luân phiên chính thức với ThS. Cáp Phạm Đình Thăng qua MS Teams!**
+   - Báo cáo Word 32 trang: Hoàn thiện xuất sắc và xuất bản `report.docx` / `report.pdf` (PR #31, #32).
+   - Video demo hoàn thiện link và kịch bản minh họa.
+6. **Luồng F (Đóng gói Nộp bài & Bàn giao — Thanh):** ✅ **HOÀN THÀNH 100% (PHASE 10)**
+   - Đóng gói tệp nén chính thức `25730067_25730013_25730061.zip` (14.14 MB, 85 files) an toàn < 50MB.
+   - Khởi tạo `build_submit_package.py` và `scripts/generate_huong_dan_docx.py`.
+   - Lưu trữ manifest và mã băm SHA256 tại `submit/README.md`.
+   - Vượt qua 100% kiểm định tự động `verify_final.py` (Phase 10 passed — PR #33 merged).
+
 
