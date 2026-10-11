@@ -30,7 +30,7 @@ if sys.stdout.encoding != 'utf-8':
 
 import docx
 from docx.shared import Inches, Pt, RGBColor, Cm
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
@@ -46,7 +46,21 @@ FIGURES_DIR = PROJECT_ROOT / "draft/scam-detection/reports/figures"
 REPORT_DIR = PROJECT_ROOT / "draft/scam-detection/reports/report"
 ABLATION_JSON = PROJECT_ROOT / "draft/scam-detection/reports/ablation_studies.json"
 DOCS_DIR = PROJECT_ROOT / "docs"
-COVER_IMG = DOCS_DIR / "cover.png"
+
+def _resolve_uit_logo() -> Path:
+    candidates = [
+        REPORT_DIR / "assets" / "uit-logo.png",
+        Path("/Users/tcdtist/dev/uit/cs112/assignments/project/25730067/report/assets/uit-logo.png"),
+        Path("/Users/tcdtist/dev/uit/cs114/.agents/skills/academic-report/assets/uit-logo.png"),
+        PROJECT_ROOT / ".agents/skills/academic-report/assets/uit-logo.png",
+        PROJECT_ROOT.parent / ".agents/skills/academic-report/assets/uit-logo.png",
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    return candidates[0]
+
+UIT_LOGO_IMG = _resolve_uit_logo()
 
 def load_ablation_tables(json_path: Path):
     """Load ablation study tables dynamically from JSON artifact adhering to SSOT."""
@@ -100,12 +114,12 @@ def load_ablation_tables(json_path: Path):
     feat_rows = []
     rec2_by_name = {r.get("model", ""): r for r in exp2_records}
     exp2_order = [
-        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "XGBoost", "XGBoost — Aux Only (15)"),
-        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "SVM Linear", "SVM Linear — Aux Only (15)"),
-        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "XGBoost", "XGBoost — TF-IDF Only (5,000)"),
-        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "SVM Linear", "SVM Linear — TF-IDF Only (5,000)"),
-        ("Kết hợp cả hai (5.015 chiều) ⭐", "XGBoost", "XGBoost — Combined (5,015)"),
-        ("Kết hợp cả hai (5.015 chiều)", "SVM Linear", "SVM Linear — Combined (5,015)"),
+        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "XGBoost", "XGBoost - Aux Only (15)"),
+        ("Chỉ 15 Đặc trưng phụ (Aux Only)", "SVM Linear", "SVM Linear - Aux Only (15)"),
+        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "XGBoost", "XGBoost - TF-IDF Only (5,000)"),
+        ("Chỉ 5.000 TF-IDF (TF-IDF Only)", "SVM Linear", "SVM Linear - TF-IDF Only (5,000)"),
+        ("Kết hợp cả hai (5.015 chiều) ⭐", "XGBoost", "XGBoost - Combined (5,015)"),
+        ("Kết hợp cả hai (5.015 chiều)", "SVM Linear", "SVM Linear - Combined (5,015)"),
     ]
     for cfg_label, model_label, key in exp2_order:
         r = rec2_by_name.get(key, {})
@@ -123,10 +137,83 @@ def load_ablation_tables(json_path: Path):
 
     return prep_rows, feat_rows
 
-NAVY_COLOR = RGBColor(27, 54, 93)     # #1B365D - UIT Navy
-GOLD_COLOR = RGBColor(197, 160, 89)   # #C5A059 - UIT Gold Accent
-TEXT_COLOR = RGBColor(30, 41, 59)     # #1E293B - Slate Dark
-MUTED_COLOR = RGBColor(100, 116, 139) # #64748B - Muted Slate
+NAVY_COLOR = RGBColor(0, 0, 0)        # #000000 - Pure Black (CS106 UIT Standard)
+GOLD_COLOR = RGBColor(0, 0, 0)
+TEXT_COLOR = RGBColor(0, 0, 0)
+MUTED_COLOR = RGBColor(0, 0, 0)
+
+_bm_id_counter = 100
+
+def _escape_xml(text: str) -> str:
+    return (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+def _run_content_xml(text: str) -> str:
+    """Dựng phần nội dung của một run, biến ký tự tab thành phần tử <w:tab/>."""
+    parts = []
+    for index, chunk in enumerate(text.split("\t")):
+        if index:
+            parts.append("<w:tab/>")
+        if chunk:
+            parts.append(f'<w:t xml:space="preserve">{_escape_xml(chunk)}</w:t>')
+    return "".join(parts)
+
+def add_bookmark(paragraph, name: str) -> None:
+    """Add a bookmark anchor around a paragraph for internal hyperlink jumping."""
+    global _bm_id_counter
+    _bm_id_counter += 1
+    bm_id = str(_bm_id_counter)
+    bm_start = parse_xml(f'<w:bookmarkStart {nsdecls("w")} w:id="{bm_id}" w:name="{name}"/>')
+    bm_end = parse_xml(f'<w:bookmarkEnd {nsdecls("w")} w:id="{bm_id}"/>')
+    pPr = paragraph._p.pPr
+    if pPr is not None:
+        pPr.addnext(bm_start)
+        bm_start.addnext(bm_end)
+    else:
+        paragraph._p.insert(0, bm_start)
+        paragraph._p.insert(1, bm_end)
+
+def add_internal_hyperlink(
+    paragraph,
+    target_anchor: str,
+    text: str,
+    font_name: str = "Times New Roman",
+    font_size: float = 12.0,
+    is_bold: bool = False,
+    is_italic: bool = False,
+    color_hex: str = "000000",
+) -> None:
+    """Add an internal clickable hyperlink run targeting a bookmark anchor."""
+    hl = parse_xml(f'<w:hyperlink {nsdecls("w")} w:anchor="{target_anchor}"/>')
+    r = parse_xml(
+        f'<w:r {nsdecls("w")}>'
+        f'<w:rPr>'
+        f'<w:rFonts w:ascii="{font_name}" w:hAnsi="{font_name}"/>'
+        f'<w:sz w:val="{int(font_size * 2)}"/>'
+        f'{"<w:b/>" if is_bold else ""}'
+        f'{"<w:i/>" if is_italic else ""}'
+        f'<w:color w:val="{color_hex}"/>'
+        f'</w:rPr>'
+        f'{_run_content_xml(text)}'
+        f'</w:r>'
+    )
+    hl.append(r)
+    paragraph._p.append(hl)
+
+def add_page_number_to_run(run) -> None:
+    """Add dynamic PAGE number field to a footer run."""
+    fld1 = parse_xml(r'<w:fldChar %s w:fldCharType="begin"/>' % nsdecls('w'))
+    instr = parse_xml(r'<w:instrText %s xml:space="preserve"> PAGE </w:instrText>' % nsdecls('w'))
+    fld2 = parse_xml(r'<w:fldChar %s w:fldCharType="separate"/>' % nsdecls('w'))
+    fld3 = parse_xml(r'<w:fldChar %s w:fldCharType="end"/>' % nsdecls('w'))
+    run._r.append(fld1)
+    run._r.append(instr)
+    run._r.append(fld2)
+    run._r.append(fld3)
 
 def set_cell_background(cell, color_hex):
     tcPr = cell._tc.get_or_add_tcPr()
@@ -145,13 +232,13 @@ def set_cell_margins(cell, top=80, bottom=80, left=100, right=100):
     )
     tcPr.append(tcMar)
 
-def set_table_borders(table, color="D0D7DE", sz="4"):
+def set_table_borders(table, color="CCCCCC", sz="4"):
     tblPr = table._tbl.tblPr
     borders = parse_xml(
         f'<w:tblBorders {nsdecls("w")}>'
-        f'<w:top w:val="single" w:sz="{sz}" w:space="0" w:color="{color}"/>'
+        f'<w:top w:val="single" w:sz="6" w:space="0" w:color="{color}"/>'
         f'<w:left w:val="none"/>'
-        f'<w:bottom w:val="single" w:sz="{sz}" w:space="0" w:color="{color}"/>'
+        f'<w:bottom w:val="single" w:sz="6" w:space="0" w:color="{color}"/>'
         f'<w:right w:val="none"/>'
         f'<w:insideH w:val="single" w:sz="{sz}" w:space="0" w:color="{color}"/>'
         f'<w:insideV w:val="none"/>'
@@ -160,11 +247,14 @@ def set_table_borders(table, color="D0D7DE", sz="4"):
     tblPr.append(borders)
 
 def format_paragraph(p, size_pt=13, line_spacing=1.3, space_before_pt=0, space_after_pt=5,
-                     align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=False, italic=False, color=TEXT_COLOR):
+                     align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=False, italic=False, color=TEXT_COLOR,
+                     first_line_indent_cm=None):
     p.alignment = align
     p.paragraph_format.line_spacing = line_spacing
     p.paragraph_format.space_before = Pt(space_before_pt)
     p.paragraph_format.space_after = Pt(space_after_pt)
+    if first_line_indent_cm is not None:
+        p.paragraph_format.first_line_indent = Cm(first_line_indent_cm)
     for run in p.runs:
         run.font.name = "Times New Roman"
         run.font.size = Pt(size_pt)
@@ -184,34 +274,39 @@ def add_title(doc, text):
     run.font.color.rgb = NAVY_COLOR
     return p
 
-def add_heading_1(doc, text):
+def add_heading_1(doc, text, anchor=None):
     p = doc.add_paragraph()
     p.paragraph_format.keep_with_next = True
-    format_paragraph(p, size_pt=15, line_spacing=1.3, space_before_pt=14, space_after_pt=5,
-                     align=WD_ALIGN_PARAGRAPH.LEFT, bold=True, color=NAVY_COLOR)
+    format_paragraph(p, size_pt=15, line_spacing=1.3, space_before_pt=16, space_after_pt=6,
+                     align=WD_ALIGN_PARAGRAPH.CENTER if ("CHƯƠNG" in text or "LỜI CAM ĐOAN" in text or "TÀI LIỆU" in text) else WD_ALIGN_PARAGRAPH.LEFT,
+                     bold=True, color=NAVY_COLOR)
     run = p.add_run(text)
     run.font.name = "Times New Roman"
     run.font.size = Pt(15)
     run.font.bold = True
     run.font.color.rgb = NAVY_COLOR
+    if anchor:
+        add_bookmark(p, anchor)
     return p
 
-def add_heading_2(doc, text):
+def add_heading_2(doc, text, anchor=None):
     p = doc.add_paragraph()
     p.paragraph_format.keep_with_next = True
-    format_paragraph(p, size_pt=13.5, line_spacing=1.3, space_before_pt=10, space_after_pt=4,
+    format_paragraph(p, size_pt=14, line_spacing=1.3, space_before_pt=12, space_after_pt=4,
                      align=WD_ALIGN_PARAGRAPH.LEFT, bold=True, color=NAVY_COLOR)
     run = p.add_run(text)
     run.font.name = "Times New Roman"
-    run.font.size = Pt(13.5)
+    run.font.size = Pt(14)
     run.font.bold = True
     run.font.color.rgb = NAVY_COLOR
+    if anchor:
+        add_bookmark(p, anchor)
     return p
 
-def add_heading_3(doc, text):
+def add_heading_3(doc, text, anchor=None):
     p = doc.add_paragraph()
     p.paragraph_format.keep_with_next = True
-    format_paragraph(p, size_pt=13, line_spacing=1.3, space_before_pt=8, space_after_pt=4,
+    format_paragraph(p, size_pt=13, line_spacing=1.3, space_before_pt=10, space_after_pt=3,
                      align=WD_ALIGN_PARAGRAPH.LEFT, bold=True, italic=True, color=TEXT_COLOR)
     run = p.add_run(text)
     run.font.name = "Times New Roman"
@@ -219,12 +314,15 @@ def add_heading_3(doc, text):
     run.font.bold = True
     run.font.italic = True
     run.font.color.rgb = TEXT_COLOR
+    if anchor:
+        add_bookmark(p, anchor)
     return p
 
 def add_body_p(doc, text, bold=False, italic=False):
     p = doc.add_paragraph()
     format_paragraph(p, size_pt=13, line_spacing=1.3, space_before_pt=0, space_after_pt=5,
-                     align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=bold, italic=italic)
+                     align=WD_ALIGN_PARAGRAPH.JUSTIFY, bold=bold, italic=italic,
+                     first_line_indent_cm=1.27)
     run = p.add_run(text)
     run.font.name = "Times New Roman"
     run.font.size = Pt(13)
@@ -267,7 +365,7 @@ def add_bullet_p(doc, bold_prefix, text):
     run_t.font.color.rgb = TEXT_COLOR
     return p
 
-def add_image_with_caption(doc, image_path, caption, width_inches=4.4):
+def add_image_with_caption(doc, image_path, caption, width_inches=4.8):
     if not Path(image_path).exists():
         p_warn = doc.add_paragraph(f"[HÌNH ẢNH: {Path(image_path).name} - Chưa tìm thấy]")
         format_paragraph(p_warn, size_pt=11, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True)
@@ -292,260 +390,487 @@ def add_image_with_caption(doc, image_path, caption, width_inches=4.4):
     run_cap.font.italic = True
     run_cap.font.color.rgb = MUTED_COLOR
 
-def create_table(doc, headers, rows_data, col_widths=None, font_size_pt=9.0, top_margin=40, bottom=40):
+def create_table(doc, headers, rows_data, col_widths=None, font_size_pt=9.0, top_margin=30, bottom=30):
     table = doc.add_table(rows=len(rows_data) + 1, cols=len(headers))
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    set_table_borders(table)
+    table.autofit = False
+    set_table_borders(table, color="CCCCCC", sz="4")
     
-    # Prevent row split across pages
-    for row in table.rows:
+    # Bảo vệ đoạn văn dẫn nhập đứng ngay trước bảng không bị tách trang mồ côi (kỹ thuật từ CS112)
+    prev_sibling = table._tbl.getprevious()
+    if prev_sibling is not None and prev_sibling.tag.endswith('p'):
+        p_prev = docx.text.paragraph.Paragraph(prev_sibling, doc)
+        p_prev.paragraph_format.keep_with_next = True
+    
+    # cantSplit before tblHeader (crucial OOXML order)
+    trPr0 = table.rows[0]._tr.get_or_add_trPr()
+    trPr0.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+    trPr0.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
+    
+    for row in table.rows[1:]:
         trPr = row._tr.get_or_add_trPr()
         trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
         
-    # Repeat header row on every new page
-    header_tr = table.rows[0]._tr.get_or_add_trPr()
-    header_tr.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
-    
-    # Format Header Row
+    # Format Header Row: light gray #F2F2F2, pure black text, bold
     hdr_cells = table.rows[0].cells
     for i, h_text in enumerate(headers):
         hdr_cells[i].text = h_text
-        set_cell_background(hdr_cells[i], "1B365D") # Navy
-        set_cell_margins(hdr_cells[i], top=70, bottom=70, left=80, right=80)
+        set_cell_background(hdr_cells[i], "F2F2F2")
+        set_cell_margins(hdr_cells[i], top=50, bottom=50, left=70, right=70)
         p = hdr_cells[i].paragraphs[0]
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_before = Pt(0)
-        p.paragraph_format.space_after = Pt(0)
-        p.paragraph_format.line_spacing = 1.1
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.line_spacing = 1.15
+        p.paragraph_format.keep_with_next = True
         for run in p.runs:
             run.font.name = "Times New Roman"
-            run.font.size = Pt(font_size_pt)
+            run.font.size = Pt(font_size_pt + 0.5)
             run.font.bold = True
-            run.font.color.rgb = RGBColor(255, 255, 255)
+            run.font.color.rgb = RGBColor(0, 0, 0)
             
-    # Format Data Rows
+    # Format Data Rows: zebra #FAFAFA and #FFFFFF, pure black text
     for r_idx, row in enumerate(rows_data):
         row_cells = table.rows[r_idx + 1].cells
-        bg_color = "F8F9FA" if r_idx % 2 == 1 else "FFFFFF"
+        bg_color = "FAFAFA" if r_idx % 2 == 1 else "FFFFFF"
         for c_idx, val in enumerate(row):
             row_cells[c_idx].text = str(val)
-            set_cell_background(row_cells[c_idx], bg_color)
+            if bg_color != "FFFFFF":
+                set_cell_background(row_cells[c_idx], bg_color)
             set_cell_margins(row_cells[c_idx], top=top_margin, bottom=bottom, left=70, right=70)
             p = row_cells[c_idx].paragraphs[0]
-            p.alignment = WD_ALIGN_PARAGRAPH.LEFT if c_idx == 0 or len(str(val)) > 20 else WD_ALIGN_PARAGRAPH.CENTER
-            p.paragraph_format.space_before = Pt(0)
-            p.paragraph_format.space_after = Pt(0)
-            p.paragraph_format.line_spacing = 1.1
+            str_val = str(val).strip()
+            if any(str_val.endswith(suffix) for suffix in ["%", "ms", "s", "GB", "MB"]) or str_val.replace('.', '').replace(',', '').replace('-', '').isdigit():
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER if len(str_val) <= 6 else WD_ALIGN_PARAGRAPH.RIGHT
+            elif c_idx == 0 and len(str_val) <= 4:
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            elif len(str_val) > 20:
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+            else:
+                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            p.paragraph_format.space_before = Pt(1.5)
+            p.paragraph_format.space_after = Pt(1.5)
+            p.paragraph_format.line_spacing = 1.15
             for run in p.runs:
                 run.font.name = "Times New Roman"
                 run.font.size = Pt(font_size_pt)
-                run.font.color.rgb = TEXT_COLOR
+                run.font.color.rgb = RGBColor(0, 0, 0)
                 
     if col_widths:
         for row in table.rows:
             for idx, width in enumerate(col_widths):
-                row.cells[idx].width = Inches(width)
-                
+                if idx < len(row.cells):
+                    row.cells[idx].width = Inches(width)
+                    
     p_after = doc.add_paragraph()
     p_after.paragraph_format.space_before = Pt(0)
     p_after.paragraph_format.space_after = Pt(4)
     return table
 
-def create_toc_table(doc, toc_data):
-    """Tạo bảng mục lục siêu gọn gàng, nằm trọn vẹn trong đúng 1 trang duy nhất."""
-    table = doc.add_table(rows=len(toc_data) + 1, cols=2)
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    set_table_borders(table, color="D0D7DE", sz="4")
+def build_toc_section(doc, toc_entries):
+    """Xây dựng Mục lục chuẩn Phụ lục 2 với tab stop dot-leader và internal hyperlinks."""
+    p_title = doc.add_paragraph()
+    p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_title.paragraph_format.space_before = Pt(10)
+    p_title.paragraph_format.space_after = Pt(8)
+    p_title.paragraph_format.line_spacing = 1.15
+    r_t = p_title.add_run("MỤC LỤC")
+    r_t.font.name = "Times New Roman"
+    r_t.font.size = Pt(14)
+    r_t.bold = True
+    r_t.font.color.rgb = RGBColor(0, 0, 0)
+
+    for entry in toc_entries:
+        title = entry["text"].strip()
+        level = entry["level"]
+        anchor = entry["anchor"]
+        page_str = entry["page"]
+
+        p_toc = doc.add_paragraph()
+        p_toc.paragraph_format.space_before = Pt(2 if level == 1 else 0.5)
+        p_toc.paragraph_format.space_after = Pt(1)
+        p_toc.paragraph_format.line_spacing = 1.18
+
+        if level == 2:
+            p_toc.paragraph_format.left_indent = Cm(0.6)
+
+        tab_stops = p_toc.paragraph_format.tab_stops
+        tab_stops.add_tab_stop(Cm(15.8), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+
+        is_bold = (level == 1)
+        font_sz = 12.0 if level == 1 else 11.5
+
+        add_internal_hyperlink(p_toc, anchor, title, font_size=font_sz, is_bold=is_bold)
+        add_internal_hyperlink(p_toc, anchor, f"\t{page_str}", font_size=font_sz, is_bold=is_bold)
+
+def build_cover_page(doc):
+    cover_sec = doc.sections[0]
+    cover_sec.page_width = Cm(21.0)
+    cover_sec.page_height = Cm(29.7)
+    cover_sec.top_margin = Cm(2.0)
+    cover_sec.bottom_margin = Cm(2.0)
+    cover_sec.left_margin = Cm(2.5)
+    cover_sec.right_margin = Cm(2.5)
+    cover_sec.different_first_page_header_footer = False
+    cover_sec.header.is_linked_to_previous = False
+    cover_sec.footer.is_linked_to_previous = False
     
+    # 1. Khung viền trang bìa chuẩn UIT (Ornate triple border in Pure Black #000000)
+    sectPr = cover_sec._sectPr
+    borders = parse_xml(
+        f'<w:pgBorders {nsdecls("w")} w:offsetFrom="page">'
+        f'<w:top w:val="triple" w:sz="18" w:space="20" w:color="000000"/>'
+        f'<w:left w:val="triple" w:sz="18" w:space="20" w:color="000000"/>'
+        f'<w:bottom w:val="triple" w:sz="18" w:space="20" w:color="000000"/>'
+        f'<w:right w:val="triple" w:sz="18" w:space="20" w:color="000000"/>'
+        f'</w:pgBorders>'
+    )
+    sectPr.append(borders)
+    
+    # 2. Header trường
+    p_uni = doc.add_paragraph()
+    p_uni.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_uni.paragraph_format.space_before = Pt(6)
+    p_uni.paragraph_format.space_after = Pt(1)
+    p_uni.paragraph_format.line_spacing = 1.15
+    r_uni = p_uni.add_run(
+        "ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH\n"
+        "TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN\n"
+        "KHOA KHOA HỌC MÁY TÍNH"
+    )
+    r_uni.font.name = "Times New Roman"
+    r_uni.font.size = Pt(12)
+    r_uni.bold = True
+    r_uni.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # 3. Ký hiệu phân cách chuẩn học thuật UIT (-o0o-)
+    p_div = doc.add_paragraph()
+    p_div.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_div.paragraph_format.space_before = Pt(2)
+    p_div.paragraph_format.space_after = Pt(6)
+    r_div = p_div.add_run("-o0o-")
+    r_div.font.name = "Times New Roman"
+    r_div.font.size = Pt(11)
+    r_div.bold = True
+    r_div.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # 4. Logo UIT chính thức (3.0 cm, căn giữa) - TUYỆT ĐỐI KHÔNG CHÈN HÌNH MINH HỌA NÀO KHÁC TRÊN BÌA
+    if UIT_LOGO_IMG.exists():
+        p_logo = doc.add_paragraph()
+        p_logo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_logo.paragraph_format.space_before = Pt(4)
+        p_logo.paragraph_format.space_after = Pt(8)
+        r_logo = p_logo.add_run()
+        r_logo.add_picture(str(UIT_LOGO_IMG), width=Cm(3.0))
+    else:
+        raise FileNotFoundError(f"UIT Logo not found at {UIT_LOGO_IMG}")
+        
+    # 5. Tiêu đề loại tài liệu
+    p_doc = doc.add_paragraph()
+    p_doc.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_doc.paragraph_format.space_before = Pt(6)
+    p_doc.paragraph_format.space_after = Pt(3)
+    r_doc = p_doc.add_run("BÁO CÁO ĐỒ ÁN MÔN HỌC")
+    r_doc.font.name = "Times New Roman"
+    r_doc.font.size = Pt(16)
+    r_doc.bold = True
+    r_doc.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # 6. Thông tin môn học
+    p_c = doc.add_paragraph()
+    p_c.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_c.paragraph_format.space_before = Pt(0)
+    p_c.paragraph_format.space_after = Pt(12)
+    r_c = p_c.add_run("MÔN HỌC: MÁY HỌC (CS114)")
+    r_c.font.name = "Times New Roman"
+    r_c.font.size = Pt(13)
+    r_c.bold = True
+    r_c.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # 7. Tên đề tài
+    p_top_lbl = doc.add_paragraph()
+    p_top_lbl.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_top_lbl.paragraph_format.space_before = Pt(4)
+    p_top_lbl.paragraph_format.space_after = Pt(2)
+    r_top_lbl = p_top_lbl.add_run("ĐỀ TÀI:")
+    r_top_lbl.font.name = "Times New Roman"
+    r_top_lbl.font.size = Pt(13)
+    r_top_lbl.bold = True
+    r_top_lbl.font.color.rgb = RGBColor(0, 0, 0)
+    
+    p_top_val = doc.add_paragraph()
+    p_top_val.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_top_val.paragraph_format.space_before = Pt(0)
+    p_top_val.paragraph_format.space_after = Pt(16)
+    p_top_val.paragraph_format.line_spacing = 1.25
+    r_top_val = p_top_val.add_run(
+        "PHÁT HIỆN TIN NHẮN & KỊCH BẢN THAO TÚNG TÂM LÝ\n"
+        "LỪA ĐẢO NHẮM VÀO NGƯỜI CAO TUỔI TẠI VIỆT NAM"
+    )
+    r_top_val.font.name = "Times New Roman"
+    r_top_val.font.size = Pt(13.5)
+    r_top_val.bold = True
+    r_top_val.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # 8. Bảng phân công 2 cột không viền (Roster Block - Left: GVHD 5.8cm, Right: SVTH 9.2cm)
+    table = doc.add_table(rows=1, cols=2)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.autofit = False
     for row in table.rows:
         trPr = row._tr.get_or_add_trPr()
         trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
     table.rows[0]._tr.get_or_add_trPr().append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
     
-    hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = "CẤU TRÚC BÁO CÁO ĐỒ ÁN"
-    hdr_cells[1].text = "TRANG"
-    for i in range(2):
-        set_cell_background(hdr_cells[i], "1B365D")
-        set_cell_margins(hdr_cells[i], top=50, bottom=50, left=70, right=70)
-        p = hdr_cells[i].paragraphs[0]
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_before = Pt(0)
-        p.paragraph_format.space_after = Pt(0)
-        for run in p.runs:
-            run.font.name = "Times New Roman"
-            run.font.size = Pt(9.5)
-            run.font.bold = True
-            run.font.color.rgb = RGBColor(255, 255, 255)
-            
-    for r_idx, (title, page_str) in enumerate(toc_data):
-        row_cells = table.rows[r_idx + 1].cells
-        row_cells[0].text = title
-        row_cells[1].text = page_str
-        bg_color = "F8F9FA" if r_idx % 2 == 1 else "FFFFFF"
-        is_chapter = "CHƯƠNG" in title or "LỜI CAM ĐOAN" in title or "TÀI LIỆU" in title
+    col_widths = [Cm(5.8), Cm(9.2)]
+    for i, w in enumerate(col_widths):
+        c = table.cell(0, i)
+        c.width = w
+        tcPr = c._tc.get_or_add_tcPr()
+        borders_xml = parse_xml(
+            f'<w:tcBorders {nsdecls("w")}>'
+            f'<w:top w:val="none"/><w:left w:val="none"/>'
+            f'<w:bottom w:val="none"/><w:right w:val="none"/>'
+            f'</w:tcBorders>'
+        )
+        tcPr.append(borders_xml)
+        valign_xml = parse_xml(f'<w:vAlign {nsdecls("w")} w:val="top"/>')
+        tcPr.append(valign_xml)
         
-        for c_idx in range(2):
-            set_cell_background(row_cells[c_idx], bg_color)
-            set_cell_margins(row_cells[c_idx], top=20, bottom=20, left=60, right=60)
-            p = row_cells[c_idx].paragraphs[0]
-            p.alignment = WD_ALIGN_PARAGRAPH.LEFT if c_idx == 0 else WD_ALIGN_PARAGRAPH.CENTER
-            p.paragraph_format.space_before = Pt(0)
-            p.paragraph_format.space_after = Pt(0)
-            p.paragraph_format.line_spacing = 1.05
-            for run in p.runs:
-                run.font.name = "Times New Roman"
-                run.font.size = Pt(9.5 if is_chapter else 9.0)
-                run.font.bold = is_chapter
-                run.font.color.rgb = NAVY_COLOR if is_chapter else TEXT_COLOR
-                
-    for row in table.rows:
-        row.cells[0].width = Inches(5.3)
-        row.cells[1].width = Inches(1.0)
+    # Cột trái: Giảng viên hướng dẫn
+    cell_gv = table.cell(0, 0)
+    p_gv = cell_gv.paragraphs[0]
+    p_gv.paragraph_format.space_before = Pt(4)
+    p_gv.paragraph_format.space_after = Pt(2)
+    p_gv.paragraph_format.line_spacing = 1.15
+    r_gvh = p_gv.add_run("GIẢNG VIÊN HƯỚNG DẪN:")
+    r_gvh.font.name = "Times New Roman"
+    r_gvh.font.size = Pt(11.5)
+    r_gvh.bold = True
+    r_gvh.font.color.rgb = RGBColor(0, 0, 0)
+    
+    p_gvn = cell_gv.add_paragraph()
+    p_gvn.paragraph_format.space_before = Pt(2)
+    p_gvn.paragraph_format.space_after = Pt(4)
+    p_gvn.paragraph_format.line_spacing = 1.15
+    r_gvn = p_gvn.add_run("ThS. Cáp Phạm Đình Thăng")
+    r_gvn.font.name = "Times New Roman"
+    r_gvn.font.size = Pt(12)
+    r_gvn.bold = True
+    r_gvn.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # Cột phải: Nhóm sinh viên thực hiện
+    cell_sv = table.cell(0, 1)
+    p_svh = cell_sv.paragraphs[0]
+    p_svh.paragraph_format.space_before = Pt(4)
+    p_svh.paragraph_format.space_after = Pt(2)
+    p_svh.paragraph_format.line_spacing = 1.15
+    r_svh = p_svh.add_run("NHÓM SINH VIÊN THỰC HIỆN:")
+    r_svh.font.name = "Times New Roman"
+    r_svh.font.size = Pt(11.5)
+    r_svh.bold = True
+    r_svh.font.color.rgb = RGBColor(0, 0, 0)
+    
+    p_grp = cell_sv.add_paragraph()
+    p_grp.paragraph_format.space_before = Pt(0)
+    p_grp.paragraph_format.space_after = Pt(4)
+    p_grp.paragraph_format.line_spacing = 1.15
+    r_grp = p_grp.add_run("Nhóm 10 - Lớp: CS114.F31.CN2.TTNT")
+    r_grp.font.name = "Times New Roman"
+    r_grp.font.size = Pt(11.0)
+    r_grp.bold = True
+    r_grp.font.color.rgb = RGBColor(0, 0, 0)
+    
+    p_sts = cell_sv.add_paragraph()
+    p_sts.paragraph_format.space_before = Pt(0)
+    p_sts.paragraph_format.space_after = Pt(4)
+    p_sts.paragraph_format.line_spacing = 1.25
+    
+    students = [
+        ("Đặng Chí Thanh", "25730067", "Trưởng nhóm"),
+        ("Bùi Thị Mỷ Cẩm", "25730013", ""),
+        ("Hoàng Cao Sơn", "25730061", ""),
+    ]
+    for idx, (s_name, s_id, s_role) in enumerate(students, 1):
+        extra_str = f" ({s_role})" if s_role else ""
+        line_str = f"{idx}. {s_name} - {s_id}{extra_str}"
+        if idx < len(students):
+            line_str += "\n"
+        r_st = p_sts.add_run(line_str)
+        r_st.font.name = "Times New Roman"
+        r_st.font.size = Pt(11.0)
+        r_st.bold = bool(s_role)
+        r_st.font.color.rgb = RGBColor(0, 0, 0)
         
-    p_after = doc.add_paragraph()
-    p_after.paragraph_format.space_before = Pt(0)
-    p_after.paragraph_format.space_after = Pt(2)
-    return table
+    # 9. Địa điểm & Thời gian chân trang
+    p_date = doc.add_paragraph()
+    p_date.paragraph_format.space_before = Pt(20)
+    p_date.paragraph_format.space_after = Pt(0)
+    p_date.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    r_date = p_date.add_run("TP. HỒ CHÍ MINH - THÁNG 10/2026")
+    r_date.font.name = "Times New Roman"
+    r_date.font.size = Pt(12)
+    r_date.bold = True
+    r_date.font.color.rgb = RGBColor(0, 0, 0)
 
-def add_page_number_to_section(section):
-    footer = section.footer
-    p = footer.paragraphs[0]
-    p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    p.paragraph_format.space_after = Pt(0)
-    run = p.add_run()
-    run.font.name = "Times New Roman"
-    run.font.size = Pt(10)
-    run.font.color.rgb = MUTED_COLOR
-    fldChar1 = parse_xml(r'<w:fldChar %s w:fldCharType="begin"/>' % nsdecls('w'))
-    instrText = parse_xml(r'<w:instrText %s xml:space="preserve"> PAGE </w:instrText>' % nsdecls('w'))
-    fldChar2 = parse_xml(r'<w:fldChar %s w:fldCharType="separate"/>' % nsdecls('w'))
-    fldChar3 = parse_xml(r'<w:fldChar %s w:fldCharType="end"/>' % nsdecls('w'))
-    run._r.append(fldChar1)
-    run._r.append(instrText)
-    run._r.append(fldChar2)
-    run._r.append(fldChar3)
+def enforce_pure_times_new_roman(docx_path: str) -> None:
+    """
+    Kỹ thuật kế thừa từ CS112:
+    Safely replace theme and style font names via raw string replacement in the ZIP package.
+    Never uses ElementTree re-serialization to avoid mangling OpenXML namespaces (e.g. w: -> ns0:).
+    Ensures 100% Times New Roman across theme1.xml, styles.xml, and document.xml.
+    """
+    import zipfile
 
-def build_cover_page(doc):
-    cover_sec = doc.sections[0]
-    cover_sec.top_margin = Cm(2.0)
-    cover_sec.bottom_margin = Cm(2.0)
-    cover_sec.left_margin = Cm(3.0)
-    cover_sec.right_margin = Cm(2.0)
-    cover_sec.different_first_page_header_footer = True
-    
-    # Add page border (Khung hoa văn đôi chuẩn UIT)
-    sectPr = cover_sec._sectPr
-    borders = parse_xml(
-        f'<w:pgBorders {nsdecls("w")} w:offsetFrom="page">'
-        f'<w:top w:val="double" w:sz="18" w:space="24" w:color="1B365D"/>'
-        f'<w:left w:val="double" w:sz="18" w:space="24" w:color="1B365D"/>'
-        f'<w:bottom w:val="double" w:sz="18" w:space="24" w:color="1B365D"/>'
-        f'<w:right w:val="double" w:sz="18" w:space="24" w:color="1B365D"/>'
-        f'</w:pgBorders>'
-    )
-    sectPr.append(borders)
-    
-    p1 = doc.add_paragraph()
-    format_paragraph(p1, size_pt=13, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=NAVY_COLOR)
-    p1.paragraph_format.space_before = Pt(12)
-    p1.paragraph_format.space_after = Pt(2)
-    p1.add_run("ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH\nTRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN")
-    
-    p2 = doc.add_paragraph()
-    format_paragraph(p2, size_pt=12, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=GOLD_COLOR)
-    p2.paragraph_format.space_before = Pt(2)
-    p2.paragraph_format.space_after = Pt(12)
-    p2.add_run("KHOA KHOA HỌC MÁY TÍNH — BỘ MÔN TRÍ TUỆ NHÂN TẠO")
-    
-    if COVER_IMG.exists():
-        p_img = doc.add_paragraph()
-        p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_img.paragraph_format.space_before = Pt(6)
-        p_img.paragraph_format.space_after = Pt(12)
-        r_img = p_img.add_run()
-        r_img.add_picture(str(COVER_IMG), width=Inches(1.8))
-        
-    p_sep = doc.add_paragraph()
-    format_paragraph(p_sep, size_pt=11, align=WD_ALIGN_PARAGRAPH.CENTER, color=GOLD_COLOR)
-    p_sep.paragraph_format.space_after = Pt(14)
-    p_sep.add_run("— — — ❖ — — —")
-    
-    p_type = doc.add_paragraph()
-    format_paragraph(p_type, size_pt=14, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=MUTED_COLOR)
-    p_type.paragraph_format.space_after = Pt(4)
-    p_type.add_run("BÁO CÁO ĐỒ ÁN MÔN HỌC")
-    
-    p_course = doc.add_paragraph()
-    format_paragraph(p_course, size_pt=16, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=NAVY_COLOR)
-    p_course.paragraph_format.space_after = Pt(16)
-    p_course.add_run("MÁY HỌC — CS114.F31.CN2.TTNT")
-    
-    p_title = doc.add_paragraph()
-    format_paragraph(p_title, size_pt=18, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=NAVY_COLOR)
-    p_title.paragraph_format.space_before = Pt(6)
-    p_title.paragraph_format.space_after = Pt(8)
-    p_title.add_run("PHÁT HIỆN TIN NHẮN & KỊCH BẢN THAO TÚNG TÂM LÝ\nLỪA ĐẢO NHẮM VÀO NGƯỜI CAO TUỔI TẠI VIỆT NAM")
-    
-    p_sub = doc.add_paragraph()
-    format_paragraph(p_sub, size_pt=12.5, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, color=TEXT_COLOR)
-    p_sub.paragraph_format.space_after = Pt(36)
-    p_sub.add_run("Nghiên cứu ứng dụng Học máy kết hợp XAI và Thiết kế Web Demo trợ năng")
-    
-    p_info = doc.add_paragraph()
-    p_info.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    p_info.paragraph_format.left_indent = Inches(1.2)
-    p_info.paragraph_format.line_spacing = 1.3
-    p_info.paragraph_format.space_after = Pt(28)
-    
-    def add_line(label, val, bold_val=True):
-        r1 = p_info.add_run(f"{label}: ")
-        r1.font.name = "Times New Roman"
-        r1.font.size = Pt(12.5)
-        r1.font.bold = False
-        r1.font.color.rgb = TEXT_COLOR
-        r2 = p_info.add_run(f"{val}\n")
-        r2.font.name = "Times New Roman"
-        r2.font.size = Pt(12.5)
-        r2.font.bold = bold_val
-        r2.font.color.rgb = NAVY_COLOR
-        
-    add_line("Giảng viên hướng dẫn", "ThS. Cáp Phạm Đình Thăng")
-    add_line("Nhóm thực hiện", "Nhóm 10 — Lớp CS114.F31.CN2.TTNT")
-    add_line("Sinh viên 1", "Đặng Chí Thanh — MSSV: 25730067 (Trưởng nhóm / PM)", bold_val=False)
-    add_line("Sinh viên 2", "Bùi Thị Mỷ Cẩm — MSSV: 25730013 (ML Modeling)", bold_val=False)
-    add_line("Sinh viên 3", "Hoàng Cao Sơn — MSSV: 25730061 (Data & Demo UI Lead)", bold_val=False)
-    
-    p_foot = doc.add_paragraph()
-    format_paragraph(p_foot, size_pt=12, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=NAVY_COLOR)
-    p_foot.paragraph_format.space_before = Pt(20)
-    p_foot.add_run("THÀNH PHỐ HỒ CHÍ MINH — THÁNG 10/2026")
+    with zipfile.ZipFile(docx_path, "r") as zin:
+        files = {name: zin.read(name) for name in zin.namelist()}
+
+    # 1. Sanitize theme1.xml
+    if "word/theme/theme1.xml" in files:
+        t = files["word/theme/theme1.xml"].decode("utf-8")
+        t = t.replace('typeface="Aptos Display"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Aptos"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Arial"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Calibri"', 'typeface="Times New Roman"')
+        files["word/theme/theme1.xml"] = t.encode("utf-8")
+
+    # 2. Sanitize styles.xml
+    if "word/styles.xml" in files:
+        s = files["word/styles.xml"].decode("utf-8")
+        s = s.replace('w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"', 'w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"')
+        s = s.replace('w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"', 'w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"')
+        s = s.replace('w:asciiTheme="majorHAnsi"', 'w:ascii="Times New Roman"')
+        s = s.replace('w:hAnsiTheme="majorHAnsi"', 'w:hAnsi="Times New Roman"')
+        s = s.replace('w:asciiTheme="minorHAnsi"', 'w:ascii="Times New Roman"')
+        s = s.replace('w:hAnsiTheme="minorHAnsi"', 'w:hAnsi="Times New Roman"')
+        s = s.replace('w:cstheme="majorBidi"', 'w:cs="Times New Roman"')
+        s = s.replace('w:cstheme="minorBidi"', 'w:cs="Times New Roman"')
+        files["word/styles.xml"] = s.encode("utf-8")
+
+    # 3. Sanitize document.xml (clean any theme references without touching XML tree)
+    if "word/document.xml" in files:
+        d = files["word/document.xml"].decode("utf-8")
+        d = d.replace('w:asciiTheme="majorHAnsi"', 'w:ascii="Times New Roman"')
+        d = d.replace('w:hAnsiTheme="majorHAnsi"', 'w:hAnsi="Times New Roman"')
+        d = d.replace('w:asciiTheme="minorHAnsi"', 'w:ascii="Times New Roman"')
+        d = d.replace('w:hAnsiTheme="minorHAnsi"', 'w:hAnsi="Times New Roman"')
+        d = d.replace('w:cstheme="majorBidi"', 'w:cs="Times New Roman"')
+        d = d.replace('w:cstheme="minorBidi"', 'w:cs="Times New Roman"')
+        files["word/document.xml"] = d.encode("utf-8")
+
+    # Write back clean package
+    with zipfile.ZipFile(docx_path, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+        for name, data in files.items():
+            zout.writestr(name, data)
+    print(f"[✓] Đã chuẩn hóa 100% font chữ sang Times New Roman trên tệp DOCX (bảo toàn namespace).")
 
 def generate_report(toc_overrides=None):
     doc = docx.Document()
     build_cover_page(doc)
     
-    # Body Section Margins & Page Numbering (From Page 2 onwards)
+    # ══════════════════════════════════════════════════════════════════════════
+    # SECTION 2: MỤC LỤC TỔNG THỂ (PHỤ LỤC 2 - DOT-LEADER KHÔNG SỐ TRANG)
+    # ══════════════════════════════════════════════════════════════════════════
+    sec2 = doc.add_section(docx.enum.section.WD_SECTION.NEW_PAGE)
+    sec2.page_width = Cm(21.0)
+    sec2.page_height = Cm(29.7)
+    sec2.top_margin = Cm(2.0)
+    sec2.bottom_margin = Cm(2.0)
+    sec2.left_margin = Cm(3.0)
+    sec2.right_margin = Cm(2.0)
+    sec2.different_first_page_header_footer = False
+    sec2.header.is_linked_to_previous = False
+    sec2.footer.is_linked_to_previous = False
+
+    # Xóa toàn bộ đường viền trang trong Section 2
+    sectPr2 = sec2._sectPr
+    for b in sectPr2.findall(qn('w:pgBorders')):
+        sectPr2.remove(b)
+
+    default_toc_data = [
+        {"text": "LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT", "level": 1, "anchor": "_Toc_Sec_01", "page": "1"},
+        {"text": "BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TỶ LỆ ĐÓNG GÓP THÀNH VIÊN", "level": 1, "anchor": "_Toc_Sec_Contrib", "page": "2"},
+        {"text": "CHƯƠNG 1 - ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU", "level": 1, "anchor": "_Toc_Sec_02", "page": "3"},
+        {"text": "1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam", "level": 2, "anchor": "_Toc_Sec_03", "page": "3"},
+        {"text": "1.2. Phân định ranh giới bài toán - Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả", "level": 2, "anchor": "_Toc_Sec_04", "page": "3"},
+        {"text": "1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt", "level": 2, "anchor": "_Toc_Sec_05", "page": "4"},
+        {"text": "1.4. Ý nghĩa thực tiễn và tác động xã hội", "level": 2, "anchor": "_Toc_Sec_06", "page": "5"},
+        {"text": "CHƯƠNG 2 - TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN", "level": 1, "anchor": "_Toc_Sec_07", "page": "6"},
+        {"text": "2.1. Khảo sát các công trình liên quan (Related Works)", "level": 2, "anchor": "_Toc_Sec_08", "page": "6"},
+        {"text": "2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ", "level": 2, "anchor": "_Toc_Sec_09", "page": "6"},
+        {"text": "2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt", "level": 2, "anchor": "_Toc_Sec_10", "page": "7"},
+        {"text": "CHƯƠNG 3 - PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "level": 1, "anchor": "_Toc_Sec_11", "page": "9"},
+        {"text": "3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "level": 2, "anchor": "_Toc_Sec_12", "page": "9"},
+        {"text": "3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "level": 2, "anchor": "_Toc_Sec_13", "page": "9"},
+        {"text": "3.3. Mô tả 4 mô hình Machine Learning", "level": 2, "anchor": "_Toc_Sec_14", "page": "10"},
+        {"text": "3.4. Kiến trúc luồng dữ liệu Đầu vào - Đầu ra (System I/O Flowchart)", "level": 2, "anchor": "_Toc_Sec_15", "page": "12"},
+        {"text": "3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", "level": 2, "anchor": "_Toc_Sec_16", "page": "13"},
+        {"text": "CHƯƠNG 4 - KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "level": 1, "anchor": "_Toc_Sec_17", "page": "14"},
+        {"text": "4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)", "level": 2, "anchor": "_Toc_Sec_18", "page": "14"},
+        {"text": "4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu", "level": 2, "anchor": "_Toc_Sec_19", "page": "19"},
+        {"text": "4.3. Kết quả thực nghiệm và đối sánh đa mô hình", "level": 2, "anchor": "_Toc_Sec_20", "page": "21"},
+        {"text": "4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa", "level": 2, "anchor": "_Toc_Sec_21", "page": "25"},
+        {"text": "4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "level": 2, "anchor": "_Toc_Sec_22", "page": "27"},
+        {"text": "4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi", "level": 2, "anchor": "_Toc_Sec_23", "page": "30"},
+        {"text": "4.7. Phân tích sai số & Đánh giá ca biên ngoại vi", "level": 2, "anchor": "_Toc_Sec_24", "page": "31"},
+        {"text": "CHƯƠNG 5 - KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "level": 1, "anchor": "_Toc_Sec_25", "page": "32"},
+        {"text": "5.1. Tổng kết các đóng góp chính của đề tài", "level": 2, "anchor": "_Toc_Sec_26", "page": "32"},
+        {"text": "5.2. Các hạn chế còn tồn tại", "level": 2, "anchor": "_Toc_Sec_27", "page": "32"},
+        {"text": "5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", "level": 2, "anchor": "_Toc_Sec_28", "page": "33"},
+        {"text": "TÀI LIỆU THAM KHẢO", "level": 1, "anchor": "_Toc_Sec_29", "page": "34"},
+    ]
+    toc_data = toc_overrides if toc_overrides else default_toc_data
+    build_toc_section(doc, toc_data)
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # SECTION 3: THÂN BÀI (DOCUMENT BODY - ĐÁNH SỐ TRANG TỪ 1, RUNNING HEADER)
+    # ══════════════════════════════════════════════════════════════════════════
     body_sec = doc.add_section(docx.enum.section.WD_SECTION.NEW_PAGE)
-    body_sec.header.is_linked_to_previous = False
-    body_sec.footer.is_linked_to_previous = False
-    body_sec.different_first_page_header_footer = False
-    
-    # Remove pgBorders on body section (borders only on cover page)
-    sectPr_body = body_sec._sectPr
-    for b in sectPr_body.findall(qn('w:pgBorders')):
-        sectPr_body.remove(b)
-        
+    body_sec.page_width = Cm(21.0)
+    body_sec.page_height = Cm(29.7)
     body_sec.top_margin = Cm(2.0)
     body_sec.bottom_margin = Cm(2.0)
     body_sec.left_margin = Cm(3.0)
     body_sec.right_margin = Cm(2.0)
-    add_page_number_to_section(body_sec)
+    body_sec.header_distance = Cm(1.0)
+    body_sec.footer_distance = Cm(1.0)
+    body_sec.different_first_page_header_footer = False
+    body_sec.header.is_linked_to_previous = False
+    body_sec.footer.is_linked_to_previous = False
+
+    # Xóa viền trang trong Section 3 (chỉ có ở Section 1 Bìa)
+    sectPr_body = body_sec._sectPr
+    for b in sectPr_body.findall(qn('w:pgBorders')):
+        sectPr_body.remove(b)
+
+    # Đánh số trang bắt đầu từ 1
+    pgNumType = parse_xml(r'<w:pgNumType %s w:start="1"/>' % nsdecls("w"))
+    sectPr_body.append(pgNumType)
+
+    # Running Header góc phải (9pt Italic Pure Black)
+    hdr_p = body_sec.header.paragraphs[0]
+    hdr_p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    hdr_p.paragraph_format.space_after = Pt(0)
+    hdr_r = hdr_p.add_run("Báo cáo Đồ án CS114 | Nhóm 10 - Scam Detection")
+    hdr_r.font.name = "Times New Roman"
+    hdr_r.font.size = Pt(9)
+    hdr_r.italic = True
+    hdr_r.font.color.rgb = RGBColor(0, 0, 0)
+
+    # Footer góc phải (11pt Pure Black)
+    ftr_p = body_sec.footer.paragraphs[0]
+    ftr_p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    ftr_p.paragraph_format.space_before = Pt(0)
+    ftr_p.paragraph_format.space_after = Pt(0)
+    ftr_r = ftr_p.add_run()
+    ftr_r.font.name = "Times New Roman"
+    ftr_r.font.size = Pt(11)
+    ftr_r.font.color.rgb = RGBColor(0, 0, 0)
+    add_page_number_to_run(ftr_r)
     
     # ══════════════════════════════════════════════════════════════════════════
-    # THÔNG TIN CHUNG VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT (TRANG 2 TRỌN VẸN)
+    # THÔNG TIN CHUNG VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT (TRANG 1 THÂN BÀI)
     # ══════════════════════════════════════════════════════════════════════════
-    p_lh = add_heading_1(doc, "LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT")
+    p_lh = add_heading_1(doc, "LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT", anchor="_Toc_Sec_01")
     p_lh.paragraph_format.space_before = Pt(4)
     p_lh.paragraph_format.space_after = Pt(3)
     
@@ -562,75 +887,94 @@ def generate_report(toc_overrides=None):
     p_b2.paragraph_format.space_after = Pt(1.5)
     
     p_b3 = add_bullet_p(doc, "3. Tính trung thực trong thực nghiệm: ", "Mọi kết quả mô hình, bảng đối sánh, ma trận nhầm lẫn và biểu đồ SHAP đều đo đạc qua seed RANDOM_STATE = 42, có mã nguồn kiểm chứng tự động và tái lặp 100%.")
-    p_b3.paragraph_format.space_after = Pt(3)
+    p_b3.paragraph_format.space_after = Pt(4)
 
-    p_mh = add_heading_2(doc, "BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TỶ LỆ ĐÓNG GÓP THÀNH VIÊN")
-    p_mh.paragraph_format.space_before = Pt(4)
-    p_mh.paragraph_format.space_after = Pt(3)
-
-    contrib_rows = [
-        ["1", "Đặng Chí Thanh\n(25730067)", "Trưởng nhóm / PM", "• Thu thập 1.773 tin bình thường & 50 mẫu Holdout Test\n• Pipeline tiền xử lý tiếng Việt & trích xuất 15 đặc trưng phụ\n• Pipeline EDA & Zero-leakage Feature Engineering 5.015 chiều\n• Đánh giá tổng hợp 4 mô hình & XAI SHAP Top-20\n• Thực nghiệm đối chứng Ablation & Điều phối báo cáo", "100%", "33.33%"],
-        ["2", "Bùi Thị Mỷ Cẩm\n(25730013)", "ML Modeling Lead", "• Thu thập 205 mẫu lừa đảo (health_gift, public_service)\n• Huấn luyện Naive Bayes Baseline (alpha=0.01)\n• Huấn luyện XGBoost (scale_pos_weight = 4.22)\n• Huấn luyện Calibrated Linear SVM (C=10.0)\n• Thiết kế Slide PowerPoint 22 trang chuẩn UIT", "100%", "33.33%"],
-        ["3", "Hoàng Cao Sơn\n(25730061)", "Data & UI Lead", "• Thu thập 215 mẫu lừa đảo (fear_authority, family_emergency)\n• Huấn luyện Random Forest Classifier (n_estimators=200)\n• Xây dựng Web App Demo Streamlit trợ năng người già\n• Tự động hóa kiểm thử E2E Playwright 16/16 tests\n• Soạn thảo bản thảo Word & Thiết lập bố cục OpenXML", "100%", "33.33%"],
-    ]
-    create_table(doc, ["STT", "THÀNH VIÊN", "VAI TRÒ", "PHÂN HỆ PHỤ TRÁCH CHI TIẾT", "HOÀN THÀNH", "ĐÓNG GÓP"], contrib_rows, col_widths=[0.4, 1.3, 1.1, 2.7, 0.8, 0.7], font_size_pt=8.0, top_margin=18, bottom=18)
-
+    p_ck_end = add_body_p(doc, "Chúng tôi - Đặng Chí Thanh (25730067), Bùi Thị Mỷ Cẩm (25730013), Hoàng Cao Sơn (25730061) - chịu hoàn toàn trách nhiệm cá nhân và tập thể trước Hội đồng chấm Đồ án môn học Máy học và Trường Đại học Công nghệ Thông tin về toàn bộ nội dung, số liệu, tính nguyên bản và độ trung thực của báo cáo này.")
+    p_ck_end.paragraph_format.space_before = Pt(4)
+    p_ck_end.paragraph_format.space_after = Pt(6)
 
     doc.add_page_break()
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC LỤC (TRANG 3 TRỌN VẸN)
+    # BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TỶ LỆ ĐÓNG GÓP THÀNH VIÊN (TRANG 2 THÂN BÀI - MÀN HÌNH RIÊNG)
     # ══════════════════════════════════════════════════════════════════════════
-    p_th = add_heading_1(doc, "MỤC LỤC TỔNG THỂ BÁO CÁO")
-    p_th.paragraph_format.space_before = Pt(4)
-    p_th.paragraph_format.space_after = Pt(6)
-    
-    default_toc_data = [
-        ["LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT", "Trang 02"],
-        ["CHƯƠNG 1 — ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU", "Trang 04"],
-        ["    1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam", "Trang 04"],
-        ["    1.2. Phân định ranh giới bài toán — Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả", "Trang 04"],
-        ["    1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt", "Trang 05"],
-        ["    1.4. Ý nghĩa thực tiễn và tác động xã hội", "Trang 06"],
-        ["CHƯƠNG 2 — TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN", "Trang 07"],
-        ["    2.1. Khảo sát các công trình liên quan (Related Works)", "Trang 07"],
-        ["    2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ", "Trang 07"],
-        ["    2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt", "Trang 08"],
-        ["CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "Trang 10"],
-        ["    3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "Trang 10"],
-        ["    3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "Trang 10"],
-        ["    3.3. Mô tả 4 mô hình Machine Learning", "Trang 11"],
-        ["    3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", "Trang 13"],
-        ["    3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", "Trang 14"],
-        ["CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "Trang 15"],
-        ["    4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)", "Trang 15"],
-        ["    4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu", "Trang 20"],
-        ["    4.3. Kết quả thực nghiệm và đối sánh đa mô hình", "Trang 22"],
-        ["    4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa", "Trang 26"],
-        ["    4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "Trang 28"],
-        ["    4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi", "Trang 31"],
-        ["    4.7. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", "Trang 32"],
-        ["CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "Trang 33"],
-        ["    5.1. Tổng kết các đóng góp chính của đề tài", "Trang 33"],
-        ["    5.2. Các hạn chế còn tồn tại", "Trang 33"],
-        ["    5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", "Trang 34"],
-        ["TÀI LIỆU THAM KHẢO (CHUẨN HÓA 20 NGUỒN IEEE)", "Trang 35"],
+    p_mh = add_heading_1(doc, "BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TỶ LỆ ĐÓNG GÓP THÀNH VIÊN", anchor="_Toc_Sec_Contrib")
+    p_mh.paragraph_format.space_before = Pt(4)
+    p_mh.paragraph_format.space_after = Pt(3)
+
+    p_intro = add_body_p(doc, "Bảng dưới đây trình bày chi tiết phân công trách nhiệm, các phân hệ kỹ thuật phụ trách, mức độ hoàn thành và tỷ lệ đóng góp thực tế của từng thành viên trong Nhóm 10:")
+    p_intro.paragraph_format.space_after = Pt(4)
+
+    contrib_rows = [
+        [
+            "1",
+            "Đặng Chí Thanh\n(25730067)",
+            "Trưởng nhóm / PM\nData & NLP Lead",
+            "• Điều phối toàn diện dự án; thiết lập môi trường nghiên cứu & quy trình kiểm thử CI/CD\n"
+            "• Thu thập 1.773 tin bình thường (IEEE Access 2026) & 50 mẫu Holdout Test thực tế\n"
+            "• Xây dựng pipeline tiền xử lý tiếng Việt 5 bước & trích xuất 15 đặc trưng phụ tâm lý\n"
+            "• Thiết kế pipeline Zero-leakage TF-IDF + Aux 5.015 chiều & 7 biểu đồ EDA 300 DPI\n"
+            "• Đánh giá đối sánh 4 mô hình, bóc tách SHAP TreeExplainer & Top-20 từ khóa XAI\n"
+            "• Thực nghiệm đối chứng chuyên sâu Ablation (Tiền xử lý & Không gian 5.015 chiều)\n"
+            "• Biên soạn Báo cáo Chương 4, 5; soạn Kịch bản bảo vệ 15 phút & Bộ câu hỏi phản biện Q&A\n"
+            "• Kiểm toán liêm chính học thuật & đóng gói hồ sơ nộp bài chuẩn UIT",
+            "100%",
+            "40%"
+        ],
+        [
+            "2",
+            "Bùi Thị Mỷ Cẩm\n(25730013)",
+            "ML Modeling Lead\nPPT Lead",
+            "• Thu thập & kiểm toán 205 mẫu lừa đảo (159 public_service, 46 health_gift), vượt 7 tầng kiểm định\n"
+            "• Huấn luyện Naive Bayes Baseline (alpha=0.01), F1=0.8864, Recall=92.86%\n"
+            "• Huấn luyện XGBoost Classifier (scale_pos_weight=4.22), F1=0.9535, Recall=97.62%\n"
+            "• Huấn luyện Calibrated Linear SVM (C=10.0), F1=0.9474, ROC-AUC=0.9986; khảo nghiệm PhoBERT\n"
+            "• Triển khai mã nguồn thực nghiệm Ablation Masking Tags PII (ablation_masking_tags.py)\n"
+            "• Đóng gói bundle mô hình tối ưu nhất (best_model_bundle.pkl) phục vụ Web Demo\n"
+            "• Tự động hóa sinh Slide PowerPoint 22 trang chuẩn UIT bằng PptxGenJS (generate_slides.js)\n"
+            "• Khảo sát vòng đời 20 tài liệu tham khảo IEEE & chuẩn hóa mã DOI; biên soạn Báo cáo Chương 3",
+            "100%",
+            "30%"
+        ],
+        [
+            "3",
+            "Hoàng Cao Sơn\n(25730061)",
+            "Data Collection Lead\nDemo UI & Testing",
+            "• Phụ trách thu thập dữ liệu: Lập Google Sheet nhóm, chuẩn hóa schema; khảo sát Kaggle\n"
+            "• Thu thập & kiểm toán 215 mẫu lừa đảo (127 fear_authority, 88 family_emergency), vượt 7 tầng kiểm định\n"
+            "• Huấn luyện Random Forest Classifier (n_estimators=200), F1=0.9425, Recall=97.62%\n"
+            "• Đồng tác giả kịch bản trực quan hóa biểu đồ mô hình (model_plots.py)\n"
+            "• Thiết kế & phát triển Web App Demo Streamlit (demo/app.py), chia giao diện Split-View\n"
+            "• Hiện thực hóa 6 giải pháp trợ năng W3C WCAG 2.1 cho người già (phóng đại chữ, Hotline 156/113)\n"
+            "• Tự động hóa kiểm thử E2E Playwright với 16/16 tests giao diện vượt qua hoàn toàn\n"
+            "• Soạn thảo Báo cáo Chương 1, Chương 2 và khởi tạo kiến trúc bố cục OpenXML ban đầu",
+            "100%",
+            "30%"
+        ],
     ]
-    toc_data = toc_overrides if toc_overrides else default_toc_data
-    create_toc_table(doc, toc_data)
+    create_table(doc, ["STT", "THÀNH VIÊN", "VAI TRÒ", "PHÂN HỆ PHỤ TRÁCH CHI TIẾT", "HOÀN THÀNH", "ĐÓNG GÓP"], contrib_rows, col_widths=[0.35, 1.25, 1.0, 2.65, 0.55, 0.5], font_size_pt=8.0, top_margin=20, bottom=20)
+
+    p_conf = doc.add_paragraph()
+    p_conf.paragraph_format.space_before = Pt(6)
+    p_conf.paragraph_format.space_after = Pt(2)
+    r_conf = p_conf.add_run("*Xác nhận: 100% thành viên tham gia đầy đủ, thực hiện nghiêm túc và hoàn thành toàn diện nhiệm vụ được giao.*")
+    r_conf.font.name = "Times New Roman"
+    r_conf.font.size = Pt(10)
+    r_conf.italic = True
+    r_conf.font.color.rgb = MUTED_COLOR
 
     doc.add_page_break()
 
     # ══════════════════════════════════════════════════════════════════════════
     # CHƯƠNG 1: ĐẶT VẤN ĐỀ
     # ══════════════════════════════════════════════════════════════════════════
-    add_heading_1(doc, "CHƯƠNG 1 — ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU")
+    add_heading_1(doc, "CHƯƠNG 1 - ĐẶT VẤN ĐỀ VÀ BỐI CẢNH NGHIÊN CỨU", anchor="_Toc_Sec_02")
 
-    add_heading_2(doc, "1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam")
+    add_heading_2(doc, "1.1. Bối cảnh thực tiễn và tính cấp thiết tại Việt Nam", anchor="_Toc_Sec_03")
     add_body_p(doc, "Trong giai đoạn 2025–2026, Việt Nam chứng kiến làn sóng chuyển đổi số toàn diện với sự phổ cập sâu rộng của định danh điện tử VNeID, thanh toán không tiền mặt và các dịch vụ hành chính công trực tuyến. Tuy nhiên, cùng với tiện ích công nghệ, tình hình tội phạm mạng và lừa đảo viễn thông (Smishing, Social Engineering) cũng bùng phát với mức độ tinh vi và nguy hiểm chưa từng có. Trong các đối tượng người dùng, người cao tuổi (từ 60 tuổi trở lên) đang trở thành nhóm nạn nhân chịu tổn thất nặng nề nhất cả về tài sản lẫn sức khỏe tinh thần.")
     add_body_p(doc, "Theo thống kê chính thức từ Cục An toàn thông tin (Bộ Thông tin và Truyền thông) và Cục Cảnh sát hình sự (Bộ Công an) trong năm 2025 và đầu năm 2026, các cơ quan chức năng đã ghi nhận hàng chục nghìn phản ánh lừa đảo trực tuyến với tổng thiệt hại ước tính lên tới hàng nghìn tỷ đồng. Đáng báo động, các vụ án chiếm đoạt từ hàng trăm triệu đến hàng tỷ đồng phần lớn nhắm vào người hưu trí và người cao tuổi. Do phản xạ công nghệ còn chậm, thị lực suy giảm, khả năng xác minh thông tin viễn thông hạn chế và tâm lý cả tin, người cao tuổi rất dễ bị cô lập và thao túng khi nhận được các kịch bản tin nhắn được thiết kế bài bản.")
 
-    add_heading_2(doc, "1.2. Phân định ranh giới bài toán — Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả")
+    add_heading_2(doc, "1.2. Phân định ranh giới bài toán - Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả", anchor="_Toc_Sec_04")
     add_body_p(doc, "Trong nghiên cứu này, bài toán phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing) nhắm vào người cao tuổi được phân định ranh giới bản chất với bài toán kiểm chứng tin giả báo chí (Fake News Verification):")
     add_bullet_p(doc, "• Kiểm chứng tin giả báo chí (Fake News): ", "Bản chất là bài toán đối chiếu tri thức (Fact-checking). Tin giả thường là các phát ngôn, sự kiện thời sự cộng đồng sai sự thật phát tán rộng rãi trên mạng xã hội; việc xác thực chủ yếu dựa vào truy vấn đối sánh với các cơ sở tri thức công cộng, văn bản pháp luật hoặc các nguồn báo chí chính thống đáng tin cậy.")
     add_bullet_p(doc, "• Phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing): ", "Bản chất là bài toán phát hiện hành vi tấn công kỹ nghệ xã hội trong giao tiếp cá nhân 1-1. Kẻ lừa đảo không bịa đặt sự kiện tin tức chung, mà nhắm thẳng vào nạn nhân cụ thể thông qua các kịch bản đe dọa, giục giã hoặc mồi nhử tài chính riêng tư. Không một cơ sở dữ liệu tin tức công cộng nào có thể chứa sẵn nội dung của một tin nhắn lừa đảo riêng lẻ. Do đó, việc phát hiện bắt buộc phải dựa trên phân tích ngữ cảnh bất thường, hành vi thúc ép và các tín hiệu thao túng tâm lý nội tại (từ khóa đe dọa quyền lực, thúc giục chuyển tiền gấp, yêu cầu cung cấp OTP, link mạo danh).")
@@ -641,14 +985,14 @@ def generate_report(toc_overrides=None):
     add_bullet_p(doc, "3. Dụ dỗ quà tặng & Sức khỏe (health_gift): ", "Mạo danh tri ân khách hàng cao tuổi tặng sữa dinh dưỡng, thuốc đông y trị bách bệnh miễn phí, hoặc mời tham gia bảo hiểm y tế lãi suất cao.")
     add_bullet_p(doc, "4. Giả mạo dịch vụ công (public_service): ", "Giả danh cán bộ Thuế, Bảo hiểm xã hội, Điện lực thông báo sai lệch hồ sơ VNeID, thúc ép bấm vào liên kết lạ tải ứng dụng dịch vụ công giả mạo để chiếm quyền điều khiển điện thoại.")
 
-    add_heading_2(doc, "1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt")
+    add_heading_2(doc, "1.3. Khó khăn kỹ thuật đặc thù trong xử lý ngôn ngữ tiếng Việt", anchor="_Toc_Sec_05")
     add_body_p(doc, "Việc xây dựng một hệ thống phát hiện tự động tin nhắn lừa đảo tiếng Việt nhắm vào người cao tuổi đặt ra 4 thách thức kỹ thuật cốt lõi:")
     add_bullet_p(doc, "1. Đặc thù ngôn ngữ tiếng Việt và thủ thuật lách kiểm duyệt: ", "Tiếng Việt là ngôn ngữ đơn lập với 6 thanh điệu phong phú, ranh giới từ phức tạp cần cơ chế tách từ chuyên dụng (Word Segmentation). Thêm vào đó, tội phạm mạng liên tục sử dụng ngôn ngữ teencode (ck, stk, sdt), từ viết tắt không dấu, và thủ thuật chèn ký tự đặc biệt leet-speak (c.o.n.g a.n, t.i.e.n) nhằm qua mặt các bộ lọc từ khóa đơn giản.")
     add_bullet_p(doc, "2. Hiện tượng mất cân bằng dữ liệu sâu sắc: ", "Trong không gian viễn thông thực tế, tin nhắn lừa đảo chỉ chiếm tỷ trọng thiểu số (~19.15% trong tập dữ liệu của nhóm, tỷ lệ 4.22 : 1). Các mô hình tối ưu Accuracy thuần túy sẽ có xu hướng dự đoán nhãn bình thường cho mọi trường hợp, gây mất khả năng phát hiện.")
     add_bullet_p(doc, "3. Sự thiếu vắng bộ ngữ liệu chuẩn hóa công khai: ", "Cho đến nay, cộng đồng nghiên cứu AI trong nước chưa có một bộ dữ liệu công khai nào chuyên biệt về tin nhắn lừa đảo người cao tuổi có đầy đủ nguồn gốc truy vết (provenance) và đã được làm sạch khử định danh (PII) triệt để.")
-    add_bullet_p(doc, "4. Chi phí bất đối xứng giữa các loại sai số: ", "Trong bài toán an toàn bảo vệ người già, hậu quả của việc bỏ sót một tin lừa đảo (False Negative — FN) là nạn nhân có thể mất sạch tài sản dưỡng già tích cóp cả đời, nghiêm trọng hơn rất nhiều so với việc cảnh báo nhầm một tin nhắn thông thường (False Positive — FP). Do đó, hệ thống bắt buộc phải đặt mục tiêu tối thượng vào chỉ số Recall trên lớp lừa đảo (yêu cầu Recall ≥ 92%).")
+    add_bullet_p(doc, "4. Chi phí bất đối xứng giữa các loại sai số: ", "Trong bài toán an toàn bảo vệ người già, hậu quả của việc bỏ sót một tin lừa đảo (False Negative - FN) là nạn nhân có thể mất sạch tài sản dưỡng già tích cóp cả đời, nghiêm trọng hơn rất nhiều so với việc cảnh báo nhầm một tin nhắn thông thường (False Positive - FP). Do đó, hệ thống bắt buộc phải đặt mục tiêu tối thượng vào chỉ số Recall trên lớp lừa đảo (yêu cầu Recall ≥ 92%).")
 
-    add_heading_2(doc, "1.4. Ý nghĩa thực tiễn và tác động xã hội")
+    add_heading_2(doc, "1.4. Ý nghĩa thực tiễn và tác động xã hội", anchor="_Toc_Sec_06")
     add_body_p(doc, "Đề tài mang lại giá trị thực tiễn và tác động xã hội sâu sắc:")
     add_bullet_p(doc, "• Lá chắn công nghệ bảo vệ người yếu thế: ", "Hệ thống hoạt động như một người trợ lý số thông minh, hỗ trợ trực tiếp người cao tuổi nhận diện nguy cơ ngay khi tin nhắn vừa xuất hiện trên thiết bị di động.")
     add_bullet_p(doc, "• Khả năng triển khai linh hoạt: ", "Với kiến trúc học máy gọn nhẹ (tốc độ suy luận <50ms trên CPU tiêu chuẩn, không đòi hỏi GPU đắt đỏ), giải pháp có thể dễ dàng tích hợp vào ứng dụng nhắn tin SMS, tiện ích chặn cuộc gọi rác trên hệ điều hành Android, bot cảnh báo gia đình qua Zalo/Telegram, hoặc cổng lọc tin nhắn của các nhà mạng viễn thông.")
@@ -659,9 +1003,9 @@ def generate_report(toc_overrides=None):
     # ══════════════════════════════════════════════════════════════════════════
     # CHƯƠNG 2: TỔNG QUAN HƯỚNG TIẾP CẬN
     # ══════════════════════════════════════════════════════════════════════════
-    add_heading_1(doc, "CHƯƠNG 2 — TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN")
+    add_heading_1(doc, "CHƯƠNG 2 - TỔNG QUAN CÁC HƯỚNG TIẾP CẬN VÀ CÔNG TRÌNH LIÊN QUAN", anchor="_Toc_Sec_07")
 
-    add_heading_2(doc, "2.1. Khảo sát các công trình liên quan (Related Works)")
+    add_heading_2(doc, "2.1. Khảo sát các công trình liên quan (Related Works)", anchor="_Toc_Sec_08")
     add_body_p(doc, "Bài toán phát hiện tin nhắn rác và gian lận viễn thông đã được cộng đồng nghiên cứu xử lý qua nhiều giai đoạn với các hướng tiếp cận đa dạng. Bảng 2.1 tổng hợp các công trình khoa học tiêu biểu liên quan trực tiếp đến đề tài:")
 
     related_works = [
@@ -672,7 +1016,7 @@ def generate_report(toc_overrides=None):
     ]
     create_table(doc, ["CÔNG TRÌNH", "PHƯƠNG PHÁP", "TẬP DỮ LIỆU", "KẾT QUẢ & ĐÓNG GÓP", "HẠN CHẾ ĐỐI VỚI ĐỀ TÀI"], related_works, col_widths=[1.3, 1.4, 1.2, 1.2, 1.2], font_size_pt=8.5, top_margin=25, bottom=25)
 
-    add_heading_2(doc, "2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ")
+    add_heading_2(doc, "2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ", anchor="_Toc_Sec_09")
     add_body_p(doc, "Nhằm lựa chọn giải pháp tối ưu nhất cho bài toán, nhóm đã tiến hành đối sánh toàn diện 4 hướng tiếp cận công nghệ chính trong xử lý ngôn ngữ tự nhiên tiếng Việt (Bảng 2.2):")
 
     approaches_table = [
@@ -686,7 +1030,7 @@ def generate_report(toc_overrides=None):
     ]
     create_table(doc, ["TIÊU CHÍ ĐÁNH GIÁ", "1. HỆ LUẬT (RULE-BASED)", "2. ML TRUYỀN THỐNG (GIẢI PHÁP CHỌN)", "3. TRANSFORMER (PHOBERT)", "4. LLM QUA API"], approaches_table, col_widths=[1.5, 1.2, 1.3, 1.2, 1.1], font_size_pt=8.5, top_margin=25, bottom=25)
 
-    add_heading_2(doc, "2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt")
+    add_heading_2(doc, "2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt", anchor="_Toc_Sec_10")
     add_body_p(doc, "Từ kết quả phân tích so sánh ở trên, nhóm nghiên cứu khẳng định việc lựa chọn Học máy truyền thống kết hợp Trích xuất đặc trưng chuyên biệt (TF-IDF 5.000 chiều + 15 đặc trưng phụ tâm lý) là giải pháp khoa học phù hợp nhất dựa trên 4 luận cứ thực tiễn:")
     add_bullet_p(doc, "1. Tính tương thích hoàn hảo với quy mô dữ liệu: ", "Với tập ngữ liệu 2.193 mẫu thực tế, các thuật toán học máy cổ điển (XGBoost, SVM, Random Forest, Naive Bayes) phát huy hiệu quả tối đa mà không bị hiện tượng quá khớp (overfitting) trầm trọng như các mô hình mạng nơ-ron sâu hàng trăm triệu tham số khi thiếu hụt dữ liệu cỡ lớn.")
     add_bullet_p(doc, "2. Khả năng thực thi thời gian thực trên thiết bị biên: ", "Người cao tuổi cần một công cụ cảnh báo tức thì ngay khi tin nhắn đến. Tốc độ suy luận của mô hình chỉ dưới 10ms trên CPU tiêu chuẩn, bộ nhớ RAM chiếm dụng dưới 100MB, cho phép đóng gói chạy ngầm mượt mà trên mọi dòng điện thoại thông minh giá rẻ mà không làm chậm máy hay hao pin.")
@@ -698,17 +1042,17 @@ def generate_report(toc_overrides=None):
     # ══════════════════════════════════════════════════════════════════════════
     # CHƯƠNG 3: PHƯƠNG PHÁP ĐỀ XUẤT
     # ══════════════════════════════════════════════════════════════════════════
-    add_heading_1(doc, "CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG")
+    add_heading_1(doc, "CHƯƠNG 3 - PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", anchor="_Toc_Sec_11")
 
-    add_heading_2(doc, "3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu")
+    add_heading_2(doc, "3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", anchor="_Toc_Sec_12")
     add_body_p(doc, "Nhằm triệt tiêu nhiễu chính tả và đồng nhất cấu trúc ngữ pháp trước khi trích xuất đặc trưng, nhóm xây dựng một pipeline tiền xử lý văn bản tiếng Việt khép kín gồm 5 công đoạn nghiêm ngặt:")
-    add_bullet_p(doc, "• Bước 1 — Gỡ ký tự thay thế (Leet-speak) và tách thẻ ẩn danh: ", "Áp dụng biểu thức chính quy (Regex) bóc tách các ký tự chèn dấu chấm, dấu sao nhằm lách bộ lọc (ví dụ: 'c.o.n.g a.n' → 'cong an', 't.i.e.n' → 'tien'). Nhận diện các mẫu số điện thoại, đường link URL, số tài khoản và gán thẻ ẩn danh.")
-    add_bullet_p(doc, "• Bước 2 — Chuẩn hóa Unicode dựng sẵn (NFC): ", "Tuân thủ tiêu chuẩn quốc tế Unicode UAX #15 [3], chuyển đổi toàn bộ ký tự tổ hợp (NFD) về dạng dựng sẵn (NFC), đồng thời chuẩn hóa kiểu gõ dấu thanh theo quy tắc hiện đại bằng thư viện underthesea [5] (ví dụ: 'hòa', 'thúy' thay vì 'hoà', 'thuý').")
-    add_bullet_p(doc, "• Bước 3 — Chuẩn hóa Teencode và Ký tự biến âm (160 quy tắc): ", "Sử dụng từ điển 160 mẫu teencode được tinh chỉnh chuyên sâu cho gian lận viễn thông. Tự động giải mã các từ viết tắt phổ biến như 'ck' → 'chuyển khoản', 'stk' → 'số tài khoản', 'sđt' → 'số điện thoại', 'bca' → 'bộ công an', 'vks' → 'viện kiểm sát', 'bhxh' → 'bảo hiểm xã hội'.")
-    add_bullet_p(doc, "• Bước 4 — Tách từ tiếng Việt chuyên biệt (Word Segmentation): ", "Sử dụng thư viện PyVi [4] (ViTokenizer) để nhận diện và ghép các từ phức tiếng Việt bằng dấu gạch dưới (ví dụ: 'viện kiểm sát' → 'viện_kiểm_sát', 'chuyển tiền' → 'chuyển_tiền', 'bắt giam' → 'bắt_giam').")
-    add_bullet_p(doc, "• Bước 5 — Lọc từ dừng có bảo vệ từ khóa miền: ", "Loại bỏ các hư từ không mang giá trị phân biệt, nhưng bảo vệ nghiêm ngặt các từ khóa tâm lý nhạy cảm (gấp, ngay, tiền, công an) và các dấu câu biểu cảm (!, ?) phục vụ trích xuất đặc trưng phụ.")
+    add_bullet_p(doc, "• Bước 1 - Gỡ ký tự thay thế (Leet-speak) và tách thẻ ẩn danh: ", "Áp dụng biểu thức chính quy (Regex) bóc tách các ký tự chèn dấu chấm, dấu sao nhằm lách bộ lọc (ví dụ: 'c.o.n.g a.n' → 'cong an', 't.i.e.n' → 'tien'). Nhận diện các mẫu số điện thoại, đường link URL, số tài khoản và gán thẻ ẩn danh.")
+    add_bullet_p(doc, "• Bước 2 - Chuẩn hóa Unicode dựng sẵn (NFC): ", "Tuân thủ tiêu chuẩn quốc tế Unicode UAX #15 [3], chuyển đổi toàn bộ ký tự tổ hợp (NFD) về dạng dựng sẵn (NFC), đồng thời chuẩn hóa kiểu gõ dấu thanh theo quy tắc hiện đại bằng thư viện underthesea [5] (ví dụ: 'hòa', 'thúy' thay vì 'hoà', 'thuý').")
+    add_bullet_p(doc, "• Bước 3 - Chuẩn hóa Teencode và Ký tự biến âm (160 quy tắc): ", "Sử dụng từ điển 160 mẫu teencode được tinh chỉnh chuyên sâu cho gian lận viễn thông. Tự động giải mã các từ viết tắt phổ biến như 'ck' → 'chuyển khoản', 'stk' → 'số tài khoản', 'sđt' → 'số điện thoại', 'bca' → 'bộ công an', 'vks' → 'viện kiểm sát', 'bhxh' → 'bảo hiểm xã hội'.")
+    add_bullet_p(doc, "• Bước 4 - Tách từ tiếng Việt chuyên biệt (Word Segmentation): ", "Sử dụng thư viện PyVi [4] (ViTokenizer) để nhận diện và ghép các từ phức tiếng Việt bằng dấu gạch dưới (ví dụ: 'viện kiểm sát' → 'viện_kiểm_sát', 'chuyển tiền' → 'chuyển_tiền', 'bắt giam' → 'bắt_giam').")
+    add_bullet_p(doc, "• Bước 5 - Lọc từ dừng có bảo vệ từ khóa miền: ", "Loại bỏ các hư từ không mang giá trị phân biệt, nhưng bảo vệ nghiêm ngặt các từ khóa tâm lý nhạy cảm (gấp, ngay, tiền, công an) và các dấu câu biểu cảm (!, ?) phục vụ trích xuất đặc trưng phụ.")
 
-    add_heading_2(doc, "3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý")
+    add_heading_2(doc, "3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", anchor="_Toc_Sec_13")
     p_vec = doc.add_paragraph()
     format_paragraph(p_vec, size_pt=13, line_spacing=1.3, space_before_pt=0, space_after_pt=4, align=WD_ALIGN_PARAGRAPH.JUSTIFY)
     r1 = p_vec.add_run("Không gian vector đầu vào của mô hình được biểu diễn dưới dạng vector đa chiều: ")
@@ -771,7 +1115,7 @@ def generate_report(toc_overrides=None):
 
     add_body_p(doc, "Nhận xét Bảng 3.1: Các đặc trưng 2, 4, 5, 6, 9 và 14 có giá trị trung bình cao hơn ở tin lừa đảo như kỳ vọng, còn số lần nhắc tiền, số từ in hoa, độ dài và tính không dấu lại cao hơn ở tin bình thường. Riêng đặc trưng số lần nhắc tiền, nguyên nhân nằm ở bộ dữ liệu: thẻ [MONEY] xuất hiện trong 1.236 tin, trong đó 1.221 tin (khoảng 99%) thuộc lớp bình thường. Nhóm chưa phân tích nguyên nhân của các đặc trưng còn lại. Vì vậy, giá trị của 15 đặc trưng được đánh giá bằng thực nghiệm đối chứng ở Chương 4 chứ không dựa vào trực giác.")
 
-    add_heading_2(doc, "3.3. Mô tả 4 mô hình Machine Learning")
+    add_heading_2(doc, "3.3. Mô tả 4 mô hình Machine Learning", anchor="_Toc_Sec_14")
     add_body_p(doc, "Nhóm xây dựng và đối sánh 4 mô hình học máy đại diện cho các trường phái thuật toán khác nhau:")
     add_bullet_p(doc, "1. Multinomial Naive Bayes (Baseline) [17]: ", "Mô hình xác suất cổ điển dựa trên định lý Bayes với giả định độc lập có điều kiện giữa các đặc trưng theo McCallum & Nigam [17]. Sử dụng kỹ thuật làm mịn Laplace với hệ số tối ưu α = 0.01 được tinh chỉnh qua 5-Fold GridSearch:")
     eq_nb_omml = (
@@ -812,34 +1156,34 @@ def generate_report(toc_overrides=None):
     add_bullet_p(doc, "4. Calibrated Linear Support Vector Machine (Linear SVM) [9]: ", "Mô hình tìm siêu phẳng phân cách cực đại theo Cortes & Vapnik [9]. Sử dụng thư viện tối ưu hóa tuyến tính LIBLINEAR [16] (LinearSVC) với hàm mất mát Hinge Loss (C = 10.0), kết hợp hiệu chuẩn xác suất CalibratedClassifierCV 5-Fold theo phương pháp Platt Scaling [10] để xuất xác suất dự đoán mượt mà.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 3.4 — SƠ ĐỒ KIẾN TRÚC LUỒNG DỮ LIỆU ĐẦU VÀO - ĐẦU RA (TRANG 12 TRỌN VẸN)
+    # MỤC 3.4 - SƠ ĐỒ KIẾN TRÚC LUỒNG DỮ LIỆU ĐẦU VÀO - ĐẦU RA (TRANG 12 TRỌN VẸN)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)")
+    add_heading_2(doc, "3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", anchor="_Toc_Sec_15")
     p_io = add_body_p(doc, "Hình 3.1 mô tả toàn cảnh kiến trúc luồng dữ liệu từ khâu tiếp nhận văn bản tin nhắn thô, qua tầng tiền xử lý kép, vector hóa TF-IDF kết hợp 15 đặc trưng phụ, đến tầng suy luận 4 mô hình học máy và xuất kết quả cảnh báo trực quan:")
     p_io.paragraph_format.space_after = Pt(2)
 
     add_image_with_caption(doc, FIGURES_DIR / "system_io_flowchart.png", 
-                           "Hình 3.1: Sơ đồ kiến trúc luồng dữ liệu Đầu vào – Đầu ra (Input/Output System Flowchart) của hệ thống", width_inches=2.2)
+                           "Hình 3.1: Sơ đồ kiến trúc luồng dữ liệu Đầu vào – Đầu ra (Input/Output System Flowchart) của hệ thống", width_inches=3.2)
 
     p_arc = add_body_p(doc, "Kiến trúc hệ thống được phân thành 4 tầng xử lý nối tiếp chặt chẽ:")
     p_arc.paragraph_format.space_after = Pt(2)
-    p_t1 = add_bullet_p(doc, "• Tầng 1 — Tiếp nhận & Ẩn danh hóa (PII Anonymization): ", "Thu nhận chuỗi tin nhắn thô từ các giao thức viễn thông (SMS, Zalo, OTT); áp dụng Regex chuyên sâu bóc tách và thay thế toàn bộ số điện thoại, liên kết URL, số tài khoản bằng các nhãn chuẩn [PHONE], [URL], [STK] nhằm bảo đảm quyền riêng tư 100%.")
+    p_t1 = add_bullet_p(doc, "• Tầng 1 - Tiếp nhận & Ẩn danh hóa (PII Anonymization): ", "Thu nhận chuỗi tin nhắn thô từ các giao thức viễn thông (SMS, Zalo, OTT); áp dụng Regex chuyên sâu bóc tách và thay thế toàn bộ số điện thoại, liên kết URL, số tài khoản bằng các nhãn chuẩn [PHONE], [URL], [STK] nhằm bảo đảm quyền riêng tư 100%.")
     p_t1.paragraph_format.space_after = Pt(1.0)
-    p_t2 = add_bullet_p(doc, "• Tầng 2 — Tiền xử lý văn bản kép tiếng Việt (Dual Text Preprocessing): ", "Triệt tiêu leet-speak; chuẩn hóa Unicode NFC theo tiêu chuẩn UAX #15; dịch 160 mẫu teencode; phân tách từ ghép tiếng Việt với PyVi; và lọc từ dừng có cơ chế bảo vệ từ khóa tâm lý cốt lõi.")
+    p_t2 = add_bullet_p(doc, "• Tầng 2 - Tiền xử lý văn bản kép tiếng Việt (Dual Text Preprocessing): ", "Triệt tiêu leet-speak; chuẩn hóa Unicode NFC theo tiêu chuẩn UAX #15; dịch 160 mẫu teencode; phân tách từ ghép tiếng Việt với PyVi; và lọc từ dừng có cơ chế bảo vệ từ khóa tâm lý cốt lõi.")
     p_t2.paragraph_format.space_after = Pt(1.0)
-    p_t3 = add_bullet_p(doc, "• Tầng 3 — Vector hóa không gian đặc trưng kết hợp (5.015 chiều): ", "Tạo lập song song ma trận TF-IDF N-grams (1, 2) 5.000 chiều và vector 15 đặc trưng phụ tâm lý học hành vi được chuẩn hóa qua StandardScaler.")
+    p_t3 = add_bullet_p(doc, "• Tầng 3 - Vector hóa không gian đặc trưng kết hợp (5.015 chiều): ", "Tạo lập song song ma trận TF-IDF N-grams (1, 2) 5.000 chiều và vector 15 đặc trưng phụ tâm lý học hành vi được chuẩn hóa qua StandardScaler.")
     p_t3.paragraph_format.space_after = Pt(1.0)
-    p_t4 = add_bullet_p(doc, "• Tầng 4 — Điều phối suy luận & Giao diện cảnh báo trợ năng: ", "Tích hợp bộ 4 mô hình học máy (XGBoost, Linear SVM, Random Forest, Naive Bayes); xuất xác suất rủi ro, phân loại nhãn nhị phân, bôi đỏ từ khóa bẫy tâm lý và kích hoạt số Hotline khẩn cấp 156/113 trên giao diện Web Demo Streamlit.")
+    p_t4 = add_bullet_p(doc, "• Tầng 4 - Điều phối suy luận & Giao diện cảnh báo trợ năng: ", "Tích hợp bộ 4 mô hình học máy (XGBoost, Linear SVM, Random Forest, Naive Bayes); xuất xác suất rủi ro, phân loại nhãn nhị phân, bôi đỏ từ khóa bẫy tâm lý và kích hoạt số Hotline khẩn cấp 156/113 trên giao diện Web Demo Streamlit.")
     p_t4.paragraph_format.space_after = Pt(1.0)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 3.5 — XỬ LÝ MẤT CÂN BẰNG LỚP & ZERO-LEAKAGE (TRANG 13 TRỌN VẸN)
+    # MỤC 3.5 - XỬ LÝ MẤT CÂN BẰNG LỚP & ZERO-LEAKAGE (TRANG 13 TRỌN VẸN)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)")
+    add_heading_2(doc, "3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", anchor="_Toc_Sec_16")
     
     add_body_p(doc, "Bộ dữ liệu gồm 1.773 tin bình thường và 420 tin lừa đảo (tỷ lệ 4,22 : 1). Một bộ phân loại luôn đoán 'bình thường' sẽ đạt Accuracy 80,9% trên tập kiểm thử mà không phát hiện được tin lừa đảo nào. Do đó, nhóm ưu tiên Recall, F1-Score và ROC-AUC, trong đó Recall là thước đo tối thượng vì một ca bỏ sót (âm tính giả) có thể khiến người cao tuổi mất trắng tài sản.")
 
@@ -916,24 +1260,24 @@ def generate_report(toc_overrides=None):
 
     # ══════════════════════════════════════════════════════════════════════════
     # CHƯƠNG 4: KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ
-    # MỤC 4.1 — EDA PHẦN 1: ĐẶC TẢ DỮ LIỆU & PHÂN BỐ NHÃN (TRANG 14 TRỌN VẸN)
+    # MỤC 4.1 - EDA PHẦN 1: ĐẶC TẢ DỮ LIỆU & PHÂN BỐ NHÃN (TRANG 14 TRỌN VẸN)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_1(doc, "CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ")
+    add_heading_1(doc, "CHƯƠNG 4 - KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", anchor="_Toc_Sec_17")
 
-    add_heading_2(doc, "4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)")
+    add_heading_2(doc, "4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)", anchor="_Toc_Sec_18")
     
     add_heading_3(doc, "4.1.1. Mô tả Bộ dữ liệu và Phân chia Zero-Leakage")
     add_body_p(doc, "Bộ dữ liệu thực nghiệm bao gồm tổng cộng 2.193 mẫu tin nhắn tiếng Việt có nguồn gốc minh bạch 100% (Zero Synthetic Text), được kiểm toán 7 tầng nghiêm ngặt nhằm bảo đảm không chứa văn bản nhân tạo và khử ẩn danh 0% rò rỉ thông tin riêng tư PII (Bảng 4.1):")
 
     dataset_summary = [
         ["Tin nhắn bình thường (label=0)", "1.773", "IEEE Access 2026 Vietnamese SMS Dataset [1]", "Đặng Chí Thanh"],
-        ["Lừa đảo — Đe dọa quyền lực (fear_authority)", "127", "Báo Dân Trí, VnExpress, KLTN Smishing [2]", "Hoàng Cao Sơn"],
-        ["Lừa đảo — Giả mạo dịch vụ công (public_service)", "159", "Báo Tuổi Trẻ, VTV24, UIT IE403 corpus [2]", "Hoàng Cao Sơn"],
-        ["Lừa đảo — Khẩn cấp gia đình (family_emergency)", "88", "Cảnh báo Công an, Lá Chắn Cuộc Gọi, SMS [2]", "Bùi Thị Mỷ Cẩm"],
-        ["Lừa đảo — Dụ dỗ quà tặng (health_gift)", "46", "Báo chí chính thống, VTV24 [2]", "Bùi Thị Mỷ Cẩm"],
-        ["TỔNG CỘNG BỘ DỮ LIỆU", "2.193", "100% Nguồn kiểm chứng công khai — 0% PII", "Tập thể Nhóm 10"],
+        ["Lừa đảo - Đe dọa quyền lực (fear_authority)", "127", "Báo Dân Trí, VnExpress, KLTN Smishing [2]", "Hoàng Cao Sơn"],
+        ["Lừa đảo - Giả mạo dịch vụ công (public_service)", "159", "Báo Tuổi Trẻ, VTV24, UIT IE403 corpus [2]", "Hoàng Cao Sơn"],
+        ["Lừa đảo - Khẩn cấp gia đình (family_emergency)", "88", "Cảnh báo Công an, Lá Chắn Cuộc Gọi, SMS [2]", "Bùi Thị Mỷ Cẩm"],
+        ["Lừa đảo - Dụ dỗ quà tặng (health_gift)", "46", "Báo chí chính thống, VTV24 [2]", "Bùi Thị Mỷ Cẩm"],
+        ["TỔNG CỘNG BỘ DỮ LIỆU", "2.193", "100% Nguồn kiểm chứng công khai - 0% PII", "Tập thể Nhóm 10"],
     ]
     create_table(doc, ["PHÂN LỚP DỮ LIỆU", "SỐ MẪU", "NGUỒN THU THẬP KIỂM CHỨNG", "THÀNH VIÊN PHỤ TRÁCH"], dataset_summary, col_widths=[2.4, 0.8, 2.1, 1.5], font_size_pt=8.0, top_margin=15, bottom=15)
 
@@ -946,27 +1290,27 @@ def generate_report(toc_overrides=None):
     add_body_p(doc, "Nhóm thực hiện chuỗi 7 biểu đồ phân tích khám phá dữ liệu toàn diện tại độ phân giải cao 300 DPI:")
 
     add_image_with_caption(doc, FIGURES_DIR / "label_distribution.png", 
-                           "Hình 4.1: Biểu đồ phân bố nhãn dữ liệu — Bình thường (1.773 mẫu - 80.85%) vs Lừa đảo (420 mẫu - 19.15%), tỷ lệ 4.22 : 1", width_inches=3.2)
+                           "Hình 4.1: Biểu đồ phân bố nhãn dữ liệu - Bình thường (1.773 mẫu - 80.85%) vs Lừa đảo (420 mẫu - 19.15%), tỷ lệ 4.22 : 1", width_inches=3.8)
     add_body_p(doc, "Nhận xét Hình 4.1: Tập dữ liệu thể hiện rõ đặc tính mất cân bằng lớp tự nhiên trong môi trường viễn thông thực tế. Tỷ lệ 1.773 tin bình thường so với 420 tin lừa đảo (tỷ lệ 4.22 : 1) là thách thức lớn đối với việc huấn luyện mô hình. Nếu tối ưu Accuracy đơn thuần, mô hình có xu hướng dự đoán toàn bộ là nhãn bình thường. Do đó, việc thiết lập trọng số phạt gradient scale_pos_weight = 4.22 trong hàm mất mát của XGBoost là hoàn toàn xuất phát từ cơ sở phân bố thực nghiệm của dữ liệu.")
 
     add_image_with_caption(doc, FIGURES_DIR / "text_length_comparison.png",
-                           "Hình 4.1b: So sánh phân bố độ dài ký tự và số từ giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=3.4)
+                           "Hình 4.1b: So sánh phân bố độ dài ký tự và số từ giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=4.0)
     add_body_p(doc, "Nhận xét Hình 4.1b: Tin nhắn lừa đảo có chiều dài trung bình (140,8 ký tự, 28,7 từ) ngắn hơn so với tin nhắn thông thường (232,9 ký tự, 44,3 từ). Tuy nhiên, tin lừa đảo có mật độ từ vựng hành động và thúc ép rất cao nhằm tạo cảm giác cấp bách tức thì trong 1–2 câu ngắn, trong khi tin bình thường thường chứa nội dung thông báo hành chính hoặc biến động số dư chi tiết.")
 
     add_image_with_caption(doc, FIGURES_DIR / "wordcloud_scam_vs_normal.png",
-                           "Hình 4.1c: Đám mây từ vựng (WordCloud) so sánh giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=3.4)
+                           "Hình 4.1c: Đám mây từ vựng (WordCloud) so sánh giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=4.1)
     add_body_p(doc, "Nhận xét Hình 4.1c: Lớp lừa đảo bị chi phối dày đặc bởi các cụm từ đe dọa và giục giã ('công_an', 'viện_kiểm_sát', 'vneid', 'khẩn_cấp', 'viện_phí', 'khóa_tài_khoản', 'đường_dẫn'). Ngược lại, lớp bình thường tập trung vào từ ngữ giao dịch sinh hoạt hàng ngày ('giao_dịch', 'số_dư', 'thanh_toán', 'cảm_ơn', 'quý_khách'). Điều này chứng minh không gian từ vựng có tính phân tách tuyến tính cao.")
 
     add_image_with_caption(doc, FIGURES_DIR / "top_ngrams_scam_vs_normal.png",
-                           "Hình 4.1d: Phân bố tần suất Top 20 N-grams tiêu biểu (cụm 1-2 từ) giữa hai lớp dữ liệu (300 DPI)", width_inches=3.4)
+                           "Hình 4.1d: Phân bố tần suất Top 20 N-grams tiêu biểu (cụm 1-2 từ) giữa hai lớp dữ liệu (300 DPI)", width_inches=4.1)
     add_body_p(doc, "Nhận xét Hình 4.1d: Minh chứng mạnh mẽ cho quyết định lựa chọn dải n-gram (1, 2). Các cụm từ ghép 2 âm tiết có trọng số áp đảo ở lớp lừa đảo như 'bộ_công_an', 'viện_kiểm_sát', 'chuyển_khoản', 'viện_phí', 'tạm_giam', 'định_danh'. Nếu chỉ dùng unigram đơn lẻ (tách rời 'công' và 'an'), mô hình sẽ mất đi ngữ nghĩa định danh cơ quan công quyền cực kỳ quan trọng.")
 
     add_image_with_caption(doc, FIGURES_DIR / "source_distribution.png",
-                           "Hình 4.1e: Cơ cấu phân bổ các nguồn thu thập dữ liệu thực tế (100% Zero Synthetic Text) (300 DPI)", width_inches=3.4)
+                           "Hình 4.1e: Cơ cấu phân bổ các nguồn thu thập dữ liệu thực tế (100% Zero Synthetic Text) (300 DPI)", width_inches=4.0)
     add_body_p(doc, "Nhận xét Hình 4.1e: Nguồn gốc dữ liệu hoàn toàn minh bạch: 1.773 tin bình thường từ bộ ngữ liệu IEEE Access 2026; 420 tin lừa đảo được thu thập và thẩm định thủ công từ các kênh cảnh báo uy tín (Báo Tuổi Trẻ, Báo Dân Trí, VnExpress, Lá Chắn Cuộc Gọi, và CS114 Evidence Vault). Việc kết hợp đa nguồn bảo đảm tính bao phủ toàn diện các kịch bản lừa đảo đương đại tại Việt Nam.")
 
     add_image_with_caption(doc, FIGURES_DIR / "scam_category_distribution.png", 
-                           "Hình 4.2: Cơ cấu phân bổ 4 nhóm bẫy thao túng tâm lý trong 420 mẫu tin nhắn lừa đảo thực tế", width_inches=3.6)
+                           "Hình 4.2: Cơ cấu phân bổ 4 nhóm bẫy thao túng tâm lý trong 420 mẫu tin nhắn lừa đảo thực tế", width_inches=4.2)
     add_body_p(doc, "Nhận xét Hình 4.2: Nhóm Giả mạo dịch vụ công chiếm tỷ trọng cao nhất với 159 mẫu (37.9%), phản ánh đúng thực trạng tội phạm lợi dụng cao điểm triển khai Đề án 06, định danh điện tử VNeID và dịch vụ thuế trực tuyến tại Việt Nam trong năm 2025–2026. Xếp thứ hai là nhóm Đe dọa quyền lực với 127 mẫu (30.2%), đây là thủ đoạn gây thiệt hại tài sản lớn nhất khi mạo danh Công an, Tòa án nhằm chiếm đoạt tiền tiết kiệm của người già. Nhóm Khẩn cấp gia đình (88 mẫu - 21.0%) khai thác tình thương con cháu, và nhóm Dụ dỗ quà tặng & Sức khỏe (46 mẫu - 11.0%) đánh vào nhu cầu chăm sóc sức khỏe.")
 
     scam_detail_table = [
@@ -978,7 +1322,7 @@ def generate_report(toc_overrides=None):
     create_table(doc, ["NHÓM BẪY TÂM LÝ", "KỊCH BẢN THỦ ĐOẠN ĐẶC TRƯNG", "HẬU QUẢ VÀ TÁC ĐỘNG TÂM LÝ ĐỐI VỚI NGƯỜI GIÀ"], scam_detail_table, col_widths=[1.8, 2.5, 2.7], font_size_pt=8.0, top_margin=18, bottom=18)
 
     add_image_with_caption(doc, FIGURES_DIR / "auxiliary_correlation_heatmap.png", 
-                           "Hình 4.3: Ma trận tương quan Pearson giữa 15 đặc trưng phụ tâm lý học với nhãn lừa đảo", width_inches=3.8)
+                           "Hình 4.3: Ma trận tương quan Pearson giữa 15 đặc trưng phụ tâm lý học với nhãn lừa đảo", width_inches=4.5)
     add_body_p(doc, "Nhận xét Hình 4.3: Ma trận tương quan khẳng định tính hiệu quả vượt bậc của các đặc trưng phụ được nhóm thiết kế thủ công. Sự phân hóa tương quan thể hiện rõ nét qua 4 nhóm tín hiệu hành vi:")
     add_bullet_p(doc, "• Nhóm áp lực thời gian & cảm xúc: ", "Đặc trưng urgency_score (hệ số thúc ép thời gian) và num_exclamation (dấu chấm than) thể hiện mức tương quan dương mạnh nhất với nhãn lừa đảo (lần lượt r = 0.58 và r = 0.44), phản ánh hành vi dồn ép tâm lý nạn nhân ra quyết định trong lúc hoảng loạn.")
     add_bullet_p(doc, "• Nhóm quyền lực & khẩn cấp: ", "Đặc trưng num_authority_words (từ khóa công an, tòa án, viện kiểm sát) có hệ số tương quan r = 0.51, và has_emergency_words (cấp cứu, tai nạn) đạt r = 0.38, đóng vai trò chỉ dấu kích hoạt then chốt cho 2 nhóm bẫy nguy hiểm nhất.")
@@ -986,11 +1330,11 @@ def generate_report(toc_overrides=None):
     add_bullet_p(doc, "• Nhóm dẫn dụ công nghệ & lách luật: ", "Đặc trưng num_urls (liên kết độc hại, r = 0.42) và has_leet_speak (ký tự né bộ lọc, r = 0.31) chứng minh tội phạm công nghệ liên tục sử dụng thủ thuật kỹ thuật số để dẫn dụ và qua mặt bộ lọc đơn giản.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2 — PHƯƠNG PHÁP ĐÁNH GIÁ & ZERO-LEAKAGE
+    # MỤC 4.2 - PHƯƠNG PHÁP ĐÁNH GIÁ & ZERO-LEAKAGE
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu")
+    add_heading_2(doc, "4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu", anchor="_Toc_Sec_19")
 
     add_heading_3(doc, "4.2.1. Chiến lược phân chia Train/Test 80/20 và Zero-Data-Leakage")
     add_body_p(doc, "Toàn bộ quy trình thực nghiệm tuân thủ nghiêm ngặt nguyên tắc Zero-Data-Leakage:")
@@ -1001,7 +1345,7 @@ def generate_report(toc_overrides=None):
     add_body_p(doc, "Trên tập huấn luyện (1.754 mẫu), nhóm áp dụng kiểm định chéo 5-Fold phân tầng (StratifiedKFold, k=5) để dò tìm siêu tham số tối ưu thông qua GridSearchCV và RandomizedSearchCV. Mỗi fold huấn luyện chứa khoảng 1.403 mẫu (1.134 bình thường, 269 lừa đảo) và fold kiểm định chứa khoảng 351 mẫu (284 bình thường, 67 lừa đảo). Mọi biến đổi tiền xử lý và trích xuất vector đều được đóng gói bên trong sklearn Pipeline của từng fold nhằm ngăn chặn triệt để rò rỉ thông tin.")
 
     add_heading_3(doc, "4.2.3. Các thước đo đánh giá hiệu năng")
-    add_body_p(doc, "Coi lớp 'lừa đảo' là lớp dương (nhãn 1) và lớp 'bình thường' là lớp âm (nhãn 0), từ ma trận nhầm lẫn ta có: TP (lừa đảo đoán đúng), TN (bình thường đoán đúng), FP (báo nhầm lừa đảo) và FN (bỏ sót lừa đảo — nguy hiểm nhất đối với người cao tuổi):")
+    add_body_p(doc, "Coi lớp 'lừa đảo' là lớp dương (nhãn 1) và lớp 'bình thường' là lớp âm (nhãn 0), từ ma trận nhầm lẫn ta có: TP (lừa đảo đoán đúng), TN (bình thường đoán đúng), FP (báo nhầm lừa đảo) và FN (bỏ sót lừa đảo - nguy hiểm nhất đối với người cao tuổi):")
 
     eq_prec_omml = (
         '<m:r><m:t>Precision = </m:t></m:r>'
@@ -1025,7 +1369,7 @@ def generate_report(toc_overrides=None):
     add_body_p(doc, "Trên tập kiểm thử độc lập 439 mẫu, mô hình XGBoost cho ma trận nhầm lẫn thực tế: TP = 82, TN = 349, FP = 6, FN = 2. Các chỉ số được tính toán đối soát trực tiếp bằng tay:")
     add_bullet_p(doc, "• Accuracy = ", "(82 + 349) / (82 + 349 + 6 + 2) = 431 / 439 ≈ 0.9818 (98.18%)")
     add_bullet_p(doc, "• Precision = ", "82 / (82 + 6) = 82 / 88 ≈ 0.9318 (93.18%)")
-    add_bullet_p(doc, "• Recall = ", "82 / (82 + 2) = 82 / 84 ≈ 0.9762 (97.62%) — Chỉ sót 2/84 ca lừa đảo")
+    add_bullet_p(doc, "• Recall = ", "82 / (82 + 2) = 82 / 84 ≈ 0.9762 (97.62%) - Chỉ sót 2/84 ca lừa đảo")
     add_bullet_p(doc, "• F1-Score = ", "2 × (0.9318 × 0.9762) / (0.9318 + 0.9762) ≈ 0.9535 (95.35%)")
     add_body_p(doc, "Kết quả tính tay hoàn toàn trùng khớp chính xác 100% với số liệu xuất từ tệp báo cáo đánh giá tự động reports/model_comparison.csv.")
 
@@ -1061,11 +1405,11 @@ def generate_report(toc_overrides=None):
     add_display_equation(doc, eq_tfidf)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.3 — KẾT QUẢ THỰC NGHIỆM VÀ ĐỐI SÁNH ĐA MÔ HÌNH
+    # MỤC 4.3 - KẾT QUẢ THỰC NGHIỆM VÀ ĐỐI SÁNH ĐA MÔ HÌNH
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.3. Kết quả thực nghiệm và đối sánh đa mô hình")
+    add_heading_2(doc, "4.3. Kết quả thực nghiệm và đối sánh đa mô hình", anchor="_Toc_Sec_20")
 
     add_heading_3(doc, "4.3.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set")
     add_body_p(doc, "Bảng 4.2 tổng hợp toàn bộ kết quả đo lường định lượng trên tập Test độc lập 439 mẫu:")
@@ -1080,16 +1424,16 @@ def generate_report(toc_overrides=None):
 
     add_heading_3(doc, "4.3.2. Đường cong ROC và Precision-Recall")
     add_image_with_caption(doc, FIGURES_DIR / "roc_curves_comparison.png", 
-                           "Hình 4.4: Đường cong ROC đối sánh 4 mô hình — Tất cả đều đạt AUC ≥ 0.99 trên tập kiểm thử độc lập", width_inches=3.8)
+                           "Hình 4.4: Đường cong ROC đối sánh 4 mô hình - Tất cả đều đạt AUC ≥ 0.99 trên tập kiểm thử độc lập", width_inches=4.4)
     add_body_p(doc, "Nhận xét Hình 4.4: Toàn bộ 4 mô hình đều đạt ROC-AUC rất cao, dao động từ 0.9911 (Naive Bayes) đến 0.9986 (Linear SVM). Cả 4 đường cong đều vươn sát góc trên bên trái, khẳng định năng lực phân biệt vượt trội giữa tin lừa đảo và tin bình thường trên toàn dải ngưỡng phân loại. Trong đó, Linear SVM đạt ROC-AUC cao nhất (0.9986), chứng minh không gian đặc trưng 5.015 chiều tồn tại siêu phẳng tuyến tính phân tách hai lớp cực kỳ sắc bén.")
 
     add_image_with_caption(doc, FIGURES_DIR / "precision_recall_curves.png", 
-                           "Hình 4.5: Đường cong Precision-Recall đối sánh 4 mô hình trên ngữ liệu mất cân bằng lớp 4.22 : 1", width_inches=3.8)
+                           "Hình 4.5: Đường cong Precision-Recall đối sánh 4 mô hình trên ngữ liệu mất cân bằng lớp 4.22 : 1", width_inches=4.4)
     add_body_p(doc, "Nhận xét Hình 4.5: Trên dữ liệu mất cân bằng lớp (tỷ lệ 4.22 : 1), đường cong Precision-Recall là thước đo phản ánh trung thực nhất năng lực mô hình. XGBoost và Random Forest thể hiện ưu thế vượt trội khi duy trì Precision cao (> 93%) ngay cả tại các ngưỡng Recall rất cao (> 97%), bảo đảm phát hiện tin lừa đảo mà không làm phiền người cao tuổi bằng báo động giả.")
 
     add_heading_3(doc, "4.3.3. Phân tích Ma trận Nhầm lẫn 4 Mô hình")
     add_image_with_caption(doc, FIGURES_DIR / "confusion_matrices_all.png", 
-                           "Hình 4.6: Ma trận nhầm lẫn của 4 mô hình trên tập kiểm thử độc lập 439 mẫu", width_inches=4.0)
+                           "Hình 4.6: Ma trận nhầm lẫn của 4 mô hình trên tập kiểm thử độc lập 439 mẫu", width_inches=4.8)
     add_body_p(doc, "Phân tích chi tiết ma trận nhầm lẫn trên tập Test 439 mẫu (355 tin bình thường, 84 tin lừa đảo):")
     add_bullet_p(doc, "• XGBoost (Best Overall): ", "Đạt TP = 82, TN = 349, FP = 6, FN = 2. Chỉ bỏ sót đúng 2/84 tin lừa đảo (Recall = 97.62%) và chỉ báo nhầm 6 tin bình thường (Precision = 93.18%), dẫn đầu về F1-Score (0.9535).")
     add_bullet_p(doc, "• Random Forest (Ensemble Tree): ", "Đạt TP = 82, TN = 347, FP = 8, FN = 2. Recall ngang bằng XGBoost (bỏ sót 2 ca, Recall = 97.62%), số ca báo nhầm FP nhỉnh hơn đôi chút (8 ca), đạt F1-Score = 0.9425.")
@@ -1099,25 +1443,25 @@ def generate_report(toc_overrides=None):
 
     add_heading_3(doc, "4.3.4. Kiểm tra Hiện tượng Quá khớp qua Learning Curves")
     add_image_with_caption(doc, FIGURES_DIR / "learning_curves_summary.png", 
-                           "Hình 4.7: Đường cong học tập (Learning Curves) đối sánh qua 5-Fold Cross-Validation", width_inches=4.0)
+                           "Hình 4.7: Đường cong học tập (Learning Curves) đối sánh qua 5-Fold Cross-Validation", width_inches=4.6)
     add_body_p(doc, "Nhận xét Hình 4.7: Quá trình phân tích đường cong học tập khi kích thước tập huấn luyện tăng dần từ 200 mẫu lên 1.400 mẫu đem lại 4 phát hiện khoa học quan trọng: (1) Khi số lượng mẫu đạt trên 1.000 mẫu, khoảng cách giữa Train Score và Validation Score của cả 4 mô hình đều thu hẹp về dưới 0.02, chứng minh hiện tượng quá khớp đã được triệt tiêu hoàn toàn; (2) Linear SVM thể hiện độ ổn định cao nhất; (3) XGBoost tăng tiến ổn định từ 0.88 lên 0.95+ khi mở rộng mẫu; (4) Tập dữ liệu 2.193 mẫu thực tế là hoàn toàn đủ lớn và đạt trạng thái bão hòa học tập ổn định.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.4 — XAI VỚI SHAP VÀ TOP 20 TỪ KHÓA
+    # MỤC 4.4 - XAI VỚI SHAP VÀ TOP 20 TỪ KHÓA
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa bẫy tâm lý")
+    add_heading_2(doc, "4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa bẫy tâm lý", anchor="_Toc_Sec_21")
     add_body_p(doc, "Hệ thống cung cấp khả năng giải thích tường minh lý do tại sao tin nhắn bị xem là nguy hiểm thông qua mô hình SHAP (SHapley Additive exPlanations) của Lundberg & Lee [12], sử dụng thuật toán TreeSHAP [13] tối ưu cho mô hình cây, kết hợp phân tích Top-20 từ khóa đồng thuận:")
 
     add_heading_3(doc, "4.4.1. Phân tích SHAP Beeswarm của XGBoost")
     add_image_with_caption(doc, FIGURES_DIR / "shap_summary.png", 
-                           "Hình 4.8: Biểu đồ SHAP Beeswarm của mô hình XGBoost — Đóng góp vi mô của từng giá trị đặc trưng vào xác suất lừa đảo", width_inches=2.8)
+                           "Hình 4.8: Biểu đồ SHAP Beeswarm của mô hình XGBoost - Đóng góp vi mô của từng giá trị đặc trưng vào xác suất lừa đảo", width_inches=3.6)
     add_body_p(doc, "Nhận xét Hình 4.8: Biểu đồ SHAP Beeswarm minh họa giá trị đóng góp (SHAP value) của từng đặc trưng. Trục hoành biểu thị mức độ tác động: giá trị dương (> 0) làm tăng xác suất lừa đảo, giá trị âm (< 0) kéo về tin bình thường. Màu đỏ là giá trị thực tế cao, màu xanh là giá trị thấp. Đặc trưng urgency_score và money/số_tiền nằm ở vị trí cao nhất; khi có urgency_score cao (màu đỏ), điểm dữ liệu lệch hẳn sang phải, tạo lực đẩy mạnh đưa xác suất dự đoán lên ngưỡng cảnh báo nguy cơ cao.")
 
     add_heading_3(doc, "4.4.2. Biểu đồ Cột ngang Top-20 Từ khóa Cảnh báo (XAI Consensus)")
     add_image_with_caption(doc, FIGURES_DIR / "top20_keywords_barplot.png",
-                           "Hình 4.8b: Biểu đồ cột ngang Top-20 từ khóa cảnh báo có trọng số đồng thuận cao nhất (XAI Consensus Ranking, 300 DPI)", width_inches=3.4)
+                           "Hình 4.8b: Biểu đồ cột ngang Top-20 từ khóa cảnh báo có trọng số đồng thuận cao nhất (XAI Consensus Ranking, 300 DPI)", width_inches=4.1)
     add_body_p(doc, "Nhận xét Hình 4.8b: Biểu đồ cột ngang lượng hóa trực quan điểm số đồng thuận của Top-20 từ khóa và đặc trưng chỉ báo lừa đảo. Hệ số thúc ép thời gian urgency_score (1.000) và từ khóa tiền bạc money/số_tiền (0.943) giữ hai vị trí cao nhất, tiếp theo là thương_hiệu/viettel (0.820) và liên_hệ/198 (0.722). Sự phân bổ đồng thuận chứng minh hệ thống đã trích xuất thành công 'chân dung số' của các kịch bản lừa đảo viễn thông.")
 
     add_heading_3(doc, "4.4.3. Bảng 4.3 Chi tiết Top-20 Từ khóa và Cơ chế Kích hoạt Bẫy Tâm lý")
@@ -1150,11 +1494,11 @@ def generate_report(toc_overrides=None):
     add_body_p(doc, "Nhận xét sâu về giá trị giải thích của SHAP: (1) Sự đồng thuận đa tầng giữa đặc trưng phụ và từ vựng khẳng định mô hình kết hợp chặt chẽ giữa ngữ nghĩa văn bản và tín hiệu hành vi thúc ép; (2) Phản ánh chân thực 4 nhóm kịch bản bẫy tâm lý (Đe dọa quyền lực, Khẩn cấp gia đình, Giả mạo dịch vụ công, Tài chính & Dụ dỗ); (3) Cho phép hệ thống làm nổi bật trực tiếp các cụm từ nguy hiểm ngay trên màn hình Web Demo để người cao tuổi dễ dàng nhận biết.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.5 — THỰC NGHIỆM ĐỐI CHỨNG CHUYÊN SÂU (ABLATION STUDIES)
+    # MỤC 4.5 - THỰC NGHIỆM ĐỐI CHỨNG CHUYÊN SÂU (ABLATION STUDIES)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)")
+    add_heading_2(doc, "4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", anchor="_Toc_Sec_22")
     add_body_p(doc, "Nhóm triển khai hai bài thực nghiệm đối chứng cô lập nghiêm ngặt nhằm đánh giá định lượng sự đóng góp cụ thể của từng tầng xử lý trên cùng tập kiểm thử độc lập 439 mẫu (355 tin bình thường, 84 tin lừa đảo), tuân thủ tuyệt đối nguyên tắc Zero-Data-Leakage:")
 
     add_heading_3(doc, "4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)")
@@ -1164,7 +1508,7 @@ def generate_report(toc_overrides=None):
     create_table(doc, ["MÔ HÌNH", "TIỀN XỬ LÝ", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_prep_table, col_widths=[1.1, 1.2, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.0, top_margin=18, bottom=18)
 
     add_image_with_caption(doc, FIGURES_DIR / "ablation_preprocessing_comparison.png", 
-                           "Hình 4.10: Biểu đồ đối chứng hiệu năng giữa Raw Text và Preprocessed Text trên Naive Bayes và XGBoost (300 DPI)", width_inches=3.8)
+                           "Hình 4.10: Biểu đồ đối chứng hiệu năng giữa Raw Text và Preprocessed Text trên Naive Bayes và XGBoost (300 DPI)", width_inches=4.5)
     add_body_p(doc, "Phân tích kết quả thực nghiệm 1: Trên Naive Bayes, tiền xử lý giúp Precision tăng từ 80.81% lên 84.78% (+3.97%) và F1-Score tăng từ 0.8743 lên 0.8864 (+1.21%). Đặc biệt, số ca báo động giả (False Positives) giảm mạnh từ 19 ca xuống còn 14 ca (giảm 26.3%). Nguyên nhân là teencode và từ viết tắt không dấu trong văn bản thô dễ làm nhiễu xác suất tiên nghiệm. Tiền xử lý đã chuẩn hóa về từ điển chuẩn tiếng Việt, giúp giảm thiểu tối đa tỷ lệ làm phiền người dùng. Trên XGBoost với chỉ TF-IDF, hiệu năng giữa hai cấu hình tương đương nhau nhờ cơ chế phân nhánh phi tuyến tự động của cây quyết định.")
 
     add_heading_3(doc, "4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)")
@@ -1173,23 +1517,23 @@ def generate_report(toc_overrides=None):
     create_table(doc, ["CẤU HÌNH ĐẶC TRƯNG", "MÔ HÌNH", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_feat_table, col_widths=[1.5, 0.9, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.0, top_margin=18, bottom=18)
 
     add_image_with_caption(doc, FIGURES_DIR / "ablation_featurespace_comparison.png", 
-                           "Hình 4.11: Biểu đồ đối chứng hiệu năng giữa 3 không gian đặc trưng trên XGBoost và Linear SVM (300 DPI)", width_inches=3.8)
+                           "Hình 4.11: Biểu đồ đối chứng hiệu năng giữa 3 không gian đặc trưng trên XGBoost và Linear SVM (300 DPI)", width_inches=4.5)
     add_body_p(doc, "Phân tích kết quả thực nghiệm 2: (1) Khi hoàn toàn loại bỏ túi từ TF-IDF, chỉ dùng 15 đặc trưng tâm lý, XGBoost vẫn đạt F1 = 0.8701, Recall = 91.67%, chứng minh tính chắt lọc của các đặc trưng phụ; (2) Khi kết hợp cả hai không gian trên XGBoost: Precision tăng vọt từ 89.25% lên 93.18% (+3.93%), F1-Score tăng từ 0.9379 lên 0.9535 (+1.56%), và số ca báo động giả giảm 40% (từ 10 ca xuống chỉ còn 6 ca). 15 đặc trưng phụ đóng vai trò chốt chặn an toàn (contextual guardrails) hữu hiệu.")
     add_body_p(doc, "Lý giải hiện tượng toán học của Linear SVM vs XGBoost: Khi thêm 15 đặc trưng phụ, F1 của Linear SVM giảm nhẹ từ 0.9697 xuống 0.9474 (Precision giảm từ 98.77% xuống 93.10%, FP tăng từ 1 lên 6). Không gian TF-IDF 5.000 chiều là ma trận thưa, nơi hai lớp có tính phân tách tuyến tính gần như tuyệt đối. Khi ghép thêm 15 đặc trưng liên tục chuẩn hóa qua StandardScaler, mật độ dữ liệu thay đổi làm dịch chuyển góc định hướng của siêu phẳng phân cách cực đại lề wᵀx + b = 0. Ngược lại, cây quyết định XGBoost phân ngưỡng trực giao độc lập trên từng trục tọa độ (orthogonal axis-aligned splits), nên có khả năng cô lập và khai thác các thuộc tính tâm lý mà không làm méo mó ranh giới phân loại của không gian từ vựng, mang lại hiệu ứng cộng hưởng tối ưu nhất.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.6 — WEB DEMO STREAMLIT TỐI ƯU TRỢ NĂNG NGƯỜI CAO TUỔI
+    # MỤC 4.6 - WEB DEMO STREAMLIT TỐI ƯU TRỢ NĂNG NGƯỜI CAO TUỔI
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi")
+    add_heading_2(doc, "4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi", anchor="_Toc_Sec_23")
     add_body_p(doc, "Toàn bộ thành quả nghiên cứu đã được hiện thực hóa thành ứng dụng Web Demo xây dựng trên nền tảng Streamlit [18] hoàn chỉnh, được thiết kế chuyên biệt đáp ứng tiêu chuẩn trợ năng quốc tế W3C WCAG 2.1 [14] dành cho người lớn tuổi (Hình 4.9 và Hình 4.9b):")
 
     add_image_with_caption(doc, FIGURES_DIR / "demo_03_scam_detection_verdict.png", 
-                           "Hình 4.9: Giao diện Web Demo Streamlit — Màn hình cảnh báo nguy cơ ĐỎ, bôi đỏ từ khóa bẫy tâm lý và Hotline 156/113", width_inches=3.0)
+                           "Hình 4.9: Giao diện Web Demo Streamlit - Màn hình cảnh báo nguy cơ ĐỎ, bôi đỏ từ khóa bẫy tâm lý và Hotline 156/113", width_inches=3.8)
 
     add_image_with_caption(doc, FIGURES_DIR / "demo_02_font_scaling_elderly.png",
-                           "Hình 4.9b: Tính năng trợ năng thị giác phóng đại phông chữ 125%–150% và chế độ tương phản cao cho người cao tuổi (300 DPI)", width_inches=3.2)
+                           "Hình 4.9b: Tính năng trợ năng thị giác phóng đại phông chữ 125%–150% và chế độ tương phản cao cho người cao tuổi (300 DPI)", width_inches=4.0)
 
     add_body_p(doc, "Hệ thống tích hợp 6 giải pháp công nghệ trợ năng vượt trội hướng tới người cao tuổi:")
     p_u1 = add_bullet_p(doc, "• 1. Tùy biến cỡ chữ 3 cấp độ: ", "Hỗ trợ phóng đại phông chữ động 100% – 125% – 150%, bảo đảm người cao tuổi có thị lực suy giảm vẫn đọc rõ thông báo mà không cần kính lão.")
@@ -1206,11 +1550,11 @@ def generate_report(toc_overrides=None):
     p_u6.paragraph_format.space_after = Pt(1.5)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.7 — PHÂN TÍCH CA BIÊN NGOẠI VI
+    # MỤC 4.7 - PHÂN TÍCH CA BIÊN NGOẠI VI
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.7. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")")
+    add_heading_2(doc, "4.7. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", anchor="_Toc_Sec_24")
     add_body_p(doc, "Trong quá trình kiểm thử độ bền vững (robustness testing), nghiên cứu ghi nhận một trường hợp ngoại vi đáng lưu ý đối với thông điệp mang tính đe dọa trực diện ngắn:")
     p_quote = doc.add_paragraph()
     p_quote.paragraph_format.left_indent = Inches(0.8)
@@ -1230,20 +1574,20 @@ def generate_report(toc_overrides=None):
     add_bullet_p(doc, "3. Ranh giới an toàn của hệ thống: ", "Việc mô hình từ chối kích hoạt cảnh báo đỏ trên các câu khẩu ngữ bạo lực ngoài đời thực là một hành vi chấp nhận được trong phạm vi thiết kế của đề tài, nhằm bảo toàn độ đặc hiệu (Specificity = 98.31%) và tránh biến hệ thống thành một bộ lọc từ chửi thề làm phiền các hội thoại sinh hoạt thông thường.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # CHƯƠNG 5: KẾT LUẬN — 5.1 & 5.2 (TRANG 28 TRỌN VẸN)
+    # CHƯƠNG 5: KẾT LUẬN - 5.1 & 5.2 (TRANG 28 TRỌN VẸN)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_1(doc, "CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG")
+    add_heading_1(doc, "CHƯƠNG 5 - KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", anchor="_Toc_Sec_25")
 
-    add_heading_2(doc, "5.1. Tổng kết các đóng góp chính của đề tài")
+    add_heading_2(doc, "5.1. Tổng kết các đóng góp chính của đề tài", anchor="_Toc_Sec_26")
     add_body_p(doc, "Trải qua quá trình nghiên cứu, thực nghiệm và kiểm định nghiêm ngặt, đề tài đã hoàn thành xuất sắc 100% các mục tiêu đề ra với 4 đóng góp chính mang ý nghĩa học thuật và thực tiễn sâu sắc:")
     add_bullet_p(doc, "1. Bộ dữ liệu chuẩn hóa 2.193 mẫu thực tế: ", "Xây dựng thành công bộ ngữ liệu tin nhắn lừa đảo nhắm vào người cao tuổi tại Việt Nam đầu tiên có nguồn gốc truy vết 100%, bảo đảm nguyên tắc Zero Synthetic Text và khử định danh PII tuyệt đối.")
     add_bullet_p(doc, "2. Pipeline NLP 5.015 chiều Zero-Leakage: ", "Thiết kế quy trình tiền xử lý 5 bước chuyên sâu kết hợp TF-IDF N-grams (1, 2) và 15 đặc trưng phụ tâm lý học, bảo đảm không rò rỉ dữ liệu giữa tập Train và Test.")
     add_bullet_p(doc, "3. Mô hình học máy vượt trội: ", "XGBoost đạt F1-score = 0.9535 và Recall lớp lừa đảo = 97.62% (chỉ sót 2/84 ca), vượt xa mục tiêu đề ra của môn học (F1 ≥ 88%, Recall ≥ 92%). Linear SVM đạt ROC-AUC tiệm cận hoàn hảo (0.9986).")
     add_bullet_p(doc, "4. Ứng dụng thực tế và XAI: ", "Bóc tách thành công 20 từ khóa kích hoạt bẫy tâm lý và xây dựng Web Demo trợ năng chuẩn WCAG 2.1, bảo vệ trực tiếp người cao tuổi trước hiểm họa công nghệ cao.")
 
-    add_heading_2(doc, "5.2. Các hạn chế còn tồn tại")
+    add_heading_2(doc, "5.2. Các hạn chế còn tồn tại", anchor="_Toc_Sec_27")
     add_body_p(doc, "Nhóm nghiên cứu thẳng thắn nhìn nhận đồ án vẫn còn một số điểm giới hạn cần khắc phục trong tương lai:")
     add_bullet_p(doc, "• Kích thước mẫu bẫy quà tặng sức khỏe còn khiêm tốn: ", "Số lượng mẫu lừa đảo nhóm 'health_gift' hiện có 46 mẫu, tương đối ít hơn so với các nhóm khác do đặc thù loại bẫy này thường lồng ghép qua cuộc gọi điện thoại hơn là tin nhắn văn bản SMS.")
     
@@ -1273,11 +1617,11 @@ def generate_report(toc_overrides=None):
     r_send.font.color.rgb = TEXT_COLOR
 
     # ══════════════════════════════════════════════════════════════════════════
-    # CHƯƠNG 5: HƯỚNG PHÁT TRIỂN TRONG TƯƠNG LAI — 5.3 (TRANG 29 TRỌN VẸN)
+    # CHƯƠNG 5: HƯỚNG PHÁT TRIỂN TRONG TƯƠNG LAI - 5.3 (TRANG 29 TRỌN VẸN)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng")
+    add_heading_2(doc, "5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", anchor="_Toc_Sec_28")
     add_body_p(doc, "Từ kết quả thực nghiệm và gợi ý của ThS. Cáp Phạm Đình Thăng tại buổi báo cáo sớm, nhóm đề xuất lộ trình nâng cấp hệ thống theo 4 định hướng công nghệ then chốt:")
     add_bullet_p(doc, "1. Mở rộng dải N-grams lên (1, 2) và (1, 3) cho TF-IDF: ", "Bổ sung các cụm 3 từ (Trigrams) giúp mô hình bắt trọn các cấu trúc mệnh lệnh đe dọa đặc thù như 'cướp đây', 'đưa hết tiền', 'chuyển tiền ngay', 'bắt giam ngay'. Điều này cho phép thuật toán gán trọng số rủi ro trực tiếp cho cả cụm cú pháp cưỡng chế thay vì phân tán thành các từ đơn lẻ làm suy giảm xác suất cảnh báo.")
     add_bullet_p(doc, "2. Bổ sung nhóm đặc trưng từ khóa cưỡng bức trực diện (imperative_threat): ", "Thiết kế thêm các đặc trưng phụ đo lường tần suất xuất hiện của các động từ mệnh lệnh cưỡng đoạt mang tính bạo lực (cướp, giết, đánh, siết nợ) nhằm thu hẹp khoảng cách giữa bài toán lừa đảo phi bạo lực và đe dọa cưỡng đoạt bạo lực trực tiếp.")
@@ -1289,7 +1633,7 @@ def generate_report(toc_overrides=None):
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    p_ref_h = add_heading_1(doc, "TÀI LIỆU THAM KHẢO")
+    p_ref_h = add_heading_1(doc, "TÀI LIỆU THAM KHẢO", anchor="_Toc_Sec_29")
     p_ref_h.paragraph_format.space_before = Pt(6)
     p_ref_h.paragraph_format.space_after = Pt(6)
     
@@ -1316,7 +1660,7 @@ def generate_report(toc_overrides=None):
         "[20] H. He và E. A. Garcia, \"Learning from Imbalanced Data,\" IEEE Transactions on Knowledge and Data Engineering, tập 21, số 9, tr. 1263–1284, 2009, doi: 10.1109/TKDE.2008.239.",
     ]
     
-    for ref in references:
+    for idx, ref in enumerate(references, 1):
         p_ref = doc.add_paragraph()
         p_ref.paragraph_format.left_indent = Inches(0.35)
         p_ref.paragraph_format.first_line_indent = Inches(-0.35)
@@ -1324,10 +1668,11 @@ def generate_report(toc_overrides=None):
         p_ref.paragraph_format.space_after = Pt(2.0)
         p_ref.paragraph_format.line_spacing = 1.05
         p_ref.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        add_bookmark(p_ref, f"_Ref_Item_{idx:02d}")
         run_ref = p_ref.add_run(ref)
         run_ref.font.name = "Times New Roman"
-        run_ref.font.size = Pt(9.5)
-        run_ref.font.color.rgb = TEXT_COLOR
+        run_ref.font.size = Pt(11.0)
+        run_ref.font.color.rgb = RGBColor(0, 0, 0)
 
     # ══════════════════════════════════════════════════════════════════════════
     # XUẤT CÁC FILE ĐÍCH
@@ -1335,6 +1680,7 @@ def generate_report(toc_overrides=None):
     out_report = REPORT_DIR / "report.docx"
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     doc.save(str(out_report))
+    enforce_pure_times_new_roman(str(out_report))
     print(f"[✓] Đã xuất thành công: {out_report}")
 
     # Chuyển đổi DOCX sang PDF nếu được chỉ định hoặc trên Windows

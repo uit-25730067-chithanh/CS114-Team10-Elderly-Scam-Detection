@@ -60,9 +60,9 @@ def main():
             # Preserve pPr (hanging indent, line spacing, etc.)
             pPr = p._p.pPr
 
-            # Remove existing run children
+            # Remove existing run children (preserve pPr and bookmarks)
             for child in list(p._p):
-                if child != pPr:
+                if child != pPr and not child.tag.endswith(('bookmarkStart', 'bookmarkEnd')):
                     p._p.remove(child)
 
             # 1. Before run
@@ -72,7 +72,8 @@ def main():
                     f'<w:r {nsdecls("w")}>'
                     f'<w:rPr>'
                     f'<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>'
-                    f'<w:color w:val="1E293B"/>'
+                    f'<w:sz w:val="22"/>'
+                    f'<w:color w:val="000000"/>'
                     f'</w:rPr>'
                     f'<w:t xml:space="preserve">{before_escaped}</w:t>'
                     f'</w:r>'
@@ -86,6 +87,7 @@ def main():
                 f'<w:r>'
                 f'<w:rPr>'
                 f'<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>'
+                f'<w:sz w:val="22"/>'
                 f'<w:color w:val="0563C1"/>'
                 f'<w:u w:val="single"/>'
                 f'</w:rPr>'
@@ -103,7 +105,8 @@ def main():
                     f'<w:r {nsdecls("w")}>'
                     f'<w:rPr>'
                     f'<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/>'
-                    f'<w:color w:val="1E293B"/>'
+                    f'<w:sz w:val="22"/>'
+                    f'<w:color w:val="000000"/>'
                     f'</w:rPr>'
                     f'<w:t xml:space="preserve">{after_escaped}</w:t>'
                     f'</w:r>'

@@ -7,11 +7,34 @@ def apply_interactive_toc(docx_path):
     print(f"[*] Đang tải tệp: {docx_path}")
     doc = docx.Document(docx_path)
     
-    if len(doc.tables) < 2:
-        print("[!] Không tìm thấy bảng Mục lục (Table 1) trong tài liệu!")
+    # 1. Kiểm tra xem tài liệu đã có Mục lục Section 2 dạng đoạn văn dot-leader với bookmarks _Toc_Sec_ chưa
+    toc_hl_elements = doc._body._element.xpath('.//w:hyperlink[starts-with(@w:anchor, "_Toc_Sec_")]')
+    if len(toc_hl_elements) > 0:
+        anchors = set(hl.get(docx.oxml.ns.qn('w:anchor')) for hl in toc_hl_elements)
+        print(f"[✓] Đã tìm thấy {len(toc_hl_elements)} liên kết Mục lục Section 2 (Phụ lục 2) bao phủ {len(anchors)} Bookmark _Toc_Sec_XX!")
+        # Kiểm tra tính toàn vẹn của các bookmarks đích
+        valid_bms = 0
+        for anchor in sorted(anchors):
+            bms = doc._body._element.xpath(f'.//w:bookmarkStart[@w:name="{anchor}"]')
+            if bms:
+                valid_bms += 1
+            else:
+                print(f"[!] Cảnh báo: Bookmark đích {anchor} chưa tồn tại!")
+        print(f"[✓] Đã kiểm tra toàn vẹn {valid_bms}/{len(anchors)} bookmarks mục lục thành công!")
+        return True
+
+    toc_tbl = None
+    for tbl in doc.tables:
+        if len(tbl.rows) > 0 and len(tbl.rows[0].cells) >= 2:
+            hdr_text = tbl.rows[0].cells[0].text.strip()
+            if "CẤU TRÚC BÁO CÁO" in hdr_text or "MỤC LỤC" in hdr_text:
+                toc_tbl = tbl
+                break
+
+    if toc_tbl is None:
+        print("[!] Không tìm thấy bảng hoặc đoạn văn Mục lục trong tài liệu!")
         return False
         
-    toc_tbl = doc.tables[1]
     toc_rows = toc_tbl.rows[1:] # Bỏ hàng tiêu đề CẤU TRÚC BÁO CÁO ĐỒ ÁN
     print(f"[*] Tìm thấy {len(toc_rows)} mục trong bảng Mục lục.")
     

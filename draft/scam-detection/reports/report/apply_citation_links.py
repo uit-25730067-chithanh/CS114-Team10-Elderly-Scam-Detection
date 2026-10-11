@@ -5,6 +5,48 @@ import docx
 from docx.oxml import parse_xml, OxmlElement
 from docx.oxml.ns import nsdecls, qn
 
+def enforce_pure_times_new_roman(docx_path: str) -> None:
+    """Safely replace theme and style font names via raw string replacement in the ZIP package."""
+    import zipfile
+
+    with zipfile.ZipFile(docx_path, "r") as zin:
+        files = {name: zin.read(name) for name in zin.namelist()}
+
+    if "word/theme/theme1.xml" in files:
+        t = files["word/theme/theme1.xml"].decode("utf-8")
+        t = t.replace('typeface="Aptos Display"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Aptos"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Arial"', 'typeface="Times New Roman"')
+        t = t.replace('typeface="Calibri"', 'typeface="Times New Roman"')
+        files["word/theme/theme1.xml"] = t.encode("utf-8")
+
+    if "word/styles.xml" in files:
+        s = files["word/styles.xml"].decode("utf-8")
+        s = s.replace('w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"', 'w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"')
+        s = s.replace('w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"', 'w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"')
+        s = s.replace('w:asciiTheme="majorHAnsi"', 'w:ascii="Times New Roman"')
+        s = s.replace('w:hAnsiTheme="majorHAnsi"', 'w:hAnsi="Times New Roman"')
+        s = s.replace('w:asciiTheme="minorHAnsi"', 'w:ascii="Times New Roman"')
+        s = s.replace('w:hAnsiTheme="minorHAnsi"', 'w:hAnsi="Times New Roman"')
+        s = s.replace('w:cstheme="majorBidi"', 'w:cs="Times New Roman"')
+        s = s.replace('w:cstheme="minorBidi"', 'w:cs="Times New Roman"')
+        files["word/styles.xml"] = s.encode("utf-8")
+
+    if "word/document.xml" in files:
+        d = files["word/document.xml"].decode("utf-8")
+        d = d.replace('w:asciiTheme="majorHAnsi"', 'w:ascii="Times New Roman"')
+        d = d.replace('w:hAnsiTheme="majorHAnsi"', 'w:hAnsi="Times New Roman"')
+        d = d.replace('w:asciiTheme="minorHAnsi"', 'w:ascii="Times New Roman"')
+        d = d.replace('w:hAnsiTheme="minorHAnsi"', 'w:hAnsi="Times New Roman"')
+        d = d.replace('w:cstheme="majorBidi"', 'w:cs="Times New Roman"')
+        d = d.replace('w:cstheme="minorBidi"', 'w:cs="Times New Roman"')
+        files["word/document.xml"] = d.encode("utf-8")
+
+    with zipfile.ZipFile(docx_path, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+        for name, data in files.items():
+            zout.writestr(name, data)
+    print(f"[✓] Đã chuẩn hóa 100% font chữ sang Times New Roman trên tệp DOCX (bảo toàn namespace).")
+
 def apply_citation_links(docx_path):
     print(f"[*] Đang tải tệp tài liệu: {docx_path}")
     if not os.path.exists(docx_path):
@@ -166,10 +208,12 @@ def apply_citation_links(docx_path):
     for p in doc.paragraphs:
         process_paragraph_runs(p, is_table_cell=False)
 
-    # Quét toàn bộ paragraphs trong tables (trừ Table 1 là Mục lục)
+    # Quét toàn bộ paragraphs trong tables (chỉ bỏ qua nếu là bảng Mục lục cũ)
     for t_idx, table in enumerate(doc.tables):
-        if t_idx == 1: # Bỏ qua Mục lục
-            continue
+        if len(table.rows) > 0 and len(table.rows[0].cells) >= 1:
+            first_cell_txt = table.rows[0].cells[0].text.strip()
+            if "MỤC LỤC" in first_cell_txt or "CẤU TRÚC BÁO CÁO" in first_cell_txt:
+                continue
         for row in table.rows:
             for cell in row.cells:
                 for p in cell.paragraphs:
@@ -178,6 +222,7 @@ def apply_citation_links(docx_path):
     print(f"[*] Đã liên kết thành công {citation_links_count} in-text citations trỏ về danh mục Tài liệu tham khảo!")
     
     doc.save(docx_path)
+    enforce_pure_times_new_roman(docx_path)
     print(f"[✓] Đã lưu thành công tệp: {docx_path}")
     return True
 

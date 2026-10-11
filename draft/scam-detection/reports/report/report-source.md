@@ -1,6 +1,6 @@
 ---
 title: "Phát hiện Tin nhắn và Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam"
-subtitle: "Báo cáo Đồ án Cuối kỳ — CS114 Máy học"
+subtitle: "Báo cáo Đồ án Cuối kỳ - CS114 Máy học"
 faculty: "Khoa Khoa học Máy tính"
 department: "Bộ môn Trí tuệ Nhân tạo"
 course: "CS114.F31.CN2.TTNT"
@@ -20,19 +20,19 @@ members:
     role: "Data Collection & Demo UI"
     email: "25730061@ms.uit.edu.vn"
 date: "Tháng 10/2026"
-university: "Trường Đại học Công nghệ Thông tin — ĐHQG-HCM"
+university: "Trường Đại học Công nghệ Thông tin - ĐHQG-HCM"
 academic_integrity: true
 ---
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     BÁO CÁO ĐỒ ÁN MÔN HỌC CS114 — MÁY HỌC
+     BÁO CÁO ĐỒ ÁN MÔN HỌC CS114 - MÁY HỌC
      Đề tài: Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam
      Nhóm 10: Đặng Chí Thanh (25730067), Bùi Thị Mỷ Cẩm (25730013), Hoàng Cao Sơn (25730061)
      ═══════════════════════════════════════════════════════════════════ -->
 
 # Cam kết Liêm chính Học thuật
 
-> Chúng tôi — Đặng Chí Thanh (25730067), Bùi Thị Mỷ Cẩm (25730013), Hoàng Cao Sơn (25730061) — cam kết rằng báo cáo này là công trình nghiên cứu độc lập của nhóm, không vi phạm liêm chính học thuật. Mọi nguồn tài liệu đều được trích dẫn đầy đủ.
+> Chúng tôi - Đặng Chí Thanh (25730067), Bùi Thị Mỷ Cẩm (25730013), Hoàng Cao Sơn (25730061) - cam kết rằng báo cáo này là công trình nghiên cứu độc lập của nhóm, không vi phạm liêm chính học thuật. Mọi nguồn tài liệu đều được trích dẫn đầy đủ.
 
 ---
 
@@ -42,9 +42,9 @@ Bảng dưới đây trình bày chi tiết phân công trách nhiệm, các h�
 
 | STT | Thành viên | MSSV | Vai trò chính | Phân hệ phụ trách chi tiết | Mức độ hoàn thành | Tỷ lệ đóng góp |
 |:---:|---|:---:|---|---|:---:|:---:|
-| 1 | **Đặng Chí Thanh** | `25730067` | Trưởng nhóm / PM | • Thu thập 1.773 tin bình thường (IEEE Access 2026) & 50 mẫu Holdout Test<br>• Pipeline tiền xử lý văn bản tiếng Việt & Trích xuất 15 đặc trưng phụ (Phase 02)<br>• Pipeline EDA & Zero-leakage Feature Engineering 5.015 chiều (Phase 03)<br>• Đánh giá tổng hợp 4 mô hình & XAI SHAP Top-20 (Phase 07)<br>• Thực nghiệm đối chứng Ablation Studies (Buổi 8)<br>• Soạn thảo báo cáo học thuật & Điều phối dự án | 100% | 33.33% |
-| 2 | **Bùi Thị Mỷ Cẩm** | `25730013` | ML Modeling Lead | • Thu thập 205 mẫu lừa đảo (`health_gift`, `public_service`) vượt 7 tầng kiểm toán<br>• Huấn luyện Naive Bayes Baseline (alpha=0.01) (Phase 04)<br>• Huấn luyện XGBoost Classifier (`scale_pos_weight = 4.22`) (Phase 05)<br>• Huấn luyện Calibrated Linear SVM (C=10.0) (Phase 06)<br>• Thiết kế Slide PowerPoint 22 trang chuẩn UIT (Phase 09) | 100% | 33.33% |
-| 3 | **Hoàng Cao Sơn** | `25730061` | Data & UI Lead | • Thu thập 215 mẫu lừa đảo (`fear_authority`, `family_emergency`) vượt 7 tầng kiểm toán<br>• Huấn luyện Random Forest Classifier (n_estimators=200) (Phase 05)<br>• Xây dựng Web App Demo Streamlit tối ưu trợ năng người già (Phase 08)<br>• Tự động hóa kiểm thử E2E Playwright 16/16 tests (Phase 08)<br>• Biên soạn bản thảo Báo cáo Word ban đầu & Thiết lập bố cục OpenXML | 100% | 33.33% |
+| 1 | **Đặng Chí Thanh** | `25730067` | Trưởng nhóm / PM<br>Data & NLP Lead | • Điều phối toàn diện dự án; thiết lập môi trường nghiên cứu & quy trình kiểm thử CI/CD<br>• Thu thập 1.773 tin bình thường (IEEE Access 2026) & 50 mẫu Holdout Test thực tế<br>• Xây dựng pipeline tiền xử lý tiếng Việt 5 bước & trích xuất 15 đặc trưng phụ tâm lý<br>• Thiết kế pipeline Zero-leakage TF-IDF + Aux 5.015 chiều & 7 biểu đồ EDA 300 DPI<br>• Đánh giá đối sánh 4 mô hình, bóc tách SHAP TreeExplainer & Top-20 từ khóa XAI<br>• Thực nghiệm đối chứng chuyên sâu Ablation (Tiền xử lý & Không gian 5.015 chiều)<br>• Biên soạn Báo cáo Chương 4, 5; soạn Kịch bản bảo vệ 15 phút & Bộ câu hỏi phản biện Q&A<br>• Kiểm toán liêm chính học thuật & đóng gói hồ sơ nộp bài chuẩn UIT | 100% | 40% |
+| 2 | **Bùi Thị Mỷ Cẩm** | `25730013` | ML Modeling Lead<br>PPT Lead | • Thu thập & kiểm toán 205 mẫu lừa đảo (159 `public_service`, 46 `health_gift`), vượt 7 tầng kiểm định<br>• Huấn luyện Naive Bayes Baseline (alpha=0.01), F1=0.8864, Recall=92.86%<br>• Huấn luyện XGBoost Classifier (`scale_pos_weight = 4.22`), F1=0.9535, Recall=97.62%<br>• Huấn luyện Calibrated Linear SVM (C=10.0), F1=0.9474, ROC-AUC=0.9986; khảo nghiệm PhoBERT<br>• Triển khai mã nguồn thực nghiệm Ablation Masking Tags PII (`ablation_masking_tags.py`)<br>• Đóng gói bundle mô hình tối ưu nhất (`best_model_bundle.pkl`) phục vụ Web Demo<br>• Tự động hóa sinh Slide PowerPoint 22 trang chuẩn UIT bằng PptxGenJS (`generate_slides.js`)<br>• Khảo sát vòng đời 20 tài liệu tham khảo IEEE & chuẩn hóa mã DOI; biên soạn Báo cáo Chương 3 | 100% | 30% |
+| 3 | **Hoàng Cao Sơn** | `25730061` | Data Collection Lead<br>Demo UI & Testing | • Phụ trách thu thập dữ liệu: Lập Google Sheet nhóm, chuẩn hóa schema; khảo sát Kaggle<br>• Thu thập & kiểm toán 215 mẫu lừa đảo (127 `fear_authority`, 88 `family_emergency`), vượt 7 tầng kiểm định<br>• Huấn luyện Random Forest Classifier (n_estimators=200), F1=0.9425, Recall=97.62%<br>• Đồng tác giả kịch bản trực quan hóa biểu đồ mô hình (`model_plots.py`)<br>• Thiết kế & phát triển Web App Demo Streamlit (`demo/app.py`), chia giao diện Split-View<br>• Hiện thực hóa 6 giải pháp trợ năng W3C WCAG 2.1 cho người già (phóng đại chữ, Hotline 156/113)<br>• Tự động hóa kiểm thử E2E Playwright với 16/16 tests giao diện vượt qua hoàn toàn<br>• Soạn thảo Báo cáo Chương 1, Chương 2 và khởi tạo kiến trúc bố cục OpenXML ban đầu | 100% | 30% |
 
 *Xác nhận: 100% thành viên tham gia đầy đủ, bình đẳng và hoàn thành toàn diện nhiệm vụ được giao.*
 
@@ -82,7 +82,7 @@ Bảng dưới đây trình bày chi tiết phân công trách nhiệm, các h�
 
 ---
 
-# Chương 1 — Đặt vấn đề
+# Chương 1 - Đặt vấn đề
 
 ## 1.1. Bối cảnh và tính cấp thiết
 
@@ -90,7 +90,7 @@ Trong giai đoạn 2025–2026, Việt Nam chứng kiến làn sóng chuyển đ
 
 Theo thống kê chính thức từ Cục An toàn thông tin (Bộ Thông tin và Truyền thông) và Cục Cảnh sát hình sự (Bộ Công an) trong năm 2025 và đầu năm 2026, các cơ quan chức năng đã ghi nhận hàng chục nghìn phản ánh lừa đảo trực tuyến với tổng thiệt hại ước tính lên tới hàng nghìn tỷ đồng. Đáng báo động, các vụ án chiếm đoạt từ hàng trăm triệu đến hàng tỷ đồng phần lớn nhắm vào người hưu trí và người cao tuổi. Do phản xạ công nghệ còn chậm, thị lực suy giảm, khả năng xác minh thông tin viễn thông hạn chế và tâm lý cả tin, người cao tuổi rất dễ bị cô lập và thao túng khi nhận được các kịch bản tin nhắn được thiết kế bài bản.
 
-**Phân định ranh giới bài toán — Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả báo chí:**
+**Phân định ranh giới bài toán - Lừa đảo thao túng tâm lý vs Kiểm chứng tin giả báo chí:**
 Trong nghiên cứu này, bài toán phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing) nhắm vào người cao tuổi được phân định ranh giới bản chất với bài toán kiểm chứng tin giả báo chí (Fake News Verification):
 - *Kiểm chứng tin giả báo chí (Fake News)*: Bản chất là bài toán đối chiếu tri thức (Fact-checking). Tin giả thường là các phát ngôn, sự kiện thời sự cộng đồng sai sự thật phát tán rộng rãi trên mạng xã hội; việc xác thực chủ yếu dựa vào truy vấn đối sánh với các cơ sở tri thức công cộng, văn bản pháp luật hoặc các nguồn báo chí chính thống đáng tin cậy.
 - *Phát hiện tin nhắn lừa đảo thao túng tâm lý (Social Engineering Phishing)*: Bản chất là bài toán phát hiện hành vi tấn công kỹ nghệ xã hội trong giao tiếp cá nhân 1-1. Kẻ lừa đảo không bịa đặt sự kiện tin tức chung, mà nhắm thẳng vào nạn nhân cụ thể thông qua các kịch bản đe dọa, giục giã hoặc mồi nhử tài chính riêng tư. Không một cơ sở dữ liệu tin tức công cộng nào có thể chứa sẵn nội dung của một tin nhắn lừa đảo riêng lẻ. Do đó, việc phát hiện bắt buộc phải dựa trên **phân tích ngữ cảnh bất thường, hành vi thúc ép và các tín hiệu thao túng tâm lý nội tại** (từ khóa đe dọa quyền lực, thúc giục chuyển tiền gấp, yêu cầu cung cấp OTP, link mạo danh).
@@ -108,7 +108,7 @@ Việc xây dựng một hệ thống phát hiện tự động tin nhắn lừa
 1. **Đặc thù ngôn ngữ tiếng Việt và thủ thuật lách kiểm duyệt (Linguistic & Evasion Complexity)**: Tiếng Việt là ngôn ngữ đơn lập với 6 thanh điệu phong phú, ranh giới từ phức tạp cần cơ chế tách từ chuyên dụng (Word Segmentation). Thêm vào đó, tội phạm mạng liên tục sử dụng ngôn ngữ teencode (`ck`, `stk`, `sdt`), từ viết tắt không dấu, và thủ thuật chèn ký tự đặc biệt leet-speak (`c.o.n.g a.n`, `t.i.e.n`) nhằm qua mặt các bộ lọc từ khóa đơn giản.
 2. **Hiện tượng mất cân bằng dữ liệu sâu sắc (Severe Class Imbalance)**: Trong không gian viễn thông thực tế, tin nhắn lừa đảo chỉ chiếm tỷ trọng thiểu số (~19.15% trong tập dữ liệu của nhóm, tỷ lệ 4.22 : 1). Các mô hình tối ưu Accuracy thuần túy sẽ có xu hướng dự đoán nhãn bình thường cho mọi trường hợp, gây mất khả năng phát hiện.
 3. **Sự thiếu vắng bộ ngữ liệu chuẩn hóa công khai (Lack of Benchmark Datasets)**: Cho đến nay, cộng đồng nghiên cứu AI trong nước chưa có một bộ dữ liệu công khai nào chuyên biệt về tin nhắn lừa đảo người cao tuổi có đầy đủ nguồn gốc truy vết (provenance) và đã được làm sạch khử định danh (PII) triệt để.
-4. **Chi phí bất đối xứng giữa các loại sai số (Asymmetric Error Cost)**: Trong bài toán an toàn bảo vệ người già, hậu quả của việc bỏ sót một tin lừa đảo (False Negative — FN) là nạn nhân có thể mất sạch tài sản dưỡng già tích cóp cả đời, nghiêm trọng hơn rất nhiều so với việc cảnh báo nhầm một tin nhắn thông thường (False Positive — FP). Do đó, hệ thống bắt buộc phải đặt mục tiêu tối thượng vào **chỉ số Recall trên lớp lừa đảo** (yêu cầu Recall ≥ 92%).
+4. **Chi phí bất đối xứng giữa các loại sai số (Asymmetric Error Cost)**: Trong bài toán an toàn bảo vệ người già, hậu quả của việc bỏ sót một tin lừa đảo (False Negative - FN) là nạn nhân có thể mất sạch tài sản dưỡng già tích cóp cả đời, nghiêm trọng hơn rất nhiều so với việc cảnh báo nhầm một tin nhắn thông thường (False Positive - FP). Do đó, hệ thống bắt buộc phải đặt mục tiêu tối thượng vào **chỉ số Recall trên lớp lừa đảo** (yêu cầu Recall ≥ 92%).
 
 ## 1.3. Ý nghĩa thực tiễn và tác động xã hội
 
@@ -119,7 +119,7 @@ Việc xây dựng một hệ thống phát hiện tự động tin nhắn lừa
 
 ---
 
-# Chương 2 — Các phương pháp tiếp cận
+# Chương 2 - Các phương pháp tiếp cận
 
 ## 2.1. Khảo sát các công trình liên quan (Related Works)
 
@@ -158,7 +158,7 @@ Từ kết quả phân tích so sánh ở trên, nhóm nghiên cứu khẳng đ�
 ---
 ---
 
-# Chương 3 — Phương pháp nhóm chọn
+# Chương 3 - Phương pháp nhóm chọn
 
 ## 3.1. Pipeline Tiền xử lý Tiếng Việt
 
@@ -226,26 +226,22 @@ Vector đặc trưng cuối cùng: **X ∈ ℝ⁵⁰¹⁵**
 ## 3.3. Mô tả 4 Mô hình
 
 ### Mô hình 1: Naive Bayes (Baseline)
-<!-- Phase 04 — Cẩm -->
 - **Loại**: MultinomialNB với Laplace smoothing [17]
 - **Tham số tốt nhất**: `alpha=0.01` (GridSearchCV 5-fold)
 - **Đặc trưng đầu vào**: chỉ 5.000 chiều TF-IDF (không âm)
 - **Lý do chọn**: baseline nhanh, interpretable, phù hợp TF-IDF
 
 ### Mô hình 2: Random Forest
-<!-- Phase 05 — Sơn -->
 - **Loại**: sklearn RandomForestClassifier [8], [11]
 - **Tham số**: `n_estimators=200, max_depth=50, min_samples_split=2, min_samples_leaf=2, max_features=0.2, class_weight="balanced"`
 - **Lý do chọn**: ensemble robustness, ít overfit
 
 ### Mô hình 3: XGBoost
-<!-- Phase 05 — Cẩm -->
 - **Loại**: XGBClassifier [7]
 - **Tham số**: `n_estimators=300, max_depth=5, learning_rate=0.05, scale_pos_weight=4.22`
 - **scale_pos_weight**: xử lý mất cân bằng lớp 4,22 : 1 (Bình thường : Lừa đảo), chi tiết ở mục 3.5
 
 ### Mô hình 4: SVM Linear (Best Linear)
-<!-- Phase 06 — Cẩm -->
 - **Loại**: LinearSVC (LIBLINEAR [16]) + CalibratedClassifierCV 5-fold (hiệu chỉnh xác suất theo Platt [10]) trên nền SVM [9]
 - **Tham số**: `C=10.0`
 - **Lý do chọn**: tốt với high-dimensional sparse features (TF-IDF)
@@ -308,7 +304,7 @@ SMOTE (Synthetic Minority Over-sampling Technique) [19] sinh thêm mẫu thiểu
 
 ---
 
-# Chương 4 — Thực nghiệm
+# Chương 4 - Thực nghiệm
 
 ## 4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)
 
@@ -319,10 +315,10 @@ Nhóm thu thập **2.193 mẫu thực tế** (100% Zero Synthetic Text), phân b
 | Loại | Số mẫu | Nguồn | Người thu thập |
 |------|--------|-------|----------------|
 | Bình thường (label=0) | 1.773 | IEEE Access 2026 Vietnamese SMS Dataset [1] | Đặng Chí Thanh |
-| Lừa đảo — Quyền lực (`fear_authority`) | 127 | Báo Dân Trí, VnExpress, KLTN Smishing [2] | Hoàng Cao Sơn |
-| Lừa đảo — Gia đình (`family_emergency`) | 88 | Lá Chắn Cuộc Gọi, SMS thực tế [2] | Bùi Thị Mỷ Cẩm |
-| Lừa đảo — Quà tặng (`health_gift`) | 46 | Báo chí chính thống, VTV24 [2] | Bùi Thị Mỷ Cẩm |
-| Lừa đảo — Dịch vụ công (`public_service`) | 159 | Báo Tuổi Trẻ, UIT IE403 corpus [2] | Hoàng Cao Sơn |
+| Lừa đảo - Quyền lực (`fear_authority`) | 127 | Báo Dân Trí, VnExpress, KLTN Smishing [2] | Hoàng Cao Sơn |
+| Lừa đảo - Gia đình (`family_emergency`) | 88 | Lá Chắn Cuộc Gọi, SMS thực tế [2] | Bùi Thị Mỷ Cẩm |
+| Lừa đảo - Quà tặng (`health_gift`) | 46 | Báo chí chính thống, VTV24 [2] | Bùi Thị Mỷ Cẩm |
+| Lừa đảo - Dịch vụ công (`public_service`) | 159 | Báo Tuổi Trẻ, UIT IE403 corpus [2] | Hoàng Cao Sơn |
 | **Tổng** | **2.193** | **Minh bạch nguồn gốc 100%** | **Cả nhóm** |
 
 **Chiến lược phân chia Zero-Leakage (Stratified 80/20)**:
@@ -335,7 +331,7 @@ Nhóm thu thập **2.193 mẫu thực tế** (100% Zero Synthetic Text), phân b
 Nhóm thực hiện chuỗi 7 biểu đồ phân tích khám phá dữ liệu toàn diện tại độ phân giải cao 300 DPI:
 
 ![Phân bố nhãn](../figures/label_distribution.png)
-*Hình 4.1: Phân bố nhãn — Bình thường (1.773 mẫu - 80.85%) vs Lừa đảo (420 mẫu - 19.15%), tỷ lệ mất cân bằng đạt 4.22 : 1*
+*Hình 4.1: Phân bố nhãn - Bình thường (1.773 mẫu - 80.85%) vs Lừa đảo (420 mẫu - 19.15%), tỷ lệ mất cân bằng đạt 4.22 : 1*
 
 **Nhận xét Hình 4.1**: Tập dữ liệu thể hiện rõ đặc tính mất cân bằng lớp tự nhiên trong môi trường viễn thông thực tế. Tỷ lệ 1.773 tin bình thường so với 420 tin lừa đảo (tỷ lệ 4.22 : 1) là thách thức lớn đối với việc huấn luyện mô hình. Nếu tối ưu Accuracy đơn thuần, mô hình có xu hướng dự đoán toàn bộ là nhãn bình thường. Do đó, việc thiết lập trọng số phạt gradient `scale_pos_weight = 4.22` trong hàm mất mát của XGBoost là hoàn toàn xuất phát từ cơ sở phân bố thực nghiệm của dữ liệu.
 
@@ -388,7 +384,7 @@ Coi lớp "lừa đảo" là lớp dương (nhãn 1) và lớp "bình thường"
 - **TP (True Positive)**: Tin lừa đảo được dự đoán chính xác là lừa đảo.
 - **TN (True Negative)**: Tin bình thường được dự đoán chính xác là bình thường.
 - **FP (False Positive)**: Tin bình thường bị cảnh báo nhầm là lừa đảo (Báo động giả).
-- **FN (False Negative)**: Tin lừa đảo bị bỏ sót (Báo động trượt — nguy hiểm nhất đối với người cao tuổi).
+- **FN (False Negative)**: Tin lừa đảo bị bỏ sót (Báo động trượt - nguy hiểm nhất đối với người cao tuổi).
 
 Năm thước đo học máy tiêu chuẩn được sử dụng:
 1. **Độ chính xác toàn thể (Accuracy)**:
@@ -446,17 +442,17 @@ Bảng 4.1 tổng hợp hiệu năng phân loại của 4 mô hình học máy t
 | **Random Forest** | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | 8 | **2** | 6.5 ms |
 | **Naive Bayes** | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | 14 | 6 | 1.8 ms |
 
-*Nguồn: `reports/model_comparison.csv` — Cả 4 mô hình đều vượt xa chỉ tiêu yêu cầu của đề tài (F1 ≥ 88%, Recall ≥ 92%).*
+*Nguồn: `reports/model_comparison.csv` - Cả 4 mô hình đều vượt xa chỉ tiêu yêu cầu của đề tài (F1 ≥ 88%, Recall ≥ 92%).*
 
 ### 4.3.2. Đường cong ROC và Precision-Recall
 
 ![ROC Curves so sánh](../figures/roc_curves_comparison.png)
-*Hình 4.4: ROC Curves — Tất cả 4 mô hình đạt AUC ≥ 99%, chứng tỏ chất lượng phân loại xuất sắc*
+*Hình 4.4: ROC Curves - Tất cả 4 mô hình đạt AUC ≥ 99%, chứng tỏ chất lượng phân loại xuất sắc*
 
 **Nhận xét Hình 4.4 (Đường cong ROC)**: Toàn bộ 4 mô hình đều đạt diện tích dưới đường cong ROC-AUC rất cao, dao động từ 0.9911 (Naive Bayes) đến 0.9986 (SVM Linear). Cả 4 đường cong đều vươn sát góc trên bên trái, khẳng định năng lực phân biệt vượt trội giữa tin lừa đảo và tin bình thường trên dải ngưỡng phân loại rộng. Trong đó, Linear SVM đạt ROC-AUC cao nhất (0.9986), chứng minh không gian vector 5.015 chiều tồn tại siêu phẳng tuyến tính phân tách hai lớp cực kỳ sắc bén.
 
 ![Precision-Recall Curves](../figures/precision_recall_curves.png)
-*Hình 4.5: Precision-Recall Curves — XGBoost và SVM duy trì Precision cao tại Recall cao*
+*Hình 4.5: Precision-Recall Curves - XGBoost và SVM duy trì Precision cao tại Recall cao*
 
 **Nhận xét Hình 4.5 (Đường cong Precision-Recall)**: Trên dữ liệu mất cân bằng lớp (tỷ lệ 4.22 : 1), đường cong Precision-Recall là thước đo phản ánh trung thực nhất năng lực mô hình. XGBoost và Random Forest thể hiện ưu thế vượt trội khi duy trì giá trị Precision cao (> 93%) ngay cả tại các ngưỡng Recall rất cao (> 97%). Điều này chứng minh mô hình có khả năng tóm trọn các ca lừa đảo mà không phải đánh đổi bằng việc báo động giả (False Alarm) làm phiền người dùng.
 
@@ -475,7 +471,7 @@ Bảng 4.1 tổng hợp hiệu năng phân loại của 4 mô hình học máy t
 ### 4.3.4. Kiểm tra Hiện tượng Quá khớp qua Learning Curves
 
 ![Learning Curves tổng hợp](../figures/learning_curves_summary.png)
-*Hình 4.7: Learning Curves — Đồ thị học tập cho thấy điểm Train Score và Validation Score hội tụ sát nhau khi tăng kích thước mẫu huấn luyện, chứng minh mô hình không bị overfit*
+*Hình 4.7: Learning Curves - Đồ thị học tập cho thấy điểm Train Score và Validation Score hội tụ sát nhau khi tăng kích thước mẫu huấn luyện, chứng minh mô hình không bị overfit*
 
 ---
 
@@ -486,7 +482,7 @@ Bảng 4.1 tổng hợp hiệu năng phân loại của 4 mô hình học máy t
 Nhằm định lượng mức độ đóng góp của từng đặc trưng và giải thích tường minh cơ chế dự đoán của mô hình cây, nghiên cứu ứng dụng phương pháp SHAP (SHapley Additive exPlanations) do Lundberg & Lee đề xuất [12], sử dụng thuật toán TreeSHAP tối ưu hóa cho cấu trúc cây [13]. Giá trị SHAP định lượng đóng góp biên của từng đặc trưng vào độ lệch xác suất dự đoán so với mức kỳ vọng cơ sở.
 
 ![SHAP Summary Beeswarm](../figures/shap_summary.png)
-*Hình 4.8: SHAP Beeswarm — Phân bố giá trị SHAP của Top-20 đặc trưng ảnh hưởng mạnh nhất đến quyết định phân loại của XGBoost*
+*Hình 4.8: SHAP Beeswarm - Phân bố giá trị SHAP của Top-20 đặc trưng ảnh hưởng mạnh nhất đến quyết định phân loại của XGBoost*
 
 ### 4.4.2. Biểu đồ Cột ngang Top-20 Từ khóa Cảnh báo (XAI Consensus)
 
@@ -604,8 +600,8 @@ Nghiên cứu tiến hành phân rã ma trận đầu vào thành 3 cấu hình 
 
 Nhóm đã xây dựng và triển khai ứng dụng thực nghiệm Web App tương tác trên nền tảng Streamlit [18], tập trung vào việc hỗ trợ tối đa người cao tuổi:
 
-![Demo Streamlit — Phát hiện tin nhắn lừa đảo](../figures/demo_03_scam_detection_verdict.png)
-*Hình 4.9: Giao diện Streamlit Web App — Kết quả phân tích tin nhắn lừa đảo thời gian thực với phân tầng rủi ro và giải thích XAI*
+![Demo Streamlit - Phát hiện tin nhắn lừa đảo](../figures/demo_03_scam_detection_verdict.png)
+*Hình 4.9: Giao diện Streamlit Web App - Kết quả phân tích tin nhắn lừa đảo thời gian thực với phân tầng rủi ro và giải thích XAI*
 
 ![Tính năng phóng to phông chữ hỗ trợ người cao tuổi](../figures/demo_02_font_scaling_elderly.png)
 *Hình 4.9b: Tính năng trợ năng thị giác phóng đại phông chữ 125%–150% và chế độ tương phản cao cho người cao tuổi (300 DPI)*
@@ -642,7 +638,7 @@ Hệ thống phân loại mẫu này là nhãn **Bình thường (An toàn)** v�
 
 ---
 
-# Chương 5 — Kết luận
+# Chương 5 - Kết luận
 
 ## 5.1. Tổng kết kết quả & Liêm chính học thuật
 
