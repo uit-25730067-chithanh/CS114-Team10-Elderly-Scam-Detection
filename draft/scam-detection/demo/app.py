@@ -24,6 +24,8 @@ import streamlit as st
 # Thiết lập đường dẫn hệ thống chuẩn hóa
 DEMO_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = DEMO_DIR.parent
+if not (PROJECT_ROOT / "src").exists() and (PROJECT_ROOT / "code" / "src").exists():
+    PROJECT_ROOT = PROJECT_ROOT / "code"
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 if str(DEMO_DIR) not in sys.path:
