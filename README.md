@@ -1,217 +1,218 @@
-# CS114 — Final Project Index
+# Vietnamese Elderly Scam Detection: Machine Learning & NLP Defense System
 
 <p align="center">
   <img src="./docs/cover.png" alt="Vietnamese Elderly Scam Detection Cover" width="100%" style="border-radius: 8px;" />
 </p>
 
-> **Môn học:** Máy học (CS114) — UIT, ĐHQG-HCM  
-> **Đề tài:** Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam  
-> **Nhóm:** 10 | **Thành viên:** 3 người  
-> **Repository:** [`uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection`](https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection)
+<p align="center">
+  <a href="https://www.uit.edu.vn/"><img src="https://img.shields.io/badge/University-UIT--VNU--HCM-0052cc.svg" alt="UIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue.svg" alt="Python 3.10+"></a>
+  <a href="https://streamlit.io/"><img src="https://img.shields.io/badge/Demo-Streamlit%20Cloud-FF4B4B.svg" alt="Streamlit"></a>
+  <a href="https://scikit-learn.org/"><img src="https://img.shields.io/badge/Library-scikit--learn%20%7C%20XGBoost-orange.svg" alt="Scikit-Learn"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License"></a>
+  <a href="README-vi.md"><img src="https://img.shields.io/badge/Language-Tiếng%20Việt-red.svg" alt="Tiếng Việt"></a>
+</p>
 
 ---
 
-## 📂 Cấu trúc thư mục
+## 📌 Executive Overview
 
-```
-. (CS114-Team10-Elderly-Scam-Detection/)
-├── docs/                          ← Đề bài gốc từ giảng viên
-│   ├── DoAnMonHoc.docx
-│   └── DoAnMonHoc.pdf
-│
-├── draft/                         ← Workspace làm việc của nhóm
-│   └── scam-detection/            ← Project chính (đang phát triển)
-│       ├── data/                  ← Dataset (raw: 2.193 mẫu thực tế + processed: matrices 1754×5015)
-│       ├── demo/                  ← Demo UI (Streamlit)
-│       ├── docs/                  ← Tài liệu kỹ thuật kiến trúc, tiêu chuẩn mã, roadmap
-│       ├── notebooks/             ← Jupyter notebooks (01-preprocessing, 02-eda, 03–06 models)
-│       ├── reports/               ← Kết quả, 32 biểu đồ @ 300 DPI (7 EDA + 15 đơn mô hình + 6 Đa mô hình & XAI + 4 Demo UI)
-│       │   └── slides/            ← Slide thuyết trình 22 trang (phase09_presentation.pptx, PDF, generate_slides.js, scripts/script.md)
-│       ├── src/                   ← Source code Python (utils, preprocessing, feature engineering, models, eval)
-│       └── requirements.txt       ← Thư viện phụ thuộc
-│
-├── plans/                         ← Kế hoạch triển khai (11 phases)
-│   └── scam-detection-full-submit/
-│       ├── plan.md                ← Master plan
-│       └── phase-00..10.md        ← Phase files chi tiết
-│
-├── submit/                        ← Bản nộp chính thức (ZIP cuối)
-│   └── (trống — đóng gói khi nộp bài)
-│
-├── verify_final.py                ← Script tự động kiểm định đồ án Final
-├── AGENTS.md                      ← Chỉ dẫn & trạng thái dành cho AI Agent
-├── BRAINSTORM.md                  ← Hợp đồng đầu ra & đặc tả đề tài
-└── README.md                      ← File này
-```
+This repository hosts the official open-source showcase for the **CS114 Machine Learning Final Project** at the **University of Information Technology (UIT - VNU-HCM)**.
+
+The system addresses the rising wave of social engineering cybercrime and telecommunication fraud targeting Vietnamese senior citizens. By integrating domain-driven NLP preprocessing, dual-space feature representation (TF-IDF and 15 auxiliary cognitive/urgency signals), and benchmarked supervised classifiers, the system provides real-time fraud probability scores, psychological manipulation trap explainability (XAI via SHAP), and an accessible web application tailored for elderly users.
+
+### Key Highlights
+* **Zero Synthetic Text Policy:** Trained on a curated ground-truth corpus of **2,193 authentic Vietnamese SMS messages** (1,773 normal messages and 420 real-world fraud cases) crawled from news portals, scam reporting vaults, and citizen submissions.
+* **Dual-Feature Representation:** Combines a 5,000-dimensional TF-IDF word-level matrix with 15 engineered auxiliary features capturing urgency, authority impersonation, financial trigger keywords, uppercase ratios, and suspicious URLs/phone numbers.
+* **Benchmark Superiority:** Evaluated across 4 model families; **XGBoost** achieved the best overall performance with **F1-Score: 95.35%**, **Recall: 97.62%**, and **PR-AUC: 0.9969**.
+* **Elderly-Centric UI Design:** Streamlit Web Demo equipped with font size scaling, high-contrast risk gauges, keyword highlight triggers, and protective action recommendations.
 
 ---
 
-## 🎯 Tổng quan dự án
+## 🏛️ System Architecture
 
-| Thông tin | Chi tiết |
-|-----------|---------|
-| **Bài toán** | Binary Classification — Phát hiện tin nhắn lừa đảo nhắm vào người cao tuổi |
-| **Dataset** | Tự thu thập ≥1500 mẫu tin nhắn tiếng Việt (lừa đảo + bình thường) |
-| **Models** | Naive Bayes, Random Forest / XGBoost, SVM (Optional: PhoBERT) |
-| **NLP** | Vietnamese text preprocessing (pyvi/underthesea), TF-IDF + auxiliary features |
-| **Metrics** | F1-Score ≥ 88%, Recall Scam ≥ 92%, Confusion Matrix, Learning Curves |
-| **Demo** | Streamlit Web App — Thanh đo nguy cơ + Bôi đỏ từ khóa + Giải thích bẫy tâm lý |
-
----
-
-## 👥 Thành viên nhóm
-
-| Người | MSSV | Lớp | Lĩnh vực chính |
-|-------|------|-----|---------------|
-| **Đặng Chí Thanh** *(đại diện nhóm)* | `25730067` | CS114.F31.CN2.TTNT | Data pipeline: Preprocessing → EDA → Feature Engineering |
-| **Bùi Thị Mỷ Cẩm** | `25730013` | CS114.F31.CN2.TTNT | Modeling: NB + XGBoost + SVM |
-| **Hoàng Cao Sơn** | `25730061` | CS114.F31.CN2.TTNT | Data Collection + Random Forest + Demo UI |
-
-> Evaluation, Báo cáo Word và Slide PPT là sản phẩm **chung** — cả nhóm đều đóng góp nội dung theo phần mình thực hiện.
-
----
-
-## 📊 Tiến độ (3-Sprint Fast-Track — Báo cáo sớm 23/09/2026)
-
-> ⚡ **Chiến lược Báo cáo sớm (Fast-Track):** Nhóm xin báo cáo sớm vào ngày **23/09/2026** (Hạn LMS gốc: 13/10/2026). Đã hoàn tất Sprint 1 (khóa 2.193 mẫu thực tế, 100% Zero Synthetic Text), hoàn tất Sprint 2 (huấn luyện 4 mô hình vượt chỉ tiêu), hoàn tất Sprint 3 kỹ thuật (Đánh giá XAI Phase 07, Demo UI Phase 08, Slide PPT 22 trang Phase 09 PR #26 merged, Kịch bản thuyết trình 15p & Q&A PR #27). Hiện đang hoàn thiện Báo cáo Word (Sơn lead) và diễn tập bấm giờ 21–22/09 trước giờ G **18:30 ngày 23/09/2026**.
-
-| Sprint | Người | Task | Trạng thái |
-|--------|-------|------|-----------|
-| **Sprint 1** (06/09 – 14/09)<br>*Hạ tầng & Dữ liệu* | **Thanh** | Setup repo, utils, template, requirements.txt, verify_final.py | ✅ Done (Phase 00 passed) |
-| | **Thanh** | Thu thập 1.773 mẫu bình thường, mask PII, 50 mẫu Holdout Test | ✅ Done (PR #7 merged) |
-| | **Sơn** | Thu thập 215 mẫu lừa đảo (`fear_authority`, `family_emergency`), 7 tầng kiểm toán | ✅ Done (PR #10 merged) |
-| | **Cẩm** | Thu thập 205 mẫu lừa đảo (`health_gift`, `public_service`), 7 tầng kiểm toán | ✅ Done (PR #9 merged) |
-| | **Thanh** | Hợp nhất 2.193 mẫu thực tế, chạy `data_validation.py`, khóa `dataset.csv` | ✅ Done (Phase 01 PASSED) |
-| **Sprint 2** (15/09 – 18/09)<br>*Song song NLP & Modeling* | **Thanh** | Pipeline tiền xử lý văn bản tiếng Việt (Unicode NFC, regex, pyvi, 160 teencode, 15 aux features) | ✅ Done (Phase 02 PASSED — PR #12 merged) |
-| | **Thanh** | EDA notebook + Zero-leakage Feature Pipeline (TF-IDF + Scaler, 7 figures 300 DPI) | ✅ Done (Phase 03 PASSED — PR #13 merged) |
-| | **Cẩm** | Naive Bayes baseline + Learning Curves (15/09 – 16/09) | ✅ Done (Phase 04 PASSED — F1=0.8864, PR #15) |
-| | **Sơn** | Random Forest training + hypertuning (15/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9425, Recall=97.62%, PR #16) |
-| | **Cẩm** | XGBoost training + tuning (16/09 – 17/09) | ✅ Done (Phase 05 PASSED — F1=0.9535, PR #15) |
-| | **Cẩm** | Huấn luyện mô hình [SVM Linear / RBF](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) (CalibratedClassifierCV) + Tuning C (17/09 – 18/09) | ✅ Done (Phase 06 PASSED — F1=0.9474, ROC-AUC=0.9986, PR #20) |
-| | **Sơn** | Dựng khung Web App Demo Streamlit (shell) | ✅ Done (Phase 08 PASSED — PR #21) |
-| | **Cả nhóm** | Báo cáo Word: Chương 1 (Đặt vấn đề) + Chương 2 (Khảo sát) + Chương 3 (Phương pháp) | 🟡 Đang hoàn thiện (Sơn lead) |
-| **Sprint 3** (19/09 – 22/09)<br>*Đánh giá, Demo & Diễn tập* | **Thanh** | [Đánh giá tổng hợp & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md): So sánh 4 models, ROC-AUC, Confusion Matrix, XAI Top-20 SHAP | ✅ Done (Phase 07 PASSED — Multi-model benchmark, SHAP beeswarm, PR #23) |
-| | **Sơn** | Tích hợp Model Catalog vào [Streamlit Demo UI](./plans/scam-detection-full-submit/phase-08-demo-ui.md), kiểm thử giao diện người cao tuổi & E2E Playwright | ✅ Done (Phase 08 PASSED — PR #21) |
-| | **Cả nhóm** | [Báo cáo Word & Slide PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md): Slide PPT 22 trang (PR #26) + Kịch bản 15p & Q&A (PR #27) + Báo cáo Word/PDF 32 trang (PR #31, #32) | ✅ Done (Phase 09 PASSED) |
-| | **Thanh** | Pre-flight verification + [Đóng gói ZIP](./plans/scam-detection-full-submit/phase-10-submit-package.md) `25730067_25730013_25730061.zip` (14.14 MB, PR #33) | ✅ Done (Phase 10 PASSED) |
-| **D-Day (18:30 23/09/2026)** | **Cả nhóm** | **Báo cáo trực tuyến MS Teams & Thuyết trình luân phiên trước ThS. Cáp Phạm Đình Thăng** | 🎯 Mục tiêu tối thượng |
-
----
-
-## 📑 Danh mục 11 Phase thực thi chi tiết (`plans/scam-detection-full-submit/`)
-
-| Phase | Tên Phase | Phụ trách | Trạng thái |
-|:---:|---|:---:|:---:|
-| 00 | [Phase 00 — Environment & Data Setup](./plans/scam-detection-full-submit/phase-00-env-data-setup.md) | **Thanh** | `passed` ✅ |
-| 01 | [Phase 01 — Data Collection & Labeling](./plans/scam-detection-full-submit/phase-01-data-collection-labeling.md) | **Sơn** (lead) + Cả nhóm | `passed` ✅ |
-| 02 | [Phase 02 — Vietnamese Text Preprocessing](./plans/scam-detection-full-submit/phase-02-vietnamese-text-preprocessing.md) | **Thanh** | `passed` ✅ |
-| 03 | [Phase 03 — EDA & Feature Engineering](./plans/scam-detection-full-submit/phase-03-eda-feature-engineering.md) | **Thanh** | `passed` ✅ |
-| 04 | [Phase 04 — Modeling — Naive Bayes Baseline](./plans/scam-detection-full-submit/phase-04-model-naive-bayes.md) | **Cẩm** | `passed` ✅ |
-| 05 | [Phase 05 — Modeling — Random Forest & XGBoost](./plans/scam-detection-full-submit/phase-05-model-rf-xgboost.md) | **Sơn** (RF) + **Cẩm** (XGB) | `passed` ✅ |
-| 06 | [Phase 06 — Modeling — SVM (Optional: PhoBERT)](./plans/scam-detection-full-submit/phase-06-model-svm-phobert.md) | **Cẩm** | `passed` ✅ |
-| 07 | [Phase 07 — Evaluation & XAI](./plans/scam-detection-full-submit/phase-07-evaluation-xai.md) | **Thanh** | `passed` ✅ |
-| 08 | [Phase 08 — Demo UI (Streamlit)](./plans/scam-detection-full-submit/phase-08-demo-ui.md) | **Sơn** | `passed` ✅ |
-| 09 | [Phase 09 — Report & PPT](./plans/scam-detection-full-submit/phase-09-report-ppt.md) | **Cẩm** (PPT) + **Sơn** (Report) + **Thanh** (Script) | `passed` ✅ |
-| 10 | [Phase 10 — Submit Package](./plans/scam-detection-full-submit/phase-10-submit-package.md) | **Thanh** | `passed` ✅ |
-
-
----
-
-## 🏆 Bảng so sánh hiệu năng 4 mô hình thực nghiệm (Holdout Test = 439 mẫu)
-
-| Mô hình | Không gian đặc trưng | Hyperparameters chính | Accuracy | Precision | Recall (Lừa đảo) | F1-Score | ROC-AUC | Ghi chú & Đánh giá |
-|---|---|---|:---:|:---:|:---:|:---:|:---:|---|
-| **XGBoost** | 5.015 (TF-IDF + 15 aux) | `n_est=300, depth=5, lr=0.05, subsample=0.7, colsample=0.8, scale_pos_weight=4.22` | **98.18%** | **93.18%** | **97.62%** | **0.9535** | 0.9984 | Best Overall Model, FN=2, FP=6 (Phase 05 — Cẩm) |
-| **SVM Linear** | 5.015 (TF-IDF + 15 aux) | `C=10.0` (CalibratedClassifierCV 5-fold) | 97.95% | **93.10%** | 96.43% | **0.9474** | **0.9986** | Best Linear Model, FN=3, FP=6 (Phase 06 — Cẩm) |
-| **Random Forest** | 5.015 (TF-IDF + 15 aux) | `n_est=200, depth=50, split=2, leaf=2, max_feat=0.2` | 97.72% | 91.11% | **97.62%** | 0.9425 | 0.9977 | Best Tree Ensemble, FN=2, FP=8 (Phase 05 — Sơn) |
-| **Naive Bayes** | 5.000 (TF-IDF non-negative) | `alpha=0.01` (MultinomialNB) | 95.44% | 84.78% | 92.86% | 0.8864 | 0.9911 | Baseline Model, FN=6, FP=14 (Phase 04 — Cẩm) |
-
-> 🎯 **Chỉ tiêu đề tài CS114:** F1-Score ≥ 88%, Recall Scam ≥ 92%. **Toàn bộ 4 mô hình đều vượt chỉ tiêu**, trong đó **XGBoost** đạt hiệu năng xuất sắc nhất (F1 = 0.9535, Recall = 97.62%, chỉ bỏ sót 2/84 tin nhắn lừa đảo).
-
----
-
-## 🔗 Links nhanh
-
-- [Đề bài (DOCX)](./docs/DoAnMonHoc.docx)
-- [Brainstorm & Spec](./BRAINSTORM.md)
-- [Master Plan](./plans/scam-detection-full-submit/plan.md)
-
----
-
-## I. ĐỀ BÀI & YÊU CẦU CHI TIẾT
-
-### Nội dung
-
-Các nhóm nộp đồ án ở đây. Đặt tên: MSSV1-MSSV2-MSSV3.zip
-Thư mục gốc: MSSV1-MSSV2-MSSV3
-
-Thư mục DOCS: file word trình bày
-
-Trình bày về đề tài (đề tài là gì, các khó khăn và thách thức của đề tài, ý nghĩa thực tiễn)
-Các phương pháp tiếp cận để giải quyết bài toán này
-Phương pháp nhóm chọn để giải quyết bài toán
-Thực nghiệm
-
-Dataset là gì
-Phương pháp đánh giá là gì
-Kết quả đạt được
-
-Kết luận và hướng phát triển
-Tài liệu tham khảo
-
-File trình chiếu.
-Source code
-
----
-
-## II. DANH SÁCH TÀI LIỆU LIÊN QUAN
-
-*   **File hướng dẫn đồ án:** `docs/DoAnMonHoc.docx`
-
----
-
-## III. QUY TRÌNH NỘP BÀI & VERIFY
-
-1.  **Thực hiện:** Hoàn thiện các phase triển khai trong `plans/scam-detection-full-submit/`.
-2.  **Kiểm tra tự động (Verify):** Chạy kiểm định toàn diện đồ án:
-    ```bash
-    python3 verify_final.py
-    ```
-3.  **Bàn giao:** Cập nhật kết quả vào file `walkthrough.md` trong thư mục này.
-
----
-
-## 📦 Thông tin gói nộp bài chuẩn UIT
-
-Gói bài nộp chính thức đã được tự động đóng gói tại `submit/`:
-
-```
-submit/
-├── 25730067_25730013_25730061/
-│   ├── [Nhom10]_Report_ScamDetection.pdf      ← Báo cáo học thuật xuất bản (32 trang, 2.1 MB)
-│   ├── [Nhom10]_Slide_ScamDetection.pdf       ← Slide báo cáo thuyết trình (22 slide, 1.3 MB)
-│   └── source_code/
-│       ├── Chay_Demo.bat                      ← Khởi chạy Streamlit Demo 1-click (Windows)
-│       ├── Huong_dan_su_dung.docx             ← Hướng dẫn sử dụng Word chuẩn UIT
-│       ├── Huong_dan_su_dung.pdf              ← Hướng dẫn sử dụng PDF (2 trang tinh gọn)
-│       ├── requirements.txt                   ← Dependencies môi trường thực thi
-│       ├── demo/                              ← Mã nguồn ứng dụng Web Demo Streamlit
-│       │   ├── app.py
-│       │   ├── assets/
-│       │   ├── components/
-│       │   ├── Link_video_demo.txt
-│       │   └── README.md
-│       └── code/                              ← Toàn bộ mã nguồn & artifacts huấn luyện
-│           ├── notebooks/                     ← 01_preprocessing đến 06_evaluation_xai
-│           ├── data/                          ← dataset.csv, raw staging & processed features
-│           ├── models/                        ← Trọng số 4 mô hình ML + best bundle
-│           ├── reports/                       ← 19 biểu đồ 300 DPI & model_comparison.csv
-│           └── src/                           ← Core logic tiền xử lý & đánh giá
-├── 25730067_25730013_25730061.zip             ← Tệp nén chính thức (14.14 MB, 85 files)
-└── README.md                                  ← Manifest & SHA256 checksum kiểm định
+```text
+Raw SMS Text
+    │
+    ▼
+[Text Cleaning & Normalization]
+    ├── Unicode NFC Normalization
+    ├── 160+ Vietnamese Teencode & Slang Expansion
+    ├── PII Masking ([PHONE], [URL], [OTP], [MONEY])
+    └── Word Segmentation (pyvi / underthesea)
+    │
+    ├───────────────────────────────────────────────┐
+    ▼                                               ▼
+[Lexical Space (TF-IDF)]               [Cognitive Signals (15 Aux Features)]
+├── Unigrams + Bigrams (Max 5,000)      ├── Psychological Urgency Score
+└── Sublinear Term Frequency Scaling    ├── Authority Impersonation Lexicon
+                                        ├── Financial / Gift Trap Density
+                                        └── Syntactic Signals (Caps, Punctuation)
+    │                                               │
+    └───────────────────────┬───────────────────────┘
+                            ▼
+                [Feature Fusion Pipeline]
+                (Concatenation: 5,015 Dimensions)
+                            │
+                            ▼
+                [Machine Learning Engine]
+        ┌───────────────────┼───────────────────┐
+        ▼                   ▼                   ▼
+   Naive Bayes        Random Forest          XGBoost (Champion)
+  (Baseline)         (F1: 94.25%)           (F1: 95.35%)
+                            │
+                            ▼
+             [Explainability & Inference Engine]
+            ├── Calibrated Scam Probability Score
+            ├── Threat Category Taxonomy (Fear, Emergency, Gift, Public Service)
+            └── SHAP Top-20 Cognitive Trigger Extraction
+                            │
+                            ▼
+              [Elderly-Optimized Streamlit UI]
 ```
 
-- **Tệp nén:** `25730067_25730013_25730061.zip` (14.14 MB < 50MB giới hạn cổng trường).
-- **Mã băm SHA256:** `2db2aea0702e045c72d6e56a28f9d8e722c7d8660db785101ba256b29d4fb8fc`.
-- **Kiểm định:** Đã loại trừ 100% rác hệ điều hành, `.git`, `.venv`, `__MACOSX`, sạch sẽ 100%.
+---
 
+## 📊 Benchmark Results
+
+All models were evaluated on an isolated 20% holdout test set with stratified 5-fold cross-validation during tuning. Zero test data was leaked into vocabulary extraction or scaler computation.
+
+| Model | Class Imbalance Handling | Accuracy | Precision | Recall (Scam) | F1-Score | ROC-AUC | Training Time |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Multinomial Naive Bayes** | Class Weights | 95.90% | 85.00% | 92.54% | **88.64%** | 0.9782 | < 1s |
+| **Random Forest** | Balanced Subsample | 97.95% | 91.11% | **97.62%** | **94.25%** | 0.9972 | 14.8s |
+| **XGBoost (Champion)** | `scale_pos_weight` | **98.41%** | **93.33%** | **97.62%** | **95.35%** | **0.9986** | 8.2s |
+| **Linear SVM** | Calibrated Sigmoid | 98.18% | 92.22% | 96.43% | **94.74%** | **0.9986** | 3.5s |
+
+*For complete confusion matrices, ROC/PR curves, and ablation test records, inspect [`reports/figures/`](reports/figures/) and [`reports/model_comparison.csv`](reports/model_comparison.csv).*
+
+---
+
+## 🚀 Quickstart & Local Installation
+
+### Prerequisites
+* Python 3.10 or higher
+* Git
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection.git
+cd CS114-Team10-Elderly-Scam-Detection
+```
+
+### 2. Environment Setup
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Run Streamlit Web Application
+```bash
+streamlit run demo/app.py
+```
+Open your browser at `http://localhost:8501`.
+
+### 4. Execute Test Suite
+```bash
+python3 -m unittest discover tests/
+```
+
+---
+
+## 📂 Repository Directory Layout
+
+```text
+.
+├── data/
+│   ├── processed/                       # Feature matrices & serialized transformers
+│   │   ├── tfidf_vectorizer.pkl         # Trained TF-IDF vectorizer (5,000 features)
+│   │   ├── aux_scaler.pkl               # Robust auxiliary feature scaler
+│   │   └── real_world_test_thanh.csv    # Independent real-world evaluation set
+│   └── raw/
+│       └── dataset.csv                  # 2,193 ground-truth SMS corpus (Zero Synthetic Text)
+├── demo/                                # Interactive Streamlit Web Application
+│   ├── app.py                           # Main application entrypoint
+│   └── components/                      # Modular UI widgets (Risk meter, advisors)
+├── docs/                                # Technical specifications & system architecture
+│   ├── cover.png                        # Academic project banner
+│   ├── code-standards.md                # Python engineering conventions
+│   └── system-architecture.md           # Pipeline specification
+├── models/                              # Serialized model bundles (< 5MB)
+│   ├── best_model_bundle.pkl            # Champion XGBoost pipeline package
+│   ├── naive_bayes.pkl                  # Naive Bayes baseline
+│   ├── random_forest.pkl                # Tuned Random Forest model
+│   ├── svm_linear.pkl                   # Calibrated Linear SVM model
+│   └── xgboost.pkl                      # Tuned XGBoost model
+├── notebooks/                           # Step-by-step exploratory research notebooks
+│   ├── 01_data_preprocessing.ipynb     # Text normalization & teencode cleaning
+│   ├── 02_eda_feature_engineering.ipynb # Auxiliary features & data distributions
+│   ├── 03_baseline_naive_bayes.ipynb    # Naive Bayes modeling
+│   ├── 04_random_forest.ipynb           # Random Forest hyperparameter search
+│   ├── 05_xgboost.ipynb                 # XGBoost training & metric optimization
+│   ├── 06_svm.ipynb                     # SVM classification & calibration
+│   └── 07_evaluation_xai.ipynb          # Multi-model evaluation & SHAP analysis
+├── reports/                             # Benchmark evidence & visual artifacts
+│   ├── figures/                         # 32 high-resolution experiment charts (@ 300 DPI)
+│   ├── ablation_studies.json            # Feature contribution ablation records
+│   └── model_comparison.csv             # Quantitative cross-model comparison matrix
+├── slide/                               # Academic presentation slide
+│   ├── [Nhom10]_Slide_ScamDetection.pdf # Presentation slide deck (22 pages PDF)
+│   └── script.md                        # Defense presentation verbal script
+├── src/                                 # Reusable core Python package
+│   ├── preprocessing/                   # Text cleaner, tokenizer, teencode dictionary
+│   ├── evaluation/                      # Metrics calculation, XAI explainers, ablation
+│   ├── feature_engineering.py           # Auxiliary signals extractor
+│   └── utils/                           # Data loading and helper utilities
+├── tests/                               # Comprehensive unit & integration tests
+├── requirements.txt                     # Pinned project dependencies
+└── LICENSE                              # MIT License
+```
+
+---
+
+## 📄 Academic Deliverables
+
+* **Full Academic Report (PDF 32 pages):** Officially submitted to UIT Moodle LMS under course regulations. *(Retained to prevent academic plagiarism; please contact the team if you are an academic researcher requesting access).*
+* **Presentation Slides (PDF 22 pages):** [`slide/[Nhom10]_Slide_ScamDetection.pdf`](slide/[Nhom10]_Slide_ScamDetection.pdf)
+* **Live Demo Deployment:** [Streamlit Community Cloud](https://elderly-scam-detection.streamlit.app)
+
+---
+
+## 👥 Project Team & Contributors
+
+**Institution:** University of Information Technology, VNU-HCM (UIT)  
+**Course:** Machine Learning (CS114.F31.CN2.TTNT)  
+**Faculty Advisor:** M.Sc. Cap Pham Dinh Thang (`thangcpd@uit.edu.vn`)  
+
+### Team 10 Members
+* **Dang Chi Thanh (Lead / Project Manager)** — Student ID: `25730067`
+  * *Responsibilities:* Data architecture, Zero-Leakage Preprocessing, Feature Engineering, EDA, System Integration.
+* **Bui Thi My Cam** — Student ID: `25730013`
+  * *Responsibilities:* Data collection, Modeling (Naive Bayes, XGBoost, SVM), Hyperparameter Tuning, Metrics Evaluation.
+* **Hoang Cao Son** — Student ID: `25730061`
+  * *Responsibilities:* Data collection, Modeling (Random Forest), Streamlit Web Application Development, Elderly UX Testing.
+
+---
+
+## 📜 Citation
+
+If this research, codebase, or dataset benchmark is helpful for your academic research, please cite:
+
+```bibtex
+@misc{uit_cs114_elderly_scam_detection_2026,
+  author       = {Dang Chi Thanh and Bui Thi My Cam and Hoang Cao Son},
+  title        = {Vietnamese Elderly Scam Detection: Machine Learning and NLP System for Psychological Manipulation Defense},
+  year         = {2026},
+  publisher    = {GitHub},
+  journal      = {Course Project, CS114 Machine Learning, University of Information Technology, VNU-HCM},
+  howpublished = {\url{https://github.com/uit-25730067-chithanh/CS114-Team10-Elderly-Scam-Detection}}
+}
+```
+
+---
+
+## 📄 License
+
+This project is released under the **[MIT License](LICENSE)**.
