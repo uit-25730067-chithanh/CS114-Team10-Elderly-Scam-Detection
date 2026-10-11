@@ -393,7 +393,7 @@ def generate_guide_docx(output_path: str):
     h32.paragraph_format.space_before = Pt(4)
     h32.paragraph_format.space_after = Pt(1)
     h32.paragraph_format.keep_with_next = True
-    r = h32.add_run("3.2. Xem Minh chứng Video Clip Thuyết minh Demo Giao diện")
+    r = h32.add_run("3.2. Trải nghiệm Trực tuyến & Xem Video Clip Thuyết minh Demo")
     r.font.name = "Times New Roman"
     r.font.size = Pt(11.0)
     r.font.bold = True
@@ -403,18 +403,19 @@ def generate_guide_docx(output_path: str):
     p32.paragraph_format.space_before = Pt(1)
     p32.paragraph_format.space_after = Pt(3)
     p32.paragraph_format.line_spacing = 1.10
-    r = p32.add_run("Quý Thầy/Cô có thể theo dõi video clip thuyết minh trực quan giao diện tương tác Streamlit Web UI (độ phân giải Full HD 1080p) qua liên kết truy cập công khai tại tệp ")
+    r = p32.add_run("Quý Thầy/Cô có thể trải nghiệm trực tiếp Web Demo tại: ")
     r.font.name = "Times New Roman"
     r.font.size = Pt(10.5)
     r.font.color.rgb = BLACK
 
-    r_link_f = p32.add_run("source_code/demo/Link_video_demo.txt")
-    r_link_f.font.name = "Courier New"
-    r_link_f.font.size = Pt(9.0)
-    r_link_f.font.bold = True
-    r_link_f.font.color.rgb = BLACK
+    r_surl = p32.add_run("https://cs114-team10-elderly-scam-detection.streamlit.app/")
+    r_surl.font.name = "Courier New"
+    r_surl.font.size = Pt(9.0)
+    r_surl.underline = True
+    r_surl.font.bold = True
+    r_surl.font.color.rgb = BLACK
 
-    r = p32.add_run(" hoặc xem trực tiếp tại đường dẫn: ")
+    r = p32.add_run(", xem video clip Full HD tại: ")
     r.font.name = "Times New Roman"
     r.font.size = Pt(10.5)
     r.font.color.rgb = BLACK
@@ -426,7 +427,7 @@ def generate_guide_docx(output_path: str):
     r_vurl.font.bold = True
     r_vurl.font.color.rgb = BLACK
 
-    r = p32.add_run(" (tệp video đề xuất: [Nhom10]_VideoDemo_ScamDetection.mp4).")
+    r = p32.add_run(" (hoặc xem tại tệp source_code/demo/Link_video_demo.txt).")
     r.font.name = "Times New Roman"
     r.font.size = Pt(10.5)
     r.font.color.rgb = BLACK
