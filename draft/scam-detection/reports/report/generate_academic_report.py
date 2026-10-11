@@ -456,7 +456,7 @@ def build_cover_page(doc):
     format_paragraph(p2, size_pt=12, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=GOLD_COLOR)
     p2.paragraph_format.space_before = Pt(2)
     p2.paragraph_format.space_after = Pt(12)
-    p2.add_run("KHOA HỆ THỐNG THÔNG TIN — BỘ MÔN TRÍ TUỆ NHÂN TẠO")
+    p2.add_run("KHOA KHOA HỌC MÁY TÍNH — BỘ MÔN TRÍ TUỆ NHÂN TẠO")
     
     if COVER_IMG.exists():
         p_img = doc.add_paragraph()
@@ -511,7 +511,7 @@ def build_cover_page(doc):
         r2.font.color.rgb = NAVY_COLOR
         
     add_line("Giảng viên hướng dẫn", "ThS. Cáp Phạm Đình Thăng")
-    add_line("Nhóm thực hiện", "Nhóm 10 — Lớp CS114.F31.CN2")
+    add_line("Nhóm thực hiện", "Nhóm 10 — Lớp CS114.F31.CN2.TTNT")
     add_line("Sinh viên 1", "Đặng Chí Thanh — MSSV: 25730067 (Trưởng nhóm / PM)", bold_val=False)
     add_line("Sinh viên 2", "Bùi Thị Mỷ Cẩm — MSSV: 25730013 (ML Modeling)", bold_val=False)
     add_line("Sinh viên 3", "Hoàng Cao Sơn — MSSV: 25730061 (Data & Demo UI Lead)", bold_val=False)
@@ -519,7 +519,7 @@ def build_cover_page(doc):
     p_foot = doc.add_paragraph()
     format_paragraph(p_foot, size_pt=12, align=WD_ALIGN_PARAGRAPH.CENTER, bold=True, color=NAVY_COLOR)
     p_foot.paragraph_format.space_before = Pt(20)
-    p_foot.add_run("THÀNH PHỐ HỒ CHÍ MINH — NĂM HỌC 2025–2026")
+    p_foot.add_run("THÀNH PHỐ HỒ CHÍ MINH — THÁNG 10/2026")
 
 def generate_report(toc_overrides=None):
     doc = docx.Document()
@@ -547,31 +547,34 @@ def generate_report(toc_overrides=None):
     # ══════════════════════════════════════════════════════════════════════════
     p_lh = add_heading_1(doc, "LỜI CAM ĐOAN VÀ CAM KẾT LIÊM CHÍNH HỌC THUẬT")
     p_lh.paragraph_format.space_before = Pt(4)
-    p_lh.paragraph_format.space_after = Pt(4)
+    p_lh.paragraph_format.space_after = Pt(3)
     
-    p_lb = add_body_p(doc, "Chúng tôi xin cam đoan rằng Báo cáo Đồ án môn học Máy học (CS114) với đề tài \"Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam\" là công trình nghiên cứu khoa học độc lập của tập thể Nhóm 10, dưới sự hướng dẫn chuyên môn của ThS. Cáp Phạm Đình Thăng.")
-    p_lb.paragraph_format.space_after = Pt(3)
+    p_lb = add_body_p(doc, "Chúng tôi xin cam đoan rằng Báo cáo Đồ án môn học Máy học (CS114.F31.CN2.TTNT) với đề tài \"Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam\" là công trình nghiên cứu khoa học độc lập của tập thể Nhóm 10, dưới sự hướng dẫn chuyên môn của ThS. Cáp Phạm Đình Thăng.")
+    p_lb.paragraph_format.space_after = Pt(2)
     
-    meta_table = [
-        ["Tên Đề tài Đồ án", "Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam (CS114.F31.CN2.TTNT)"],
-        ["Giảng viên Hướng dẫn", "ThS. Cáp Phạm Đình Thăng — Bộ môn Trí tuệ Nhân tạo, Trường ĐH Công nghệ Thông tin"],
-        ["Nhóm thực hiện", "Nhóm 10: Đặng Chí Thanh (25730067), Bùi Thị Mỷ Cẩm (25730013), Hoàng Cao Sơn (25730061)"],
-        ["Bộ Dữ liệu Nghiên cứu", "2.193 mẫu thực tế (1.773 bình thường + 420 lừa đảo) — 100% Zero Synthetic Text — 0% PII Leak"],
-        ["Mô hình Tối ưu Nhất", "XGBoost Classifier (F1 = 0.9535, Recall = 97.62%) & Linear SVM Calibrated (ROC-AUC = 0.9986)"],
-    ]
-    create_table(doc, ["HẠNG MỤC THÔNG TIN", "CHI TIẾT THỰC HIỆN"], meta_table, col_widths=[2.1, 4.2], font_size_pt=9.0, top_margin=35, bottom=35)
-    
-    p_ck = add_body_p(doc, "Tập thể nhóm xin khẳng định các nguyên tắc liêm chính học thuật bất khả xâm phạm:")
+    p_ck = add_body_p(doc, "Tập thể Nhóm 10 khẳng định 3 nguyên tắc liêm chính học thuật bất khả xâm phạm:")
     p_ck.paragraph_format.space_after = Pt(2)
     
-    p_b1 = add_bullet_p(doc, "1. Tính nguyên bản của dữ liệu (Zero Synthetic Text): ", "Toàn bộ 2.193 mẫu được thu thập thủ công từ nguồn thực tế có thể kiểm chứng (báo chí, Cục ATTT, Bộ Công an, ViSmish, La Chắn Cuộc Gọi), tuyệt đối không dùng văn bản nhân tạo LLM.")
-    p_b1.paragraph_format.space_after = Pt(2)
+    p_b1 = add_bullet_p(doc, "1. Tính nguyên bản của dữ liệu (Zero Synthetic Text): ", "Toàn bộ 2.193 mẫu được thu thập thủ công từ nguồn thực tế có thể kiểm chứng (IEEE Access, báo chí chính thống, Cục ATTT, Bộ Công an), tuyệt đối không dùng văn bản nhân tạo LLM.")
+    p_b1.paragraph_format.space_after = Pt(1.5)
     
-    p_b2 = add_bullet_p(doc, "2. Bảo vệ quyền riêng tư người dùng (0% PII Leak): ", "Toàn bộ thông tin nhạy cảm (họ tên, SĐT, STK ngân hàng, biển số xe) đã được mã hóa ẩn danh 100% bằng các thẻ quy chuẩn [PHONE], [STK], [NAME], [DATE].")
-    p_b2.paragraph_format.space_after = Pt(2)
+    p_b2 = add_bullet_p(doc, "2. Bảo vệ quyền riêng tư người dùng (0% PII Leak): ", "Toàn bộ thông tin nhạy cảm (họ tên, SĐT, STK ngân hàng) đã được mã hóa ẩn danh 100% bằng các thẻ quy chuẩn [PHONE], [STK], [NAME], [DATE].")
+    p_b2.paragraph_format.space_after = Pt(1.5)
     
     p_b3 = add_bullet_p(doc, "3. Tính trung thực trong thực nghiệm: ", "Mọi kết quả mô hình, bảng đối sánh, ma trận nhầm lẫn và biểu đồ SHAP đều đo đạc qua seed RANDOM_STATE = 42, có mã nguồn kiểm chứng tự động và tái lặp 100%.")
-    p_b3.paragraph_format.space_after = Pt(2)
+    p_b3.paragraph_format.space_after = Pt(3)
+
+    p_mh = add_heading_2(doc, "BẢNG PHÂN CÔNG NHIỆM VỤ VÀ TỶ LỆ ĐÓNG GÓP THÀNH VIÊN")
+    p_mh.paragraph_format.space_before = Pt(4)
+    p_mh.paragraph_format.space_after = Pt(3)
+
+    contrib_rows = [
+        ["1", "Đặng Chí Thanh\n(25730067)", "Trưởng nhóm / PM", "• Thu thập 1.773 tin bình thường & 50 mẫu Holdout Test\n• Pipeline tiền xử lý tiếng Việt & trích xuất 15 đặc trưng phụ\n• Pipeline EDA & Zero-leakage Feature Engineering 5.015 chiều\n• Đánh giá tổng hợp 4 mô hình & XAI SHAP Top-20\n• Thực nghiệm đối chứng Ablation & Điều phối báo cáo", "100%", "33.33%"],
+        ["2", "Bùi Thị Mỷ Cẩm\n(25730013)", "ML Modeling Lead", "• Thu thập 205 mẫu lừa đảo (health_gift, public_service)\n• Huấn luyện Naive Bayes Baseline (alpha=0.01)\n• Huấn luyện XGBoost (scale_pos_weight = 4.22)\n• Huấn luyện Calibrated Linear SVM (C=10.0)\n• Thiết kế Slide PowerPoint 22 trang chuẩn UIT", "100%", "33.33%"],
+        ["3", "Hoàng Cao Sơn\n(25730061)", "Data & UI Lead", "• Thu thập 215 mẫu lừa đảo (fear_authority, family_emergency)\n• Huấn luyện Random Forest Classifier (n_estimators=200)\n• Xây dựng Web App Demo Streamlit trợ năng người già\n• Tự động hóa kiểm thử E2E Playwright 16/16 tests\n• Soạn thảo bản thảo Word & Thiết lập bố cục OpenXML", "100%", "33.33%"],
+    ]
+    create_table(doc, ["STT", "THÀNH VIÊN", "VAI TRÒ", "PHÂN HỆ PHỤ TRÁCH CHI TIẾT", "HOÀN THÀNH", "ĐÓNG GÓP"], contrib_rows, col_widths=[0.4, 1.3, 1.1, 2.7, 0.8, 0.7], font_size_pt=8.0, top_margin=18, bottom=18)
+
 
     doc.add_page_break()
 
@@ -593,31 +596,25 @@ def generate_report(toc_overrides=None):
         ["    2.1. Khảo sát các công trình liên quan (Related Works)", "Trang 07"],
         ["    2.2. So sánh toàn diện 4 hướng tiếp cận công nghệ", "Trang 07"],
         ["    2.3. Luận cứ khoa học lựa chọn giải pháp Học máy kết hợp NLP tiếng Việt", "Trang 08"],
-        ["CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "Trang 09"],
-        ["    3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "Trang 09"],
-        ["    3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "Trang 09"],
+        ["CHƯƠNG 3 — PHƯƠNG PHÁP ĐỀ XUẤT VÀ KIẾN TRÚC HỆ THỐNG", "Trang 10"],
+        ["    3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu", "Trang 10"],
+        ["    3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý", "Trang 10"],
         ["    3.3. Mô tả 4 mô hình Machine Learning", "Trang 11"],
-        ["    3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", "Trang 12"],
-        ["    3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", "Trang 13"],
-        ["CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "Trang 14"],
-        ["    4.1. Đặc tả tập dữ liệu thực tế và phân tích khám phá (EDA)", "Trang 14"],
-        ["    4.2. Kết quả thực nghiệm đối sánh 4 mô hình học máy", "Trang 17"],
-        ["        4.2.0. Định nghĩa các thước đo đánh giá và ví dụ tính tay", "Trang 17"],
-        ["        4.2.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set", "Trang 17"],
-        ["        4.2.2. Phân tích đường cong ROC và Precision-Recall", "Trang 18"],
-        ["        4.2.3. Phân tích ma trận nhầm lẫn (Confusion Matrices)", "Trang 20"],
-        ["        4.2.4. Phân tích hiện tượng quá khớp qua Learning Curves", "Trang 21"],
-        ["    4.3. Trí tuệ nhân tạo có thể giải thích (XAI) với SHAP và Top 20 từ khóa", "Trang 22"],
-        ["    4.4. Ứng dụng thực tế Web Demo Streamlit tối ưu trợ năng người cao tuổi", "Trang 24"],
-        ["    4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "Trang 25"],
-        ["        4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)", "Trang 25"],
-        ["        4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)", "Trang 26"],
-        ["    4.6. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", "Trang 27"],
-        ["CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "Trang 28"],
-        ["    5.1. Tổng kết các đóng góp chính của đề tài", "Trang 28"],
-        ["    5.2. Các hạn chế còn tồn tại", "Trang 28"],
-        ["    5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", "Trang 29"],
-        ["TÀI LIỆU THAM KHẢO (CHUẨN HÓA 20 NGUỒN IEEE)", "Trang 30"],
+        ["    3.4. Kiến trúc luồng dữ liệu Đầu vào – Đầu ra (System I/O Flowchart)", "Trang 13"],
+        ["    3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)", "Trang 14"],
+        ["CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ", "Trang 15"],
+        ["    4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)", "Trang 15"],
+        ["    4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu", "Trang 20"],
+        ["    4.3. Kết quả thực nghiệm và đối sánh đa mô hình", "Trang 22"],
+        ["    4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa", "Trang 26"],
+        ["    4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)", "Trang 28"],
+        ["    4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi", "Trang 31"],
+        ["    4.7. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")", "Trang 32"],
+        ["CHƯƠNG 5 — KẾT LUẬN VÀ ĐỊNH HƯỚNG MỞ RỘNG", "Trang 33"],
+        ["    5.1. Tổng kết các đóng góp chính của đề tài", "Trang 33"],
+        ["    5.2. Các hạn chế còn tồn tại", "Trang 33"],
+        ["    5.3. Hướng phát triển trong tương lai theo chỉ đạo hội đồng", "Trang 34"],
+        ["TÀI LIỆU THAM KHẢO (CHUẨN HÓA 20 NGUỒN IEEE)", "Trang 35"],
     ]
     toc_data = toc_overrides if toc_overrides else default_toc_data
     create_toc_table(doc, toc_data)
@@ -682,7 +679,7 @@ def generate_report(toc_overrides=None):
         ["Khả năng khái quát hóa", "Rất thấp, chỉ bắt từ khóa cố định", "Rất cao, học phân phối từ vựng & hành vi", "Rất cao, hiểu ngữ cảnh sâu", "Rất cao, hiểu ngữ nghĩa linh hoạt"],
         ["Tốc độ suy luận (Latency)", "< 1 ms", "< 10 ms (Siêu nhanh trên CPU)", "~200 – 400 ms (cần GPU)", "1.000 – 3.000 ms (phụ thuộc mạng)"],
         ["Yêu cầu phần cứng", "Tối thiểu (CPU cơ bản)", "Rất nhẹ (< 500MB RAM, CPU)", "Nặng (GPU VRAM ≥ 4GB)", "Không GPU nhưng cần Internet"],
-        ["Khả năng giải thích (XAI)", "Tường minh nhưng cứng nhắc", "Rất tốt (TF-IDF, Feature Importance, SHAP)", "Khó giải thích (Black-box)", "Khó lượng hóa bằng toán học"],
+        ["Khả năng giải thích (XAI)", "Tường minh nhưng cứng nhắc", "Rất tốt (TF-IDF, Feature Importance, SHAP)", "Khó giải thích (Mạng nơ-ron sâu)", "Khó lượng hóa bằng toán học"],
         ["Bảo mật PII & Khả năng Offline", "Tốt, chạy offline hoàn toàn", "Tuyệt đối an toàn, offline 100%", "An toàn nếu tự host, nhưng nặng", "Nguy cơ rò rỉ dữ liệu cá nhân"],
         ["Chi phí vận hành", "0 VNĐ", "0 VNĐ (Không tốn chi phí)", "Tốn chi phí điện / thuê server GPU", "Tốn phí token liên tục qua API"],
         ["Đánh giá mức độ phù hợp", "❌ Không chọn (Dễ lách luật)", "✅ LỰA CHỌN TỐI ƯU CỦA ĐỀ TÀI", "🔭 Hướng nghiên cứu tương lai", "❌ Không chọn (Độ trễ cao, lộ PII)"],
@@ -706,9 +703,9 @@ def generate_report(toc_overrides=None):
     add_heading_2(doc, "3.1. Quy trình tiền xử lý văn bản tiếng Việt 5 bước chuyên sâu")
     add_body_p(doc, "Nhằm triệt tiêu nhiễu chính tả và đồng nhất cấu trúc ngữ pháp trước khi trích xuất đặc trưng, nhóm xây dựng một pipeline tiền xử lý văn bản tiếng Việt khép kín gồm 5 công đoạn nghiêm ngặt:")
     add_bullet_p(doc, "• Bước 1 — Gỡ ký tự thay thế (Leet-speak) và tách thẻ ẩn danh: ", "Áp dụng biểu thức chính quy (Regex) bóc tách các ký tự chèn dấu chấm, dấu sao nhằm lách bộ lọc (ví dụ: 'c.o.n.g a.n' → 'cong an', 't.i.e.n' → 'tien'). Nhận diện các mẫu số điện thoại, đường link URL, số tài khoản và gán thẻ ẩn danh.")
-    add_bullet_p(doc, "• Bước 2 — Chuẩn hóa Unicode dựng sẵn (NFC): ", "Tuân thủ tiêu chuẩn quốc tế Unicode UAX #15, chuyển đổi toàn bộ ký tự tổ hợp (NFD) về dạng dựng sẵn (NFC), đồng thời chuẩn hóa kiểu gõ dấu thanh theo quy tắc hiện đại (ví dụ: 'hòa', 'thúy' thay vì 'hoà', 'thuý').")
+    add_bullet_p(doc, "• Bước 2 — Chuẩn hóa Unicode dựng sẵn (NFC): ", "Tuân thủ tiêu chuẩn quốc tế Unicode UAX #15 [3], chuyển đổi toàn bộ ký tự tổ hợp (NFD) về dạng dựng sẵn (NFC), đồng thời chuẩn hóa kiểu gõ dấu thanh theo quy tắc hiện đại bằng thư viện underthesea [5] (ví dụ: 'hòa', 'thúy' thay vì 'hoà', 'thuý').")
     add_bullet_p(doc, "• Bước 3 — Chuẩn hóa Teencode và Ký tự biến âm (160 quy tắc): ", "Sử dụng từ điển 160 mẫu teencode được tinh chỉnh chuyên sâu cho gian lận viễn thông. Tự động giải mã các từ viết tắt phổ biến như 'ck' → 'chuyển khoản', 'stk' → 'số tài khoản', 'sđt' → 'số điện thoại', 'bca' → 'bộ công an', 'vks' → 'viện kiểm sát', 'bhxh' → 'bảo hiểm xã hội'.")
-    add_bullet_p(doc, "• Bước 4 — Tách từ tiếng Việt chuyên biệt (Word Segmentation): ", "Sử dụng thư viện PyVi (ViTokenizer) để nhận diện và ghép các từ phức tiếng Việt bằng dấu gạch dưới (ví dụ: 'viện kiểm sát' → 'viện_kiểm_sát', 'chuyển tiền' → 'chuyển_tiền', 'bắt giam' → 'bắt_giam').")
+    add_bullet_p(doc, "• Bước 4 — Tách từ tiếng Việt chuyên biệt (Word Segmentation): ", "Sử dụng thư viện PyVi [4] (ViTokenizer) để nhận diện và ghép các từ phức tiếng Việt bằng dấu gạch dưới (ví dụ: 'viện kiểm sát' → 'viện_kiểm_sát', 'chuyển tiền' → 'chuyển_tiền', 'bắt giam' → 'bắt_giam').")
     add_bullet_p(doc, "• Bước 5 — Lọc từ dừng có bảo vệ từ khóa miền: ", "Loại bỏ các hư từ không mang giá trị phân biệt, nhưng bảo vệ nghiêm ngặt các từ khóa tâm lý nhạy cảm (gấp, ngay, tiền, công an) và các dấu câu biểu cảm (!, ?) phục vụ trích xuất đặc trưng phụ.")
 
     add_heading_2(doc, "3.2. Không gian đặc trưng kết hợp TF-IDF và 15 đặc trưng phụ tâm lý")
@@ -726,7 +723,7 @@ def generate_report(toc_overrides=None):
         '</m:sSup>'
     )
     add_inline_equation(p_vec, eq_vec_omml)
-    r2 = p_vec.add_run(", kết hợp giữa 5.000 chiều TF-IDF N-grams (1, 2) và 15 đặc trưng phụ tâm lý học hành vi.")
+    r2 = p_vec.add_run(", kết hợp giữa 5.000 chiều TF-IDF N-grams (1, 2) theo Salton & Buckley [6] và 15 đặc trưng phụ tâm lý học hành vi.")
     r2.font.name = "Times New Roman"
     r2.font.size = Pt(13)
 
@@ -751,30 +748,32 @@ def generate_report(toc_overrides=None):
     r_end.font.name = "Times New Roman"
     r_end.font.size = Pt(13)
 
-    add_body_p(doc, "Bảng 3.1 tổng hợp 15 đặc trưng phụ tâm lý học được nhóm nghiên cứu thiết kế và trích xuất trực tiếp:")
+    add_body_p(doc, "Bảng 3.1 tổng hợp 15 đặc trưng phụ tâm lý học được trích xuất bằng biểu thức chính quy trên văn bản gốc và chuẩn hóa qua StandardScaler (chỉ fit trên tập huấn luyện). Các giá trị trung bình (TB) được tính trên toàn bộ 2.193 mẫu nhằm mục đích thống kê mô tả:")
 
     aux_table = [
-        ["1. num_urls", "Số lượng liên kết URL trong tin nhắn", "Dấu hiệu dẫn dụ truy cập website giả mạo, tải tệp độc hại."],
-        ["2. num_phone_numbers", "Số lượng số điện thoại liên hệ lạ", "Thúc ép nạn nhân gọi điện trực tiếp để thao túng giọng nói."],
-        ["3. num_money_mentions", "Số lần đề cập đến tiền bạc, tài chính", "Mục tiêu cuối cùng của mọi kịch bản lừa đảo tài sản."],
-        ["4. has_urgent_words", "Cờ nhị phân chứa từ giục giã (gấp, ngay)", "Tạo áp lực thời gian làm suy giảm khả năng suy xét lý trí."],
-        ["5. num_authority_words", "Số lượng từ khóa cơ quan công quyền", "Kích hoạt bẫy tâm lý đe dọa quyền lực (công an, tòa án)."],
-        ["6. has_emergency_words", "Cờ chứa từ khóa cấp cứu, tai nạn", "Kích hoạt bẫy khẩn cấp gia đình (bệnh viện, nguy kịch)."],
-        ["7. has_gift_words", "Cờ chứa từ khóa quà tặng, trúng thưởng", "Kích hoạt bẫy dụ dỗ quà tặng và chăm sóc sức khỏe."],
-        ["8. has_otp_request", "Cờ phát hiện yêu cầu cung cấp mã OTP", "Tín hiệu tấn công đánh cắp tài khoản ngân hàng."],
-        ["9. has_leet_speak", "Cờ phát hiện ký tự viết lệch né bộ lọc", "Thủ thuật lách kiểm duyệt của tội phạm công nghệ."],
-        ["10. is_unaccented", "Cờ nhận diện tin nhắn không dấu", "Thường xuất hiện trong tin nhắn rác lừa đảo hàng loạt."],
-        ["11. text_length", "Tổng độ dài ký tự trong tin nhắn", "Tin lừa đảo thường dài hơn đáng kể do cần dựng kịch bản."],
-        ["12. num_words", "Tổng số lượng từ trong tin nhắn", "Đo lường dung lượng thông tin và cấu trúc ngữ pháp."],
-        ["13. num_exclamation", "Số lượng dấu chấm than (!)", "Thể hiện mức độ đe dọa, kích động tâm lý hoảng loạn."],
-        ["14. num_question", "Số lượng dấu chấm hỏi (?)", "Thúc ép trả lời hoặc nghi vấn dồn dập nạn nhân."],
-        ["15. num_uppercase_words", "Số lượng từ viết IN HOA toàn bộ", "Hành vi gây chú ý thị giác bất thường trong tin nhắn rác."],
+        ["1", "num_urls", "Đếm", "Số URL hoặc thẻ [ĐƯỜNG_DẪN]", "0,40", "0,46"],
+        ["2", "num_phone_numbers", "Đếm", "Số điện thoại hoặc thẻ [SỐ_ĐIỆN_THOẠI], [HOTLINE]", "0,03", "0,00"],
+        ["3", "num_money_mentions", "Đếm", "Số lần nhắc số tiền (triệu, tỷ, nghìn, đồng, [MONEY]...)", "0,24", "1,40"],
+        ["4", "has_urgent_words", "Cờ 0/1", "Có từ thúc ép (gấp, khẩn, phong tỏa, khóa tài khoản...)", "0,19", "0,04"],
+        ["5", "num_authority_words", "Đếm", "Số từ chỉ cơ quan quyền lực (công an, viện kiểm sát, VNeID...)", "0,13", "0,04"],
+        ["6", "has_emergency_words", "Cờ 0/1", "Có từ tình huống khẩn cấp gia đình (cấp cứu, tai nạn, viện phí...)", "0,10", "0,00"],
+        ["7", "has_gift_words", "Cờ 0/1", "Có từ dụ quà tặng (trúng thưởng, tri ân, miễn phí, quay số...)", "0,09", "0,11"],
+        ["8", "has_otp_request", "Cờ 0/1", "Có cụm yêu cầu mã OTP, mật khẩu, mã xác thực", "0,01", "0,04"],
+        ["9", "has_leet_speak", "Cờ 0/1", "Có dấu hiệu thay chữ bằng số (th0ng, kh0a...)", "0,03", "0,00"],
+        ["10", "is_unaccented", "Cờ 0/1", "Toàn bộ tin nhắn không có dấu tiếng Việt", "0,02", "0,55"],
+        ["11", "text_length", "Số", "Số ký tự của văn bản gốc", "140,8", "232,9"],
+        ["12", "num_words", "Số", "Số từ (tách theo khoảng trắng)", "28,7", "44,3"],
+        ["13", "num_exclamation", "Đếm", "Số dấu chấm than (!)", "0,12", "0,30"],
+        ["14", "num_question", "Đếm", "Số dấu chấm hỏi (?)", "0,04", "0,02"],
+        ["15", "num_uppercase_words", "Đếm", "Số từ viết hoa toàn bộ (từ hai ký tự trở lên)", "2,34", "8,05"],
     ]
-    create_table(doc, ["TÊN ĐẶC TRƯNG", "MÔ TẢ CÔNG THỨC TRÍCH XUẤT", "Ý NGHĨA PHÁT HIỆN BẪY TÂM LÝ"], aux_table, col_widths=[1.8, 2.3, 2.7], font_size_pt=8.5, top_margin=25, bottom=25)
+    create_table(doc, ["STT", "ĐẶC TRƯNG", "KIỂU", "MÔ TẢ TRÍCH XUẤT", "TB LỪA ĐẢO", "TB THƯỜNG"], aux_table, col_widths=[0.4, 1.4, 0.5, 2.3, 0.85, 0.85], font_size_pt=8.0, top_margin=18, bottom=18)
+
+    add_body_p(doc, "Nhận xét Bảng 3.1: Các đặc trưng 2, 4, 5, 6, 9 và 14 có giá trị trung bình cao hơn ở tin lừa đảo như kỳ vọng, còn số lần nhắc tiền, số từ in hoa, độ dài và tính không dấu lại cao hơn ở tin bình thường. Riêng đặc trưng số lần nhắc tiền, nguyên nhân nằm ở bộ dữ liệu: thẻ [MONEY] xuất hiện trong 1.236 tin, trong đó 1.221 tin (khoảng 99%) thuộc lớp bình thường. Nhóm chưa phân tích nguyên nhân của các đặc trưng còn lại. Vì vậy, giá trị của 15 đặc trưng được đánh giá bằng thực nghiệm đối chứng ở Chương 4 chứ không dựa vào trực giác.")
 
     add_heading_2(doc, "3.3. Mô tả 4 mô hình Machine Learning")
     add_body_p(doc, "Nhóm xây dựng và đối sánh 4 mô hình học máy đại diện cho các trường phái thuật toán khác nhau:")
-    add_bullet_p(doc, "1. Multinomial Naive Bayes (Baseline): ", "Mô hình xác suất cổ điển dựa trên định lý Bayes với giả định độc lập có điều kiện giữa các đặc trưng. Sử dụng kỹ thuật làm mịn Laplace với hệ số tối ưu α = 0.01 được tinh chỉnh qua 5-Fold GridSearch:")
+    add_bullet_p(doc, "1. Multinomial Naive Bayes (Baseline) [17]: ", "Mô hình xác suất cổ điển dựa trên định lý Bayes với giả định độc lập có điều kiện giữa các đặc trưng theo McCallum & Nigam [17]. Sử dụng kỹ thuật làm mịn Laplace với hệ số tối ưu α = 0.01 được tinh chỉnh qua 5-Fold GridSearch:")
     eq_nb_omml = (
         '<m:r><m:t>P(</m:t></m:r>'
         '<m:sSub><m:e><m:r><m:t>w</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
@@ -792,9 +791,9 @@ def generate_report(toc_overrides=None):
     )
     add_display_equation(doc, eq_nb_omml)
 
-    add_bullet_p(doc, "2. Random Forest Classifier: ", "Thuật toán học tập hợp (Ensemble Learning) phương pháp đóng bao (Bagging) gồm 200 cây quyết định độc lập (n_estimators = 200). Kiểm soát quá khớp với giới hạn độ sâu max_depth = 50, min_samples_split = 2, min_samples_leaf = 2 và lấy ngẫu nhiên 20% đặc trưng tại mỗi nhánh (max_features = 0.2).")
+    add_bullet_p(doc, "2. Random Forest Classifier [8], [11]: ", "Thuật toán học tập hợp (Ensemble Learning) phương pháp đóng bao (Bagging) theo Breiman [8], triển khai qua thư viện Scikit-learn [11] gồm 200 cây quyết định độc lập (n_estimators = 200). Kiểm soát quá khớp với giới hạn độ sâu max_depth = 50, min_samples_split = 2, min_samples_leaf = 2 và lấy ngẫu nhiên 20% đặc trưng tại mỗi nhánh (max_features = 0.2).")
     
-    add_bullet_p(doc, "3. Extreme Gradient Boosting (XGBoost): ", "Thuật toán tăng cường độ dốc (Boosting) tiên tiến. Thiết lập cấu hình: 300 cây (n_estimators = 300), độ sâu nông max_depth = 5, tốc độ học learning_rate = 0.05, tỷ lệ lấy mẫu con subsample = 0.7, colsample_bytree = 0.8. Đặc biệt, tham số scale_pos_weight = 4.22 được gán bằng đúng tỷ lệ mất cân bằng dữ liệu để phạt nặng sai số trên lớp lừa đảo:")
+    add_bullet_p(doc, "3. Extreme Gradient Boosting (XGBoost) [7]: ", "Thuật toán tăng cường độ dốc (Boosting) tiên tiến theo Chen & Guestrin [7]. Thiết lập cấu hình: 300 cây (n_estimators = 300), độ sâu nông max_depth = 5, tốc độ học learning_rate = 0.05, tỷ lệ lấy mẫu con subsample = 0.7, colsample_bytree = 0.8. Đặc biệt, tham số scale_pos_weight = 4.22 được gán bằng đúng tỷ lệ mất cân bằng dữ liệu để phạt nặng sai số trên lớp lừa đảo:")
     eq_xgb_omml = (
         '<m:r><m:t>scale_pos_weight = </m:t></m:r>'
         '<m:f>'
@@ -810,7 +809,7 @@ def generate_report(toc_overrides=None):
     )
     add_display_equation(doc, eq_xgb_omml)
 
-    add_bullet_p(doc, "4. Calibrated Linear Support Vector Machine (Linear SVM): ", "Mô hình tìm siêu phẳng phân cách cực đại trên không gian nhiều chiều. Sử dụng hàm mất mát Hinge Loss (LinearSVC) với tham số điều hòa C = 10.0, kết hợp hiệu chuẩn xác suất CalibratedClassifierCV (5-Fold Sigmoid Platt Scaling) để xuất xác suất dự đoán mượt mà.")
+    add_bullet_p(doc, "4. Calibrated Linear Support Vector Machine (Linear SVM) [9]: ", "Mô hình tìm siêu phẳng phân cách cực đại theo Cortes & Vapnik [9]. Sử dụng thư viện tối ưu hóa tuyến tính LIBLINEAR [16] (LinearSVC) với hàm mất mát Hinge Loss (C = 10.0), kết hợp hiệu chuẩn xác suất CalibratedClassifierCV 5-Fold theo phương pháp Platt Scaling [10] để xuất xác suất dự đoán mượt mà.")
 
     # ══════════════════════════════════════════════════════════════════════════
     # MỤC 3.4 — SƠ ĐỒ KIẾN TRÚC LUỒNG DỮ LIỆU ĐẦU VÀO - ĐẦU RA (TRANG 12 TRỌN VẸN)
@@ -841,21 +840,78 @@ def generate_report(toc_overrides=None):
     doc.add_page_break()
 
     add_heading_2(doc, "3.5. Xử lý mất cân bằng lớp và Kiểm soát rò rỉ dữ liệu (Zero-Leakage)")
-    add_body_p(doc, "Một thách thức trọng tâm của đề tài là xử lý tỷ lệ mất cân bằng dữ liệu 4.22 : 1 (1.773 tin bình thường so với 420 tin lừa đảo) mà không làm méo mó ngữ nghĩa tự nhiên của văn bản tiếng Việt. Bảng 3.2 tổng hợp luận cứ khoa học lựa chọn giải pháp xử lý:")
+    
+    add_body_p(doc, "Bộ dữ liệu gồm 1.773 tin bình thường và 420 tin lừa đảo (tỷ lệ 4,22 : 1). Một bộ phân loại luôn đoán 'bình thường' sẽ đạt Accuracy 80,9% trên tập kiểm thử mà không phát hiện được tin lừa đảo nào. Do đó, nhóm ưu tiên Recall, F1-Score và ROC-AUC, trong đó Recall là thước đo tối thượng vì một ca bỏ sót (âm tính giả) có thể khiến người cao tuổi mất trắng tài sản.")
+
+    add_body_p(doc, "Nhóm áp dụng phương pháp học nhạy cảm chi phí (Cost-Sensitive Learning) [20], đưa chi phí sai lệch giữa hai lớp trực tiếp vào hàm mất mát thay vì can thiệp biến dạng dữ liệu. Với nhãn yᵢ ∈ {0, 1} (1 là lừa đảo) và xác suất dự đoán pᵢ = P(yᵢ = 1 | xᵢ), hàm mất mát entropy chéo có trọng số w là:")
+
+    eq_cost_loss_omml = (
+        '<m:r><m:t>L(θ) = − </m:t></m:r>'
+        '<m:nary>'
+        '<m:naryPr><m:chr m:val="∑"/><m:limLoc m:val="subSup"/></m:naryPr>'
+        '<m:sub><m:r><m:t>i</m:t></m:r></m:sub>'
+        '<m:sup/>'
+        '<m:e>'
+        '<m:d>'
+        '<m:dPr><m:begChr m:val="["/><m:endChr m:val="]"/></m:dPr>'
+        '<m:e>'
+        '<m:r><m:t>w · </m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>y</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t> · log(</m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>p</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t>) + (1 − </m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>y</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t>) · log(1 − </m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>p</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t>)</m:t></m:r>'
+        '</m:e>'
+        '</m:d>'
+        '</m:e>'
+        '</m:nary>'
+    )
+    add_display_equation(doc, eq_cost_loss_omml)
+
+    add_body_p(doc, "Trọng số w được tính chỉ từ tập huấn luyện (1.418 tin bình thường / 336 tin lừa đảo): w = N₋ / N₊ = 1.418 / 336 = 4,2202. Trong XGBoost [7], tham số scale_pos_weight = 4,2202 được đưa vào gradient g = w(p − y) và hessian h = w·p(1 − p).")
+
+    add_body_p(doc, "Đối với Random Forest [8] và Calibrated Linear SVM [9], tham số class_weight='balanced' điều chỉnh trọng số nghịch đảo tần suất lớp. Với SVM (quy ước nhãn yᵢ ∈ {−1, +1}), hàm tối ưu Hinge Loss có trọng số phạt là:")
+
+    eq_svm_loss_omml = (
+        '<m:r><m:t>min </m:t></m:r>'
+        '<m:f><m:num><m:r><m:t>1</m:t></m:r></m:num><m:den><m:r><m:t>2</m:t></m:r></m:den></m:f>'
+        '<m:sSup><m:e><m:r><m:t>‖ω‖</m:t></m:r></m:e><m:sup><m:r><m:t>2</m:t></m:r></m:sup></m:sSup>'
+        '<m:r><m:t> + C · </m:t></m:r>'
+        '<m:nary>'
+        '<m:naryPr><m:chr m:val="∑"/><m:limLoc m:val="subSup"/></m:naryPr>'
+        '<m:sub><m:r><m:t>i</m:t></m:r></m:sub>'
+        '<m:sup/>'
+        '<m:e>'
+        '<m:r><m:t>w(</m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>y</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t>) · max(0, 1 − </m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>y</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t> · f(</m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>x</m:t></m:r></m:e><m:sub><m:r><m:t>i</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t>))</m:t></m:r>'
+        '</m:e>'
+        '</m:nary>'
+    )
+    add_display_equation(doc, eq_svm_loss_omml)
+
+    add_body_p(doc, "Bảng 3.2 tổng hợp luận cứ khoa học giải thích lý do không chọn kỹ thuật Oversampling (SMOTE) [19] hay Undersampling:")
 
     imbalance_table = [
         ["Random Undersampling", "Loại bỏ ngẫu nhiên mẫu đa số (tin bình thường) cho cân bằng 1:1", "Làm mất mát nghiêm trọng 76% tri thức văn bản bình thường, gây suy giảm mạnh Precision."],
-        ["SMOTE (Synthetic Minority)", "Nội suy tuyến tính vector khoảng cách Euclidean trong không gian liên tục", "Sinh ra vector từ vựng lai tạo phi thực tế, phá vỡ cấu trúc ngữ pháp và ngữ nghĩa tiếng Việt."],
-        ["Cost-Sensitive Weighting\n(Giải pháp của đề tài)", "Giữ nguyên 100% dữ liệu gốc; phạt nặng hàm mất mát trên lớp lừa đảo (scale_pos_weight = 4.22)", "Bảo toàn toàn vẹn tri thức từ vựng; tối ưu trực tiếp Recall lớp thiểu số mà không gây méo mó phân phối dữ liệu."],
+        ["SMOTE (Synthetic Minority) [19]", "Nội suy tuyến tính vector khoảng cách Euclidean trong không gian liên tục", "Sinh ra vector từ vựng lai tạo phi thực tế trong không gian thưa 5.015 chiều; phá vỡ các đặc trưng cờ nhị phân."],
+        ["Cost-Sensitive Weighting\n(Giải pháp của đề tài) [20]", "Giữ nguyên 100% dữ liệu gốc; phạt nặng hàm mất mát trên lớp lừa đảo (scale_pos_weight = 4.22)", "Bảo toàn toàn vẹn tri thức từ vựng; tối ưu trực tiếp Recall lớp thiểu số mà không gây méo mó phân phối dữ liệu."],
     ]
-    create_table(doc, ["PHƯƠNG PHÁP", "CƠ CHẾ KỸ THUẬT", "ĐÁNH GIÁ MỨC ĐỘ PHÙ HỢP VỚI ĐỀ TÀI"], imbalance_table, col_widths=[1.8, 2.5, 2.7], font_size_pt=8.5, top_margin=20, bottom=20)
+    create_table(doc, ["PHƯƠNG PHÁP", "CƠ CHẾ KỸ THUẬT", "ĐÁNH GIÁ MỨC ĐỘ PHÙ HỢP VỚI ĐỀ TÀI"], imbalance_table, col_widths=[1.8, 2.5, 2.7], font_size_pt=8.0, top_margin=18, bottom=18)
 
     add_body_p(doc, "Quy trình kiểm soát rò rỉ dữ liệu tuyệt đối (Zero-Data-Leakage Protocol):")
-    p_z1 = add_bullet_p(doc, "• Bước 1 — Stratified Train/Test Split đầu tiên: ", "Thực hiện phân chia ngẫu nhiên có bảo toàn tỷ lệ lớp 80/20 (1.754 mẫu Train / 439 mẫu Test, seed = 42) ngay từ bước khởi tạo trước khi thực hiện bất kỳ phép biến đổi nào.")
-    p_z1.paragraph_format.space_after = Pt(2)
-    p_z2 = add_bullet_p(doc, "• Bước 2 — Tách biệt không gian Fit và Transform: ", "TfidfVectorizer (5.000 từ vựng) và StandardScaler (15 đặc trưng phụ) CHỈ ĐƯỢC PHÉP fit trên tập Train. Tập Test hoàn toàn đóng vai trò Holdout Set và chỉ được áp dụng phương thức transform, bảo đảm tuyệt đối không rò rỉ thông tin phân phối từ vựng hay độ lệch chuẩn.")
-    p_z2.paragraph_format.space_after = Pt(2)
-    p_z3 = add_bullet_p(doc, "• Bước 3 — Kiểm định chéo 5-Fold lồng ghép: ", "Trong quá trình tinh chỉnh siêu tham số mô hình, mọi bước chuẩn hóa và trích xuất đều được đóng gói bên trong sklearn Pipeline nhằm triệt tiêu rò rỉ dữ liệu giữa các fold kiểm định.")
+    p_z1 = add_bullet_p(doc, "• Phân chia Train/Test 80/20 đầu tiên: ", "StratifiedShuffleSplit (1.754 mẫu Train / 439 mẫu Test, seed = 42) thực hiện trước mọi bước tiền xử lý nhằm bảo toàn nguyên vẹn tỷ lệ lớp.")
+    p_z1.paragraph_format.space_after = Pt(1.5)
+    p_z2 = add_bullet_p(doc, "• Tách biệt Fit và Transform: ", "TfidfVectorizer và StandardScaler CHỈ ĐƯỢC PHÉP fit trên tập Train. Tập Test chỉ được transform, bảo đảm tuyệt đối không rò rỉ phân phối từ vựng hay độ lệch chuẩn.")
+    p_z2.paragraph_format.space_after = Pt(1.5)
+    p_z3 = add_bullet_p(doc, "• Đóng gói Pipeline trong 5-Fold CV: ", "Mọi phép biến đổi trong quá trình tìm siêu tham số đều nằm trong sklearn Pipeline của từng fold, ngăn chặn rò rỉ thông tin qua các fold kiểm định.")
     p_z3.paragraph_format.space_after = Pt(2)
 
     # ══════════════════════════════════════════════════════════════════════════
@@ -866,32 +922,52 @@ def generate_report(toc_overrides=None):
 
     add_heading_1(doc, "CHƯƠNG 4 — KẾT QUẢ THỰC NGHIỆM VÀ PHÂN TÍCH ĐÁNH GIÁ")
 
-    add_heading_2(doc, "4.1. Đặc tả tập dữ liệu thực tế và phân tích khám phá (EDA)")
-    add_body_p(doc, "Bộ dữ liệu thực nghiệm bao gồm tổng cộng 2.193 mẫu tin nhắn tiếng Việt có nguồn gốc minh bạch 100%, được kiểm toán 7 tầng nghiêm ngặt nhằm bảo đảm không chứa văn bản nhân tạo và không rò rỉ thông tin riêng tư (Bảng 4.1):")
+    add_heading_2(doc, "4.1. Bộ dữ liệu nghiên cứu và phân tích khám phá (EDA)")
+    
+    add_heading_3(doc, "4.1.1. Mô tả Bộ dữ liệu và Phân chia Zero-Leakage")
+    add_body_p(doc, "Bộ dữ liệu thực nghiệm bao gồm tổng cộng 2.193 mẫu tin nhắn tiếng Việt có nguồn gốc minh bạch 100% (Zero Synthetic Text), được kiểm toán 7 tầng nghiêm ngặt nhằm bảo đảm không chứa văn bản nhân tạo và khử ẩn danh 0% rò rỉ thông tin riêng tư PII (Bảng 4.1):")
 
     dataset_summary = [
-        ["Tin nhắn bình thường (label=0)", "1.773", "IEEE Access 2026 SMS QA Dataset & Tin nhắn đời thực", "Đặng Chí Thanh"],
-        ["Lừa đảo — Đe dọa quyền lực (fear_authority)", "127", "Cổng TTĐT Bộ Công an, Báo Dân Trí, VnExpress", "Hoàng Cao Sơn"],
-        ["Lừa đảo — Giả mạo dịch vụ công (public_service)", "159", "Báo Tuổi Trẻ, VTV24, ViSmish Corpus", "Hoàng Cao Sơn"],
-        ["Lừa đảo — Khẩn cấp gia đình (family_emergency)", "88", "Cảnh báo Công an các tỉnh, La Chắn Cuộc Gọi", "Bùi Thị Mỷ Cẩm"],
-        ["Lừa đảo — Dụ dỗ quà tặng (health_gift)", "46", "Phóng sự điều tra VTV, Dân Trí, Báo Pháp Luật", "Bùi Thị Mỷ Cẩm"],
+        ["Tin nhắn bình thường (label=0)", "1.773", "IEEE Access 2026 Vietnamese SMS Dataset [1]", "Đặng Chí Thanh"],
+        ["Lừa đảo — Đe dọa quyền lực (fear_authority)", "127", "Báo Dân Trí, VnExpress, KLTN Smishing [2]", "Hoàng Cao Sơn"],
+        ["Lừa đảo — Giả mạo dịch vụ công (public_service)", "159", "Báo Tuổi Trẻ, VTV24, UIT IE403 corpus [2]", "Hoàng Cao Sơn"],
+        ["Lừa đảo — Khẩn cấp gia đình (family_emergency)", "88", "Cảnh báo Công an, Lá Chắn Cuộc Gọi, SMS [2]", "Bùi Thị Mỷ Cẩm"],
+        ["Lừa đảo — Dụ dỗ quà tặng (health_gift)", "46", "Báo chí chính thống, VTV24 [2]", "Bùi Thị Mỷ Cẩm"],
         ["TỔNG CỘNG BỘ DỮ LIỆU", "2.193", "100% Nguồn kiểm chứng công khai — 0% PII", "Tập thể Nhóm 10"],
     ]
-    create_table(doc, ["PHÂN LỚP DỮ LIỆU", "SỐ MẪU", "NGUỒN THU THẬP KIỂM CHỨNG", "THÀNH VIÊN PHỤ TRÁCH"], dataset_summary, col_widths=[2.4, 0.8, 2.1, 1.5], font_size_pt=8.5, top_margin=15, bottom=15)
+    create_table(doc, ["PHÂN LỚP DỮ LIỆU", "SỐ MẪU", "NGUỒN THU THẬP KIỂM CHỨNG", "THÀNH VIÊN PHỤ TRÁCH"], dataset_summary, col_widths=[2.4, 0.8, 2.1, 1.5], font_size_pt=8.0, top_margin=15, bottom=15)
+
+    add_body_p(doc, "Chiến lược phân chia Zero-Leakage (Stratified 80/20):")
+    add_bullet_p(doc, "• Tập huấn luyện (Train set): ", "1.754 mẫu (1.418 tin bình thường, 336 tin lừa đảo), bảo toàn tỷ lệ 4,22 : 1.")
+    add_bullet_p(doc, "• Tập kiểm thử độc lập (Test set): ", "439 mẫu (355 tin bình thường, 84 tin lừa đảo), dùng đánh giá tổng kết.")
+    add_bullet_p(doc, "• Tập kiểm thử thực tế độc lập (Holdout Test set): ", "50 mẫu ảnh chụp màn hình điện thoại thực tế từ kho lưu trữ chứng cứ (CS114 Evidence Vault), được dán nhãn độc lập để kiểm định độ bền vững ngoại vi.")
+
+    add_heading_3(doc, "4.1.2. Phân tích Khám phá Dữ liệu (EDA Chuyên sâu)")
+    add_body_p(doc, "Nhóm thực hiện chuỗi 7 biểu đồ phân tích khám phá dữ liệu toàn diện tại độ phân giải cao 300 DPI:")
 
     add_image_with_caption(doc, FIGURES_DIR / "label_distribution.png", 
                            "Hình 4.1: Biểu đồ phân bố nhãn dữ liệu — Bình thường (1.773 mẫu - 80.85%) vs Lừa đảo (420 mẫu - 19.15%), tỷ lệ 4.22 : 1", width_inches=3.2)
-    p_eda1 = add_body_p(doc, "Nhận xét Hình 4.1: Tập dữ liệu thể hiện rõ đặc tính mất cân bằng lớp tự nhiên trong môi trường viễn thông thực tế. Tỷ lệ 1.773 tin bình thường so với 420 tin lừa đảo (tỷ lệ 4.22 : 1) là thách thức lớn đối với việc huấn luyện mô hình. Nếu tối ưu Accuracy đơn thuần, mô hình có xu hướng dự đoán toàn bộ là nhãn bình thường. Do đó, việc thiết lập trọng số phạt gradient scale_pos_weight = 4.22 trong hàm mất mát của XGBoost là hoàn toàn xuất phát từ cơ sở phân bố thực nghiệm của dữ liệu.")
-    p_eda1.paragraph_format.space_after = Pt(2)
+    add_body_p(doc, "Nhận xét Hình 4.1: Tập dữ liệu thể hiện rõ đặc tính mất cân bằng lớp tự nhiên trong môi trường viễn thông thực tế. Tỷ lệ 1.773 tin bình thường so với 420 tin lừa đảo (tỷ lệ 4.22 : 1) là thách thức lớn đối với việc huấn luyện mô hình. Nếu tối ưu Accuracy đơn thuần, mô hình có xu hướng dự đoán toàn bộ là nhãn bình thường. Do đó, việc thiết lập trọng số phạt gradient scale_pos_weight = 4.22 trong hàm mất mát của XGBoost là hoàn toàn xuất phát từ cơ sở phân bố thực nghiệm của dữ liệu.")
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.1 — EDA PHẦN 2: CƠ CẤU 4 NHÓM BẪY TÂM LÝ (TRANG 15 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
+    add_image_with_caption(doc, FIGURES_DIR / "text_length_comparison.png",
+                           "Hình 4.1b: So sánh phân bố độ dài ký tự và số từ giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=3.4)
+    add_body_p(doc, "Nhận xét Hình 4.1b: Tin nhắn lừa đảo có chiều dài trung bình (140,8 ký tự, 28,7 từ) ngắn hơn so với tin nhắn thông thường (232,9 ký tự, 44,3 từ). Tuy nhiên, tin lừa đảo có mật độ từ vựng hành động và thúc ép rất cao nhằm tạo cảm giác cấp bách tức thì trong 1–2 câu ngắn, trong khi tin bình thường thường chứa nội dung thông báo hành chính hoặc biến động số dư chi tiết.")
+
+    add_image_with_caption(doc, FIGURES_DIR / "wordcloud_scam_vs_normal.png",
+                           "Hình 4.1c: Đám mây từ vựng (WordCloud) so sánh giữa tin nhắn lừa đảo và tin bình thường (300 DPI)", width_inches=3.4)
+    add_body_p(doc, "Nhận xét Hình 4.1c: Lớp lừa đảo bị chi phối dày đặc bởi các cụm từ đe dọa và giục giã ('công_an', 'viện_kiểm_sát', 'vneid', 'khẩn_cấp', 'viện_phí', 'khóa_tài_khoản', 'đường_dẫn'). Ngược lại, lớp bình thường tập trung vào từ ngữ giao dịch sinh hoạt hàng ngày ('giao_dịch', 'số_dư', 'thanh_toán', 'cảm_ơn', 'quý_khách'). Điều này chứng minh không gian từ vựng có tính phân tách tuyến tính cao.")
+
+    add_image_with_caption(doc, FIGURES_DIR / "top_ngrams_scam_vs_normal.png",
+                           "Hình 4.1d: Phân bố tần suất Top 20 N-grams tiêu biểu (cụm 1-2 từ) giữa hai lớp dữ liệu (300 DPI)", width_inches=3.4)
+    add_body_p(doc, "Nhận xét Hình 4.1d: Minh chứng mạnh mẽ cho quyết định lựa chọn dải n-gram (1, 2). Các cụm từ ghép 2 âm tiết có trọng số áp đảo ở lớp lừa đảo như 'bộ_công_an', 'viện_kiểm_sát', 'chuyển_khoản', 'viện_phí', 'tạm_giam', 'định_danh'. Nếu chỉ dùng unigram đơn lẻ (tách rời 'công' và 'an'), mô hình sẽ mất đi ngữ nghĩa định danh cơ quan công quyền cực kỳ quan trọng.")
+
+    add_image_with_caption(doc, FIGURES_DIR / "source_distribution.png",
+                           "Hình 4.1e: Cơ cấu phân bổ các nguồn thu thập dữ liệu thực tế (100% Zero Synthetic Text) (300 DPI)", width_inches=3.4)
+    add_body_p(doc, "Nhận xét Hình 4.1e: Nguồn gốc dữ liệu hoàn toàn minh bạch: 1.773 tin bình thường từ bộ ngữ liệu IEEE Access 2026; 420 tin lừa đảo được thu thập và thẩm định thủ công từ các kênh cảnh báo uy tín (Báo Tuổi Trẻ, Báo Dân Trí, VnExpress, Lá Chắn Cuộc Gọi, và CS114 Evidence Vault). Việc kết hợp đa nguồn bảo đảm tính bao phủ toàn diện các kịch bản lừa đảo đương đại tại Việt Nam.")
 
     add_image_with_caption(doc, FIGURES_DIR / "scam_category_distribution.png", 
-                           "Hình 4.2: Cơ cấu phân bổ 4 nhóm bẫy thao túng tâm lý trong 420 mẫu tin nhắn lừa đảo thực tế", width_inches=3.8)
-    add_body_p(doc, "Nhận xét Hình 4.2: Trong 4 nhóm bẫy tâm lý, nhóm Giả mạo dịch vụ công chiếm tỷ trọng cao nhất với 159 mẫu (37.9%), phản ánh đúng thực trạng tội phạm lợi dụng cao điểm triển khai Đề án 06, định danh điện tử VNeID và dịch vụ thuế trực tuyến tại Việt Nam trong năm 2025–2026. Xếp thứ hai là nhóm Đe dọa quyền lực với 127 mẫu (30.2%), đây là thủ đoạn gây thiệt hại tài sản lớn nhất khi mạo danh Công an, Tòa án nhằm chiếm đoạt tiền tiết kiệm của người già. Nhóm Khẩn cấp gia đình (88 mẫu - 21.0%) khai thác lòng thương yêu con cháu, và nhóm Dụ dỗ quà tặng & Sức khỏe (46 mẫu - 11.0%) đánh vào nhu cầu chăm sóc sức khỏe lúc tuổi già.")
+                           "Hình 4.2: Cơ cấu phân bổ 4 nhóm bẫy thao túng tâm lý trong 420 mẫu tin nhắn lừa đảo thực tế", width_inches=3.6)
+    add_body_p(doc, "Nhận xét Hình 4.2: Nhóm Giả mạo dịch vụ công chiếm tỷ trọng cao nhất với 159 mẫu (37.9%), phản ánh đúng thực trạng tội phạm lợi dụng cao điểm triển khai Đề án 06, định danh điện tử VNeID và dịch vụ thuế trực tuyến tại Việt Nam trong năm 2025–2026. Xếp thứ hai là nhóm Đe dọa quyền lực với 127 mẫu (30.2%), đây là thủ đoạn gây thiệt hại tài sản lớn nhất khi mạo danh Công an, Tòa án nhằm chiếm đoạt tiền tiết kiệm của người già. Nhóm Khẩn cấp gia đình (88 mẫu - 21.0%) khai thác tình thương con cháu, và nhóm Dụ dỗ quà tặng & Sức khỏe (46 mẫu - 11.0%) đánh vào nhu cầu chăm sóc sức khỏe.")
 
     scam_detail_table = [
         ["Giả mạo dịch vụ công (37.9%)", "Lỗi định danh VNeID mức 2, hoàn thuế thu nhập cá nhân, cập nhật thông tin bảo hiểm xã hội.", "Dẫn dụ bấm liên kết lạ tải ứng dụng chứa mã độc gián điệp nhằm chiếm quyền điều khiển điện thoại."],
@@ -899,15 +975,10 @@ def generate_report(toc_overrides=None):
         ["Khẩn cấp gia đình (21.0%)", "Con cháu bị tai nạn giao thông chấn thương sọ não, đang cấp cứu nguy kịch tại bệnh viện lớn.", "Thao túng tình mẫu tử/phụ tử, ép chuyển viện phí phẫu thuật khẩn cấp trong vòng 15–30 phút."],
         ["Dụ dỗ quà tặng & Y tế (11.0%)", "Tri ân hội người cao tuổi tặng máy đo huyết áp, sữa dinh dưỡng, bảo hiểm sức khỏe trúng thưởng.", "Ép đóng phí bảo hiểm, phí vận chuyển ứng trước hoặc lôi kéo mua thuốc đông y giả giá cao."],
     ]
-    create_table(doc, ["NHÓM BẪY TÂM LÝ", "KỊCH BẢN THỦ ĐOẠN ĐẶC TRƯNG", "HẬU QUẢ VÀ TÁC ĐỘNG TÂM LÝ ĐỐI VỚI NGƯỜI GIÀ"], scam_detail_table, col_widths=[1.8, 2.5, 2.7], font_size_pt=8.5, top_margin=20, bottom=20)
-
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.1 — EDA PHẦN 3: TƯƠNG QUAN 15 ĐẶC TRƯNG PHỤ (TRANG 16 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
+    create_table(doc, ["NHÓM BẪY TÂM LÝ", "KỊCH BẢN THỦ ĐOẠN ĐẶC TRƯNG", "HẬU QUẢ VÀ TÁC ĐỘNG TÂM LÝ ĐỐI VỚI NGƯỜI GIÀ"], scam_detail_table, col_widths=[1.8, 2.5, 2.7], font_size_pt=8.0, top_margin=18, bottom=18)
 
     add_image_with_caption(doc, FIGURES_DIR / "auxiliary_correlation_heatmap.png", 
-                           "Hình 4.3: Ma trận tương quan Pearson giữa 15 đặc trưng phụ tâm lý học với nhãn lừa đảo", width_inches=4.0)
+                           "Hình 4.3: Ma trận tương quan Pearson giữa 15 đặc trưng phụ tâm lý học với nhãn lừa đảo", width_inches=3.8)
     add_body_p(doc, "Nhận xét Hình 4.3: Ma trận tương quan khẳng định tính hiệu quả vượt bậc của các đặc trưng phụ được nhóm thiết kế thủ công. Sự phân hóa tương quan thể hiện rõ nét qua 4 nhóm tín hiệu hành vi:")
     add_bullet_p(doc, "• Nhóm áp lực thời gian & cảm xúc: ", "Đặc trưng urgency_score (hệ số thúc ép thời gian) và num_exclamation (dấu chấm than) thể hiện mức tương quan dương mạnh nhất với nhãn lừa đảo (lần lượt r = 0.58 và r = 0.44), phản ánh hành vi dồn ép tâm lý nạn nhân ra quyết định trong lúc hoảng loạn.")
     add_bullet_p(doc, "• Nhóm quyền lực & khẩn cấp: ", "Đặc trưng num_authority_words (từ khóa công an, tòa án, viện kiểm sát) có hệ số tương quan r = 0.51, và has_emergency_words (cấp cứu, tai nạn) đạt r = 0.38, đóng vai trò chỉ dấu kích hoạt then chốt cho 2 nhóm bẫy nguy hiểm nhất.")
@@ -915,15 +986,23 @@ def generate_report(toc_overrides=None):
     add_bullet_p(doc, "• Nhóm dẫn dụ công nghệ & lách luật: ", "Đặc trưng num_urls (liên kết độc hại, r = 0.42) và has_leet_speak (ký tự né bộ lọc, r = 0.31) chứng minh tội phạm công nghệ liên tục sử dụng thủ thuật kỹ thuật số để dẫn dụ và qua mặt bộ lọc đơn giản.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2.0 & 4.2.1 — THƯỚC ĐO ĐÁNH GIÁ & BẢNG BENCHMARK (TRANG 17 TRỌN VẸN)
+    # MỤC 4.2 — PHƯƠNG PHÁP ĐÁNH GIÁ & ZERO-LEAKAGE
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.2. Kết quả thực nghiệm đối sánh 4 mô hình học máy")
-    
-    add_heading_3(doc, "4.2.0. Định nghĩa các thước đo đánh giá và ví dụ tính tay")
-    add_body_p(doc, "Coi lớp \"lừa đảo\" là lớp dương (nhãn 1), từ ma trận nhầm lẫn trên tập kiểm thử 439 mẫu ta có 4 đại lượng: TP (lừa đảo, đoán đúng), TN (bình thường, đoán đúng), FP (báo nhầm lừa đảo) và FN (bỏ sót lừa đảo):")
-    
+    add_heading_2(doc, "4.2. Phương pháp đánh giá và kiểm soát rò rỉ dữ liệu")
+
+    add_heading_3(doc, "4.2.1. Chiến lược phân chia Train/Test 80/20 và Zero-Data-Leakage")
+    add_body_p(doc, "Toàn bộ quy trình thực nghiệm tuân thủ nghiêm ngặt nguyên tắc Zero-Data-Leakage:")
+    add_bullet_p(doc, "• Phân tầng bảo toàn tỷ lệ: ", "Phân chia tập Train (80% - 1.754 mẫu) và Test (20% - 439 mẫu) bằng StratifiedShuffleSplit (random_state=42) bảo đảm tỷ lệ 4,22 : 1 giữa hai lớp được bảo toàn ở cả hai tập.")
+    add_bullet_p(doc, "• Tách biệt Fit và Transform: ", "Bộ trích xuất TfidfVectorizer và bộ chuẩn hóa StandardScaler chỉ được phép fit trên tập Train. Khi xử lý tập Test, mô hình chỉ transform, tuyệt đối không tính toán lại từ điển từ vựng hay các tham số thống kê (mean, std).")
+
+    add_heading_3(doc, "4.2.2. Kiểm định chéo 5-Fold Stratified Cross-Validation")
+    add_body_p(doc, "Trên tập huấn luyện (1.754 mẫu), nhóm áp dụng kiểm định chéo 5-Fold phân tầng (StratifiedKFold, k=5) để dò tìm siêu tham số tối ưu thông qua GridSearchCV và RandomizedSearchCV. Mỗi fold huấn luyện chứa khoảng 1.403 mẫu (1.134 bình thường, 269 lừa đảo) và fold kiểm định chứa khoảng 351 mẫu (284 bình thường, 67 lừa đảo). Mọi biến đổi tiền xử lý và trích xuất vector đều được đóng gói bên trong sklearn Pipeline của từng fold nhằm ngăn chặn triệt để rò rỉ thông tin.")
+
+    add_heading_3(doc, "4.2.3. Các thước đo đánh giá hiệu năng")
+    add_body_p(doc, "Coi lớp 'lừa đảo' là lớp dương (nhãn 1) và lớp 'bình thường' là lớp âm (nhãn 0), từ ma trận nhầm lẫn ta có: TP (lừa đảo đoán đúng), TN (bình thường đoán đúng), FP (báo nhầm lừa đảo) và FN (bỏ sót lừa đảo — nguy hiểm nhất đối với người cao tuổi):")
+
     eq_prec_omml = (
         '<m:r><m:t>Precision = </m:t></m:r>'
         '<m:f><m:num><m:r><m:t>TP</m:t></m:r></m:num><m:den><m:r><m:t>TP + FP</m:t></m:r></m:den></m:f>'
@@ -942,13 +1021,53 @@ def generate_report(toc_overrides=None):
     )
     add_display_equation(doc, eq_f1_omml)
 
-    add_body_p(doc, "Ví dụ tính tay trên mô hình XGBoost (Holdout Test 439 mẫu có TP = 82, TN = 349, FP = 6, FN = 2):")
-    add_bullet_p(doc, "• Accuracy = ", "(82 + 349) / 439 = 0.9818 (98.18%)")
-    add_bullet_p(doc, "• Precision = ", "82 / (82 + 6) = 0.9318 (93.18%)")
-    add_bullet_p(doc, "• Recall = ", "82 / (82 + 2) = 0.9762 (97.62%) — Chỉ sót đúng 2/84 ca lừa đảo")
-    add_bullet_p(doc, "• F1-Score = ", "2 × 0.9318 × 0.9762 / (0.9318 + 0.9762) = 0.9535")
+    add_heading_3(doc, "4.2.4. Ví dụ tính tay cụ thể trên ma trận nhầm lẫn của XGBoost")
+    add_body_p(doc, "Trên tập kiểm thử độc lập 439 mẫu, mô hình XGBoost cho ma trận nhầm lẫn thực tế: TP = 82, TN = 349, FP = 6, FN = 2. Các chỉ số được tính toán đối soát trực tiếp bằng tay:")
+    add_bullet_p(doc, "• Accuracy = ", "(82 + 349) / (82 + 349 + 6 + 2) = 431 / 439 ≈ 0.9818 (98.18%)")
+    add_bullet_p(doc, "• Precision = ", "82 / (82 + 6) = 82 / 88 ≈ 0.9318 (93.18%)")
+    add_bullet_p(doc, "• Recall = ", "82 / (82 + 2) = 82 / 84 ≈ 0.9762 (97.62%) — Chỉ sót 2/84 ca lừa đảo")
+    add_bullet_p(doc, "• F1-Score = ", "2 × (0.9318 × 0.9762) / (0.9318 + 0.9762) ≈ 0.9535 (95.35%)")
+    add_body_p(doc, "Kết quả tính tay hoàn toàn trùng khớp chính xác 100% với số liệu xuất từ tệp báo cáo đánh giá tự động reports/model_comparison.csv.")
 
-    add_heading_3(doc, "4.2.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set")
+    add_heading_3(doc, "4.2.5. Hệ thống công thức toán học TF-IDF")
+    add_body_p(doc, "Với từ hoặc cụm n-gram t trong văn bản tin nhắn d:")
+    add_bullet_p(doc, "1. Tần suất từ chuẩn hóa logarit phi tuyến (Sublinear Term Frequency): ", "tf(t, d) = 1 + ln(f(t, d)) nếu f(t, d) > 0, và bằng 0 nếu ngược lại (với f(t, d) là số lần t xuất hiện trong d).")
+    eq_tf = '<m:r><m:t>tf(t, d) = 1 + ln(f(t, d))</m:t></m:r>'
+    add_display_equation(doc, eq_tf)
+
+    add_bullet_p(doc, "2. Nghịch đảo tần suất tài liệu có làm trơn (Smoothed Inverse Document Frequency): ", "với n = 1.754 là tổng số tin nhắn trong tập huấn luyện và df(t) là số tin chứa từ t:")
+    eq_idf = (
+        '<m:r><m:t>idf(t) = ln</m:t></m:r>'
+        '<m:d><m:e>'
+        '<m:f>'
+        '<m:num><m:r><m:t>1 + n</m:t></m:r></m:num>'
+        '<m:den><m:r><m:t>1 + df(t)</m:t></m:r></m:den>'
+        '</m:f>'
+        '</m:e></m:d>'
+        '<m:r><m:t> + 1</m:t></m:r>'
+    )
+    add_display_equation(doc, eq_idf)
+
+    add_bullet_p(doc, "3. Trọng số TF-IDF cuối cùng kết hợp chuẩn hóa vector L2: ", "Đảm bảo mỗi vector tin nhắn có độ dài đơn vị 1:")
+    eq_tfidf = (
+        '<m:r><m:t>tfidf(t, d) = tf(t, d) × idf(t),       </m:t></m:r>'
+        '<m:sSub><m:e><m:r><m:t>v</m:t></m:r></m:e><m:sub><m:r><m:t>norm</m:t></m:r></m:sub></m:sSub>'
+        '<m:r><m:t> = </m:t></m:r>'
+        '<m:f>'
+        '<m:num><m:r><m:t>v</m:t></m:r></m:num>'
+        '<m:den><m:sSub><m:e><m:r><m:t>‖v‖</m:t></m:r></m:e><m:sub><m:r><m:t>2</m:t></m:r></m:sub></m:sSub></m:den>'
+        '</m:f>'
+    )
+    add_display_equation(doc, eq_tfidf)
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # MỤC 4.3 — KẾT QUẢ THỰC NGHIỆM VÀ ĐỐI SÁNH ĐA MÔ HÌNH
+    # ══════════════════════════════════════════════════════════════════════════
+    doc.add_page_break()
+
+    add_heading_2(doc, "4.3. Kết quả thực nghiệm và đối sánh đa mô hình")
+
+    add_heading_3(doc, "4.3.1. Bảng đối sánh tổng hợp 4 mô hình trên Holdout Test Set")
     add_body_p(doc, "Bảng 4.2 tổng hợp toàn bộ kết quả đo lường định lượng trên tập Test độc lập 439 mẫu:")
 
     benchmark_table = [
@@ -957,117 +1076,121 @@ def generate_report(toc_overrides=None):
         ["Random Forest (Bagging)", "5.015", "97.72%", "91.11%", "97.62%", "0.9425", "0.9977", "FN=2, FP=8\n(Best Tree)"],
         ["Naive Bayes (Baseline)", "5.000", "95.44%", "84.78%", "92.86%", "0.8864", "0.9911", "FN=6, FP=14\n(Baseline)"],
     ]
-    create_table(doc, ["MÔ HÌNH HỌC MÁY", "SỐ CHIỀU", "ACCURACY", "PRECISION", "RECALL (LỪA ĐẢO)", "F1-SCORE", "ROC-AUC", "CHI PHÍ SAI SỐ"], benchmark_table, col_widths=[1.5, 0.6, 0.7, 0.7, 0.8, 0.7, 0.7, 1.1], font_size_pt=8.5, top_margin=25, bottom=25)
+    create_table(doc, ["MÔ HÌNH HỌC MÁY", "SỐ CHIỀU", "ACCURACY", "PRECISION", "RECALL (LỪA ĐẢO)", "F1-SCORE", "ROC-AUC", "CHI PHÍ SAI SỐ"], benchmark_table, col_widths=[1.5, 0.6, 0.7, 0.7, 0.8, 0.7, 0.7, 1.1], font_size_pt=8.0, top_margin=18, bottom=18)
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2.2 — ĐƯỜNG CONG ROC (TRANG 18 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_3(doc, "4.2.2. Phân tích đường cong ROC (Receiver Operating Characteristic)")
+    add_heading_3(doc, "4.3.2. Đường cong ROC và Precision-Recall")
     add_image_with_caption(doc, FIGURES_DIR / "roc_curves_comparison.png", 
-                           "Hình 4.4: Đường cong ROC đối sánh 4 mô hình — Tất cả đều đạt AUC ≥ 0.99 trên tập kiểm thử độc lập", width_inches=4.0)
-    add_body_p(doc, "Nhận xét Hình 4.4: Toàn bộ 4 mô hình đều đạt diện tích dưới đường cong ROC-AUC ở mức xuất sắc vượt trội, dao động từ 0.9911 (Naive Bayes) đến 0.9986 (Linear SVM). Cả 4 đường cong đều vươn sát góc trên bên trái, khẳng định năng lực phân biệt vượt trội giữa tin lừa đảo và tin bình thường trên toàn dải ngưỡng phân loại từ 0.0 đến 1.0.")
-    add_body_p(doc, "Trong đó, Calibrated Linear SVM đạt ROC-AUC cao nhất (0.9986), chứng minh không gian đặc trưng 5.015 chiều tồn tại siêu phẳng tuyến tính phân tách hai lớp cực kỳ sắc bén. Nhờ phương pháp hiệu chuẩn xác suất Platt Scaling qua CalibratedClassifierCV 5-Fold, khoảng cách từ vector dữ liệu đến siêu phẳng phân cách cực đại được ánh xạ mượt mà thành xác suất rủi ro tin cậy, giúp hệ thống hoạt động ổn định và chính xác ngay cả khi thay đổi ngưỡng kích hoạt cảnh báo.")
+                           "Hình 4.4: Đường cong ROC đối sánh 4 mô hình — Tất cả đều đạt AUC ≥ 0.99 trên tập kiểm thử độc lập", width_inches=3.8)
+    add_body_p(doc, "Nhận xét Hình 4.4: Toàn bộ 4 mô hình đều đạt ROC-AUC rất cao, dao động từ 0.9911 (Naive Bayes) đến 0.9986 (Linear SVM). Cả 4 đường cong đều vươn sát góc trên bên trái, khẳng định năng lực phân biệt vượt trội giữa tin lừa đảo và tin bình thường trên toàn dải ngưỡng phân loại. Trong đó, Linear SVM đạt ROC-AUC cao nhất (0.9986), chứng minh không gian đặc trưng 5.015 chiều tồn tại siêu phẳng tuyến tính phân tách hai lớp cực kỳ sắc bén.")
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2.2 — ĐƯỜNG CONG PRECISION-RECALL (TRANG 19 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_3(doc, "4.2.2. Phân tích đường cong Precision-Recall trên dữ liệu mất cân bằng")
     add_image_with_caption(doc, FIGURES_DIR / "precision_recall_curves.png", 
-                           "Hình 4.5: Đường cong Precision-Recall đối sánh 4 mô hình trên ngữ liệu mất cân bằng lớp 4.22 : 1", width_inches=4.0)
-    add_body_p(doc, "Nhận xét Hình 4.5: Trên dữ liệu mất cân bằng lớp nghiêm ngặt (lớp lừa đảo chỉ chiếm 19.15%), đường cong Precision-Recall là thước đo phản ánh trung thực và nhạy bén nhất năng lực thực tế của mô hình so với ROC curve:")
-    add_bullet_p(doc, "• Năng lực duy trì độ chính xác ở ngưỡng bắt lừa đảo cao: ", "XGBoost và Random Forest thể hiện ưu thế vượt trội khi duy trì giá trị Precision cao (> 93%) ngay cả tại các ngưỡng Recall rất cao (> 97%). Điều này chứng minh mô hình có khả năng tóm trọn các ca lừa đảo mà không phải đánh đổi bằng việc báo động giả (False Alarm) làm phiền cuộc sống hàng ngày của người cao tuổi.")
-    add_bullet_p(doc, "• So sánh PR-AUC giữa các mô hình: ", "XGBoost đạt diện tích dưới đường cong PR-AUC cao nhất (0.985), theo sau sát nút là Linear SVM (0.978) và Random Forest (0.972). Đường cong của Naive Bayes (PR-AUC = 0.921) giảm độ dốc sớm hơn ở các mức Recall > 90% do giả định độc lập từ vựng khiến xác suất dự đoán bị phân cực quá mức ở các câu dài.")
-    add_bullet_p(doc, "• Ý nghĩa đối với người cao tuổi: ", "Tại ngưỡng phân loại khuyến nghị 0.50, hệ thống đạt điểm cân bằng tối ưu giữa việc bảo vệ triệt để tài sản (Recall = 97.62%) và giữ gìn trải nghiệm giao tiếp bình yên (Precision = 93.18%).")
+                           "Hình 4.5: Đường cong Precision-Recall đối sánh 4 mô hình trên ngữ liệu mất cân bằng lớp 4.22 : 1", width_inches=3.8)
+    add_body_p(doc, "Nhận xét Hình 4.5: Trên dữ liệu mất cân bằng lớp (tỷ lệ 4.22 : 1), đường cong Precision-Recall là thước đo phản ánh trung thực nhất năng lực mô hình. XGBoost và Random Forest thể hiện ưu thế vượt trội khi duy trì Precision cao (> 93%) ngay cả tại các ngưỡng Recall rất cao (> 97%), bảo đảm phát hiện tin lừa đảo mà không làm phiền người cao tuổi bằng báo động giả.")
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2.3 — PHÂN TÍCH MA TRẬN NHẦM LẪN (TRANG 20 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_3(doc, "4.2.3. Phân tích ma trận nhầm lẫn (Confusion Matrices)")
+    add_heading_3(doc, "4.3.3. Phân tích Ma trận Nhầm lẫn 4 Mô hình")
     add_image_with_caption(doc, FIGURES_DIR / "confusion_matrices_all.png", 
-                           "Hình 4.6: Ma trận nhầm lẫn của 4 mô hình trên tập kiểm thử độc lập 439 mẫu", width_inches=4.2)
-    add_body_p(doc, "Phân tích chi tiết ma trận nhầm lẫn của từng mô hình trên tập Test 439 mẫu (355 tin bình thường, 84 tin lừa đảo):")
-    add_bullet_p(doc, "• XGBoost (Best Overall): ", "Đạt TP = 82, TN = 349, FP = 6, FN = 2. Mô hình chỉ bỏ sót duy nhất 2 trên tổng số 84 tin lừa đảo (Recall = 97.62%) và chỉ báo nhầm 6 tin bình thường (Precision = 93.18%), dẫn đầu về điểm số F1-Score (0.9535).")
-    add_bullet_p(doc, "• Random Forest (Ensemble Tree): ", "Đạt TP = 82, TN = 347, FP = 8, FN = 2. Có chỉ số Recall ngang bằng XGBoost (bỏ sót 2 ca, Recall = 97.62%), tuy nhiên số lượng báo nhầm FP nhỉnh hơn đôi chút (8 ca), đạt F1-Score = 0.9425.")
-    add_bullet_p(doc, "• Linear SVM (Calibrated): ", "Đạt TP = 81, TN = 349, FP = 6, FN = 3. Bỏ sót 3 ca lừa đảo (Recall = 96.43%), đạt Precision cao ngang XGBoost (93.10%) và F1-Score = 0.9474, tốc độ suy luận nhanh nhất nhóm.")
-    add_bullet_p(doc, "• Naive Bayes (Baseline): ", "Đạt TP = 78, TN = 341, FP = 14, FN = 6. Dù dựa trên giả định độc lập từ vựng đơn giản, mô hình vẫn phát hiện được 78/84 ca lừa đảo (Recall = 92.86%, F1 = 0.8864), hoàn thành xuất sắc vai trò mốc đối chứng cơ sở.")
-    add_bullet_p(doc, "• Đánh giá chi phí sai số bất đối xứng: ", "Cả 3 mô hình học máy nâng cao (XGBoost, RF, SVM) đều khống chế số ca bỏ sót nguy hiểm FN ≤ 3 ca, đáp ứng trọn vẹn yêu cầu bảo vệ an toàn tính mạng tài sản cho người cao tuổi.")
+                           "Hình 4.6: Ma trận nhầm lẫn của 4 mô hình trên tập kiểm thử độc lập 439 mẫu", width_inches=4.0)
+    add_body_p(doc, "Phân tích chi tiết ma trận nhầm lẫn trên tập Test 439 mẫu (355 tin bình thường, 84 tin lừa đảo):")
+    add_bullet_p(doc, "• XGBoost (Best Overall): ", "Đạt TP = 82, TN = 349, FP = 6, FN = 2. Chỉ bỏ sót đúng 2/84 tin lừa đảo (Recall = 97.62%) và chỉ báo nhầm 6 tin bình thường (Precision = 93.18%), dẫn đầu về F1-Score (0.9535).")
+    add_bullet_p(doc, "• Random Forest (Ensemble Tree): ", "Đạt TP = 82, TN = 347, FP = 8, FN = 2. Recall ngang bằng XGBoost (bỏ sót 2 ca, Recall = 97.62%), số ca báo nhầm FP nhỉnh hơn đôi chút (8 ca), đạt F1-Score = 0.9425.")
+    add_bullet_p(doc, "• Linear SVM (Calibrated): ", "Đạt TP = 81, TN = 349, FP = 6, FN = 3. Bỏ sót 3 ca lừa đảo (Recall = 96.43%), Precision cao ngang XGBoost (93.10%) và F1-Score = 0.9474, tốc độ suy luận nhanh nhất (1.2 ms).")
+    add_bullet_p(doc, "• Naive Bayes (Baseline): ", "Đạt TP = 78, TN = 341, FP = 14, FN = 6. Bắt được 78/84 ca lừa đảo (Recall = 92.86%, F1 = 0.8864), hoàn thành xuất sắc vai trò mốc đối chứng cơ sở.")
+    add_bullet_p(doc, "• Chi phí sai số bất đối xứng: ", "Cả 3 mô hình học máy nâng cao (XGBoost, RF, SVM) đều khống chế số ca bỏ sót nguy hiểm FN ≤ 3 ca, đáp ứng trọn vẹn yêu cầu bảo vệ người cao tuổi.")
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.2.4 — PHÂN TÍCH HIỆN TƯỢNG QUÁ KHỚP QUA LEARNING CURVES (TRANG 21 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_3(doc, "4.2.4. Phân tích hiện tượng quá khớp qua Learning Curves")
+    add_heading_3(doc, "4.3.4. Kiểm tra Hiện tượng Quá khớp qua Learning Curves")
     add_image_with_caption(doc, FIGURES_DIR / "learning_curves_summary.png", 
-                           "Hình 4.7: Đường cong học tập (Learning Curves) đối sánh qua 5-Fold Cross-Validation", width_inches=4.2)
-    add_body_p(doc, "Nhận xét Hình 4.7: Quá trình phân tích đường cong học tập (Learning Curves) khi kích thước tập huấn luyện tăng dần từ 200 mẫu lên 1.400 mẫu đem lại 4 phát hiện khoa học quan trọng:")
-    add_bullet_p(doc, "• Xu hướng hội tụ và kiểm soát Overfitting: ", "Khi số lượng mẫu đạt trên 1.000 mẫu, khoảng cách giữa đường Train Score và Validation Score của cả 4 mô hình đều thu hẹp về dưới 0.02. Điều này chứng minh hiện tượng quá khớp (Overfitting) đã được triệt tiêu hoàn toàn nhờ các kỹ thuật điều hòa tham số tối ưu (max_depth=5, subsample=0.7 trong XGBoost; C=10.0 và L2 penalty trong Linear SVM).")
-    add_bullet_p(doc, "• Tính ổn định của Linear SVM: ", "Linear SVM thể hiện độ ổn định cao nhất trong suốt quá trình huấn luyện: đường Validation Score tăng mượt mà và tiệm cận đường Train Score sớm nhất (ngay từ mốc 800 mẫu), khẳng định tính tổng quát hóa xuất sắc của siêu phẳng lề cực đại.")
-    add_bullet_p(doc, "• Năng lực hấp thụ dữ liệu của XGBoost: ", "Đường Validation Score của XGBoost tiếp tục tăng tiến ổn định từ 0.88 lên 0.95+ khi kích thước mẫu mở rộng, chứng minh mô hình tăng cường độ dốc có khả năng học sâu các mẫu hành vi phức tạp khi được cung cấp thêm dữ liệu.")
-    add_bullet_p(doc, "• Kết luận về quy mô dữ liệu: ", "Tập dữ liệu 2.193 mẫu thực tế là hoàn toàn đủ lớn và đạt trạng thái bão hòa học tập ổn định cho bài toán học máy kết hợp NLP tiếng Việt.")
+                           "Hình 4.7: Đường cong học tập (Learning Curves) đối sánh qua 5-Fold Cross-Validation", width_inches=4.0)
+    add_body_p(doc, "Nhận xét Hình 4.7: Quá trình phân tích đường cong học tập khi kích thước tập huấn luyện tăng dần từ 200 mẫu lên 1.400 mẫu đem lại 4 phát hiện khoa học quan trọng: (1) Khi số lượng mẫu đạt trên 1.000 mẫu, khoảng cách giữa Train Score và Validation Score của cả 4 mô hình đều thu hẹp về dưới 0.02, chứng minh hiện tượng quá khớp đã được triệt tiêu hoàn toàn; (2) Linear SVM thể hiện độ ổn định cao nhất; (3) XGBoost tăng tiến ổn định từ 0.88 lên 0.95+ khi mở rộng mẫu; (4) Tập dữ liệu 2.193 mẫu thực tế là hoàn toàn đủ lớn và đạt trạng thái bão hòa học tập ổn định.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.3 — XAI VỚI SHAP BEESWARM (TRANG 22 TRỌN VẸN)
+    # MỤC 4.4 — XAI VỚI SHAP VÀ TOP 20 TỪ KHÓA
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.3. Trí tuệ nhân tạo có thể giải thích (XAI) với SHAP và Top 20 từ khóa")
-    add_body_p(doc, "Điểm đột phá của đề tài là không dừng lại ở phán đoán nhị phân (Lừa đảo / Bình thường), mà cung cấp khả năng giải thích tường minh lý do tại sao tin nhắn bị xem là nguy hiểm thông qua mô hình SHAP Beeswarm và Top-20 từ khóa đồng thuận:")
+    add_heading_2(doc, "4.4. Trí tuệ nhân tạo có thể giải thích (XAI) và Top 20 từ khóa bẫy tâm lý")
+    add_body_p(doc, "Hệ thống cung cấp khả năng giải thích tường minh lý do tại sao tin nhắn bị xem là nguy hiểm thông qua mô hình SHAP (SHapley Additive exPlanations) của Lundberg & Lee [12], sử dụng thuật toán TreeSHAP [13] tối ưu cho mô hình cây, kết hợp phân tích Top-20 từ khóa đồng thuận:")
 
+    add_heading_3(doc, "4.4.1. Phân tích SHAP Beeswarm của XGBoost")
     add_image_with_caption(doc, FIGURES_DIR / "shap_summary.png", 
-                           "Hình 4.8: Biểu đồ SHAP Beeswarm của mô hình XGBoost — Đóng góp vi mô của từng giá trị đặc trưng vào xác suất lừa đảo", width_inches=3.0)
-    p_sh1 = add_body_p(doc, "Nhận xét Hình 4.8: Biểu đồ SHAP Beeswarm minh họa trực quan sự phân bố giá trị đóng góp (SHAP value) của từng đặc trưng trên từng mẫu tin nhắn kiểm thử. Trục hoành biểu thị mức độ tác động: giá trị SHAP dương (> 0) làm tăng xác suất tin nhắn bị phân loại là lừa đảo, trong khi giá trị âm (< 0) kéo xác suất về hướng tin bình thường. Màu sắc đại diện cho giá trị thực tế của đặc trưng (màu đỏ biểu thị giá trị cao, màu xanh biểu thị giá trị thấp).")
-    p_sh1.paragraph_format.space_after = Pt(2)
-    p_sh2 = add_body_p(doc, "Kết quả phân tích SHAP chỉ ra rằng đặc trưng urgency_score (hệ số thúc ép thời gian) và money/số_tiền nằm ở vị trí cao nhất. Khi tin nhắn có urgency_score cao (màu đỏ), các điểm dữ liệu phân bố lệch hẳn về phía bên phải trục 0, tạo lực đẩy cực mạnh đưa xác suất dự đoán lên ngưỡng cảnh báo nguy cơ cao. Tương tự, sự xuất hiện của các thực thể như thương hiệu mạo danh (Viettel, ngân hàng) và yêu cầu cung cấp OTP/STK đóng vai trò là những chỉ dấu kích hoạt then chốt giúp mô hình đưa ra phán quyết chính xác.")
-    p_sh2.paragraph_format.space_after = Pt(2)
+                           "Hình 4.8: Biểu đồ SHAP Beeswarm của mô hình XGBoost — Đóng góp vi mô của từng giá trị đặc trưng vào xác suất lừa đảo", width_inches=2.8)
+    add_body_p(doc, "Nhận xét Hình 4.8: Biểu đồ SHAP Beeswarm minh họa giá trị đóng góp (SHAP value) của từng đặc trưng. Trục hoành biểu thị mức độ tác động: giá trị dương (> 0) làm tăng xác suất lừa đảo, giá trị âm (< 0) kéo về tin bình thường. Màu đỏ là giá trị thực tế cao, màu xanh là giá trị thấp. Đặc trưng urgency_score và money/số_tiền nằm ở vị trí cao nhất; khi có urgency_score cao (màu đỏ), điểm dữ liệu lệch hẳn sang phải, tạo lực đẩy mạnh đưa xác suất dự đoán lên ngưỡng cảnh báo nguy cơ cao.")
 
-    # ══════════════════════════════════════════════════════════════════════════
-    # BẢNG 4.3 — TOP 20 TỪ KHÓA BẪY TÂM LÝ SHAP (TRANG 23 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
+    add_heading_3(doc, "4.4.2. Biểu đồ Cột ngang Top-20 Từ khóa Cảnh báo (XAI Consensus)")
+    add_image_with_caption(doc, FIGURES_DIR / "top20_keywords_barplot.png",
+                           "Hình 4.8b: Biểu đồ cột ngang Top-20 từ khóa cảnh báo có trọng số đồng thuận cao nhất (XAI Consensus Ranking, 300 DPI)", width_inches=3.4)
+    add_body_p(doc, "Nhận xét Hình 4.8b: Biểu đồ cột ngang lượng hóa trực quan điểm số đồng thuận của Top-20 từ khóa và đặc trưng chỉ báo lừa đảo. Hệ số thúc ép thời gian urgency_score (1.000) và từ khóa tiền bạc money/số_tiền (0.943) giữ hai vị trí cao nhất, tiếp theo là thương_hiệu/viettel (0.820) và liên_hệ/198 (0.722). Sự phân bổ đồng thuận chứng minh hệ thống đã trích xuất thành công 'chân dung số' của các kịch bản lừa đảo viễn thông.")
 
-    add_body_p(doc, "Bảng 4.3 tổng hợp chi tiết Top-20 từ khóa kích hoạt bẫy tâm lý có giá trị đóng góp SHAP lớn nhất trên mô hình XGBoost và ý nghĩa thực tế phát hiện lừa đảo:")
+    add_heading_3(doc, "4.4.3. Bảng 4.3 Chi tiết Top-20 Từ khóa và Cơ chế Kích hoạt Bẫy Tâm lý")
+    add_body_p(doc, "Bảng 4.3 tổng hợp chi tiết Top-20 đặc trưng và cơ chế kích hoạt 4 nhóm bẫy thao túng tâm lý trên mô hình XGBoost:")
 
     top_keywords_table = [
-        ["1. urgency_score", "Rất cao (1.0000)", "Đặc trưng phụ: Hệ số tổng hợp các từ thúc giục thời gian và dấu cảm thán."],
-        ["2. money / số_tiền", "Rất cao (0.9433)", "Từ khóa đề cập trực tiếp đến số tiền nộp, tiền phạt hoặc tiền thưởng."],
-        ["3. thương_hiệu / viettel", "Cao (0.8199)", "Mạo danh nhà mạng viễn thông, doanh nghiệp công nghệ uy tín."],
-        ["4. liên_hệ / 198", "Cao (0.7223)", "Đầu số tổng đài giả mạo dẫn dụ nạn nhân gọi lại để thao túng giọng nói."],
-        ["5. đường_dẫn / num_urls", "Cao (0.5634)", "Đặc trưng phụ: Liên kết lạ dẫn dụ truy cập website giả mạo, tải tệp độc hại."],
-        ["6. number / sđt", "Cao (0.4669)", "Đặc trưng phụ: Số điện thoại lạ yêu cầu liên hệ gấp hoặc kết bạn Zalo."],
-        ["7. mày / chị", "Trung bình (0.4331)", "Đại từ nhân xưng gây áp lực tâm lý trịch thượng hoặc mạo danh người quen."],
-        ["8. số_định_danh / vneid", "Trung bình (0.4222)", "Kịch bản giả mạo dịch vụ công: lỗi định danh công dân Đề án 06."],
-        ["9. 198 / hotline", "Trung bình (0.3176)", "Số tổng đài giả danh chăm sóc khách hàng viễn thông."],
-        ["10. gấp / khẩn cấp", "Trung bình (0.3097)", "Từ khóa giục giã, dồn ép nạn nhân ra quyết định trong lúc hoảng loạn."],
-        ["11. viện_phí", "Trung bình (0.2249)", "Kịch bản khẩn cấp gia đình: con cháu tai nạn cấp cứu cần tiền phẫu thuật."],
-        ["12. chị / anh", "Trung bình (0.1912)", "Cách xưng hô thân mật nhằm tạo dựng lòng tin giả tạo ban đầu."],
-        ["13. doi (đòi)", "Trung bình (0.1712)", "Thủ đoạn đe dọa đòi nợ, tịch thu tài sản nếu không thanh toán ngay."],
-        ["14. soạn / cú pháp", "Trung bình (0.1708)", "Thao túng nạn nhân bấm theo cú pháp tin nhắn trừ tiền tài khoản."],
-        ["15. thuế / công an", "Trung bình (0.1670)", "Kịch bản đe dọa quyền lực: truy thu thuế, lệnh tạm giữ cơ quan pháp luật."],
-        ["16. đang", "Trung bình (0.1589)", "Trạng thái tiếp diễn, ám chỉ sự cố nguy cấp đang xảy ra cần xử lý ngay."],
-        ["17. số_lượng", "Thấp (0.1509)", "Đòi hỏi số lượng thẻ cào, phần quà thưởng khuyến mãi dụ dỗ."],
-        ["18. viettel / vinaphone", "Thấp (0.1502)", "Mạo danh thương hiệu viễn thông thông báo khóa sim hoặc gói cước."],
-        ["19. time / thời_hạn", "Thấp (0.1352)", "Giới hạn khung giờ (trong 15–30 phút) nhằm triệt tiêu khả năng kiểm chứng."],
-        ["20. sẽ", "Thấp (0.1322)", "Động từ vị ngữ đe dọa hậu quả pháp lý sẽ áp dụng nếu không chấp hành."],
+        ["1. urgency_score", "Rất cao (1.0000)", "Thao túng thời gian", "Đặc trưng phụ: Hệ số tổng hợp các từ thúc giục thời gian và dấu cảm thán."],
+        ["2. money / số_tiền", "Rất cao (0.9433)", "Tài chính", "Từ khóa đề cập trực tiếp đến số tiền nộp, tiền phạt hoặc tiền thưởng."],
+        ["3. thương_hiệu / viettel", "Cao (0.8199)", "Mạo danh doanh nghiệp", "Mạo danh nhà mạng viễn thông, tập đoàn công nghệ uy tín."],
+        ["4. liên_hệ / 198", "Cao (0.7223)", "Dẫn dụ kênh ngoài", "Đầu số tổng đài giả mạo dẫn dụ nạn nhân gọi lại để thao túng giọng nói."],
+        ["5. đường_dẫn / num_urls", "Cao (0.5634)", "Chiếm đoạt thiết bị", "Đặc trưng phụ: Liên kết lạ dẫn dụ truy cập website giả mạo, tải tệp độc hại."],
+        ["6. number / sđt", "Cao (0.4669)", "Dẫn dụ kênh ngoài", "Đặc trưng phụ: Số điện thoại lạ yêu cầu liên hệ gấp hoặc kết bạn Zalo."],
+        ["7. mày / chị", "Trung bình (0.4331)", "Áp lực vị thế", "Đại từ nhân xưng gây áp lực tâm lý trịch thượng hoặc mạo danh người quen."],
+        ["8. số_định_danh / vneid", "Trung bình (0.4222)", "Giả mạo dịch vụ công", "Kịch bản giả mạo dịch vụ công: lỗi định danh công dân Đề án 06."],
+        ["9. 198 / hotline", "Trung bình (0.3176)", "Dẫn dụ kênh ngoài", "Số tổng đài giả danh chăm sóc khách hàng viễn thông."],
+        ["10. gấp / khẩn cấp", "Trung bình (0.3097)", "Thao túng thời gian", "Từ khóa giục giã, dồn ép nạn nhân ra quyết định trong lúc hoảng loạn."],
+        ["11. viện_phí", "Trung bình (0.2249)", "Khẩn cấp gia đình", "Kịch bản khẩn cấp gia đình: con cháu tai nạn cấp cứu cần tiền phẫu thuật."],
+        ["12. chị / anh", "Trung bình (0.1912)", "Lòng tin giả tạo", "Cách xưng hô thân mật nhằm tạo dựng lòng tin giả tạo ban đầu."],
+        ["13. doi (đòi)", "Trung bình (0.1712)", "Đe dọa tài chính", "Thủ đoạn đe dọa đòi nợ, tịch thu tài sản nếu không thanh toán ngay."],
+        ["14. soạn / cú pháp", "Trung bình (0.1708)", "Thao túng thao tác", "Thao túng nạn nhân bấm theo cú pháp tin nhắn trừ tiền tài khoản."],
+        ["15. thuế / công an", "Trung bình (0.1670)", "Đe dọa quyền lực", "Kịch bản đe dọa quyền lực: truy thu thuế, lệnh tạm giữ cơ quan pháp luật."],
+        ["16. đang", "Trung bình (0.1589)", "Trạng thái khẩn", "Trạng thái tiếp diễn, ám chỉ sự cố nguy cấp đang xảy ra cần xử lý ngay."],
+        ["17. số_lượng", "Thấp (0.1509)", "Mồi chài quà tặng", "Đòi hỏi số lượng thẻ cào, phần quà thưởng khuyến mãi dụ dỗ."],
+        ["18. viettel / vinaphone", "Thấp (0.1502)", "Mạo danh nhà mạng", "Mạo danh thương hiệu viễn thông thông báo khóa sim hoặc gói cước."],
+        ["19. time / thời_hạn", "Thấp (0.1352)", "Giới hạn thời gian", "Giới hạn khung giờ (trong 15–30 phút) nhằm triệt tiêu khả năng kiểm chứng."],
+        ["20. sẽ", "Thấp (0.1322)", "Đe dọa cưỡng bức", "Động từ vị ngữ đe dọa hậu quả pháp lý sẽ áp dụng nếu không chấp hành."],
     ]
-    create_table(doc, ["HẠNG & TỪ KHÓA", "TRỌNG SỐ SHAP", "Ý NGHĨA PHÁT HIỆN BẪY TÂM LÝ"], top_keywords_table, col_widths=[1.8, 1.4, 3.1], font_size_pt=8.5, top_margin=20, bottom=20)
+    create_table(doc, ["HẠNG & TỪ KHÓA", "TRỌNG SỐ SHAP", "PHÂN LOẠI BẪY", "Ý NGHĨA PHÁT HIỆN BẪY TÂM LÝ"], top_keywords_table, col_widths=[1.5, 1.1, 1.4, 2.3], font_size_pt=7.5, top_margin=12, bottom=12)
+
+    add_body_p(doc, "Nhận xét sâu về giá trị giải thích của SHAP: (1) Sự đồng thuận đa tầng giữa đặc trưng phụ và từ vựng khẳng định mô hình kết hợp chặt chẽ giữa ngữ nghĩa văn bản và tín hiệu hành vi thúc ép; (2) Phản ánh chân thực 4 nhóm kịch bản bẫy tâm lý (Đe dọa quyền lực, Khẩn cấp gia đình, Giả mạo dịch vụ công, Tài chính & Dụ dỗ); (3) Cho phép hệ thống làm nổi bật trực tiếp các cụm từ nguy hiểm ngay trên màn hình Web Demo để người cao tuổi dễ dàng nhận biết.")
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.4 — WEB DEMO STREAMLIT TỐI ƯU TRỢ NĂNG (TRANG 24 TRỌN VẸN)
+    # MỤC 4.5 — THỰC NGHIỆM ĐỐI CHỨNG CHUYÊN SÂU (ABLATION STUDIES)
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.4. Ứng dụng thực tế Web Demo Streamlit tối ưu trợ năng người cao tuổi")
-    add_body_p(doc, "Toàn bộ thành quả nghiên cứu đã được hiện thực hóa thành ứng dụng Web Demo Streamlit hoàn chỉnh, được thiết kế chuyên biệt đáp ứng tiêu chuẩn trợ năng quốc tế W3C WCAG 2.1 dành cho người lớn tuổi (Hình 4.9):")
+    add_heading_2(doc, "4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)")
+    add_body_p(doc, "Nhóm triển khai hai bài thực nghiệm đối chứng cô lập nghiêm ngặt nhằm đánh giá định lượng sự đóng góp cụ thể của từng tầng xử lý trên cùng tập kiểm thử độc lập 439 mẫu (355 tin bình thường, 84 tin lừa đảo), tuân thủ tuyệt đối nguyên tắc Zero-Data-Leakage:")
+
+    add_heading_3(doc, "4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)")
+    add_body_p(doc, "Mục tiêu: Đo lường chính xác hiệu quả của pipeline tiền xử lý 5 bước so với việc đưa trực tiếp văn bản thô (Raw Text) vào mô hình (Bảng 4.4 và Hình 4.10):")
+
+    ablation_prep_table, ablation_feat_table = load_ablation_tables(ABLATION_JSON)
+    create_table(doc, ["MÔ HÌNH", "TIỀN XỬ LÝ", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_prep_table, col_widths=[1.1, 1.2, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.0, top_margin=18, bottom=18)
+
+    add_image_with_caption(doc, FIGURES_DIR / "ablation_preprocessing_comparison.png", 
+                           "Hình 4.10: Biểu đồ đối chứng hiệu năng giữa Raw Text và Preprocessed Text trên Naive Bayes và XGBoost (300 DPI)", width_inches=3.8)
+    add_body_p(doc, "Phân tích kết quả thực nghiệm 1: Trên Naive Bayes, tiền xử lý giúp Precision tăng từ 80.81% lên 84.78% (+3.97%) và F1-Score tăng từ 0.8743 lên 0.8864 (+1.21%). Đặc biệt, số ca báo động giả (False Positives) giảm mạnh từ 19 ca xuống còn 14 ca (giảm 26.3%). Nguyên nhân là teencode và từ viết tắt không dấu trong văn bản thô dễ làm nhiễu xác suất tiên nghiệm. Tiền xử lý đã chuẩn hóa về từ điển chuẩn tiếng Việt, giúp giảm thiểu tối đa tỷ lệ làm phiền người dùng. Trên XGBoost với chỉ TF-IDF, hiệu năng giữa hai cấu hình tương đương nhau nhờ cơ chế phân nhánh phi tuyến tự động của cây quyết định.")
+
+    add_heading_3(doc, "4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)")
+    add_body_p(doc, "Mục tiêu: Đánh giá giá trị đóng góp và tính độc lập của 15 đặc trưng hành vi tâm lý khi kết hợp cùng túi từ TF-IDF 5.000 chiều trên 3 cấu hình: Chỉ 15 Đặc trưng phụ (Aux Only), Chỉ 5.000 TF-IDF (TF-IDF Only) và Kết hợp cả hai (5.015 chiều) (Bảng 4.5 và Hình 4.11):")
+
+    create_table(doc, ["CẤU HÌNH ĐẶC TRƯNG", "MÔ HÌNH", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_feat_table, col_widths=[1.5, 0.9, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.0, top_margin=18, bottom=18)
+
+    add_image_with_caption(doc, FIGURES_DIR / "ablation_featurespace_comparison.png", 
+                           "Hình 4.11: Biểu đồ đối chứng hiệu năng giữa 3 không gian đặc trưng trên XGBoost và Linear SVM (300 DPI)", width_inches=3.8)
+    add_body_p(doc, "Phân tích kết quả thực nghiệm 2: (1) Khi hoàn toàn loại bỏ túi từ TF-IDF, chỉ dùng 15 đặc trưng tâm lý, XGBoost vẫn đạt F1 = 0.8701, Recall = 91.67%, chứng minh tính chắt lọc của các đặc trưng phụ; (2) Khi kết hợp cả hai không gian trên XGBoost: Precision tăng vọt từ 89.25% lên 93.18% (+3.93%), F1-Score tăng từ 0.9379 lên 0.9535 (+1.56%), và số ca báo động giả giảm 40% (từ 10 ca xuống chỉ còn 6 ca). 15 đặc trưng phụ đóng vai trò chốt chặn an toàn (contextual guardrails) hữu hiệu.")
+    add_body_p(doc, "Lý giải hiện tượng toán học của Linear SVM vs XGBoost: Khi thêm 15 đặc trưng phụ, F1 của Linear SVM giảm nhẹ từ 0.9697 xuống 0.9474 (Precision giảm từ 98.77% xuống 93.10%, FP tăng từ 1 lên 6). Không gian TF-IDF 5.000 chiều là ma trận thưa, nơi hai lớp có tính phân tách tuyến tính gần như tuyệt đối. Khi ghép thêm 15 đặc trưng liên tục chuẩn hóa qua StandardScaler, mật độ dữ liệu thay đổi làm dịch chuyển góc định hướng của siêu phẳng phân cách cực đại lề wᵀx + b = 0. Ngược lại, cây quyết định XGBoost phân ngưỡng trực giao độc lập trên từng trục tọa độ (orthogonal axis-aligned splits), nên có khả năng cô lập và khai thác các thuộc tính tâm lý mà không làm méo mó ranh giới phân loại của không gian từ vựng, mang lại hiệu ứng cộng hưởng tối ưu nhất.")
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # MỤC 4.6 — WEB DEMO STREAMLIT TỐI ƯU TRỢ NĂNG NGƯỜI CAO TUỔI
+    # ══════════════════════════════════════════════════════════════════════════
+    doc.add_page_break()
+
+    add_heading_2(doc, "4.6. Đánh giá ứng dụng thực tế Web Demo Streamlit trợ năng người cao tuổi")
+    add_body_p(doc, "Toàn bộ thành quả nghiên cứu đã được hiện thực hóa thành ứng dụng Web Demo xây dựng trên nền tảng Streamlit [18] hoàn chỉnh, được thiết kế chuyên biệt đáp ứng tiêu chuẩn trợ năng quốc tế W3C WCAG 2.1 [14] dành cho người lớn tuổi (Hình 4.9 và Hình 4.9b):")
 
     add_image_with_caption(doc, FIGURES_DIR / "demo_03_scam_detection_verdict.png", 
-                           "Hình 4.9: Giao diện Web Demo Streamlit — Màn hình cảnh báo nguy cơ ĐỎ, bôi đỏ từ khóa bẫy tâm lý và Hotline 156/113", width_inches=3.2)
+                           "Hình 4.9: Giao diện Web Demo Streamlit — Màn hình cảnh báo nguy cơ ĐỎ, bôi đỏ từ khóa bẫy tâm lý và Hotline 156/113", width_inches=3.0)
+
+    add_image_with_caption(doc, FIGURES_DIR / "demo_02_font_scaling_elderly.png",
+                           "Hình 4.9b: Tính năng trợ năng thị giác phóng đại phông chữ 125%–150% và chế độ tương phản cao cho người cao tuổi (300 DPI)", width_inches=3.2)
+
     add_body_p(doc, "Hệ thống tích hợp 6 giải pháp công nghệ trợ năng vượt trội hướng tới người cao tuổi:")
     p_u1 = add_bullet_p(doc, "• 1. Tùy biến cỡ chữ 3 cấp độ: ", "Hỗ trợ phóng đại phông chữ động 100% – 125% – 150%, bảo đảm người cao tuổi có thị lực suy giảm vẫn đọc rõ thông báo mà không cần kính lão.")
     p_u1.paragraph_format.space_after = Pt(1.5)
@@ -1079,47 +1202,15 @@ def generate_report(toc_overrides=None):
     p_u4.paragraph_format.space_after = Pt(1.5)
     p_u5 = add_bullet_p(doc, "• 5. Bộ điều phối đa mô hình thời gian thực: ", "Tích hợp song song cả 4 mô hình học máy (XGBoost F1=0.9535 mặc định, Linear SVM, Random Forest, Naive Bayes) với độ trễ suy luận siêu tốc < 45ms trên CPU.")
     p_u5.paragraph_format.space_after = Pt(1.5)
-    p_u6 = add_bullet_p(doc, "• 6. Kiểm định chất lượng toàn diện: ", "Vượt qua 16/16 ca kiểm thử tự động E2E với Playwright (kiểm tra phân loại, đổi cỡ chữ, dán tin nhắn, gọi hotline) đạt tỷ lệ thành công 100%.")
+    p_u6 = add_bullet_p(doc, "• 6. Kiểm định chất lượng toàn diện: ", "Vượt qua 16/16 ca kiểm thử tự động E2E với Playwright và 70/70 ca unit tests pytest đạt tỷ lệ thành công 100%.")
     p_u6.paragraph_format.space_after = Pt(1.5)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.5.1 — THỰC NGHIỆM ĐỐI CHỨNG 1: TIỀN XỬ LÝ NLP (TRANG 25 TRỌN VẸN)
+    # MỤC 4.7 — PHÂN TÍCH CA BIÊN NGOẠI VI
     # ══════════════════════════════════════════════════════════════════════════
     doc.add_page_break()
 
-    add_heading_2(doc, "4.5. Thực nghiệm đối chứng chuyên sâu (Ablation Studies)")
-    add_body_p(doc, "Theo chỉ đạo của ThS. Cáp Phạm Đình Thăng tại buổi bảo vệ sớm, nhóm đã triển khai hai bài thực nghiệm đối chứng cô lập nghiêm ngặt nhằm đánh giá định lượng sự đóng góp cụ thể của từng tầng xử lý trên cùng tập kiểm thử độc lập 439 mẫu, tuân thủ tuyệt đối nguyên tắc Zero-Data-Leakage:")
-
-    add_heading_3(doc, "4.5.1. Thực nghiệm 1: Vai trò của Tiền xử lý NLP (Raw vs Preprocessed)")
-    add_body_p(doc, "Mục tiêu: Đo lường chính xác hiệu quả của pipeline tiền xử lý 5 bước so với việc đưa trực tiếp văn bản thô (Raw Text) vào mô hình (Bảng 4.4 và Hình 4.10):")
-
-    ablation_prep_table, ablation_feat_table = load_ablation_tables(ABLATION_JSON)
-    create_table(doc, ["MÔ HÌNH", "TIỀN XỬ LÝ", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_prep_table, col_widths=[1.1, 1.2, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.5, top_margin=25, bottom=25)
-
-    add_image_with_caption(doc, FIGURES_DIR / "ablation_preprocessing_comparison.png", 
-                           "Hình 4.10: Biểu đồ đối chứng hiệu năng giữa Raw Text và Preprocessed Text trên Naive Bayes và XGBoost (300 DPI)", width_inches=4.2)
-    add_body_p(doc, "Phân tích kết quả thực nghiệm 1: Trên Naive Bayes, tiền xử lý giúp Precision tăng từ 80.81% lên 84.78% (+3.97%) và F1-Score tăng từ 0.8743 lên 0.8864 (+1.21%). Đặc biệt, số ca báo động giả (False Positives) giảm mạnh từ 19 ca xuống còn 14 ca (giảm 26.3%). Nguyên nhân là teencode và từ viết tắt không dấu trong văn bản thô dễ làm nhiễu xác suất tiên nghiệm. Tiền xử lý đã chuẩn hóa về từ điển chuẩn tiếng Việt, giúp giảm thiểu tối đa tỷ lệ làm phiền người dùng.")
-
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.5.2 — THỰC NGHIỆM ĐỐI CHỨNG 2: 15 ĐẶC TRƯNG TÂM LÝ (TRANG 26 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_3(doc, "4.5.2. Thực nghiệm 2: Vai trò của 15 Đặc trưng Tâm lý (TF-IDF vs Aux)")
-    add_body_p(doc, "Mục tiêu: Đánh giá giá trị đóng góp và tính độc lập của 15 đặc trưng hành vi tâm lý khi kết hợp cùng túi từ TF-IDF 5.000 chiều trên 3 cấu hình: Chỉ 15 Đặc trưng phụ (Aux Only), Chỉ 5.000 TF-IDF (TF-IDF Only) và Kết hợp cả hai (5.015 chiều) (Bảng 4.5 và Hình 4.11):")
-
-    create_table(doc, ["CẤU HÌNH ĐẶC TRƯNG", "MÔ HÌNH", "ACCURACY", "PRECISION", "RECALL", "F1-SCORE", "ROC-AUC", "BÁO SAI (FP)", "BỎ SÓT (FN)"], ablation_feat_table, col_widths=[1.5, 0.9, 0.6, 0.6, 0.6, 0.6, 0.6, 0.5, 0.5], font_size_pt=8.5, top_margin=25, bottom=25)
-
-    add_image_with_caption(doc, FIGURES_DIR / "ablation_featurespace_comparison.png", 
-                           "Hình 4.11: Biểu đồ đối chứng hiệu năng giữa 3 không gian đặc trưng trên XGBoost và Linear SVM (300 DPI)", width_inches=4.2)
-    add_body_p(doc, "Phân tích kết quả thực nghiệm 2: Khi hoàn toàn loại bỏ túi từ TF-IDF, chỉ dùng 15 đặc trưng hành vi tâm lý, XGBoost vẫn đạt F1 = 0.8701, Recall = 91.67%, chứng minh tính chắt lọc của các đặc trưng phụ. Khi kết hợp cả hai không gian trên XGBoost: Precision tăng vọt từ 89.25% lên 93.18% (+3.93%), F1-Score tăng từ 0.9379 lên 0.9535 (+1.56%), và số ca báo động giả giảm 40% (từ 10 ca xuống chỉ còn 6 ca). 15 đặc trưng phụ đóng vai trò chốt chặn an toàn (contextual guardrails) hữu hiệu.")
-
-    # ══════════════════════════════════════════════════════════════════════════
-    # MỤC 4.6 — PHÂN TÍCH CA BIÊN NGOẠI VI (TRANG 27 TRỌN VẸN)
-    # ══════════════════════════════════════════════════════════════════════════
-    doc.add_page_break()
-
-    add_heading_2(doc, "4.6. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")")
+    add_heading_2(doc, "4.7. Phân tích sai số & Đánh giá ca biên ngoại vi (\"Cướp đây, đưa hết tiền đây!\")")
     add_body_p(doc, "Trong quá trình kiểm thử độ bền vững (robustness testing), nghiên cứu ghi nhận một trường hợp ngoại vi đáng lưu ý đối với thông điệp mang tính đe dọa trực diện ngắn:")
     p_quote = doc.add_paragraph()
     p_quote.paragraph_format.left_indent = Inches(0.8)
@@ -1190,7 +1281,7 @@ def generate_report(toc_overrides=None):
     add_body_p(doc, "Từ kết quả thực nghiệm và gợi ý của ThS. Cáp Phạm Đình Thăng tại buổi báo cáo sớm, nhóm đề xuất lộ trình nâng cấp hệ thống theo 4 định hướng công nghệ then chốt:")
     add_bullet_p(doc, "1. Mở rộng dải N-grams lên (1, 2) và (1, 3) cho TF-IDF: ", "Bổ sung các cụm 3 từ (Trigrams) giúp mô hình bắt trọn các cấu trúc mệnh lệnh đe dọa đặc thù như 'cướp đây', 'đưa hết tiền', 'chuyển tiền ngay', 'bắt giam ngay'. Điều này cho phép thuật toán gán trọng số rủi ro trực tiếp cho cả cụm cú pháp cưỡng chế thay vì phân tán thành các từ đơn lẻ làm suy giảm xác suất cảnh báo.")
     add_bullet_p(doc, "2. Bổ sung nhóm đặc trưng từ khóa cưỡng bức trực diện (imperative_threat): ", "Thiết kế thêm các đặc trưng phụ đo lường tần suất xuất hiện của các động từ mệnh lệnh cưỡng đoạt mang tính bạo lực (cướp, giết, đánh, siết nợ) nhằm thu hẹp khoảng cách giữa bài toán lừa đảo phi bạo lực và đe dọa cưỡng đoạt bạo lực trực tiếp.")
-    add_bullet_p(doc, "3. Ứng dụng Mô hình Ngôn ngữ Transformer (PhoBERT Fine-tuning): ", "Tận dụng cơ chế Self-Attention của kiến trúc Transformer trên tập ngữ liệu tiếng Việt quy mô lớn. Mô hình PhoBERT có khả năng nắm bắt trọn vẹn ngữ cảnh ngữ nghĩa của các câu ngắn gọn mà không bị giới hạn bởi không gian túi từ tĩnh, nâng cao độ bền vững trước các thủ đoạn ngôn ngữ mới.")
+    add_bullet_p(doc, "3. Ứng dụng Mô hình Ngôn ngữ Transformer (PhoBERT Fine-tuning) [15]: ", "Tận dụng cơ chế Self-Attention của kiến trúc Transformer theo Nguyen & Nguyen [15] trên tập ngữ liệu tiếng Việt quy mô lớn. Mô hình PhoBERT có khả năng nắm bắt trọn vẹn ngữ cảnh ngữ nghĩa của các câu ngắn gọn mà không bị giới hạn bởi không gian túi từ tĩnh, nâng cao độ bền vững trước các thủ đoạn ngôn ngữ mới.")
     add_bullet_p(doc, "4. Phát hiện lừa đảo đa phương thức (Multimodal Scam Detection): ", "Mở rộng hệ thống từ phân tích văn bản sang phát hiện cuộc gọi thoại mạo danh bằng công nghệ Deepfake giọng nói, nhận diện hình ảnh lệnh bắt giả mạo con dấu đỏ của cơ quan công an, xây dựng lá chắn bảo vệ toàn diện đa kênh cho người cao tuổi.")
 
     # ══════════════════════════════════════════════════════════════════════════

@@ -111,5 +111,5 @@ def apply_interactive_toc(docx_path):
     return True
 
 if __name__ == "__main__":
-    report_file = "draft/scam-detection/reports/report/report.docx"
+    report_file = sys.argv[1] if len(sys.argv) > 1 else "draft/scam-detection/reports/report/report.docx"
     apply_interactive_toc(report_file)

@@ -1,7 +1,4 @@
-"""
-Apply clickable hyperlinks to references in report.docx
-Maintains all formatting, indents, styles, and TOC.
-"""
+import sys
 import shutil
 import re
 import os
@@ -10,19 +7,19 @@ from docx.opc.constants import RELATIONSHIP_TYPE
 from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
-REPORT_PATH = "draft/scam-detection/reports/report/report.docx"
-BACKUP_PATH = "draft/scam-detection/reports/report/report_backup_before_links.docx"
-
 def main():
-    if not os.path.exists(REPORT_PATH):
-        print(f"Error: {REPORT_PATH} not found!")
+    report_path = sys.argv[1] if len(sys.argv) > 1 else "draft/scam-detection/reports/report/report.docx"
+    backup_path = report_path.replace(".docx", "_backup_before_links.docx")
+
+    if not os.path.exists(report_path):
+        print(f"Error: {report_path} not found!")
         return
 
     # Backup first
-    shutil.copy2(REPORT_PATH, BACKUP_PATH)
-    print(f"Backed up to {BACKUP_PATH}")
+    shutil.copy2(report_path, backup_path)
+    print(f"Backed up to {backup_path}")
 
-    doc = docx.Document(REPORT_PATH)
+    doc = docx.Document(report_path)
     print(f"Total paragraphs in document: {len(doc.paragraphs)}")
 
     url_regex = re.compile(r'(https?://[^\s]+)')
@@ -30,11 +27,11 @@ def main():
 
     modified_count = 0
 
-    for i in range(233, 253):
-        if i >= len(doc.paragraphs):
-            break
-        p = doc.paragraphs[i]
-        text = p.text
+    for i, p in enumerate(doc.paragraphs):
+        text = p.text.strip()
+        if not re.match(r'^\[\d+\]', text):
+            continue
+
         url_m = url_regex.search(text)
         doi_m = doi_regex.search(text)
 
@@ -116,16 +113,14 @@ def main():
             modified_count += 1
             print(f"Applied link [{modified_count}]: P#{i} -> {target}")
 
-    doc.save(REPORT_PATH)
-    print(f"Saved {REPORT_PATH} successfully! Total links applied: {modified_count}")
+    doc.save(report_path)
+    print(f"Saved {report_path} successfully! Total links applied: {modified_count}")
 
     # Validate
-    doc_check = docx.Document(REPORT_PATH)
+    doc_check = docx.Document(report_path)
     print(f"Validation: loaded document with {len(doc_check.paragraphs)} paragraphs.")
-    print("Sample checks:")
-    print(f"P#233: {doc_check.paragraphs[233].text}")
-    print(f"P#238: {doc_check.paragraphs[238].text}")
-    print(f"P#252: {doc_check.paragraphs[252].text}")
+    ref_checks = [p.text for p in doc_check.paragraphs if re.match(r'^\[\d+\]', p.text.strip())]
+    print(f"Found {len(ref_checks)} reference entries verified.")
 
 if __name__ == "__main__":
     main()
