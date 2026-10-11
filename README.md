@@ -150,13 +150,23 @@ To verify whether the engineered cognitive features genuinely add value beyond p
 
 The interactive web demo is explicitly engineered around accessibility standards for senior citizens:
 
+#### 1. Desktop Experience & Elderly Accessibility Mode
+| 🖥️ Standard Layout (Default UI) | 🔍 Senior Accessibility Mode (150% Font Zoom) |
+| :---: | :---: |
+| <img src="reports/figures/demo_01_initial_layout.png" alt="Streamlit Initial Dashboard" width="100%" /> | <img src="reports/figures/demo_02_font_scaling_elderly.png" alt="Elderly Font Scaling Feature" width="100%" /> |
+
+#### 2. Real-Time Detection Verdict & Explainable Highlighting
 <p align="center">
-  <img src="reports/figures/demo_01_initial_layout.png" alt="Streamlit Initial Dashboard" width="48%" style="border-radius: 6px; display: inline-block; margin-right: 2%;" />
-  <img src="reports/figures/demo_02_font_scaling_elderly.png" alt="Elderly Font Scaling Feature" width="48%" style="border-radius: 6px; display: inline-block;" />
+  <img src="reports/figures/demo_03_scam_detection_verdict.png" alt="Scam Detection Verdict & Keyword Highlighter" width="95%" />
+  <br>
+  <em>Real-time inference verdict with intuitive risk score dial, manipulative keyword highlighting, and senior-focused safety advice.</em>
 </p>
+
+#### 3. Mobile-Responsive Experience
 <p align="center">
-  <img src="reports/figures/demo_03_scam_detection_verdict.png" alt="Scam Detection Verdict & Keyword Highlighter" width="48%" style="border-radius: 6px; display: inline-block; margin-right: 2%;" />
-  <img src="reports/figures/demo_04_mobile_responsive.png" alt="Mobile Responsive Experience" width="48%" style="border-radius: 6px; display: inline-block;" />
+  <img src="reports/figures/demo_04_mobile_responsive.png" alt="Mobile Responsive Experience" width="320px" style="border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);" />
+  <br>
+  <em>Touch-friendly mobile interface with 1-tap quick test scenarios and adaptive typography.</em>
 </p>
 
 > **Accessibility Features for Seniors:**

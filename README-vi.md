@@ -150,13 +150,23 @@ Nhằm chứng minh tính khoa học và đóng góp thực chất của 15 đ�
 
 Ứng dụng web tương tác được thiết kế riêng biệt theo tiêu chuẩn khả năng tiếp cận (Accessibility) dành cho người lớn tuổi:
 
+#### 1. Giao Diện Desktop & Chế Độ Hỗ Trợ Thị Lực
+| 🖥️ Giao Diện Chuẩn (100% Cỡ Chữ) | 🔍 Chế Độ Người Cao Tuổi (Phóng To 150%) |
+| :---: | :---: |
+| <img src="reports/figures/demo_01_initial_layout.png" alt="Giao diện khởi đầu Streamlit" width="100%" /> | <img src="reports/figures/demo_02_font_scaling_elderly.png" alt="Tính năng phóng to cỡ chữ cho người già" width="100%" /> |
+
+#### 2. Kết Quả Dự Đoán Thời Gian Thực & Bôi Đỏ Bẫy Tâm Lý
 <p align="center">
-  <img src="reports/figures/demo_01_initial_layout.png" alt="Giao diện khởi đầu Streamlit" width="48%" style="border-radius: 6px; display: inline-block; margin-right: 2%;" />
-  <img src="reports/figures/demo_02_font_scaling_elderly.png" alt="Tính năng phóng to cỡ chữ cho người già" width="48%" style="border-radius: 6px; display: inline-block;" />
+  <img src="reports/figures/demo_03_scam_detection_verdict.png" alt="Kết quả nhận định và bôi đỏ từ khóa lừa đảo" width="95%" />
+  <br>
+  <em>Đồng hồ đo rủi ro trực quan (63.5%), bôi đỏ từ khóa thao túng tâm lý và khuyến nghị hành động tức thì cho người cao tuổi.</em>
 </p>
+
+#### 3. Trải Nghiệm Tương Thích Thiết Bị Di Động
 <p align="center">
-  <img src="reports/figures/demo_03_scam_detection_verdict.png" alt="Kết quả nhận định và bôi đỏ từ khóa lừa đảo" width="48%" style="border-radius: 6px; display: inline-block; margin-right: 2%;" />
-  <img src="reports/figures/demo_04_mobile_responsive.png" alt="Tương thích giao diện điện thoại" width="48%" style="border-radius: 6px; display: inline-block;" />
+  <img src="reports/figures/demo_04_mobile_responsive.png" alt="Tương thích giao diện điện thoại" width="320px" style="border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);" />
+  <br>
+  <em>Giao diện điện thoại tối ưu hóa thao tác chạm 1 chạm cho các kịch bản lừa đảo phổ biến.</em>
 </p>
 
 > **Tính Năng Chuyên Biệt Cho Người Cao Tuổi:**
