@@ -28,12 +28,19 @@ if not (PROJECT_ROOT / "src").exists() and (PROJECT_ROOT / "code" / "src").exist
     PROJECT_ROOT = PROJECT_ROOT / "code"
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+if str(DEMO_DIR.parent) not in sys.path:
+    sys.path.insert(0, str(DEMO_DIR.parent))
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
 
-from demo.components.keyword_highlighter import extract_found_keywords, highlight_text_html
-from demo.components.risk_meter import render_risk_meter
-from demo.components.safety_advisor import diagnose_scam_category, render_safety_advisor
+try:
+    from demo.components.keyword_highlighter import extract_found_keywords, highlight_text_html
+    from demo.components.risk_meter import render_risk_meter
+    from demo.components.safety_advisor import diagnose_scam_category, render_safety_advisor
+except ModuleNotFoundError:
+    from components.keyword_highlighter import extract_found_keywords, highlight_text_html
+    from components.risk_meter import render_risk_meter
+    from components.safety_advisor import diagnose_scam_category, render_safety_advisor
 from src.feature_engineering_config import AUX_FEATURE_COLS
 from src.preprocessing.pipeline import extract_auxiliary_features, preprocess_pipeline
 

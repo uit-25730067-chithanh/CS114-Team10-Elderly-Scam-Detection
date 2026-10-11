@@ -1,6 +1,8 @@
 # Demo UI — Streamlit Application & Integration Contract
 
-> Hướng dẫn tích hợp mô hình phát hiện lừa đảo vào giao diện Web Demo Streamlit (`draft/scam-detection/demo/`).
+> Hướng dẫn tích hợp mô hình phát hiện lừa đảo vào giao diện Web Demo Streamlit (`draft/scam-detection/demo/`).  
+> **Live Web Demo:** [https://cs114-team10-elderly-scam-detection.streamlit.app/](https://cs114-team10-elderly-scam-detection.streamlit.app/)  
+> **Video Clip Demo:** [https://aceteam-uit.vercel.app/l/BhqvPH](https://aceteam-uit.vercel.app/l/BhqvPH)  
 
 ---
 

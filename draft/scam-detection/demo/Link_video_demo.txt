@@ -1,0 +1,25 @@
+LIÊN KẾT WEB DEMO TRỰC TUYẾN & VIDEO CLIP DEMO HỆ THỐNG PHÁT HIỆN TIN NHẮN LỪA ĐẢO
+NHÓM 10 — MÔN MÁY HỌC (CS114.F31.CN2.TTNT) — TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN (UIT)
+
+- Đề tài: Nghiên cứu và Xây dựng Hệ thống Phát hiện Tin nhắn & Kịch bản Thao túng Tâm lý Lừa đảo nhắm vào Người cao tuổi tại Việt Nam
+- Sinh viên thực hiện:
+  1. Đặng Chí Thanh (MSSV: 25730067) — Trưởng nhóm / NLP Lead & Modeling
+  2. Bùi Thị Mỷ Cẩm (MSSV: 25730013) — Modeling Engineer & Slide Presentation
+  3. Hoàng Cao Sơn (MSSV: 25730061) — Demo UI Developer & Test Scenarios
+- Giảng viên hướng dẫn: ThS. Cáp Phạm Đình Thăng
+- Tên tệp video đề xuất: [Nhom10]_VideoDemo_ScamDetection.mp4
+
+================================================================================
+1. ĐƯỜNG DẪN ỨNG DỤNG WEB DEMO TRỰC TUYẾN (TRẢI NGHIỆM TỨC THÌ TRÊN TRÌNH DUYỆT):
+https://cs114-team10-elderly-scam-detection.streamlit.app/
+================================================================================
+
+================================================================================
+2. ĐƯỜNG DẪN VIDEO CLIP DEMO CHÍNH THỨC (XEM TRỰC TIẾP FULL HD 1080P):
+https://aceteam-uit.vercel.app/l/BhqvPH
+================================================================================
+
+LƯU Ý DÀNH CHO QUÝ THẦY/CÔ:
+- Mục 1 (Web Demo trực tuyến): Quý Thầy/Cô có thể bấm trực tiếp vào đường dẫn Streamlit Cloud ở trên để thử nghiệm phân tích tin nhắn và đối sánh 4 mô hình học máy theo thời gian thực mà không cần cài đặt môi trường trên máy cá nhân.
+- Mục 2 (Video clip demo): Bản ghi hình minh chứng Full HD ghi lại chi tiết các kịch bản test demo thực tế và tính năng trợ năng người cao tuổi.
+- Toàn bộ mã nguồn, dữ liệu thực nghiệm và script khởi chạy Web Demo tương tác Streamlit cục bộ được lưu trữ đầy đủ tại thư mục source_code/.
